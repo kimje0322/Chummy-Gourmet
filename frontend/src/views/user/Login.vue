@@ -56,6 +56,7 @@
         </div>
         <div class="wrap">
           <p>비밀번호를 잊으셨나요?</p>
+          <router-link to="/user/findPassword" class="btn--text">비밀번호 찾기</router-link>
         </div>
         <div class="wrap">
           <p>아직 회원이 아니신가요?</p>
@@ -120,33 +121,34 @@ export default {
       this.isSubmit = isSubmit;
     },
     onLogin() {
-      if (this.isSubmit) {
-        let { email, password } = this;
-        let data = {
-          email,
-          password
-        };
+      this.$router.push('/curator');
+      // if (this.isSubmit) {
+      //   let { email, password } = this;
+      //   let data = {
+      //     email,
+      //     password
+      //   };
 
-        //요청 후에는 버튼 비활성화
-        this.isSubmit = false;
+      //   //요청 후에는 버튼 비활성화
+      //   this.isSubmit = false;
 
-        UserApi.requestLogin(
-          data,
-          res => {
-            //통신을 통해 전달받은 값 콘솔에 출력
-            //console.log(res);
+      //   UserApi.requestLogin(
+      //     data,
+      //     res => {
+      //       //통신을 통해 전달받은 값 콘솔에 출력
+      //       //console.log(res);
 
-            //요청이 끝나면 버튼 활성화
-            this.isSubmit = true;
+      //       //요청이 끝나면 버튼 활성화
+      //       this.isSubmit = true;
 
-            this.$router.push("/main");
-          },
-          error => {
-            //요청이 끝나면 버튼 활성화
-            this.isSubmit = true;
-          }
-        );
-      }
+      //       this.$router.push("/main");
+      //     },
+      //     error => {
+      //       //요청이 끝나면 버튼 활성화
+      //       this.isSubmit = true;
+      //     }
+      //   );
+      // }
     }
   },
   data: () => {

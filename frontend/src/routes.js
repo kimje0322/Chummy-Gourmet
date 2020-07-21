@@ -4,6 +4,7 @@ import Login from './views/user/Login.vue'
 import Join from './views/user/Join.vue'
 import JoinRule from './views/user/JoinRule.vue'
 import JoinInfo from './views/user/JoinInfo.vue'
+import FinishJoin from './views/user/FinishJoin.vue'
 import Curator from './views/curator/curator.vue'
 import Detail from './views/curator/detail.vue'
 import ReviewDetail from './views/curator/reviewDetail.vue'
@@ -44,6 +45,11 @@ export default [
         path : '/user/joininfo',
         name : 'JoinInfo',
         component : JoinInfo
+    },
+    {
+        path : '/user/finishjoin',
+        name : 'FinshJoin',
+        component : FinishJoin
     },
     {
         path : '/user/findPw',

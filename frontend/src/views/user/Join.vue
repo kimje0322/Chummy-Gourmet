@@ -53,7 +53,7 @@
     <router-link to="/user/joinrule"><span @click="termPopup=true" class="seeRules">약관보기</span></router-link>
   
     <router-link to="/user/joininfo"><v-btn color="warning" class="next-btn">다음</v-btn></router-link>
-    <!-- <router-link to="/joininfo" class="btn-bottom">다음</router-link> -->
+   
   </div>
 </template>
 

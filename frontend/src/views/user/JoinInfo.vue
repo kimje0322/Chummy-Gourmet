@@ -91,7 +91,7 @@
 
     <!-- personality -->
     <h3 class="userInfo">성향</h3>
-      <ul class="select-food">
+      <ul class="select-other">
         <li>
           <input type="checkbox" id="p1" name="personality" />
           <label for="p1" class="age">
@@ -176,96 +176,114 @@
         <li>
           <input type="checkbox" id="i1" name="interest" />
           <label for="i1" class="age">
-            게임
+            아이돌
           </label>
         </li>
         <li>
           <input type="checkbox" id="i2" name="interest" />
           <label for="i2" class="age">
-            패션
+            콘서트
           </label>
         </li>
         <li>
           <input type="checkbox" id="i3" name="interest" />
           <label for="i3" class="age">
-            대학교
+            취업
           </label>
         </li>
         <li>
           <input type="checkbox" id="i4" name="interest" />
           <label for="i4" class="age">
-            재테크
+            게임
           </label>
         </li>
         <li>
           <input type="checkbox" id="i5" name="interest" />
           <label for="i5" class="age">
-            사업
+            패션
           </label>
         </li>
         <li>
           <input type="checkbox" id="i6" name="interest" />
           <label for="i6" class="age">
-            경제
+            다이어트
           </label>
         </li>
         <li>
           <input type="checkbox" id="i7" name="interest" />
           <label for="i7" class="age">
-            건강 
+            재테크
           </label>
         </li>
         <li>
           <input type="checkbox" id="i8" name="interest" />
           <label for="i8" class="age">
-            스포츠
+            사업
           </label>
         </li>
         <li>
           <input type="checkbox" id="i9" name="interest" />
           <label for="i9" class="age">
-            취업
+            경제
           </label>
         </li>
         <li>
           <input type="checkbox" id="i10" name="interest" />
           <label for="i10" class="age">
-            군대 
+            건강 
           </label>
         </li>
         <li>
           <input type="checkbox" id="i11" name="interest" />
           <label for="i11" class="age">
-            인테리어
+            스포츠
           </label>
         </li>
         <li>
           <input type="checkbox" id="i12" name="interest" />
           <label for="i12" class="age">
-            여행
+            요리
           </label>
         </li>
         <li>
           <input type="checkbox" id="i13" name="interest" />
           <label for="i13" class="age">
-            일러스트
+            군대 
           </label>
         </li>
         <li>
           <input type="checkbox" id="i14" name="interest" />
           <label for="i14" class="age">
-            이직
+            인테리어
           </label>
         </li>
         <li>
           <input type="checkbox" id="i15" name="interest" />
           <label for="i15" class="age">
+            여행
+          </label>
+        </li>
+        <li>
+          <input type="checkbox" id="i16" name="interest" />
+          <label for="i16" class="age">
+            일러스트
+          </label>
+        </li>
+        <li>
+          <input type="checkbox" id="i17" name="interest" />
+          <label for="i17" class="age">
+            이직
+          </label>
+        </li>
+        <li>
+          <input type="checkbox" id="i18" name="interest" />
+          <label for="i18" class="age">
             IT
           </label>
         </li>
       </ul>
       <!-- <span class="selectInfo">게임</span> -->
-    <v-btn color="warning" class="next-btn"><h4>제출</h4></v-btn> 
+    <router-link to="/user/finishjoin"><v-btn color="warning" class="next-btn"><h4>제출</h4></v-btn></router-link> 
   </div>
 </template>
 

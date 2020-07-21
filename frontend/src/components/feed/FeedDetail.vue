@@ -1,12 +1,12 @@
 <template>
- <div class="feed-item" style="padding-top:5px">
+<div style="padding-top:5px">
+  <div class="feed-item" style="padding-top:5px">
     <div class="feed-card" style="width : 100%; float : none;">
       <div class="img" :style="{'background-image': 'url('+defaultImage+')'}"></div>
       <div class="contentsWrap">
       <!---->
-    <div class="btn-group wrap"><button @click="goDetail">
-        <h4 class="title">1. 태평소국밥</h4>
-        </button>
+    <div class="btn-group wrap">
+        <h4 class="title">태평소국밥</h4>
       <div class="like likeScrap">
         <svg
           class="svg-inline--fa fa-heart fa-w-16 icon full"
@@ -87,20 +87,70 @@
 
         <!---->
   </div>
+ <div class="feed-item" style="padding-top:5px">
+    <div class="top">
+     <div class="profile-image" :style="{'background-image': 'url('+defaultProfile+')'}"></div>
+     <div class="user-info">
+        <div class="user-name">
+          <button>김승범</button>
+        </div>
+        <p class="date">9시간 전</p>
+      </div>
+      <div class="content">
+        <p>이 집은 맛이 좋습니다.</p>
+        <button @click="goReviewDetail"><p class="date">리뷰 상세보기</p>
+        </button>
+      </div>
+    </div>
+ </div>
+ <div class="feed-item" style="padding-top:5px">
+    <div class="top">
+     <div class="profile-image" :style="{'background-image': 'url('+defaultProfile+')'}"></div>
+     <div class="user-info">
+        <div class="user-name">
+          <button>조민기</button>
+        </div>
+        <p class="date">13시간 전</p>
+      </div>
+      <div class="content">
+        <p>일주일에 5번 먹기 가능.</p>
+        <p class="date">리뷰 상세보기</p>
+      </div>
+    </div>
+ </div>
+ <div class="feed-item" style="padding-top:5px">
+    <div class="top">
+     <div class="profile-image" :style="{'background-image': 'url('+defaultProfile+')'}"></div>
+     <div class="user-info">
+        <div class="user-name">
+          <button>박세훈</button>
+        </div>
+        <p class="date">18시간 전</p>
+      </div>
+      <div class="content">
+        <p>배고프다</p>
+        <p class="date">리뷰 상세보기</p>
+      </div>
+    </div>
+ </div>
+      
+     
+      
+</div>
   
 </template>
 
 <script>
-import defaultImage from "../../assets/images/testImage.png";
+import defaultImage from "../../assets/images/detailtest.png";
 import defaultProfile from "../../assets/images/profile_default.png";
 export default {
   data: () => {
-    return { defaultImage, defaultProfile};
+    return { defaultImage, defaultProfile };
   },
-  methods : {
-    goDetail(){
-      this.$router.push('/detail');
-    }
+  methods:{
+      goReviewDetail(){
+          this.$router.push('/reviewDetail');
+      }
   }
 };
 </script>

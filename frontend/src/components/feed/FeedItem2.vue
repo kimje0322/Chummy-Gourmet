@@ -4,9 +4,8 @@
       <div class="img" :style="{'background-image': 'url('+defaultImage+')'}"></div>
       <div class="contentsWrap">
       <!---->
-    <div class="btn-group wrap"><button @click="goDetail">
-        <h4 class="title">1. 태평소국밥</h4>
-        </button>
+    <div class="btn-group wrap">
+        <h4 class="title">2. 온천칼국수</h4>
       <div class="like likeScrap">
         <svg
           class="svg-inline--fa fa-heart fa-w-16 icon full"
@@ -40,7 +39,7 @@
           />
         </svg>
         <!-- <i class="far fa-heart icon empty"></i> -->
-        99
+        82
       </div>
       <div class="comment">
         <svg
@@ -59,7 +58,7 @@
           />
         </svg>
         <!-- <i class="far fa-comment-alt icon"></i> -->
-        99
+        84
       </div>
       <!---->
       <div class="share">
@@ -78,7 +77,7 @@
             d="M352 320c-22.608 0-43.387 7.819-59.79 20.895l-102.486-64.054a96.551 96.551 0 0 0 0-41.683l102.486-64.054C308.613 184.181 329.392 192 352 192c53.019 0 96-42.981 96-96S405.019 0 352 0s-96 42.981-96 96c0 7.158.79 14.13 2.276 20.841L155.79 180.895C139.387 167.819 118.608 160 96 160c-53.019 0-96 42.981-96 96s42.981 96 96 96c22.608 0 43.387-7.819 59.79-20.895l102.486 64.054A96.301 96.301 0 0 0 256 416c0 53.019 42.981 96 96 96s96-42.981 96-96-42.981-96-96-96z"
           />
         </svg>
-        99
+        73
       </div>
     </div>
     <!---->
@@ -91,16 +90,11 @@
 </template>
 
 <script>
-import defaultImage from "../../assets/images/testImage.png";
+import defaultImage from "../../assets/images/feeditemtest.png";
 import defaultProfile from "../../assets/images/profile_default.png";
 export default {
   data: () => {
     return { defaultImage, defaultProfile};
-  },
-  methods : {
-    goDetail(){
-      this.$router.push('/detail');
-    }
   }
 };
 </script>

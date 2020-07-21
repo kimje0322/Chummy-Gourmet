@@ -40,7 +40,7 @@ public class AccountController {
     public Object login(@RequestParam(required = true) final String email,
             @RequestParam(required = true) final String password) {
 
-        Optional<User> userOpt = userDao.findUserByEmailAndPassword(email, password);
+        Optional<User> userOpt = userDao.findUserByUserEmailAndUserPwd(email, password);
 
         ResponseEntity response = null;
 
@@ -62,7 +62,7 @@ public class AccountController {
     public Object signup(@Valid @RequestBody SignupRequest request) {
         // 이메일, 닉네임 중복처리 필수
         // 회원가입단을 생성해 보세요.
-
+    	System.out.println(request);
         final BasicResponse result = new BasicResponse();
         result.status = true;
         result.data = "success";

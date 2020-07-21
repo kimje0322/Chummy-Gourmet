@@ -49,4 +49,10 @@ public class SignupRequest {
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
+
+	@Override
+	public String toString() {
+		return "SignupRequest [email=" + email + ", password=" + password + ", nickname=" + nickname + "]";
+	}
+    
 }

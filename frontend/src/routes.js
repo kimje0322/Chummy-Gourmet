@@ -9,6 +9,8 @@ import ReviewDetail from './views/curator/reviewDetail.vue'
 import FeedMain from './views/feed/IndexFeed.vue'
 import Components from './views/Components.vue'
 import Party from './views/feed/Party.vue'
+import FindPw from './views/user/FindPw.vue'
+import UserInfo from './views/Main.vue'
 
 
 export default [
@@ -25,9 +27,19 @@ export default [
         component : Join
     },
     {
+        path : '/user/info',
+        name : 'UserInfo',
+        component : UserInfo
+    },
+    {
         path : '/user/joininfo',
         name : 'JoinInfo',
         component : JoinInfo
+    },
+    {
+        path : '/user/findPw',
+        name : 'FindPw',
+        component : FindPw
     },
     {
         path : '/feed/main',

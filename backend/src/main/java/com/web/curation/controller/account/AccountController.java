@@ -19,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.fusionauth.jwt.Signer;
+import io.fusionauth.jwt.hmac.HMACSigner;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,14 +42,15 @@ public class AccountController {
     public Object login(@RequestParam(required = true) final String email,
             @RequestParam(required = true) final String password) {
 
-        Optional<User> userOpt = userDao.findUserByEmailAndPassword(email, password);
+        Optional<User> userOpt = userDao.findUserByUserEmailAndUserPwd(email, password);
 
         ResponseEntity response = null;
-
+        System.out.println(userOpt);
         if (userOpt.isPresent()) {
             final BasicResponse result = new BasicResponse();
             result.status = true;
             result.data = "success";
+//            String token = getToken(userOpt);
             response = new ResponseEntity<>(result, HttpStatus.OK);
         } else {
             response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -69,5 +72,20 @@ public class AccountController {
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+    
+ // 암호화 하는 방법임 : 내이름 넣음
+ 	static Signer signer = HMACSigner.newSHA256Signer("hong jeong min");
+
+// 	static public String getToken(Member member) {
+// 		// Userid로 토큰을 만든다.
+// 		// plusMinutes 는 토큰을 등록하는 시간임 지금은 1분
+// 		JWT jwt = new JWT().setIssuer(member.getUserid()).setIssuedAt(ZonedDateTime.now(ZoneOffset.UTC))
+// 				.setSubject("f1e33ab3-027f-47c5-bb07-8dd8ab37a2d3")
+// 				.setExpiration(ZonedDateTime.now(ZoneOffset.UTC).plusMinutes(1));
+// 		// Sign and encode the JWT to a JSON string representation
+// 		String token = JWT.getEncoder().encode(jwt, signer);
+//
+// 		return token;
+// 	}
 
 }

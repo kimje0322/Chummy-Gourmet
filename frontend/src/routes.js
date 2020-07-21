@@ -2,6 +2,7 @@
 
 import Login from './views/user/Login.vue'
 import Join from './views/user/Join.vue'
+import JoinRule from './views/user/JoinRule.vue'
 import JoinInfo from './views/user/JoinInfo.vue'
 import Curator from './views/curator/curator.vue'
 import Detail from './views/curator/detail.vue'
@@ -33,6 +34,11 @@ export default [
         path : '/user/info',
         name : 'UserInfo',
         component : UserInfo
+    },
+    {
+        path : '/user/joinrule',
+        name : 'Joinrule',
+        component : JoinRule
     },
     {
         path : '/user/joininfo',

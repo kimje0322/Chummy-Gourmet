@@ -10,6 +10,11 @@
     <hr>
     <div class="form-wrap">
       <div class="input-with-label">
+        <input id="name" placeholder="이름을 입력하세요." type="text" />
+        <label for="name">이름</label>
+      </div>
+
+      <div class="input-with-label">
         <input v-model="nickName" id="nickname" placeholder="닉네임을 입력하세요." type="text" />
         <label for="nickname">닉네임</label>
       </div>
@@ -34,15 +39,20 @@
         <label for="password-confirm">비밀번호 확인</label>
       </div>
     </div>
+    <div class="input-with-label">
+        <input id="cellphone" placeholder="휴대폰 번호를 입력하세요." type="text" />
+        <label for="cellphone">휴대폰</label>
+      </div>
+
 
     <label>
       <input v-model="isTerm" type="checkbox" id="term" />
       <span>약관을 동의합니다.</span>
     </label>
 
-    <span @click="termPopup=true" class="seeRules">약관보기</span>
+    <router-link to="/user/joinrule"><span @click="termPopup=true" class="seeRules">약관보기</span></router-link>
   
-    <v-btn color="warning" class="next-btn">다음</v-btn> 
+    <router-link to="/user/joininfo"><v-btn color="warning" class="next-btn">다음</v-btn></router-link>
     <!-- <router-link to="/joininfo" class="btn-bottom">다음</router-link> -->
   </div>
 </template>

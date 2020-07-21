@@ -2,6 +2,7 @@
 
 import Login from './views/user/Login.vue'
 import Join from './views/user/Join.vue'
+import JoinInfo from './views/user/JoinInfo.vue'
 import Curator from './views/curator/curator.vue'
 import Detail from './views/curator/detail.vue'
 import ReviewDetail from './views/curator/reviewDetail.vue'
@@ -22,6 +23,11 @@ export default [
         path : '/user/join',
         name : 'Join',
         component : Join
+    },
+    {
+        path : '/user/joininfo',
+        name : 'JoinInfo',
+        component : JoinInfo
     },
     {
         path : '/feed/main',

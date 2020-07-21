@@ -11,6 +11,9 @@ import Components from './views/Components.vue'
 import Party from './views/feed/Party.vue'
 import FindPw from './views/user/FindPw.vue'
 import UserInfo from './views/Main.vue'
+import Pref from './views/user/Preference.vue'
+import Map from './views/map/map.vue'
+import MapParty from './views/map/party.vue'
 
 
 export default [
@@ -40,6 +43,21 @@ export default [
         path : '/user/findPw',
         name : 'FindPw',
         component : FindPw
+    },
+    {
+        path : '/user/pref',
+        name : 'Pref',
+        component : Pref
+    },
+    {
+        path : '/map',
+        name : 'Map',
+        component : Map
+    },
+    {
+        path : '/map/party',
+        name : 'MapParty',
+        component : MapParty
     },
     {
         path : '/feed/main',

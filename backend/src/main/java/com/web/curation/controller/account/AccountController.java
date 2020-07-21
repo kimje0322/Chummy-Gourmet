@@ -40,7 +40,7 @@ public class AccountController {
     public Object login(@RequestParam(required = true) final String email,
             @RequestParam(required = true) final String password) {
 
-        Optional<User> userOpt = userDao.findUserByEmailAndPassword(email, password);
+        Optional<User> userOpt = userDao.findUserByUserEmailAndUserPwd(email, password);
 
         ResponseEntity response = null;
 
@@ -70,4 +70,25 @@ public class AccountController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    
+    @GetMapping("/account/findpwd")
+    @ApiOperation(value = "비밀번호찾기")
+    public Object findpwd(@RequestParam(required = true) final String email,
+            @RequestParam(required = true) final String password) {
+
+        Optional<User> userOpt = userDao.findUserByUserEmailAndUserPwd(email, password);
+
+        ResponseEntity response = null;
+
+        if (userOpt.isPresent()) {
+            final BasicResponse result = new BasicResponse();
+            result.status = true;
+            result.data = "success";
+            response = new ResponseEntity<>(result, HttpStatus.OK);
+        } else {
+            response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        return response;
+    }
 }

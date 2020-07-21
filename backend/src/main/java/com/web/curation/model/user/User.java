@@ -23,15 +23,26 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String uid;
+   @Id
+   @Column(name = "user_id")
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   private String userId;
 
-    @JsonIgnore
-    private String password;
-    private String email;
+   @JsonIgnore
+   @Column(name = "user_pwd")
+   private String userPwd;
+   @Column(name = "user_email")
+   private String userEmail;
 
-    @Column(insertable = false, updatable = false)
-    private LocalDateTime createDate;
+   @Column(name = "user_joindate", insertable = false, updatable = false)
+   private String userJoindate;
+//    private LocalDateTime createDate;
+
+   @Column(name = "user_name")
+   private String userName;
+   @Column(name = "user_nickname")
+   private String userNickname;
+   @Column(name = "user_phone")
+   private String userPhone;
 
 }

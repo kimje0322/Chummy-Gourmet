@@ -7,8 +7,8 @@ import com.web.curation.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserDao extends JpaRepository<User, String> {
-    User getUserByEmail(String email);
+    User getUserByUserEmail(String email);
 
-    Optional<User> findUserByEmailAndPassword(String email, String password);
+    Optional<User> findUserByUserEmailAndUserPwd(String email, String password);
 
 }

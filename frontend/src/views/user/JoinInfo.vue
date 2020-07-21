@@ -66,7 +66,6 @@
             중식
           </label>
         </li>
-
         <li>
           <input type="checkbox" id="il" name="food" />
           <label for="il" class="age">
@@ -89,7 +88,6 @@
           </label>
         </li>
       </ul><br><br><br><br>
-
 
     <!-- personality -->
     <h3 class="userInfo">성향</h3>

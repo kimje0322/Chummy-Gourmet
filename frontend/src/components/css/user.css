@@ -110,7 +110,7 @@
 }
 
 .user#login .add-option .bar {
-  width: calc(100% - 40px);
+  width: calc(100% - 80px);
 }
 
 .user#login .add-option .wrap {

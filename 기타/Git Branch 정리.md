@@ -8,7 +8,7 @@
 >
 > 배포(Release) 이력을 관리하기 위해 사용. 즉, 배포 가능한 상태만을 관리한다.
 
-![](img/develop-branch_1.PNG)![develop-branch](img/develop-branch.PNG)
+![](img/develop-branch_1.PNG)![develop-branch](img/develop-branch_2.PNG)
 
 
 

@@ -45,8 +45,7 @@ public class User {
 	private String userNickname;
 	@Column(name = "user_phone")
 	private String userPhone;
-	
-	
+
 	public User() {
 		super();
 	}
@@ -67,6 +66,61 @@ public class User {
 				+ userJoindate + ", userName=" + userName + ", userNickname=" + userNickname + ", userPhone="
 				+ userPhone + "]";
 	}
-	
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String getUserPwd() {
+		return userPwd;
+	}
+
+	public void setUserPwd(String userPwd) {
+		this.userPwd = userPwd;
+	}
+
+	public String getUserEmail() {
+		return userEmail;
+	}
+
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
+	}
+
+	public String getUserJoindate() {
+		return userJoindate;
+	}
+
+	public void setUserJoindate(String userJoindate) {
+		this.userJoindate = userJoindate;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getUserNickname() {
+		return userNickname;
+	}
+
+	public void setUserNickname(String userNickname) {
+		this.userNickname = userNickname;
+	}
+
+	public String getUserPhone() {
+		return userPhone;
+	}
+
+	public void setUserPhone(String userPhone) {
+		this.userPhone = userPhone;
+	}
 
 }

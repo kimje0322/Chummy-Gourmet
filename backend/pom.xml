@@ -81,6 +81,12 @@
 			<artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
 		
+		<!-- java mail sender-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+	
 		<!-- JWt -->
 
 		<dependency>
@@ -94,6 +100,11 @@
 			<version>4.7</version>
 		</dependency>
 
+		<!-- 서버 자동 재시작 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -6,6 +6,9 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.validation.Valid;
 
 import com.web.curation.dao.user.UserDao;
@@ -16,6 +19,8 @@ import com.web.curation.model.user.User;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -43,7 +48,7 @@ public class AccountController {
 
     @Autowired
     UserDao userDao;
-
+    
     @GetMapping("/account/login")
     @ApiOperation(value = "로그인")
     public Object login(@RequestParam(required = true) final String email,
@@ -79,7 +84,7 @@ public class AccountController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
     
- // 암호화 하는 방법임 : 내이름 넣음
+    // 암호화 하는 방법임 : 내이름 넣음
  	static Signer signer = HMACSigner.newSHA256Signer("park se hun");
 
  	static public String getToken(String email, String password) {
@@ -93,7 +98,7 @@ public class AccountController {
  		return token;
  	}
 
- // 복호화 하는 방법 : 내이름 넣음 
+ 	// 복호화 하는 방법 : 내이름 넣음 
  	// 토큰이 필요한 API 정보에 대해서 유효성을 체크해주면된다
  	static Verifier verifier = HMACVerifier.newVerifier("park se hun");
  	static public boolean cmpToken(String token) {

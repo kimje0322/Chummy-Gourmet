@@ -647,12 +647,12 @@ p {
 }
 
 .container {
-    //padding-top:90px;
+    // padding-top:90px;
     @include wrap;
     box-sizing: border-box;
     min-height: 100vh;
     >div {
-        padding-top: 80px;
+        padding-top: 0px;
         &.tab_wrap {
             padding-top: 50px;
         }

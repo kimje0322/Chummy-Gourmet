@@ -1,12 +1,13 @@
 <template>
   <v-app id="app">
-    <div class="img-info">
-      <!-- <img src="../../assets/images/logo_ex.png" alt="log" width="100"> -->
-    </div>
+    <!-- <div class="img-info"> -->
+    <!-- <img src="../../assets/images/logo_ex.png" alt="log" width="100"> -->
+    <!-- </div> -->
     <!-- <router-view></router-view> -->
 
     <div class="user" id="login">
       <div class="wrapC">
+        <v-parallax src="../../assets/images/background.jpg" width="500"></v-parallax>
         <!-- <h1>
         돈독한
         <br />미식가
@@ -59,11 +60,11 @@
         <p>혹시</p>
         <div class="bar"></div>
           </div>-->
-          <br>
-          <br>
-          <br>
-          <br>
-          <br>
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
           <div class="row">
             <p class="d-flex mx-auto">
               <router-link to="/user/join">

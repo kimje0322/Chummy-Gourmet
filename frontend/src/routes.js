@@ -15,13 +15,14 @@ import UserInfo from './views/Main.vue'
 import Pref from './views/user/Preference.vue'
 import Map from './views/map/map.vue'
 import MapParty from './views/map/party.vue'
+import Home from './views/user/Home.vue'
 
 
 export default [
 
 
     {
-        path : '/',
+        path : '/login',
         name : 'Login',
         component : Login
     },
@@ -94,5 +95,10 @@ export default [
         path : '/party',
         name : 'Party',
         component : Party
+    },
+    {
+        path : '/',
+        name : 'Home',
+        component : Home
     }
 ]

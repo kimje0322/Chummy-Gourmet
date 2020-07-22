@@ -1,6 +1,6 @@
 <template>
-  <div id="personal">
-    <h2>추가정보 입력 </h2>
+  <div id="joininfo">
+    <h2 class="title">추가정보 입력 </h2>
     <hr>    
     <!-- 성별 -->
     <h3 class="userInfo">성별</h3>
@@ -44,7 +44,7 @@
       </ul><br><br><br><br>
     <!-- 선호 음식 -->
     <h3 class="userInfo">선호음식</h3>
-      <ul class="select-food">
+      <ul class="select-many">
         <li>
           <input type="checkbox" id="han" name="food" />
           <label for="han" class="age">
@@ -90,12 +90,14 @@
       </ul><br><br><br><br>
 
     <!-- personality -->
-    <h3 class="userInfo">성향</h3>
-      <ul class="select-other">
+    <h3 class="userInfo">성격</h3>
+      <ul class="select-many">
         <li>
           <input type="checkbox" id="p1" name="personality" />
           <label for="p1" class="age">
+            <!-- <h5 style="padding-left:15px; padding-right:15px"> -->
             낙천적
+            <!-- </h5> -->
           </label>
         </li>
         <li>
@@ -172,7 +174,7 @@
     
     <!-- interest -->
     <h3 class="userInfo">관심사</h3>
-      <ul class="select-food">
+      <ul class="select-many-interest">
         <li>
           <input type="checkbox" id="i1" name="interest" />
           <label for="i1" class="age">
@@ -272,7 +274,7 @@
         <li>
           <input type="checkbox" id="i17" name="interest" />
           <label for="i17" class="age">
-            이직
+            동물
           </label>
         </li>
         <li>
@@ -283,7 +285,7 @@
         </li>
       </ul>
       <!-- <span class="selectInfo">게임</span> -->
-    <router-link to="/user/finishjoin"><v-btn color="warning" class="next-btn"><h4>제출</h4></v-btn></router-link> 
+    <router-link to="/user/finishjoin"><v-btn color="#B388FF" class="next-btn"><h4 class="submitbtn">제출</h4></v-btn></router-link> 
   </div>
 </template>
 
@@ -301,24 +303,16 @@ export default {
 </script>
 
 <style scoped>
-  h2 {
+  .title{
     text-align: center;
   }
 
   .userInfo {
-    margin: 18px 0 10px 0;
+    margin: 18px 0 10px 25px;
   }
 
   .selectInfo {
     padding: 8px 25px;
-    border: solid gray;
-    border-radius: 15px;
-    border-width: 1.5px;
-    margin: 5px 5px 30px 0;
-  }
-
-  .selectInfoFood {
-    padding: 8px 18px;
     border: solid gray;
     border-radius: 15px;
     border-width: 1.5px;
@@ -333,12 +327,13 @@ export default {
 }
 
   .next-btn {
-    margin: 20px 0;
-    height: 200px;  
-    width: 98%;
+    margin: 20px 20px;
+    height: 200px; 
+    width: 80%;
+    text-align: center;
 }
 
-  h4 {
+  .submitbtn{
     color: white;
   }
 
@@ -347,19 +342,34 @@ export default {
     justify-content: center;
   }
 
-  .select-gender, .select-food {
+  .select-gender, .select-many {
      list-style-type:none;
-     margin:25px 0 0 0;
-     padding:0;
+     margin:2px 0 0 0;
+     padding:0x;
   }
 
-  .select-gender li, .select-food li{
+   .select-many-interest {
+     list-style-type:none;
+     margin:2px 0 0 0;
+     padding:0x;
+  }
+
+  .select-gender li, .select-many li{
       float:left;
       margin:0 5px 0 0;
       width:85px;
       height:42px;
       position:relative;
   }
+
+  .select-many-interest li{
+      float:left;
+      margin:0 5px 0 0;
+      width:85px;
+      height:42px;
+      position:relative;
+  }
+
 
   .select-gender label, .select-gender input {
       display:block;
@@ -370,20 +380,49 @@ export default {
       bottom:0;
   }
 
+
   .select-gender input[type="radio"],
-  .select-food input[type="checkbox"] {
+  .select-many input[type="checkbox"] {
       opacity:0.011;
       z-index:100;
   }
 
-  .select-gender input[type="radio"]:checked + label,
-  .select-food input[type="checkbox"]:checked + label
+  .select-gender input[type="radio"]:checked + label
+
    {
-      background:#FBC02D;
+      background:#D1C4E9;
   }
 
-  .select-gender label, .select-food label {
+  .select-many input[type="checkbox"]:checked + label
+   {
+      background:#D1C4E9;
+  }
+
+  .select-many-interest input[type="checkbox"]:checked + label
+   {
+      background:#D1C4E9;
+  }
+
+  .select-gender label {
       padding:5px;
+      border:1.5px solid gray; 
+      border-radius: 15px;
+      cursor:pointer;
+      z-index:90;
+  }
+
+  .select-many label {
+      width: 100%;
+      padding: 5px 12px 5px 12px;
+      border:1.5px solid gray; 
+      border-radius: 15px;
+      cursor:pointer;
+      z-index:90;
+  }
+
+  .select-many-interest label {
+      width: 100%;
+      padding: 5px 12px 5px 12px;
       border:1.5px solid gray; 
       border-radius: 15px;
       cursor:pointer;

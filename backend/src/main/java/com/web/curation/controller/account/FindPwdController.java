@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException.Gone;
 
-import com.web.curation.dao.user.UserDao;
+import com.web.curation.dao.user.FindPwdDao;
 import com.web.curation.model.BasicResponse;
 
 import io.swagger.annotations.ApiOperation;
@@ -30,13 +31,48 @@ import io.swagger.annotations.ApiResponses;
 @CrossOrigin(origins = { "http://localhost:3000" })
 @RestController
 public class FindPwdController {
+	
 	@Autowired
-	UserDao userDao;
+	FindPwdDao findpwdDao;
 
 	// mail보내기 위함
 	@Autowired
 	private JavaMailSender mailSender;
-
+	
+	// 비교를 위해 저장될 사용자이름변수
+	private String GlobalUserName=""; String GlobalUserEmail="";
+	
+	// 이메일입력 할때 이름과 이메일이 디비에 같은 것인지 아닌지 ajax통신을 위함
+	@PostMapping("/account/equalsemail")
+	@ApiOperation(value = "사용자이름으로 찾은 이메일과 지금 입력한 이메일이 일치하는지검사")
+	public Object emailequalsusername(@RequestParam(required = true) final String userName,
+			@RequestParam(required = true) final String userEmail) {
+		
+		// db에 한번만 갔다 와서 유저 이름에 대한 db에 저장된 이메일을 저장하기 위함
+		if(GlobalUserName.equals("") || !GlobalUserName.equals(userName)) {
+			System.out.println("여기까지 왔는가?");
+			GlobalUserName = userName;
+			// 해당 유저이름에 대한 유저이메일을 디비에 가서 가져온다.
+			GlobalUserEmail = findpwdDao.getUserEmailByUserName(userName);
+			System.out.println("검사하고 왔따");
+		}
+		System.out.println(GlobalUserEmail);
+		
+		// 성공 or 실패 리턴 저장위함
+		ResponseEntity response = null;
+		
+		// 사용자가 입력한 유저이메일과 디비에 저장된 유저이메일이 같은가?
+		if(userEmail.equals(GlobalUserEmail)) {
+			// 일치하다
+			return response = new ResponseEntity<>("success", HttpStatus.OK);
+		}
+		// 불일치하다
+		else {
+			return response = new ResponseEntity<>("fail", HttpStatus.NOT_FOUND);
+		}
+		
+	}
+	
 	// 최종적으로 확인버튼 눌렀을때 이메일로 임시비밀번호를 보내기
 	@PostMapping("/account/sendpwd")
 	@ApiOperation(value = "이메일로임시비밀번호보내기")
@@ -48,8 +84,8 @@ public class FindPwdController {
 		for (int i = 0; i < 12; i++) {
 			userPwd += (char) ((Math.random() * 26) + 97);
 		}
-		// 
-		int num = userDao.setUserPwdByUserNameAndUserEmail(userPwd, userName, userEmail);
+		// 이미 이전부분에서 정확히 이름과 이메일을 입력하기 때문에 오류가 나지 않을거라고 생각함
+		int num = findpwdDao.setUserPwdByUserNameAndUserEmail(userPwd, userName, userEmail);
 
 		// 성공 or 실패 리턴 저장위함
 		ResponseEntity response = null;

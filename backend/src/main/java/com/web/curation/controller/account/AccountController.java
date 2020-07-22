@@ -49,40 +49,6 @@ public class AccountController {
     @Autowired
     UserDao userDao;
     
-    // mail보내기 위함
-    @Autowired
-	private JavaMailSender mailSender;
-
-    @PostMapping("/account/sendpwd")
-    @ApiOperation(value = "이메일로비밀번호보내기")
-    public Object sendpwd(@RequestParam(required = true) final String userName,
-    		@RequestParam(required = true) final String userEmail) {
-    	// 여기는 최종적으로 확인버튼 눌렀을때 이메일로 임시비밀번호를 보내기 하는 곳임
-    	
-		System.out.println(userName + " " + userEmail + " ") ;
-		User user = userDao.getUserPwdByUserNameAndUserEmail(userName, userEmail);
-		System.out.println("비밀번호는 = "+user.getUserPwd());
-		String UserPwd = user.getUserPwd();
-		// 성공 or 실패 리턴
-		ResponseEntity response = null;
-	    
-	    try {
-			MimeMessage msg = mailSender.createMimeMessage();
-			MimeMessageHelper messageHelper = new MimeMessageHelper(msg, true, "UTF-8");
-			messageHelper.setFrom("tmdwkd2.gmail.com"); // 보내는사람의 주소(없으면 동작x)
-			messageHelper.setTo(userEmail); // 받는사람의 주소
-			messageHelper.setSubject(userName + "님의 비밀번호 찾기 메일입니다."); // 제목
-			messageHelper.setText("패스워드는  " + UserPwd + " 입니다."); // 내용
-			msg.setRecipients(MimeMessage.RecipientType.TO, InternetAddress.parse(userEmail));
-			System.out.println(messageHelper);
-			mailSender.send(msg);
-			response = new ResponseEntity<>("success", HttpStatus.OK);	
-		} catch (MessagingException e) {
-			response = new ResponseEntity<>("Fail", HttpStatus.NOT_FOUND);
-		}
-        return response;
-    }
-    
     @GetMapping("/account/login")
     @ApiOperation(value = "로그인")
     public Object login(@RequestParam(required = true) final String email,

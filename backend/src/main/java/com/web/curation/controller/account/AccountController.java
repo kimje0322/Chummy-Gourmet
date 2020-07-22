@@ -56,7 +56,6 @@ public class AccountController {
 			final BasicResponse result = new BasicResponse();
 			result.status = true;
 			result.data = "success";
-//            String token = getToken(userOpt);
 			String token = getToken(email, password);
 			response = new ResponseEntity<>(token, HttpStatus.OK);
 		} else {
@@ -64,6 +63,13 @@ public class AccountController {
 		}
 
 		return response;
+	}
+	
+	//토큰이 유호한지 확인
+	@PostMapping("/account/checktoken")
+	public boolean checkToken(@RequestParam(required = true) final String token) {
+		if(cmpToken(token))return true;
+		return false;
 	}
 
 	@PostMapping("/account/signup")
@@ -104,6 +110,7 @@ public class AccountController {
 				.setExpiration(ZonedDateTime.now(ZoneOffset.UTC).plusMinutes(1));
 		// Sign and encode the JWT to a JSON string representation
 		String token = JWT.getEncoder().encode(jwt, signer);
+		System.out.println(cmpToken(token));
 		return token;
 	}
 

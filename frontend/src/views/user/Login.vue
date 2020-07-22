@@ -6,8 +6,8 @@
     <!-- <router-view></router-view> -->
 
     <div class="user" id="login">
+        <!-- <img src="../../assets/images/background.jpg" width="500"> -->
       <div class="wrapC">
-        <v-parallax src="../../assets/images/background.jpg" width="500"></v-parallax>
         <!-- <h1>
         돈독한
         <br />미식가
@@ -40,12 +40,6 @@
         </div>
 
         <v-btn color="warning" width="100%">로그인</v-btn>
-
-        <!-- <v-btn color="info" class="btn btn--back btn--login"
-      @click="onLogin"
-      :disabled="!isSubmit"
-      :class="{disabled : !isSubmit}"
-        >로그인</v-btn>-->
 
         <div class="sns-login">
           <div class="text">

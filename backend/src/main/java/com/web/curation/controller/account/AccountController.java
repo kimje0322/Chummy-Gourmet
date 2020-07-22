@@ -1,5 +1,7 @@
 package com.web.curation.controller.account;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -59,15 +61,27 @@ public class AccountController {
 	@PostMapping("/account/signup")
 	@ApiOperation(value = "가입하기")
 	public Object signup(@Valid @RequestBody SignupRequest request) {
-		User tempUser = userDao.getUserByUserEmail(request.getUserEmail());
-		System.out.println(tempUser);
-		
-		userDao.save(new User(request.getUserPwd(), request.getUserEmail(), request.getUserName(), request.getUserNickname(), request.getUserPhone()));
-//		System.out.println(request);
+		List<User> originUsers = new ArrayList<>();
+		User originUser = null;
+		originUser = userDao.getUserByUserEmail(request.getUserEmail());
+		if (originUser != null)
+			originUsers.add(originUser);
+		originUser = userDao.getUserByUserNickname(request.getUserNickname());
+		if (originUser != null)
+			originUsers.add(originUser);
 		final BasicResponse result = new BasicResponse();
-		result.status = true;
-		result.data = "success";
-
+		// 기존에 가입한 유저가 없다면
+		if (originUsers.isEmpty()) {
+			userDao.save(new User(request.getUserPwd(), request.getUserEmail(), request.getUserName(),
+					request.getUserNickname(), request.getUserPhone()));
+			result.status = true;
+			result.data = "success";
+		}
+		// 기존에 가입한 유저가 있다면
+		else {
+			result.status = false;
+			result.data = "fail";
+		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 

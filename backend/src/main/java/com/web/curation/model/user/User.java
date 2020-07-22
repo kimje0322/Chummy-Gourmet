@@ -3,6 +3,7 @@
 package com.web.curation.model.user;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -44,6 +45,27 @@ public class User {
 	private String userNickname;
 	@Column(name = "user_phone")
 	private String userPhone;
+
+	public User() {
+		super();
+	}
+
+	@Builder
+	public User(String userPwd, String userEmail, String userName, String userNickname, String userPhone) {
+		super();
+		this.userPwd = userPwd;
+		this.userEmail = userEmail;
+		this.userName = userName;
+		this.userNickname = userNickname;
+		this.userPhone = userPhone;
+	}
+
+	@Override
+	public String toString() {
+		return "User [userId=" + userId + ", userPwd=" + userPwd + ", userEmail=" + userEmail + ", userJoindate="
+				+ userJoindate + ", userName=" + userName + ", userNickname=" + userNickname + ", userPhone="
+				+ userPhone + "]";
+	}
 
 	public String getUserId() {
 		return userId;

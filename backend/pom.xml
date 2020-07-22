@@ -80,6 +80,19 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
+		
+		<!-- JWt -->
+
+		<dependency>
+			<groupId>io.fusionauth</groupId>
+			<artifactId>fusionauth-jwt</artifactId>
+			<version>3.4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.7</version>
+		</dependency>
 
 	</dependencies>
 

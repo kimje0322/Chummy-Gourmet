@@ -1,58 +1,70 @@
 package com.web.curation.model.user;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.ToString;
+import lombok.Data;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-
-
-
 @Valid
-@ToString
+@Data
 public class SignupRequest {
-    @ApiModelProperty(required = true)
-    @NotNull
-    String email;
-    @ApiModelProperty(required = true)
-    @NotNull
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d$@$!%*#?&]{8,}$")
-    String password;
-    @ApiModelProperty(required = true)
-    @NotNull
-    String nickname;
+	@ApiModelProperty(required = true)
+	@NotNull
+	String userEmail;
+	@ApiModelProperty(required = true)
+	@NotNull
+	@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d$@$!%*#?&]{8,}$")
+	String userPwd;
+	@ApiModelProperty(required = true)
+	@NotNull
+	String userNickname;
+	@ApiModelProperty(required = true)
+	@NotNull
+	String userName;
+	@ApiModelProperty(required = true)
+	@NotNull
+	String userPhone;
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-
-    public String getPassword() {
-        return password;
-    }
-
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-	@Override
-	public String toString() {
-		return "SignupRequest [email=" + email + ", password=" + password + ", nickname=" + nickname + "]";
+	public String getUserEmail() {
+		return userEmail;
 	}
-    
+
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
+	}
+
+	public String getUserPwd() {
+		return userPwd;
+	}
+
+	public void setUserPwd(String userPwd) {
+		this.userPwd = userPwd;
+	}
+
+	public String getUserNickname() {
+		return userNickname;
+	}
+
+	public void setUserNickname(String userNickname) {
+		this.userNickname = userNickname;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getUserPhone() {
+		return userPhone;
+	}
+
+	public void setUserPhone(String userPhone) {
+		this.userPhone = userPhone;
+	}
+
 }

@@ -24,50 +24,51 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
-        @ApiResponse(code = 403, message = "Forbidden", response = BasicResponse.class),
-        @ApiResponse(code = 404, message = "Not Found", response = BasicResponse.class),
-        @ApiResponse(code = 500, message = "Failure", response = BasicResponse.class) })
+		@ApiResponse(code = 403, message = "Forbidden", response = BasicResponse.class),
+		@ApiResponse(code = 404, message = "Not Found", response = BasicResponse.class),
+		@ApiResponse(code = 500, message = "Failure", response = BasicResponse.class) })
 
 @CrossOrigin(origins = { "http://localhost:3000" })
 @RestController
 public class AccountController {
 
-    @Autowired
-    UserDao userDao;
+	@Autowired
+	UserDao userDao;
 
-    @GetMapping("/account/login")
-    @ApiOperation(value = "로그인")
-    public Object login(@RequestParam(required = true) final String email,
-            @RequestParam(required = true) final String password) {
+	@GetMapping("/account/login")
+	@ApiOperation(value = "로그인")
+	public Object login(@RequestParam(required = true) final String email,
+			@RequestParam(required = true) final String password) {
 
-        Optional<User> userOpt = userDao.findUserByUserEmailAndUserPwd(email, password);
+		Optional<User> userOpt = userDao.findUserByUserEmailAndUserPwd(email, password);
 
-        ResponseEntity response = null;
+		ResponseEntity response = null;
 
-        if (userOpt.isPresent()) {
-            final BasicResponse result = new BasicResponse();
-            result.status = true;
-            result.data = "success";
-            response = new ResponseEntity<>(result, HttpStatus.OK);
-        } else {
-            response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
+		if (userOpt.isPresent()) {
+			final BasicResponse result = new BasicResponse();
+			result.status = true;
+			result.data = "success";
+			response = new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
 
-        return response;
-    }
+		return response;
+	}
 
-    @PostMapping("/account/signup")
-    @ApiOperation(value = "가입하기")
+	@PostMapping("/account/signup")
+	@ApiOperation(value = "가입하기")
+	public Object signup(@Valid @RequestBody SignupRequest request) {
+		User tempUser = userDao.getUserByUserEmail(request.getUserEmail());
+		System.out.println(tempUser);
+		
+		userDao.save(new User(request.getUserPwd(), request.getUserEmail(), request.getUserName(), request.getUserNickname(), request.getUserPhone()));
+//		System.out.println(request);
+		final BasicResponse result = new BasicResponse();
+		result.status = true;
+		result.data = "success";
 
-    public Object signup(@Valid @RequestBody SignupRequest request) {
-        // 이메일, 닉네임 중복처리 필수
-        // 회원가입단을 생성해 보세요.
-    	System.out.println(request);
-        final BasicResponse result = new BasicResponse();
-        result.status = true;
-        result.data = "success";
-
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
 
 }

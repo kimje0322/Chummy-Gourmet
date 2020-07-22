@@ -12,13 +12,19 @@
         margin-bottom: 30px;
     }
 
+    h3 {
+        color: white;
+        margin: 10px;
+        text-align: center;
+    }
+
     /*로그인*/
     // 아이디 선택자 &#
     &#login {
         background-image: url(../../assets/images/background.png);
-        h1 {
-            margin-bottom: 30px;
-            color:#000;
+        .p {
+            // margin-bottom: 50px;
+            color: white;
         }
         .btn--login {
             margin-top: 5px;
@@ -34,7 +40,7 @@
             .bar {
                 height: 1px;
                 background-color: white;
-                float: right;
+                float: left;
                 margin-top: 9px;
                 margin-bottom: 20px;
             }

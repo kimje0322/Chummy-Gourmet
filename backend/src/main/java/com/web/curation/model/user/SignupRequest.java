@@ -67,4 +67,22 @@ public class SignupRequest {
 		this.userPhone = userPhone;
 	}
 
+	public SignupRequest(@NotNull String userEmail,
+			@NotNull @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d$@$!%*#?&]{8,}$") String userPwd,
+			@NotNull String userNickname, @NotNull String userName, @NotNull String userPhone) {
+		super();
+		this.userEmail = userEmail;
+		this.userPwd = userPwd;
+		this.userNickname = userNickname;
+		this.userName = userName;
+		this.userPhone = userPhone;
+	}
+
+	@Override
+	public String toString() {
+		return "SignupRequest [userEmail=" + userEmail + ", userPwd=" + userPwd + ", userNickname=" + userNickname
+				+ ", userName=" + userName + ", userPhone=" + userPhone + "]";
+	}
+	
+	
 }

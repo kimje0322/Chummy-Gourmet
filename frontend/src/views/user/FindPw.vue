@@ -12,6 +12,7 @@
     </div>
     <div class="input-with-label">
         <input
+          v-model="email"
           id="email"
           placeholder="이메일을 입력하세요."
           type="text"
@@ -35,9 +36,30 @@
 </template>
 
 <script>
+import * as EmailValidator from "email-validator";
+
 export default {
-  name: 'FindPw'
-}
+  name: 'FindPw',
+  watch: {
+    email: function(v) {
+      this.checkForm();
+    }
+  },
+  methods: {
+    checkForm() {
+      if (this.email.length >= 0 && !EmailValidator.validate(this.email))
+        this.error.email = "이메일 형식이 아닙니다.";
+    }
+  },
+  data () {
+    return {
+      email: "",
+      error: {
+        email: false,
+      },
+    }
+  }
+};
 </script>
 
 <style>

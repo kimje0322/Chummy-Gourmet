@@ -17,17 +17,19 @@
       <div class="input-with-label">
         <input v-model="nickName" id="nickname" placeholder="닉네임을 입력하세요." type="text" />
         <label for="nickname">닉네임</label>
-      </div>
        <div class="error-text" v-if="error.nickName">{{error.nickName}}</div>
+      </div>
 
       <div class="input-with-label">
         <input v-model="email" id="email" placeholder="이메일을 입력하세요." type="text" />
         <label for="email">이메일</label>
+      <div class="error-text" v-if="error.email">{{error.email}}</div>
       </div>
 
       <div class="input-with-label">
-        <input v-model="password" id="password" :type="passwordType" placeholder="비밀번호를 입력하세요." />
+        <input v-model="password" v-bind:class="{error : error.password, complete:!error.password&&password.length!==0}" id="password" :type="passwordType" placeholder="비밀번호를 입력하세요." />
         <label for="password">비밀번호</label>
+        <div class="error-text" v-if="error.password">{{error.password}}</div>
       </div>
 
       <div class="input-with-label">
@@ -61,6 +63,8 @@
 </template>
 
 <script>
+import * as EmailValidator from "email-validator";
+import PV from "password-validator";
 
 export default {
   name: 'Join',
@@ -86,17 +90,40 @@ export default {
     };
   },
   watch: {
+    password: function(v) {
+      this.checkForm();
+    },
+    
     nickName: function(v) {
-      this.checkNick();
+      this.checkForm();
+    },
+    email: function(v) {
+      this.checkForm();
+    },
+    passwordConfirm: function(v) {
+      this.checkForm();
     },
   },
   methods: {
-    checkNick() {
+    checkForm() {
       if (this.nickName.length == 3 )
         this.error.nickName = "사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.";
       else this.error.nickName = false;
-      
-      
+
+      if (this.email.length > 0 && !EmailValidator.validate(this.email))
+        this.error.email = "이메일 형식이 아닙니다.";
+      else this.error.email = false;  
+
+      if (
+        this.password.length >= 0 &&
+        !this.passwordSchema.validate(this.password)
+      )
+        this.error.password = "영문,숫자 포함 8 자리이상이어야 합니다.";
+      else this.error.password = false;
+
+      if (this.passwordConfirm != this.password)
+        this.error.passwordConfirm = "비밀번호가 다릅니다.";
+      else this.error.passwordConfirm = false;
   }
     
 }

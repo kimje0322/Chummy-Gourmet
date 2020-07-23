@@ -7,6 +7,7 @@
             <v-toolbar-title style="margin:auto;">돈독한 미식가</v-toolbar-title>
           </v-app-bar> -->
           <v-bottom-navigation
+            v-if="!$route.meta.navbar"
             scroll-target="#scroll-area-2"
             hide-on-scroll
             scroll-threshold="500"

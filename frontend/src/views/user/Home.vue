@@ -1,6 +1,7 @@
 <template>
   <div id="home">
-      <!-- <v-parallax src="../../assets/images/background.jpg" width="500"></v-parallax> -->
+      <!-- <v-parallax src="../../assets/images/background.png" width="500"></v-parallax> -->
+      home
   </div>
 </template>
 

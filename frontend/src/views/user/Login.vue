@@ -46,7 +46,7 @@
           <div class="error-text" v-if="error.password">{{error.password}}</div>
         </div>
 
-        <v-btn color="#E8EAF6" width="100%">로그인</v-btn>
+        <v-btn color="white" width="100%">로그인</v-btn>
 
         <div class="sns-login">
           <div class="text">

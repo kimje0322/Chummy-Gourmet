@@ -73,36 +73,49 @@ public class AccountController {
 	@PostMapping("/account/signup")
 	@ApiOperation(value = "가입하기")
 	public Object signup(@Valid @RequestBody SignupRequest request) {
-		List<User> originUsers = new ArrayList<>();
 		User originUser = null;
+		final BasicResponse result = new BasicResponse();
+
+		boolean isExistEmail = false;
+		boolean isExistNickname = false;
+
+		// 이메일 중복 검사
 		originUser = userDao.getUserByUserEmail(request.getUserEmail());
 		if (originUser != null)
-			originUsers.add(originUser);
+			isExistEmail = true;
+
+		// 닉네임 중복 검사
 		originUser = userDao.getUserByUserNickname(request.getUserNickname());
 		if (originUser != null)
-			originUsers.add(originUser);
-		final BasicResponse result = new BasicResponse();
-		// 기존에 가입한 유저가 없다면
-		if (originUsers.isEmpty()) {
+			isExistNickname = true;
+
+		// 기존에 가입한 동일 이메일이 있다면
+		if (isExistEmail) {
+			result.status = false;
+			result.data = "fail";
+		}
+
+		// 기존에 가입한 동일 닉네임이 있다면
+		else if (isExistNickname) {
+			result.status = false;
+			result.data = "fail";
+		}
+
+		// 기존 유저가 없다면
+		else {
+			// user entity db 저장
 			User newUser = new User(request.getUserPwd(), request.getUserEmail(), request.getUserName(),
 					request.getUserNickname(), request.getUserPhone());
 			userDao.save(newUser);
-			
+
+			// user detail entity db 저장
 			UserDetail newUserDetail = new UserDetail(newUser.getUserId(), request.getUserGender(),
-					request.getUserAge(), request.getUserFavorite(), request.getUserPersonality(),
-					request.getUserInterest());
+					request.getUserAge(), request.getUserFavorite().toString(), request.getUserPersonality().toString(),
+					request.getUserInterest().toString());
 			userDetailDao.save(newUserDetail);
-			
-			System.out.println(newUser);
-			System.out.println(newUserDetail);
-			
+
 			result.status = true;
 			result.data = "success";
-		}
-		// 기존에 가입한 유저가 있다면
-		else {
-			result.status = false;
-			result.data = "fail";
 		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}

@@ -10,9 +10,11 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import com.web.curation.dao.user.UserDao;
+import com.web.curation.dao.user.UserDetailDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.user.SignupRequest;
 import com.web.curation.model.user.User;
+import com.web.curation.model.user.UserDetail;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
@@ -42,6 +44,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 public class AccountController {
 
+	@Autowired
+	UserDetailDao userDetailDao;
 	@Autowired
 	UserDao userDao;
 
@@ -80,8 +84,18 @@ public class AccountController {
 		final BasicResponse result = new BasicResponse();
 		// 기존에 가입한 유저가 없다면
 		if (originUsers.isEmpty()) {
-			userDao.save(new User(request.getUserPwd(), request.getUserEmail(), request.getUserName(),
-					request.getUserNickname(), request.getUserPhone()));
+			User newUser = new User(request.getUserPwd(), request.getUserEmail(), request.getUserName(),
+					request.getUserNickname(), request.getUserPhone());
+			userDao.save(newUser);
+			
+			UserDetail newUserDetail = new UserDetail(newUser.getUserId(), request.getUserGender(),
+					request.getUserAge(), request.getUserFavorite(), request.getUserPersonality(),
+					request.getUserInterest());
+			userDetailDao.save(newUserDetail);
+			
+			System.out.println(newUser);
+			System.out.println(newUserDetail);
+			
 			result.status = true;
 			result.data = "success";
 		}

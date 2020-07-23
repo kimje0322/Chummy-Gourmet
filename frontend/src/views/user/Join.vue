@@ -13,11 +13,12 @@
         <input id="name" placeholder="이름을 입력하세요." type="text" />
         <label for="name">이름</label>
       </div>
-
+      
       <div class="input-with-label">
         <input v-model="nickName" id="nickname" placeholder="닉네임을 입력하세요." type="text" />
         <label for="nickname">닉네임</label>
       </div>
+       <div class="error-text" v-if="error.nickName">{{error.nickName}}</div>
 
       <div class="input-with-label">
         <input v-model="email" id="email" placeholder="이메일을 입력하세요." type="text" />
@@ -39,11 +40,13 @@
         <label for="password-confirm">비밀번호 확인</label>
       </div>
     </div>
-    <div class="input-with-label">
-        <input id="cellphone" placeholder="휴대폰 번호를 입력하세요." type="text" />
-        <label for="cellphone">휴대폰</label>
-      </div>
-
+    <div class="input-with-label cell-label">
+      <input id="cellphone" placeholder="휴대폰 번호를 입력하세요." type="text" />
+      <v-btn class="cell-auth" color="error">인증</v-btn>
+      <label for="cellphone">
+        휴대폰
+      </label>
+    </div>
 
     <label>
       <input v-model="isTerm" type="checkbox" id="term" />
@@ -81,8 +84,24 @@ export default {
       passwordConfirmType: "password",
       termPopup: false
     };
+  },
+  watch: {
+    nickName: function(v) {
+      this.checkNick();
+    },
+  },
+  methods: {
+    checkNick() {
+      if (this.nickName.length == 3 )
+        this.error.nickName = "사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.";
+      else this.error.nickName = false;
+      
+      
   }
+    
+}
 };
+
 </script>
 
 
@@ -97,8 +116,22 @@ export default {
    float: right;
  }
  .next-btn {
-    margin: 20px 0;
+    margin: 20px 0 0 0;
     height: 200px;  
     width: 100%;
  }
+ .cell-label {
+    position: relative;
+ }
+ 
+ .cell-auth {
+   position: absolute;
+   right: 11px;
+   bottom: 8px;
+ }
+  
+  .input-with-label {
+    margin: 0 0 15px 0;
+  }
+
 </style>

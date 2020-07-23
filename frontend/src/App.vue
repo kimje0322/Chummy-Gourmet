@@ -3,8 +3,11 @@
     <v-app>
       <v-main>
         <v-card class="overflow-hidden mx-auto" height="667" max-width="375">
-        
-          <v-bottom-navigation           
+          <!-- <v-app-bar color="deep-blue accent-4" dense dark>
+            <v-toolbar-title style="margin:auto;">돈독한 미식가</v-toolbar-title>
+          </v-app-bar> -->
+          <v-bottom-navigation
+            v-if="!$route.meta.navbar"
             scroll-target="#scroll-area-2"
             hide-on-scroll
             scroll-threshold="500"

@@ -3,6 +3,7 @@
 package com.web.curation.model.user;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -23,26 +24,103 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
-   @Id
-   @Column(name = "user_id")
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private String userId;
+	@Id
+	@Column(name = "user_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private String userId;
 
-   @JsonIgnore
-   @Column(name = "user_pwd")
-   private String userPwd;
-   @Column(name = "user_email")
-   private String userEmail;
+	@JsonIgnore
+	@Column(name = "user_pwd")
+	private String userPwd;
+	@Column(name = "user_email")
+	private String userEmail;
 
-   @Column(name = "user_joindate", insertable = false, updatable = false)
-   private String userJoindate;
+	@Column(name = "user_joindate", insertable = false, updatable = false)
+	private String userJoindate;
 //    private LocalDateTime createDate;
 
-   @Column(name = "user_name")
-   private String userName;
-   @Column(name = "user_nickname")
-   private String userNickname;
-   @Column(name = "user_phone")
-   private String userPhone;
+	@Column(name = "user_name")
+	private String userName;
+	@Column(name = "user_nickname")
+	private String userNickname;
+	@Column(name = "user_phone")
+	private String userPhone;
+
+	public User() {
+		super();
+	}
+
+	@Builder
+	public User(String userPwd, String userEmail, String userName, String userNickname, String userPhone) {
+		super();
+		this.userPwd = userPwd;
+		this.userEmail = userEmail;
+		this.userName = userName;
+		this.userNickname = userNickname;
+		this.userPhone = userPhone;
+	}
+
+	@Override
+	public String toString() {
+		return "User [userId=" + userId + ", userPwd=" + userPwd + ", userEmail=" + userEmail + ", userJoindate="
+				+ userJoindate + ", userName=" + userName + ", userNickname=" + userNickname + ", userPhone="
+				+ userPhone + "]";
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String getUserPwd() {
+		return userPwd;
+	}
+
+	public void setUserPwd(String userPwd) {
+		this.userPwd = userPwd;
+	}
+
+	public String getUserEmail() {
+		return userEmail;
+	}
+
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
+	}
+
+	public String getUserJoindate() {
+		return userJoindate;
+	}
+
+	public void setUserJoindate(String userJoindate) {
+		this.userJoindate = userJoindate;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getUserNickname() {
+		return userNickname;
+	}
+
+	public void setUserNickname(String userNickname) {
+		this.userNickname = userNickname;
+	}
+
+	public String getUserPhone() {
+		return userPhone;
+	}
+
+	public void setUserPhone(String userPhone) {
+		this.userPhone = userPhone;
+	}
 
 }

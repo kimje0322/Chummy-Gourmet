@@ -29,7 +29,7 @@
       <label for="email">휴대폰</label>
     </div>
       <br><br>
-      <p>※ 회원가입시 입력한 정보를 입력해주세요</p>
+      <!-- <p>※ 회원가입시 입력한 정보를 입력해주세요</p> -->
     <v-btn color="info confirm-btn">확인</v-btn> 
     <v-btn color="#FFB74D">인증</v-btn> 
   </div>

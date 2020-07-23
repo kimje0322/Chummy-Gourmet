@@ -27,7 +27,6 @@ public class UserPage {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String userId;
 
-	@JsonIgnore
 	@Column(name = "user_following")
 	private String userFollowing;
 	@Column(name = "user_follower")

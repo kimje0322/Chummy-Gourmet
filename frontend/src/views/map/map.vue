@@ -172,6 +172,7 @@ export default {
   overflow: hidden;
   width: 100%;
   height: 667px;
+  padding-top: 0px;
 }
 .radius_border {
   border: 1px solid #919191;

@@ -14,12 +14,13 @@
     </div>
     <!-- modal -->
     <v-row justify="center">
+      <!-- calendar dialog -->
       <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
         <template v-slot:activator="{ on, attrs }">
           <v-btn color="primary" dark v-bind="attrs" v-on="on">Calendar</v-btn>
         </template>->
         <!-- calendar -->
-        <v-row class="fill-height">
+        <v-row class="fill-height mx-auto ">
           <v-col>
             <v-sheet height="64">
               <v-toolbar flat color="white">
@@ -106,7 +107,7 @@
         
     <!-- modal/location -->
     <v-row justify="center">
-      <v-dialog v-model="dialog" persistent max-width="290">
+      <v-dialog v-model="dialog1   " persistent max-width="290">
         <template v-slot:activator="{ on, attrs }">
           <v-btn color="primary" dark v-bind="attrs" v-on="on">Location</v-btn>
         </template>
@@ -116,8 +117,8 @@
           <!-- <div id="map"></div> -->
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="green darken-1" text @click="dialog = false">Disagree</v-btn>
-            <v-btn color="green darken-1" text @click="dialog = false">Agree</v-btn>
+            <v-btn color="green darken-1" text @click="dialog1 = false">Disagree</v-btn>
+            <v-btn color="green darken-1" text @click="dialog1 = false">Agree</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -138,6 +139,7 @@
 export default {
   data: () => ({
     dialog: false,
+    dialog1: false,
     dropdown_font: ["1", "2", "3", "4"],
     focus: "",
     type: "month",

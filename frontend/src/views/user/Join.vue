@@ -10,7 +10,7 @@
     <hr>
     <div class="form-wrap">
       <div class="input-with-label">
-        <input id="name" placeholder="이름을 입력하세요." type="text" />
+        <input v-model="name" id="name" placeholder="이름을 입력하세요." type="text" />
         <label for="name">이름</label>
       </div>
       
@@ -58,26 +58,47 @@
 
     <router-link to="/user/joinrule"><span @click="termPopup=true" class="seeRules">약관보기</span></router-link>
   
-    <router-link to="/user/joininfo"><v-btn color="warning" class="next-btn">다음</v-btn></router-link>
+    <router-link to="/user/joininfo" @click.native="onSignup"><v-btn color="warning" class="next-btn">다음</v-btn></router-link>
    
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
+const SERVER_URL = 'http://i3b302.p.ssafy.io:8080'
+
 import * as EmailValidator from "email-validator";
 import PV from "password-validator";
+import UserApi from "../../api/UserApi"
 
 export default {
   name: 'Join',
+  created() {
+    this.component = this;
+
+    this.passwordSchema
+      .is()
+      .min(8)
+      .is()
+      .max(100)
+      .has()
+      .digits()
+      .has()
+      .letters();
+  },
   data: () => {
     return {
       email: "",
       password: "",
+      passwordSchema: new PV(),
       passwordConfirm: "",
       nickName: "",
+      name: "",
       isTerm: false,
       isLoading: false,
       error: {
+        name: false,
         email: false,
         password: false,
         nickName: false,
@@ -106,6 +127,16 @@ export default {
     },
   },
   methods: {
+    onSignup () {
+      const name = this.name;
+      const password = this.password;
+      const email = this.email;
+      const nickName = this.nickName;
+      axios.post(`${SERVER_URL}/account/signup/`, {name, password, email, nickName})
+        .then(response => {
+          console.log(response)
+        })
+    },
     checkForm() {
       if (this.nickName.length == 3 )
         this.error.nickName = "사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.";
@@ -116,7 +147,7 @@ export default {
       else this.error.email = false;  
 
       if (
-        this.password.length >= 0 &&
+        this.password.length > 0 &&
         !this.passwordSchema.validate(this.password)
       )
         this.error.password = "영문,숫자 포함 8 자리이상이어야 합니다.";

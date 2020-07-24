@@ -1,7 +1,12 @@
 <template>
   <div id="home">
-      <!-- <v-parallax src="../../assets/images/background.png" width="500"></v-parallax> -->
-      home
+    <img src="../../assets/images/home-img.png" alt="">
+    <!-- <v-parallax src="../../assets/images/logo0723.png" width="500"></v-parallax> -->
+    
+    <div>
+    <!-- <v-btn color="warning">회원가입</v-btn>
+    <v-btn color="warning">로그인</v-btn> -->
+    </div>
   </div>
 </template>
 
@@ -13,5 +18,10 @@ export default {
 </script>
 
 <style>
-
+  /* #home {
+    background-image: url(../../assets/images/home-img.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  } */
 </style>

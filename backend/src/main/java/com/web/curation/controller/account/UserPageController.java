@@ -96,4 +96,22 @@ public class UserPageController {
 		System.out.println("팔로워 수 = " + count);
 		return count;
 	}
+	
+	// 사용자의 한줄 소개
+	@GetMapping("/userpage/getuserComment")
+	@ApiOperation(value = "[유저페이지] 유저한줄소개가져오기")
+	public String getuserConmment(@RequestParam(required = true) final String userEmail) {
+		
+		User user = userdao.getUserByUserEmail(userEmail);
+		// 팔로워유저 Id리스트
+		String Comment = "";
+		try {
+			Comment = userPageDao.getUserCommentByUserId(user.getUserId());
+		}
+		catch (Exception e) {
+			
+		}
+		System.out.println(Comment);
+		return Comment;
+	}
 }

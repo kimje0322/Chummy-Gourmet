@@ -43,9 +43,9 @@ public class FindPwdController {
 	private String GlobalUserName=""; String GlobalUserEmail="";
 	
 	// 사용자 이름 입력시 디비에 있는지 검사
-	@GetMapping("/account/countusername")
+	@GetMapping("/account/checkusername")
 	@ApiOperation(value = "사용자 이름 입력시 디비에 있는지 검사")
-	public Object countusername(@RequestParam(required = true) final String userName) {
+	public Object checkusername(@RequestParam(required = true) final String userName) {
 		
 		// db에 사용자 이름이 있는지 검사
 		int result;

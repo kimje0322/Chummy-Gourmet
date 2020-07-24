@@ -44,6 +44,9 @@ public class SignupRequest {
 	@ApiModelProperty(required = true)
 //	@NotNull
 	List<Integer> userInterest;
+	@ApiModelProperty(required = true)
+//	@NotNull
+	String userComment;
 
 	public String getUserEmail() {
 		return userEmail;
@@ -100,7 +103,7 @@ public class SignupRequest {
 	public void setUserAge(String userAge) {
 		this.userAge = userAge;
 	}
-
+	
 //	public SignupRequest(@NotNull String userEmail,
 //			@NotNull @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d$@$!%*#?&]{8,}$") String userPwd,
 //			@NotNull String userNickname, @NotNull String userName, @NotNull String userPhone) {
@@ -111,6 +114,14 @@ public class SignupRequest {
 //		this.userName = userName;
 //		this.userPhone = userPhone;
 //	}
+
+	public String getUserComment() {
+		return userComment;
+	}
+
+	public void setUserComment(String userComment) {
+		this.userComment = userComment;
+	}
 
 	public List<Integer> getUserFavorite() {
 		return userFavorite;

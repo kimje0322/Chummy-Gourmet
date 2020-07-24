@@ -2,7 +2,8 @@ package com.web.curation.controller.account;
 
 
 import java.util.ArrayList;
-
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -71,47 +72,55 @@ public class UserPageController {
 		return userNameList;
 	}
 	
-	// 사용자가 팔로잉하는 유저 카운터 반환
-	@GetMapping("/userpage/getfollowingcount")
-	@ApiOperation(value = "[유저페이지] 팔로잉 수 계산")
-	public int getfollowingcount(@RequestParam(required = true) final String userEmail) {
+//	// 사용자가 팔로잉하는 유저 카운터 반환
+//	@GetMapping("/userpage/getfollowingcount")
+//	@ApiOperation(value = "[유저페이지] 팔로잉 수 계산")
+//	public int getfollowingcount(@RequestParam(required = true) final String userEmail) {
+//		
+//		User user = userdao.getUserByUserEmail(userEmail);
+//		// 팔로잉유저 Id리스트
+//		int count = userPageDao.getUserFollowingCount(user.getUserId());
+//		
+//		System.out.println("팔로잉 수 = " + count);
+//		return count;
+//	}
+//	
+//	// 사용자를 팔로워하는 유저 카운터 반환
+//	@GetMapping("/userpage/getfollowercount")
+//	@ApiOperation(value = "[유저페이지] 팔로워 수 계산")
+//	public int getfollowercount(@RequestParam(required = true) final String userEmail) {
+//		
+//		User user = userdao.getUserByUserEmail(userEmail);
+//		// 팔로워유저 Id리스트
+//		int count = userPageDao.getUserFollowerCount(user.getUserId());
+//		
+//		System.out.println("팔로워 수 = " + count);
+//		return count;
+//	}
+	
+	// 사용자의 유저정보, 팔로잉수, 팔로워수 가져오기
+	@GetMapping("/userpage/getuser")
+	@ApiOperation(value = "[유저페이지] 사용자의 유저정보, 팔로잉, 팔로워 수 가져오기")
+	public Object getUserByUserEmail(@RequestParam(required = true) final String userEmail) {
+		User user = new User();
+		user = userdao.getUserByUserEmail(userEmail);
+		System.out.println(user);
+		Map<String, Object>map = new HashMap();
+		map.put("userName", user.getUserName());
+		map.put("userEmail", user.getUserEmail());
+		map.put("userNickname", user.getUserNickname());
+		map.put("userPhone", user.getUserPhone());
+		map.put("userComment", user.getUsercomment());
 		
-		User user = userdao.getUserByUserEmail(userEmail);
-		// 팔로잉유저 Id리스트
+		// 팔로잉 수
 		int count = userPageDao.getUserFollowingCount(user.getUserId());
+		map.put("followingCount", count);
+
+		// 팔로워 수
+		count = userPageDao.getUserFollowerCount(user.getUserId());
+		map.put("followerCount", count);
 		
-		System.out.println("팔로잉 수 = " + count);
-		return count;
-	}
-	
-	// 사용자를 팔로워하는 유저 카운터 반환
-	@GetMapping("/userpage/getfollowercount")
-	@ApiOperation(value = "[유저페이지] 팔로워 수 계산")
-	public int getfollowercount(@RequestParam(required = true) final String userEmail) {
-		
-		User user = userdao.getUserByUserEmail(userEmail);
-		// 팔로워유저 Id리스트
-		int count = userPageDao.getUserFollowerCount(user.getUserId());
-		
-		System.out.println("팔로워 수 = " + count);
-		return count;
-	}
-	
-	// 사용자의 한줄 소개
-	@GetMapping("/userpage/getuserComment")
-	@ApiOperation(value = "[유저페이지] 유저한줄소개가져오기")
-	public String getuserConmment(@RequestParam(required = true) final String userEmail) {
-		
-		User user = userdao.getUserByUserEmail(userEmail);
-		// 팔로워유저 Id리스트
-		String Comment = "";
-		try {
-			Comment = userPageDao.getUserCommentByUserId(user.getUserId());
-		}
-		catch (Exception e) {
-			
-		}
-		System.out.println(Comment);
-		return Comment;
+		System.out.println(map);
+		return map;
 	}
 }

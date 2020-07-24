@@ -4,7 +4,9 @@ package com.web.curation.dao.user;
 import java.util.ArrayList;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.web.curation.model.user.UserPage;
 
@@ -27,5 +29,13 @@ public interface UserPageDao extends JpaRepository<UserPage, String> {
     		"INNER JOIN follower b ON a.user_id = b.user_id "+
     		"WHERE a.user_email = :userEmail", nativeQuery = true)
     ArrayList<String> getUserFollowerByUserEmail(String userEmail);
+    
+    
+    @Query(value = "SELECT count(*) FROM following WHERE user_id  = :userId", nativeQuery = true)
+    int getUserFollowingCount(String userId);
+    
+    @Query(value = "SELECT count(*) FROM follower WHERE user_id  = :userId", nativeQuery = true)
+    int getUserFollowerCount(String userId);
+    
     
 }

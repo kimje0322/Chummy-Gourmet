@@ -158,7 +158,7 @@ export default {
       console.log('123');
       axios.get(`${SERVER_URL}/account/signup/valid?nickname=${this.signupData.nickName}&email=${this.signupData.email}`)
         .then(response => {
-          console.log(response)
+          console.log('123123123' + response)
         })
         .catch(error => {
           console.log(error.response)

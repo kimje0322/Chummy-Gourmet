@@ -1,6 +1,7 @@
 <template>
-  <div id="home">
-    <img src="../../assets/images/home-img.png" alt="">
+<v-app id="app">
+  <div class="user" id="home">
+    <!-- <img src="../../assets/images/home-img.png" alt=""> -->
     <!-- <v-parallax src="../../assets/images/logo0723.png" width="500"></v-parallax> -->
     
     <div>
@@ -8,6 +9,7 @@
     <v-btn color="warning">로그인</v-btn> -->
     </div>
   </div>
+</v-app>
 </template>
 
 <script>

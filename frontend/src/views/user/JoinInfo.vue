@@ -2,16 +2,16 @@
   <div id="joininfo">
     <h2 class="title">추가정보 입력</h2>
     <hr />
-    <button @click="getCheckedFoods">체크된 음식</button>
+    <button @click="getCheckedlists">체크된 정보</button>
     <!-- 성별 -->
     <h3 class="userInfo">성별</h3>
     <ul class="select-gender">
       <li>
-        <input type="radio" id="man" name="gender" />
+        <input type="radio" v-model="checkedGender" value="1" id="man" name="gender" />
         <label for="man" class="gender">남성</label>
       </li>
       <li>
-        <input type="radio" id="woman" name="gender" />
+        <input type="radio" v-model="checkedGender" value="2" id="woman" name="gender" />
         <label for="woman" class="gender">여성</label>
       </li>
     </ul>
@@ -20,27 +20,27 @@
     <h3 class="userInfo">나이</h3>
     <ul class="select-gender">
       <li>
-        <input type="radio" id="10" name="age" />
+        <input type="radio" v-model="checkedAge" value="1" id="10" name="age" />
         <label for="10" class="age">10대</label>
       </li>
       <li>
-        <input type="radio" id="20" name="age" />
+        <input type="radio" v-model="checkedAge" value="2"  id="20" name="age" />
         <label for="20" class="age">20대</label>
       </li>
       <li>
-        <input type="radio" id="30" name="age" />
+        <input type="radio" v-model="checkedAge" value="3"  id="30" name="age" />
         <label for="30" class="age">30대</label>
       </li>
       <li>
-        <input type="radio" id="40" name="age" />
+        <input type="radio" v-model="checkedAge" value="4"  id="40" name="age" />
         <label for="40" class="age">40대</label>
       </li>
       <li>
-        <input type="radio" id="50" name="age" />
+        <input type="radio" v-model="checkedAge" value="5"  id="50" name="age" />
         <label for="50" class="age">50대</label>
       </li>
       <li>
-        <input type="radio" id="60" name="age" />
+        <input type="radio" v-model="checkedAge" value="6" id="60" name="age" />
         <label for="60" class="age">60 +</label>
       </li>
     </ul>
@@ -50,7 +50,7 @@
     <ul class="select-many">
       <form id="favoriteFood">
         <li>
-          <input type="checkbox" v-model="checkedFoods" value="1" id="han" name="food" />
+          <input type="checkbox" v-model="checkedFoods" id="han" name="food" />
           <label for="han" class="food">
             <img src="../../assets/images/food_han.png" alt="Food Image" />
             한식
@@ -99,51 +99,51 @@
     <h3 class="userInfo">성격</h3>
     <ul class="select-many">
       <li>
-        <input type="checkbox" id="p1" name="personality" />
+        <input type="checkbox" v-model="checkedPersonalities" value="1" id="p1" name="personality" />
         <label for="p1" class="pers">낙천적</label>
       </li>
       <li>
-        <input type="checkbox" id="p2" name="personality" />
+        <input type="checkbox" v-model="checkedPersonalities" value="2" id="p2" name="personality" />
         <label for="p2" class="pers">부정적</label>
       </li>
       <li>
-        <input type="checkbox" id="p3" name="personality" />
+        <input type="checkbox" v-model="checkedPersonalities" value="3" id="p3" name="personality" />
         <label for="p3" class="pers">내향적</label>
       </li>
       <li>
-        <input type="checkbox" id="p4" name="personality" />
+        <input type="checkbox" v-model="checkedPersonalities" value="4" id="p4" name="personality" />
         <label for="p4" class="pers">외향적</label>
       </li>
       <li>
-        <input type="checkbox" id="p5" name="personality" />
+        <input type="checkbox" v-model="checkedPersonalities" value="5" id="p5" name="personality" />
         <label for="p5" class="pers">충동적</label>
       </li>
       <li>
-        <input type="checkbox" id="p6" name="personality" />
+        <input type="checkbox" v-model="checkedPersonalities" value="6" id="p6" name="personality" />
         <label for="p6" class="pers">사교적</label>
       </li>
       <li>
-        <input type="checkbox" id="p7" name="personality" />
+        <input type="checkbox" v-model="checkedPersonalities" value="7" id="p7" name="personality" />
         <label for="p7" class="pers">대담함</label>
       </li>
       <li>
-        <input type="checkbox" id="p8" name="personality" />
+        <input type="checkbox" v-model="checkedPersonalities" value="8" id="p8" name="personality" />
         <label for="p8" class="pers">성실함</label>
       </li>
       <li>
-        <input type="checkbox" id="p9" name="personality" />
+        <input type="checkbox" v-model="checkedPersonalities" value="9" id="p9" name="personality" />
         <label for="p9" class="pers">냉정함</label>
       </li>
       <li>
-        <input type="checkbox" id="p10" name="personality" />
+        <input type="checkbox" v-model="checkedPersonalities" value="10" id="p10" name="personality" />
         <label for="p10" class="pers">온화함</label>
       </li>
       <li>
-        <input type="checkbox" id="p11" name="personality" />
+        <input type="checkbox" v-model="checkedPersonalities" value="11" id="p11" name="personality" />
         <label for="p11" class="pers">신중함</label>
       </li>
       <li>
-        <input type="checkbox" id="p12" name="personality" />
+        <input type="checkbox" v-model="checkedPersonalities" value="12" id="p12" name="personality" />
         <label for="p12" class="pers">게으름</label>
       </li>
     </ul>
@@ -153,81 +153,81 @@
     <h3 class="userInfo">관심사</h3>
     <ul class="select-many-interest">
       <li>
-        <input type="checkbox" id="i1" name="interest" />
+        <input type="checkbox" v-model="checkedInterests" value="1" id="i1" name="interest" />
         <label for="i1" class="int">아이돌</label>
       </li>
       <li>
-        <input type="checkbox" id="i2" name="interest" />
+        <input type="checkbox" v-model="checkedInterests" value="2" id="i2" name="interest" />
         <label for="i2" class="int">콘서트</label>
       </li>
       <li>
-        <input type="checkbox" id="i3" name="interest" />
+        <input type="checkbox" v-model="checkedInterests" value="3" id="i3" name="interest" />
         <label for="i3" class="int">취업</label>
       </li>
       <li>
-        <input type="checkbox" id="i4" name="interest" />
+        <input type="checkbox" v-model="checkedInterests" value="4" id="i4" name="interest" />
         <label for="i4" class="int">게임</label>
       </li>
       <li>
-        <input type="checkbox" id="i5" name="interest" />
+        <input type="checkbox" v-model="checkedInterests" value="5" id="i5" name="interest" />
         <label for="i5" class="int">패션</label>
       </li>
       <li>
-        <input type="checkbox" id="i6" name="interest" />
+        <input type="checkbox" v-model="checkedInterests" value="6" id="i6" name="interest" />
         <label for="i6" class="int">다이어트</label>
       </li>
       <li>
-        <input type="checkbox" id="i7" name="interest" />
+        <input type="checkbox" v-model="checkedInterests" value="7" id="i7" name="interest" />
         <label for="i7" class="int">재테크</label>
       </li>
       <li>
-        <input type="checkbox" id="i8" name="interest" />
+        <input type="checkbox" v-model="checkedInterests" value="8" id="i8" name="interest" />
         <label for="i8" class="int">사업</label>
       </li>
       <li>
-        <input type="checkbox" id="i9" name="interest" />
+        <input type="checkbox" v-model="checkedInterests" value="9" id="i9" name="interest" />
         <label for="i9" class="int">경제</label>
       </li>
       <li>
-        <input type="checkbox" id="i10" name="interest" />
+        <input type="checkbox" v-model="checkedInterests" value="10" id="i10" name="interest" />
         <label for="i10" class="int">건강</label>
       </li>
       <li>
-        <input type="checkbox" id="i11" name="interest" />
+        <input type="checkbox" v-model="checkedInterests" value="11" id="i11" name="interest" />
         <label for="i11" class="int">스포츠</label>
       </li>
       <li>
-        <input type="checkbox" id="i12" name="interest" />
+        <input type="checkbox" v-model="checkedInterests" value="12" id="i12" name="interest" />
         <label for="i12" class="int">요리</label>
       </li>
       <li>
-        <input type="checkbox" id="i13" name="interest" />
+        <input type="checkbox" v-model="checkedInterests" value="13" id="i13" name="interest" />
         <label for="i13" class="int">군대</label>
       </li>
       <li>
-        <input type="checkbox" id="i14" name="interest" />
+        <input type="checkbox" v-model="checkedInterests" value="14" id="i14" name="interest" />
         <label for="i14" class="int">인테리어</label>
       </li>
       <li>
-        <input type="checkbox" id="i15" name="interest" />
+        <input type="checkbox" v-model="checkedInterests" value="15" id="i15" name="interest" />
         <label for="i15" class="int">여행</label>
       </li>
       <li>
-        <input type="checkbox" id="i16" name="interest" />
+        <input type="checkbox" v-model="checkedInterests" value="16" id="i16" name="interest" />
         <label for="i16" class="int">일러스트</label>
       </li>
       <li>
-        <input type="checkbox" id="i17" name="interest" />
+        <input type="checkbox" v-model="checkedInterests" value="17" id="i17" name="interest" />
         <label for="i17" class="int">동물</label>
       </li>
       <li>
-        <input type="checkbox" id="i18" name="interest" />
+        <input type="checkbox" v-model="checkedInterests" value="18" id="i18" name="interest" />
         <label for="i18" class="int">IT</label>
       </li>
     </ul>
     <!-- <span class="selectInfo">게임</span> -->
     <router-link to="/user/finishjoin">
-      <v-btn color="#B388FF" class="next-btn">
+      <v-btn color="warning" class="next-btn">
         <h4 class="submitbtn">제출</h4>
       </v-btn>
     </router-link>
@@ -239,16 +239,20 @@ export default {
   name: "JoinInfo",
   data() {
     return {
-      // finalSignup: {
-      //   gender: '',
-      //   food: [],
-      // },
-      checkedFoods: []
+      checkedGender: '',
+      checkedAge: '',
+      checkedFoods: [],
+      checkedPersonalities: [],
+      checkedInterests: [],
     };
   },
   methods: {
-    getCheckedFoods() {
+    getCheckedlists() {
+      console.log(this.checkedGender);
+      console.log(this.checkedAge);
       console.log(this.checkedFoods);
+      console.log(this.checkedPersonalities)
+      console.log(this.checkedInterests)
     }
       // const food = document.getElementByID("favoriteFood");
       // console.log(food.c);
@@ -346,15 +350,15 @@ img {
 }
 
 .select-gender input[type="radio"]:checked + label {
-  background: orange;
+  background: #FFB74D;
 }
 
 .select-many input[type="checkbox"]:checked + label {
-  background: orange;
+  background: #FFB74D;
 }
 
 .select-many-interest input[type="checkbox"]:checked + label {
-  background: orange;
+  background:#FFB74D;
 }
 
 .select-gender label {

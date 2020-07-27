@@ -44,6 +44,9 @@ public class SignupRequest {
 	@ApiModelProperty(required = true)
 //	@NotNull
 	List<Integer> userInterest;
+	@ApiModelProperty(required = true)
+//	@NotNull
+	String userComment;
 
 	public String getUserEmail() {
 		return userEmail;
@@ -101,6 +104,14 @@ public class SignupRequest {
 		this.userAge = userAge;
 	}
 
+
+	public String getUserComment() {
+		return userComment;
+	}
+
+	public void setUserComment(String userComment) {
+		this.userComment = userComment;
+	}
 
 	public List<Integer> getUserFavorite() {
 		return userFavorite;

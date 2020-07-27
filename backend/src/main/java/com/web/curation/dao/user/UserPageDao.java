@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import com.web.curation.model.user.User;
 import com.web.curation.model.user.UserPage;
 
 public interface UserPageDao extends JpaRepository<UserPage, String> {
@@ -27,5 +28,19 @@ public interface UserPageDao extends JpaRepository<UserPage, String> {
     		"INNER JOIN follower b ON a.user_id = b.user_id "+
     		"WHERE a.user_email = :userEmail", nativeQuery = true)
     ArrayList<String> getUserFollowerByUserEmail(String userEmail);
+    
+    @Query(value = "SELECT count(*) FROM following WHERE user_id  = :userId", nativeQuery = true)
+    int getUserFollowingCount(String userId);
+    
+    @Query(value = "SELECT count(*) FROM follower WHERE user_id  = :userId", nativeQuery = true)
+    int getUserFollowerCount(String userId);
+    
+    @Query(value = "SELECT user_comment FROM user WHERE user_id  = :userId", nativeQuery = true)
+    String getUserCommentByUserId(String userId);
+    
+    //(value = "SELECT count(*) FROM following WHERE user_id = :userId and user_following = :obecjtId", nativeQuery = true)
+    @Query(value = "SELECT count(*) FROM following WHERE user_id = :userId and user_following = :objectId", nativeQuery = true)
+    int checkFollow(String userId, String objectId);
+    
     
 }

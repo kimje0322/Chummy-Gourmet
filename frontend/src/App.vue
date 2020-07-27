@@ -59,6 +59,7 @@
 const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
 
 import "./components/css/style.scss";
+  
 export default {
   name: "app",
   methods: {

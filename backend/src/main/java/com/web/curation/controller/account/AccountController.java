@@ -70,7 +70,7 @@ public class AccountController {
 		return response;
 	}
 
-	@GetMapping("/account/signup/vaild")
+	@GetMapping("/account/signup/valid")
 	@ApiOperation(value = "닉네임, 이메일 중복체크")
 	public Object nicknameAndEmailVaildCheck(String nickname, String email) {
 		User originUser = null;

@@ -174,9 +174,12 @@ public class UserPageController {
 		ans = userPageDao.checkFollow(userId, objectId);
 		String result = "false";
 		if(ans > 0) {
-			result = "success"; 
+			result = "true"; 
+			System.out.println("나("+userName+")는 상대방인 "+user.getUserName()+" 님을 팔로우 한 상태입니다.");
 		}
-		System.out.println(user);
+		else {
+			System.out.println(userName+ "님은 상대방인 "+user.getUserName()+" 님을 팔로우 하지 않은 상태입니다.");
+		}
 		
 		return result;
 	}

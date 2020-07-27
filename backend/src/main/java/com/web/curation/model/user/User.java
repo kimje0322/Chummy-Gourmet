@@ -45,26 +45,29 @@ public class User {
 	private String userNickname;
 	@Column(name = "user_phone")
 	private String userPhone;
+	@Column(name = "user_comment")
+	private String userComment;
 
 	public User() {
 		super();
 	}
 
 	@Builder
-	public User(String userPwd, String userEmail, String userName, String userNickname, String userPhone) {
+	public User(String userPwd, String userEmail, String userName, String userNickname, String userPhone, String userComment) {
 		super();
 		this.userPwd = userPwd;
 		this.userEmail = userEmail;
 		this.userName = userName;
 		this.userNickname = userNickname;
 		this.userPhone = userPhone;
+		this.userComment = userComment;
 	}
 
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", userPwd=" + userPwd + ", userEmail=" + userEmail + ", userJoindate="
 				+ userJoindate + ", userName=" + userName + ", userNickname=" + userNickname + ", userPhone="
-				+ userPhone + "]";
+				+ userPhone + ", usercomment=" + userComment + "]";
 	}
 
 	public String getUserId() {
@@ -123,4 +126,12 @@ public class User {
 		this.userPhone = userPhone;
 	}
 
+	public String getUserComment() {
+		return userComment;
+	}
+
+	public void setUserComment(String userComment) {
+		this.userComment = userComment;
+	}
+	
 }

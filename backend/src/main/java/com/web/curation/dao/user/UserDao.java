@@ -11,8 +11,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface UserDao extends JpaRepository<User, String> {
+	User getUserByUserName(String userName);
+	
 	User getUserByUserEmail(String email);
-
+	
 	User getUserByUserNickname(String nickname);
 
 	Optional<User> findUserByUserEmailAndUserPwd(String email, String password);

@@ -38,4 +38,9 @@ public interface UserPageDao extends JpaRepository<UserPage, String> {
     @Query(value = "SELECT user_comment FROM user WHERE user_id  = :userId", nativeQuery = true)
     String getUserCommentByUserId(String userId);
     
+    //(value = "SELECT count(*) FROM following WHERE user_id = :userId and user_following = :obecjtId", nativeQuery = true)
+    @Query(value = "SELECT count(*) FROM following WHERE user_id = :userId and user_following = :objectId", nativeQuery = true)
+    int checkFollow(String userId, String objectId);
+    
+    
 }

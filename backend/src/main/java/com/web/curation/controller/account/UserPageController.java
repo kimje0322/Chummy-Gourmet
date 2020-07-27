@@ -157,4 +157,27 @@ public class UserPageController {
 			}
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+	
+	// 이 유저를 내가 팔로우 했냐 안했냐
+	@GetMapping("/userpage/checkfollow")
+	@ApiOperation(value = "[유저페이지] 상대방을 내가 팔로우 했는지 안했는지 확인(팔로우 요청버튼 노출)")
+	public String checkFollowByUserName(@RequestParam(required = true) final String userName,
+			@RequestParam(required = true) final String objectName) {
+		User user = new User();
+		user = userdao.getUserByUserName(userName);
+		String userId = user.getUserId();
+		
+		user = userdao.getUserByUserName(objectName);
+		String objectId = user.getUserId();
+		
+		int ans = 0;
+		ans = userPageDao.checkFollow(userId, objectId);
+		String result = "false";
+		if(ans > 0) {
+			result = "success"; 
+		}
+		System.out.println(user);
+		
+		return result;
+	}
 }

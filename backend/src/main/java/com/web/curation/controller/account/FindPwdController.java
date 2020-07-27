@@ -1,6 +1,8 @@
 package com.web.curation.controller.account;
 
 
+import java.util.ArrayList;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -39,20 +41,17 @@ public class FindPwdController {
 	@Autowired
 	private JavaMailSender mailSender;
 	
-	// 비교를 위해 저장될 사용자이름변수
-	private String GlobalUserName=""; String GlobalUserEmail="";
-	
 	// 사용자 이름 입력시 디비에 있는지 검사
 	@GetMapping("/account/checkusername")
-	@ApiOperation(value = "사용자 이름 입력시 디비에 있는지 검사")
+	@ApiOperation(value = "[비밀번호찾기] 사용자 이름 입력시 디비에 있는지 검사(동일한이름으로 존재 가능)")
 	public Object checkusername(@RequestParam(required = true) final String userName) {
 		
 		// db에 사용자 이름이 있는지 검사
-		int result;
-		result = findpwdDao.countByUserName(userName);
+		int result = findpwdDao.countByUserName(userName);
+		System.out.println(userName+"으로 검색한 결과 count = "+result);
 		// 성공 or 실패 리턴 저장위함
 		ResponseEntity response = null;
-		// 카운트가 1보다 크면 사용자가 db에 존재함
+		// 카운트가 1보다 크면 사용자가 db에 존재함()
 		if(result >= 1) {
 			response = new ResponseEntity<>("success", HttpStatus.OK);
 		}
@@ -64,37 +63,31 @@ public class FindPwdController {
 	}
 		
 	// 이메일입력 할때 이름과 이메일이 디비에 같은 것인지 아닌지 ajax통신을 위함
-	@GetMapping("/account/equalsemail")
-	@ApiOperation(value = "사용자이름으로 찾은 이메일과 지금 입력한 이메일이 일치하는지검사")
+	@GetMapping("/account/checkuseremail")
+	@ApiOperation(value = "[비밀번호찾기] 입력한 이메일과  db에 등록된 (이름,이메일)과 일치하는지검사")
 	public Object emailequalsusername(@RequestParam(required = true) final String userName,
 			@RequestParam(required = true) final String userEmail) {
 		
-		// db에 한번만 갔다 와서 유저 이름에 대한 db에 저장된 이메일을 저장하기 위함
-		if(GlobalUserName.equals("") || !GlobalUserName.equals(userName)) {
-			GlobalUserName = userName;
-			// 해당 유저이름에 대한 유저이메일을 디비에 가서 가져온다.
-			GlobalUserEmail = findpwdDao.getUserEmailByUserName(userName);
-		}
-		System.out.println(GlobalUserEmail);
+		// 해당 유저이름에 대한 유저이메일을 디비에 가서 가져온다.
+		ArrayList<String>UserEmailList = findpwdDao.getUserEmailByUserName(userName);
 		
 		// 성공 or 실패 리턴 저장위함
 		ResponseEntity response = null;
-		
-		// 사용자가 입력한 유저이메일과 디비에 저장된 유저이메일이 같은가?
-		if(userEmail.equals(GlobalUserEmail)) {
-			// 일치하다
-			return response = new ResponseEntity<>("success", HttpStatus.OK);
+				
+		for (String userEmaillist : UserEmailList) {
+			// 사용자 이름으로 검색한 이메일 리스트중 입력한 이메일과 동일한것이 존재
+			if(userEmaillist.equals(userEmail)) {
+				System.out.println(userEmaillist);
+				return response = new ResponseEntity<>("success", HttpStatus.OK);
+			}
 		}
 		// 불일치하다
-		else {
-			return response = new ResponseEntity<>("fail", HttpStatus.NOT_FOUND);
-		}
-		
+		return response = new ResponseEntity<>("fail", HttpStatus.NOT_FOUND);
 	}
 	
 	// 최종적으로 확인버튼 눌렀을때 이메일로 임시비밀번호를 보내기
-	@PostMapping("/account/sendpwd")
-	@ApiOperation(value = "이메일로임시비밀번호보내기")
+	@PostMapping("/account/senduserpwd")
+	@ApiOperation(value = "[비밀번호찾기] 이메일로임시비밀번호보내기")
 	public Object sendpwd(@RequestParam(required = true) final String userName,
 			@RequestParam(required = true) final String userEmail) {
 

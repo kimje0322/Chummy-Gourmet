@@ -13,7 +13,7 @@ public interface UserDao extends JpaRepository<User, String> {
 
     SignupRequest save(SignupRequest signupRequest);
 
-	User getUserByUserName(String userName);
+    User getUserByUserId(String userId);
 	
 	User getUserByUserEmail(String email);
 	

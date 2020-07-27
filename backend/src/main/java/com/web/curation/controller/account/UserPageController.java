@@ -5,22 +5,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.dao.user.UserPageDao;
 import com.web.curation.model.BasicResponse;
-import com.web.curation.model.user.SignupRequest;
 import com.web.curation.model.user.User;
 
 import io.swagger.annotations.ApiOperation;
@@ -45,65 +41,39 @@ public class UserPageController {
 	// 사용자가 팔로잉 하는 유저 리스트를 가져온다.
 	@GetMapping("/userpage/getfollowinglist")
 	@ApiOperation(value = "[유저페이지] 팔로잉 유저 리스트 가져옴")
-	public ArrayList<String> getuserfollowing(@RequestParam(required = true) final String userEmail) {
+	public Object getuserfollowing(@RequestParam(required = true) final String userEmail) {
 		
 		// 팔로잉유저 Id리스트
 		ArrayList<String>followingIdList = userPageDao.getUserFollowingByUserEmail(userEmail);
-		// Name리스트
-		ArrayList<String>userNameList = new ArrayList<String>();
+		// 팔로잉 유저 리스트
+		ArrayList<User>userList = new ArrayList<>();
 		
 		for (String userId : followingIdList) {
-			userNameList.add(userPageDao.getUserNameByUserId(userId));
+			userList.add(userdao.getUserByUserId(userId));
 		}
-		System.out.println("사용자가 팔로잉 하는 유저 리스트 =" + userNameList);
+		System.out.println("사용자가 팔로잉 하는 유저 리스트 =" + userList);
 		
-		return userNameList;
+		return userList;
 	}
 	
 	// 사용자를 팔로워 하는 유저 리스트를 가져온다.
 	@GetMapping("/userpage/getfollowerlist")
 	@ApiOperation(value = "[유저페이지] 팔로워 유저 리스트 가져옴")
-	public ArrayList<String> getuserfollower(@RequestParam(required = true) final String userEmail) {
+	public Object getuserfollower(@RequestParam(required = true) final String userEmail) {
 		
 		// 팔로워유저 Id리스트
 		ArrayList<String>followerIdList = userPageDao.getUserFollowerByUserEmail(userEmail);
-		// Name리스트
-		ArrayList<String>userNameList = new ArrayList<String>();
+		// user리스트
+		ArrayList<User>userList = new ArrayList<>();
 		
 		for (String userId : followerIdList) {
-			userNameList.add(userPageDao.getUserNameByUserId(userId));
+			userList.add(userdao.getUserByUserId(userId));
 		}
 		
-		System.out.println("사용자를 팔로워 하는 유저 리스트 =" + userNameList);
+		System.out.println("사용자를 팔로워 하는 유저 리스트 =" + userList);
 		
-		return userNameList;
+		return userList;
 	}
-	
-//	// 사용자가 팔로잉하는 유저 카운터 반환
-//	@GetMapping("/userpage/getfollowingcount")
-//	@ApiOperation(value = "[유저페이지] 팔로잉 수 계산")
-//	public int getfollowingcount(@RequestParam(required = true) final String userEmail) {
-//		
-//		User user = userdao.getUserByUserEmail(userEmail);
-//		// 팔로잉유저 Id리스트
-//		int count = userPageDao.getUserFollowingCount(user.getUserId());
-//		
-//		System.out.println("팔로잉 수 = " + count);
-//		return count;
-//	}
-//	
-//	// 사용자를 팔로워하는 유저 카운터 반환
-//	@GetMapping("/userpage/getfollowercount")
-//	@ApiOperation(value = "[유저페이지] 팔로워 수 계산")
-//	public int getfollowercount(@RequestParam(required = true) final String userEmail) {
-//		
-//		User user = userdao.getUserByUserEmail(userEmail);
-//		// 팔로워유저 Id리스트
-//		int count = userPageDao.getUserFollowerCount(user.getUserId());
-//		
-//		System.out.println("팔로워 수 = " + count);
-//		return count;
-//	}
 	
 	// 사용자의 유저정보, 팔로잉수, 팔로워수 가져오기
 	@GetMapping("/userpage/getuser")
@@ -161,26 +131,46 @@ public class UserPageController {
 	// 이 유저를 내가 팔로우 했냐 안했냐
 	@GetMapping("/userpage/checkfollow")
 	@ApiOperation(value = "[유저페이지] 상대방을 내가 팔로우 했는지 안했는지 확인(팔로우 요청버튼 노출)")
-	public String checkFollowByUserName(@RequestParam(required = true) final String userName,
-			@RequestParam(required = true) final String objectName) {
+	public String checkFollowByUserName(@RequestParam(required = true) final String userEmail,
+			@RequestParam(required = true) final String opponentEmail) {
 		User user = new User();
-		user = userdao.getUserByUserName(userName);
+		user = userdao.getUserByUserEmail(userEmail);
 		String userId = user.getUserId();
 		
-		user = userdao.getUserByUserName(objectName);
-		String objectId = user.getUserId();
+		user = userdao.getUserByUserEmail(opponentEmail);
+		String opponentId = user.getUserId();
 		
 		int ans = 0;
-		ans = userPageDao.checkFollow(userId, objectId);
+		ans = userPageDao.getFollowingByUserIdByUserFollowing(userId, opponentId);
 		String result = "false";
 		if(ans > 0) {
 			result = "true"; 
-			System.out.println("나("+userName+")는 상대방인 "+user.getUserName()+" 님을 팔로우 한 상태입니다.");
+			System.out.println("나("+userEmail+")는 상대방인 "+user.getUserName()+" 님을 팔로우 한 상태입니다.");
 		}
 		else {
-			System.out.println(userName+ "님은 상대방인 "+user.getUserName()+" 님을 팔로우 하지 않은 상태입니다.");
+			System.out.println(userEmail+ "님은 상대방인 "+user.getUserName()+" 님을 팔로우 하지 않은 상태입니다.");
 		}
 		
 		return result;
 	}
+	
+	@GetMapping("/userpage/getfollowingrequestlist")
+	@ApiOperation(value = "[유저페이지] 사용자를 팔로잉한 요청리스트 출력")
+	public Object getfollowingrequestlist(@RequestParam(required = true) final String userEmail) {
+		
+		// 팔로워유저 Id리스트
+		ArrayList<String>followingrequestIdList = userPageDao.getFollowingrequestUserByUserEmail(userEmail);
+		// user리스트
+		ArrayList<User>userList = new ArrayList<>();
+		
+		for (String userId : followingrequestIdList) {
+			userList.add(userdao.getUserByUserId(userId));
+		}
+		
+		System.out.println("사용자를 팔로잉 요청한 리스트 =" + userList);
+		
+		return userList;
+	}
+	
+	
 }

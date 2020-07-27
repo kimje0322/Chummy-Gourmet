@@ -1,5 +1,9 @@
 @charset "utf-8";
+// @import './common';
 .user {
+    // @include wrap;
+    // box-sizing: border-box;
+    // min-height: 100%;
     &#home {
         background-image: url(../../assets/images/home-img.png);
     }

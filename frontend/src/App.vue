@@ -40,7 +40,7 @@
             </v-btn>
           </v-bottom-navigation>
           
-          <v-sheet id="scroll-area-1" class="overflow-y-auto" max-height="600">
+          <v-sheet id="scroll-area-1" class="overflow-y-auto" max-height="667">
             <v-container style="height: 100%;">
               <router-view ></router-view>
             </v-container>
@@ -59,6 +59,7 @@
 const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
 
 import "./components/css/style.scss";
+  
 export default {
   name: "app",
   methods: {

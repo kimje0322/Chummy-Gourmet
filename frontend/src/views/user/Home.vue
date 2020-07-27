@@ -14,21 +14,24 @@
 
 <script>
 import "../../components/css/home.scss";
-export default {
-
-}
+export default {};
 </script>
 
 <style>
+/* #home { */
+/* background-image: url(../../assets/images/home-img.png); */
+/* position: relative; */
+/* background-repeat: no-repeat; */
+/* background-size: cover; */
+/* } */
 
-  .home-btns {
-    margin: 500px 0 0 0;
-    text-align: center;
-  }
-  
-  .join-btn {
-    margin-right: 10px;
-    /* border-width: 2px;
+.home-btns {
+  margin: 500px 0 0 0;
+  text-align: center;
+}
+.join-btn {
+  margin-right: 10px;
+  /* border-width: 2px;
     border-color: black; */
-  }
+}
 </style>

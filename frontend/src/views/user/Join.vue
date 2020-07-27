@@ -165,7 +165,7 @@ export default {
         })
     },
     checkForm() {
-      if (this.nickName.length == 3)
+      if (this.nickName.length == 1)
         this.error.nickName =
           "사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.";
       else this.error.nickName = false;

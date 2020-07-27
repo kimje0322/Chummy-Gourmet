@@ -46,7 +46,7 @@ public class User {
 	@Column(name = "user_phone")
 	private String userPhone;
 	@Column(name = "user_comment")
-	private String usercomment;
+	private String userComment;
 
 	public User() {
 		super();
@@ -60,14 +60,14 @@ public class User {
 		this.userName = userName;
 		this.userNickname = userNickname;
 		this.userPhone = userPhone;
-		this.usercomment = userComment;
+		this.userComment = userComment;
 	}
 
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", userPwd=" + userPwd + ", userEmail=" + userEmail + ", userJoindate="
 				+ userJoindate + ", userName=" + userName + ", userNickname=" + userNickname + ", userPhone="
-				+ userPhone + ", usercomment=" + usercomment + "]";
+				+ userPhone + ", usercomment=" + userComment + "]";
 	}
 
 	public String getUserId() {
@@ -126,12 +126,12 @@ public class User {
 		this.userPhone = userPhone;
 	}
 
-	public String getUsercomment() {
-		return usercomment;
+	public String getUserComment() {
+		return userComment;
 	}
 
-	public void setUsercomment(String usercomment) {
-		this.usercomment = usercomment;
+	public void setUserComment(String userComment) {
+		this.userComment = userComment;
 	}
 	
 }

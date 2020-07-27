@@ -5,15 +5,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.dao.user.UserPageDao;
 import com.web.curation.model.BasicResponse;
+import com.web.curation.model.user.SignupRequest;
 import com.web.curation.model.user.User;
 
 import io.swagger.annotations.ApiOperation;
@@ -108,9 +115,10 @@ public class UserPageController {
 		Map<String, Object>map = new HashMap();
 		map.put("userName", user.getUserName());
 		map.put("userEmail", user.getUserEmail());
+		map.put("userPWd", user.getUserPwd());
 		map.put("userNickname", user.getUserNickname());
 		map.put("userPhone", user.getUserPhone());
-		map.put("userComment", user.getUsercomment());
+		map.put("userComment", user.getUserComment());
 		
 		// 팔로잉 수
 		int count = userPageDao.getUserFollowingCount(user.getUserId());
@@ -122,5 +130,31 @@ public class UserPageController {
 		
 		System.out.println(map);
 		return map;
+	}
+	
+	// 사용자의 유저정보 변경
+	@PutMapping("/userpage/updateuser")
+	@ApiOperation(value = "[유저페이지] 사용자의 유저정보 변경(닉네임, 비밀번호, 한줄소개)")
+	public Object updateUserByUserEmail(@RequestParam(required = true) final String userEmail,
+			@RequestParam(required = true) final String userNickname,
+			@RequestParam(required = true) final String userPwd,
+			@RequestParam(required = true) final String userComment) {
+		final BasicResponse result = new BasicResponse();
+		// 계정 설정 화면에서는 닉네임, 비밀번호, 한줄 소개 변경 가능
+			User user = new User();
+			user = userdao.getUserByUserEmail(userEmail);
+			user.setUserNickname(userNickname);
+			user.setUserPwd(userPwd);
+			user.setUserComment(userComment);
+			try {
+				userdao.setUserNicknameUserPwdUserCommentByUserId(user.getUserId(), userNickname, userPwd, userComment);
+				result.status = true;
+				result.data = "success";
+			} catch (Exception e) {
+				// TODO: handle exception
+				result.status = false;
+				result.data = "fail";
+			}
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 }

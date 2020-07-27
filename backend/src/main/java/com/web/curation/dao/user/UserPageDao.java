@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import com.web.curation.model.user.User;
 import com.web.curation.model.user.UserPage;
 
 public interface UserPageDao extends JpaRepository<UserPage, String> {
@@ -36,4 +37,5 @@ public interface UserPageDao extends JpaRepository<UserPage, String> {
     
     @Query(value = "SELECT user_comment FROM user WHERE user_id  = :userId", nativeQuery = true)
     String getUserCommentByUserId(String userId);
+    
 }

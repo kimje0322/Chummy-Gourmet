@@ -23,6 +23,9 @@ public interface UserDao extends JpaRepository<User, String> {
 	@Query(value = "UPDATE user SET user_pwd = :userPwd WHERE user_name = :userName And user_email = :userEmail", nativeQuery = true)
 	int setUserPwdByUserNameAndUserEmail(String userPwd, String userName, String userEmail);
 
-	//
-	Optional<User> findUserNameByUserEmail(String userEmail);
+	@Query(value = "UPDATE user SET user_nickname = :userNickname ,"+
+	"user_pwd = :userPwd ,"+
+	"user_comment = :userComment "+
+	"WHERE user_id = :userId", nativeQuery = true)
+	void setUserNicknameUserPwdUserCommentByUserId(String userId, String userNickname, String userPwd, String userComment); 
 }

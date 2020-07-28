@@ -15,6 +15,7 @@ import Pref from './views/user/Preference.vue'
 import Map from './views/map/map.vue'
 import MapParty from './views/map/party.vue'
 import Home from './views/user/Home.vue'
+import FoundPw from './views/user/FoundPw.vue'
 
 
 export default [
@@ -54,19 +55,24 @@ export default [
         component: FindPw
     },
     {
-        path : '/user/finishjoin',
-        name : 'FinshJoin',
-        component : FinishJoin
+        path: 'user/foundpw',
+        name: 'FoundPw',
+        component: FoundPw
     },
     {
-        path : '/user/findPw',
-        name : 'FindPw',
-        component : FindPw
+        path: '/user/finishjoin',
+        name: 'FinshJoin',
+        component: FinishJoin
     },
     {
-        path : '/user/pref',
-        name : 'Pref',
-        component : Pref
+        path: '/user/findPw',
+        name: 'FindPw',
+        component: FindPw
+    },
+    {
+        path: '/user/pref',
+        name: 'Pref',
+        component: Pref
     },
     {
         path: '/map',
@@ -115,5 +121,5 @@ export default [
         meta: {
             navbar: true
         }
-    }
+    },
 ]

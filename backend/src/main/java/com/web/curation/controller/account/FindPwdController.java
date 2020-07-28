@@ -41,56 +41,44 @@ public class FindPwdController {
 	@Autowired
 	private JavaMailSender mailSender;
 	
-	// 사용자 이름 입력시 디비에 있는지 검사
-	@GetMapping("/account/checkusername")
-	@ApiOperation(value = "[비밀번호찾기] 사용자 이름 입력시 디비에 있는지 검사(동일한이름으로 존재 가능)")
-	public Object checkusername(@RequestParam(required = true) final String userName) {
+	// 최종적으로 확인버튼 눌렀을때 이메일로 임시비밀번호를 보내기
+	@PostMapping("/account/senduserpwd")
+	@ApiOperation(value = "[비밀번호찾기] 이름존재검사, 이메일=이름 일치한지 검사 , 이메일로임시비밀번호보내기")
+	public Object sendpwd(@RequestParam(required = true) final String userName,
+			@RequestParam(required = true) final String userEmail) {
+		
+		final BasicResponse result = new BasicResponse();
 		
 		// db에 사용자 이름이 있는지 검사
-		int result = findpwdDao.countByUserName(userName);
+		int count = findpwdDao.countByUserName(userName);
 		System.out.println(userName+"으로 검색한 결과 count = "+result);
 		// 성공 or 실패 리턴 저장위함
 		ResponseEntity response = null;
-		// 카운트가 1보다 크면 사용자가 db에 존재함()
-		if(result >= 1) {
-			response = new ResponseEntity<>("success", HttpStatus.OK);
-		}
 		// db에 사용자가 존재하지않음
-		else {
-			response = new ResponseEntity<>("fail", HttpStatus.NOT_FOUND);
+		
+		if(count == 0) {
+			 result.status = false;
+	         result.data = "isNotuserName";
+	         return new ResponseEntity<>(result, HttpStatus.OK);
 		}
-		return response;
-	}
-		
-	// 이메일입력 할때 이름과 이메일이 디비에 같은 것인지 아닌지 ajax통신을 위함
-	@GetMapping("/account/checkuseremail")
-	@ApiOperation(value = "[비밀번호찾기] 입력한 이메일과  db에 등록된 (이름,이메일)과 일치하는지검사")
-	public Object emailequalsusername(@RequestParam(required = true) final String userName,
-			@RequestParam(required = true) final String userEmail) {
-		
+		 
 		// 해당 유저이름에 대한 유저이메일을 디비에 가서 가져온다.
 		ArrayList<String>UserEmailList = findpwdDao.getUserEmailByUserName(userName);
-		
-		// 성공 or 실패 리턴 저장위함
-		ResponseEntity response = null;
-				
+		boolean flag = false;
 		for (String userEmaillist : UserEmailList) {
 			// 사용자 이름으로 검색한 이메일 리스트중 입력한 이메일과 동일한것이 존재
 			if(userEmaillist.equals(userEmail)) {
+				flag = true;
 				System.out.println(userEmaillist);
-				return response = new ResponseEntity<>("success", HttpStatus.OK);
 			}
 		}
-		// 불일치하다
-		return response = new ResponseEntity<>("fail", HttpStatus.NOT_FOUND);
-	}
-	
-	// 최종적으로 확인버튼 눌렀을때 이메일로 임시비밀번호를 보내기
-	@PostMapping("/account/senduserpwd")
-	@ApiOperation(value = "[비밀번호찾기] 이메일로임시비밀번호보내기")
-	public Object sendpwd(@RequestParam(required = true) final String userName,
-			@RequestParam(required = true) final String userEmail) {
-
+		// 일치하는게 존재 하지 않는다
+		if(!flag) {
+			 result.status = false;
+	         result.data = "isNotExistEmail";
+	         return new ResponseEntity<>(result, HttpStatus.OK);
+		}
+		
 		// 임시 비밀번호 생성 저장 변수
 		String userPwd = "";
 		for (int i = 0; i < 12; i++) {
@@ -99,9 +87,6 @@ public class FindPwdController {
 		// 이미 여기 함수 이전부분에서 정확히 이름과 이메일을 입력하기 때문에 오류가 나지 않을거라고 생각함
 		int num = findpwdDao.setUserPwdByUserNameAndUserEmail(userPwd, userName, userEmail);
 
-		// 성공 or 실패 리턴 저장위함
-		ResponseEntity response = null;
-		
 		try {
 			MimeMessage msg = mailSender.createMimeMessage();
 			MimeMessageHelper messageHelper = new MimeMessageHelper(msg, true, "UTF-8");
@@ -112,11 +97,13 @@ public class FindPwdController {
 			msg.setRecipients(MimeMessage.RecipientType.TO, InternetAddress.parse(userEmail));
 			System.out.println(messageHelper);
 			mailSender.send(msg);
-			response = new ResponseEntity<>("success", HttpStatus.OK);
+			result.status = true;
+	        result.data = "sendEmailsuccess";
 		} catch (MessagingException e) {
-			response = new ResponseEntity<>("Fail", HttpStatus.NOT_FOUND);
+			result.status = false;
+	        result.data = "sendEmailfail";
 		}
-		return response;
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	

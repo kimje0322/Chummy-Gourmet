@@ -5,9 +5,13 @@ import router from './routes'
 import store from './vuex/store'
 import vuetify from '@/plugins/vuetify'
 
+import VueCookie from 'vue-cookie'
+
 Vue.config.productionTip = false
 
 // Vue.use(VueRouter)
+
+Vue.use(VueCookie)
 
 // const router = new VueRouter({
 //     routes,
@@ -19,5 +23,3 @@ new Vue({
     store,
     render: h => h(App),
 }).$mount('#app');
-
-

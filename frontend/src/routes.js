@@ -13,17 +13,16 @@ import FeedMain from './views/feed/IndexFeed.vue'
 import Components from './views/Components.vue'
 import Party from './views/feed/Party.vue'
 import FindPw from './views/user/FindPw.vue'
+import FoundPw from './views/user/FoundPw.vue'
 import UserInfo from './views/Main.vue'
 import Pref from './views/user/Preference.vue'
 import Map from './views/map/map.vue'
 import MapParty from './views/map/party.vue'
 import Home from './views/user/Home.vue'
-import FoundPw from './views/user/FoundPw.vue'
 
 Vue.use(VueRouter);
 export default new VueRouter({
-    routes : [
-        {
+    routes: [{
             path: '/login',
             name: 'Login',
             component: Login,
@@ -57,9 +56,24 @@ export default new VueRouter({
             component: FindPw
         },
         {
+            path: '/user/foundPw',
+            name: 'FoundPw',
+            component: FoundPw
+        },
+        {
             path: '/user/finishjoin',
             name: 'FinshJoin',
             component: FinishJoin
+        },
+        {
+            path: '/user/findPw',
+            name: 'FindPw',
+            component: FindPw
+        },
+        {
+            path: '/user/foundPw',
+            name: 'FoundPw',
+            component: FoundPw
         },
         {
             path: '/user/pref',
@@ -114,6 +128,5 @@ export default new VueRouter({
                 navbar: true
             }
         }
-
     ]
 });

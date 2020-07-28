@@ -254,6 +254,7 @@ export default {
       console.log(this.checkedPersonalities)
       console.log(this.checkedInterests)
     }
+    
       // const food = document.getElementByID("favoriteFood");
       // console.log(food.c);
   },

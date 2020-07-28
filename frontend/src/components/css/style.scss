@@ -873,7 +873,7 @@ p {
     }
     .error-text {
         @include wrap;
-        // color: $red;
+        color: $red;
         margin-top: 3px;
     }
 }

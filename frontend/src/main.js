@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
-import VueRouter from 'vue-router';
-import routes from './routes'
+// import VueRouter from 'vue-router';
+import router from './routes'
 import store from './vuex/store'
 import vuetify from '@/plugins/vuetify'
 
@@ -9,7 +9,7 @@ import VueCookie from 'vue-cookie'
 
 Vue.config.productionTip = false
 
-Vue.use(VueRouter)
+// Vue.use(VueRouter)
 
 Vue.use(VueCookie)
 

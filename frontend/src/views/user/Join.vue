@@ -51,9 +51,10 @@
       </div>
     </div>
     <div class="input-with-label cell-label">
-      <input id="cellphone" placeholder="휴대폰 번호를 입력하세요." type="text" />
-      <v-btn @click="onSignup" class="cell-auth" color="error">인증</v-btn>
+      <input v-model="phone" id="cellphone" placeholder="휴대폰 번호를 입력하세요." type="text" />
       <label for="cellphone">휴대폰</label>
+      <div class="error-text" v-if="error.phone">{{error.phone}}</div>
+      <!-- <v-btn @click="onSignup" class="cell-auth" color="error">인증</v-btn> -->
     </div>
 
     <label>
@@ -75,12 +76,15 @@
 
 <script>
 import axios from "axios";
+import router from "@/routes";
 
-const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
+
 
 import * as EmailValidator from "email-validator";
 import PV from "password-validator";
 import UserApi from "../../api/UserApi";
+
+const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
 
 export default {
   name: "Join",
@@ -105,6 +109,7 @@ export default {
       passwordConfirm: "",
       nickName: "",
       name: "",
+      phone: "",
       isTerm: false,
       isLoading: false,
       error: {
@@ -113,7 +118,8 @@ export default {
         password: false,
         nickName: false,
         passwordConfirm: false,
-        term: false
+        term: false,
+        phone: false,
       },
       isSubmit: false,
       passwordType: "password",
@@ -158,7 +164,12 @@ export default {
     },
     isTerm: function() {
       if (this.isTerm) this.error.term = false;
-    }
+    },
+    phone: function (v) {
+      if (this.phone.length > 0 && isNaN(this.phone))
+        this.error.phone = "올바른 휴대폰 번호를 입력해주세요.";
+      else this.error.phone = false;
+    },
   },
   methods: {
     checkFormAndSignUp() {
@@ -177,14 +188,23 @@ export default {
       axios
         .get(
           `${SERVER_URL}/account/signup/valid?nickname=${this.nickName}&email=${this.email}`
+          // `http://localhost:8080/account/signup/valid?nickname=${this.nickName}&email=${this.email}`
         )
         .then(response => {
           // data : success / isExistEmail / isExistNickname
           var data = response.data.data;
 
-          // 이메일과 닉네임이 중복이 아니라면, 다음 페이지로
+          // 이메일과 닉네임이 중복이 아니라면,
           if (data == "success") {
-            this.$router.push("/user/joininfo");
+            let userInfo = {
+              email: this.email,
+              password: this.password,
+              nickName: this.nickName,
+              name: this.name,
+            };
+
+            // 현재 페이지에서 입력받은 정보를 params에 넣어서 다음 페이지로 이동
+            router.push({name : "JoinInfo", params : userInfo});
           } else if (data == "isExistEmail") {
             this.error.email =
               "사용중인 이메일입니다. 다른 이메일을 입력해주세요.";
@@ -217,7 +237,7 @@ export default {
         this.password.length > 0 &&
         !this.passwordSchema.validate(this.password)
       )
-        this.error.password = "영문,숫자 포함 8 자리이상이어야 합니다.";
+      this.error.password = "영문,숫자 포함 8 자리이상이어야 합니다.";
       else this.error.password = false;
 
       if (
@@ -226,7 +246,13 @@ export default {
       ) {
         this.error.passwordConfirm = "비밀번호가 다릅니다.";
       } else this.error.passwordConfirm = false;
+
+       if (this.phone.length < 1)
+        this.error.phone = "전화번호를 입력해주세요.";
+      else this.error.phone = false;
     },
+
+    // 입력 정보가 다 유효하면 true, 아니면 false
     isValidForm() {
       for (let key in this.error) {
         if (this.error[key]) return false;

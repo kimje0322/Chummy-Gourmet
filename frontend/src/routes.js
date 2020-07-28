@@ -10,6 +10,7 @@ import FeedMain from './views/feed/IndexFeed.vue'
 import Components from './views/Components.vue'
 import Party from './views/feed/Party.vue'
 import FindPw from './views/user/FindPw.vue'
+import FoundPw from './views/user/FoundPw.vue'
 import UserInfo from './views/Main.vue'
 import Pref from './views/user/Preference.vue'
 import Map from './views/map/map.vue'
@@ -54,19 +55,24 @@ export default [
         component: FindPw
     },
     {
-        path : '/user/finishjoin',
-        name : 'FinshJoin',
-        component : FinishJoin
+        path: '/user/foundPw',
+        name: 'FoundPw',
+        component: FoundPw
     },
     {
-        path : '/user/findPw',
-        name : 'FindPw',
-        component : FindPw
+        path: '/user/finishjoin',
+        name: 'FinshJoin',
+        component: FinishJoin
     },
     {
-        path : '/user/pref',
-        name : 'Pref',
-        component : Pref
+        path: '/user/findPw',
+        name: 'FindPw',
+        component: FindPw
+    },
+    {
+        path: '/user/pref',
+        name: 'Pref',
+        component: Pref
     },
     {
         path: '/map',

@@ -10,9 +10,11 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import com.web.curation.dao.user.UserDao;
+import com.web.curation.dao.user.UserDetailDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.user.SignupRequest;
 import com.web.curation.model.user.User;
+import com.web.curation.model.user.UserDetail;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
@@ -38,10 +40,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 		@ApiResponse(code = 404, message = "Not Found", response = BasicResponse.class),
 		@ApiResponse(code = 500, message = "Failure", response = BasicResponse.class) })
 
-@CrossOrigin(origins = { "http://localhost:3000" })
+@CrossOrigin(origins = { "*" })
 @RestController
 public class AccountController {
 
+	@Autowired
+	UserDetailDao userDetailDao;
 	@Autowired
 	UserDao userDao;
 
@@ -66,30 +70,63 @@ public class AccountController {
 		return response;
 	}
 
-	@PostMapping("/account/signup")
-	@ApiOperation(value = "가입하기")
-	public Object signup(@Valid @RequestBody SignupRequest request) {
-		List<User> originUsers = new ArrayList<>();
+	@GetMapping("/account/signup/valid")
+	@ApiOperation(value = "닉네임, 이메일 중복체크")
+	public Object nicknameAndEmailVaildCheck(String nickname, String email) {
 		User originUser = null;
-		originUser = userDao.getUserByUserEmail(request.getUserEmail());
-		if (originUser != null)
-			originUsers.add(originUser);
-		originUser = userDao.getUserByUserNickname(request.getUserNickname());
-		if (originUser != null)
-			originUsers.add(originUser);
 		final BasicResponse result = new BasicResponse();
-		// 기존에 가입한 유저가 없다면
-		if (originUsers.isEmpty()) {
-			userDao.save(new User(request.getUserPwd(), request.getUserEmail(), request.getUserName(),
-					request.getUserNickname(), request.getUserPhone()));
+		boolean isExistNickname = false;
+		boolean isExistEmail = false;
+
+		// 이메일 중복 검사
+		originUser = userDao.getUserByUserEmail(email);
+		if (originUser != null)
+			isExistEmail = true;
+
+		// 닉네임 중복 검사
+		originUser = userDao.getUserByUserNickname(nickname);
+		if (originUser != null)
+			isExistNickname = true;
+
+		// 기존에 가입한 동일 닉네임이 있다면
+		if (isExistNickname) {
+			result.status = false;
+			result.data = "isExistNickname";
+		}
+
+		// 기존에 가입한 동일 이메일이 있다면
+		else if (isExistEmail) {
+			result.status = false;
+			result.data = "isExistEmail";
+		}
+
+		// 기존 유저가 없다면
+		else {
 			result.status = true;
 			result.data = "success";
 		}
-		// 기존에 가입한 유저가 있다면
-		else {
-			result.status = false;
-			result.data = "fail";
-		}
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@PostMapping("/account/signup")
+	@ApiOperation(value = "가입하기")
+	public Object signup(@Valid @RequestBody SignupRequest request) {
+		User originUser = null;
+		final BasicResponse result = new BasicResponse();
+
+		// user entity db 저장
+		User newUser = new User(request.getUserPwd(), request.getUserEmail(), request.getUserName(),
+				request.getUserNickname(), request.getUserPhone(), request.getUserComment());
+		userDao.save(newUser);
+		// user detail entity db 저장
+		UserDetail newUserDetail = new UserDetail(newUser.getUserId(), request.getUserGender(), request.getUserAge(),
+				request.getUserFavorite().toString(), request.getUserPersonality().toString(),
+				request.getUserInterest().toString());
+		System.out.println(newUserDetail);
+
+		result.status = true;
+		result.data = "success";
+		
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 

@@ -65,13 +65,45 @@
 <script>
 
 const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
-
+// const SERVER_URL = "http://localhost:8080";
 import "./components/css/style.scss";
+import axios from "axios";
   
 export default {
   name: "app",
   methods: {
- 
+  },
+  created() {
+    //로그인 유지가 아닐경우
+    if(this.$cookie.get("loginSave")=="false"||this.$cookie.get("loginSave")==null){
+      //저장되어있는 쿠키를 제거한다.
+      this.$cookie.delete("accesstoken");
+      this.$cookie.delete("userId");
+    }
+    //로그인 유지일 경우
+    else{
+      //새 토큰을 받아온다.
+       axios
+        .get(
+          `${SERVER_URL}/account/loginSave?email=${this.$cookie.get('useremail')}`
+        )
+
+        .then((response) => {
+          console.log("로그인페이지");
+          console.log(response.data);
+
+          this.$cookie.set("accesstoken", response.data, 1);
+          this.$cookie.set("userId", response.data.object.userId, 1);
+
+          this.$router.push("/map");
+        })
+
+        .catch((error) => {
+          console.log(error.response);
+          alert("다시 로그인 해주세요");
+          this.$router.push("/");
+        });
+    }
   }
 };
   

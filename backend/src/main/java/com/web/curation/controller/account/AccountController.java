@@ -58,11 +58,36 @@ public class AccountController {
       ResponseEntity response = null;
       if (userOpt.isPresent()) {
          final BasicResponse result = new BasicResponse();
+         String token = getToken(email);
          result.status = true;
-         result.data = "success";
+         result.data = token;
 //            String token = getToken(userOpt);
-         String token = getToken(email, password);
-         response = new ResponseEntity<>(token, HttpStatus.OK);
+         result.object = userOpt;
+         System.out.println(userOpt);
+         response = new ResponseEntity<>(result, HttpStatus.OK);
+      } else {
+         response = new ResponseEntity<>("Fail", HttpStatus.NOT_FOUND);
+      }
+
+      return response;
+   }
+   
+   //재접속시 로그인 상태 유지
+   @GetMapping("/account/loginSave")
+   @ApiOperation(value = "재접속시 로그인상태 유지")
+   public Object loginSave(@RequestParam(required = true) final String email) {
+
+      Optional<User> userOpt = userDao.findUserByUserEmail(email);
+      ResponseEntity response = null;
+      if (userOpt.isPresent()) {
+         final BasicResponse result = new BasicResponse();
+         String token = getToken(email);
+         result.status = true;
+         result.data = token;
+//            String token = getToken(userOpt);
+         result.object = userOpt;
+         System.out.println(userOpt);
+         response = new ResponseEntity<>(result, HttpStatus.OK);
       } else {
          response = new ResponseEntity<>("Fail", HttpStatus.NOT_FOUND);
       }
@@ -134,8 +159,8 @@ public class AccountController {
    // 암호화 하는 방법임 : 내이름 넣음
    static Signer signer = HMACSigner.newSHA256Signer("park se hun");
 
-   static public String getToken(String email, String password) {
-      // Userid로 토큰을 만든다.
+   static public String getToken(String email) {
+      // UserEmail로 토큰을 만든다.
       // plusMinutes 는 토큰을 등록하는 시간임 지금은 1분
       JWT jwt = new JWT().setIssuer(email).setIssuedAt(ZonedDateTime.now(ZoneOffset.UTC))
             .setSubject("f1e33ab3-027f-47c5-bb07-8dd8ab37a2d3")

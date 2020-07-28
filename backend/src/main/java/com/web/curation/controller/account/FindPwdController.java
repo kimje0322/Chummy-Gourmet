@@ -2,6 +2,7 @@ package com.web.curation.controller.account;
 
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
@@ -15,6 +16,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,11 +46,13 @@ public class FindPwdController {
 	// 최종적으로 확인버튼 눌렀을때 이메일로 임시비밀번호를 보내기
 	@PostMapping("/account/senduserpwd")
 	@ApiOperation(value = "[비밀번호찾기] 이름존재검사, 이메일=이름 일치한지 검사 , 이메일로임시비밀번호보내기")
-	public Object sendpwd(@RequestParam(required = true) final String userName,
-			@RequestParam(required = true) final String userEmail) {
+	public Object sendpwd(@RequestBody  Map<String, Object> param) {
 		
 		final BasicResponse result = new BasicResponse();
 		
+		String userName = (String) param.get("userName");
+	    String userEmail = (String) param.get("userEmail");
+	    
 		// db에 사용자 이름이 있는지 검사
 		int count = findpwdDao.countByUserName(userName);
 		System.out.println(userName+"으로 검색한 결과 count = "+result);

@@ -25,7 +25,7 @@
     </div> -->
     <br />
     <br />
-    <p>※ 회원가입시 입력한 정보를 입력해주세요</p>
+    <div>※ 회원가입시 입력한 정보를 입력해주세요</div>
 
     <!-- 버튼 -->
     <v-btn @click="checkFormAndFindpw" color="warning find-btn">확인</v-btn>
@@ -63,14 +63,11 @@ export default {
       this.checkForm();
       // 
       if (this.isValidForm()){
-        console.log('함수 실행 전');
         this.onFindPw();
-        console.log('비번찾기 함수 실행 후');
         // this.$router.push("/user/foundpw")
       }
     },
     checkForm() {
-      console.log('체크폼 함수 실행')
       if (this.name.length < 1) this.error.name = "이름 입력해주세요.";
       else this.error.name = false;
     
@@ -89,10 +86,8 @@ export default {
     },
     isValidForm() {
       for (let key in this.error) {
-        console.log('에러 false')
         if (this.error[key]) return false;
       }
-      console.log('에러')
       return true;
     },
     onFindPw() {
@@ -103,7 +98,19 @@ export default {
       console.log(userData);
       axios.post(`${SERVER_URL}/account/senduserpwd`, userData)
         .then(res => {
-          console.log(res)
+          // isNotExistName / isNotExistEmail / success  
+          var data = res.data.data;
+          
+          if(data == 'isNotExistName'){
+            console.log('isNotExistName');
+          }
+          else if (data == 'isNotExistEmail'){
+            console.log('isNotExistEmail');
+          }
+          else if (data == 'success'){
+            console.log('success');
+          }
+
         })
         .catch(error => {
           console.log(error.res)

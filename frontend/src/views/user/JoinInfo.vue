@@ -367,7 +367,7 @@ export default {
   },
   methods: {
     isVaildJoinInfo() {
-      // console.log(this.$route.params);
+      
       if (this.checkedGender == "") {
         this.error.gender = "성별을 선택해주세요.";
         return false;
@@ -404,19 +404,17 @@ export default {
           userInterest: this.checkedInterests,
           userPhone: "01000000000",
         };
-        console.log(newUser);
         axios
           .post(
             // `${SERVER_URL}/account/signup/`, newUser
-            `http://localhost:8080/account/signup/`,
-            newUser
+            `http://localhost:8080/account/signup/`, newUser
           )
           .then((response) => {
             var data = response.data.data;
   
             if (data == "success") {
               alert("가입성공");
-              this.$route.push("/user/finishjoin");
+              this.$router.push("/user/finishjoin");
             } else {
               alert("가입실패");
             }
@@ -427,8 +425,6 @@ export default {
           });
       }
     },
-    // const food = document.getElementByID("favoriteFood");
-    // console.log(food.c);
   },
 };
 </script>

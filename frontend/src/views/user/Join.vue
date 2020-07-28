@@ -50,11 +50,12 @@
         <div class="error-text" v-if="error.passwordConfirm">{{error.passwordConfirm}}</div>
       </div>
     </div>
-    <!-- <div class="input-with-label cell-label">
-      <input id="cellphone" placeholder="휴대폰 번호를 입력하세요." type="text" />
-      <v-btn @click="onSignup" class="cell-auth" color="error">인증</v-btn>
+    <div class="input-with-label cell-label">
+      <input v-model="phone" id="cellphone" placeholder="휴대폰 번호를 입력하세요." type="text" />
       <label for="cellphone">휴대폰</label>
-    </div>-->
+      <div class="error-text" v-if="error.phone">{{error.phone}}</div>
+      <v-btn @click="onSignup" class="cell-auth" color="error">인증</v-btn>
+    </div>
 
     <label>
       <input v-model="isTerm" type="checkbox" id="term" />
@@ -108,6 +109,7 @@ export default {
       passwordConfirm: "",
       nickName: "",
       name: "",
+      phone: "",
       isTerm: false,
       isLoading: false,
       error: {
@@ -116,7 +118,8 @@ export default {
         password: false,
         nickName: false,
         passwordConfirm: false,
-        term: false
+        term: false,
+        phone: false,
       },
       isSubmit: false,
       passwordType: "password",
@@ -161,6 +164,14 @@ export default {
     },
     isTerm: function() {
       if (this.isTerm) this.error.term = false;
+    },
+    phone: function (v) {
+      if (this.phone.length > 0 && isNaN(this.phone))
+        this.error.phone = "올바른 휴대폰 번호를 입력해주세요.";
+      else this.error.phone = false;
+    },
+    isTerm: function() {
+      if (this.isTerm) this.error.term = false;
     }
   },
   methods: {
@@ -179,8 +190,7 @@ export default {
     onSignup() {
       axios
         .get(
-          // `${SERVER_URL}/account/signup/valid?nickname=${this.nickName}&email=${this.email}`
-          `http://localhost:8080/account/signup/valid?nickname=${this.nickName}&email=${this.email}`
+          `${SERVER_URL}/account/signup/valid?nickname=${this.nickName}&email=${this.email}`
         )
         .then(response => {
           // data : success / isExistEmail / isExistNickname

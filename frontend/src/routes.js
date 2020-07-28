@@ -18,6 +18,7 @@ import Pref from './views/user/Preference.vue'
 import Map from './views/map/map.vue'
 import MapParty from './views/map/party.vue'
 import Home from './views/user/Home.vue'
+import FoundPw from './views/user/FoundPw.vue'
 
 Vue.use(VueRouter);
 export default new VueRouter({

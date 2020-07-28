@@ -54,7 +54,7 @@
       <input v-model="phone" id="cellphone" placeholder="휴대폰 번호를 입력하세요." type="text" />
       <label for="cellphone">휴대폰</label>
       <div class="error-text" v-if="error.phone">{{error.phone}}</div>
-      <v-btn @click="onSignup" class="cell-auth" color="error">인증</v-btn>
+      <!-- <v-btn @click="onSignup" class="cell-auth" color="error">인증</v-btn> -->
     </div>
 
     <label>
@@ -170,9 +170,6 @@ export default {
         this.error.phone = "올바른 휴대폰 번호를 입력해주세요.";
       else this.error.phone = false;
     },
-    isTerm: function() {
-      if (this.isTerm) this.error.term = false;
-    }
   },
   methods: {
     checkFormAndSignUp() {
@@ -190,7 +187,8 @@ export default {
     onSignup() {
       axios
         .get(
-          `${SERVER_URL}/account/signup/valid?nickname=${this.nickName}&email=${this.email}`
+          // `${SERVER_URL}/account/signup/valid?nickname=${this.nickName}&email=${this.email}`
+          `http://localhost:8080/account/signup/valid?nickname=${this.nickName}&email=${this.email}`
         )
         .then(response => {
           // data : success / isExistEmail / isExistNickname
@@ -239,7 +237,7 @@ export default {
         this.password.length > 0 &&
         !this.passwordSchema.validate(this.password)
       )
-        this.error.password = "영문,숫자 포함 8 자리이상이어야 합니다.";
+      this.error.password = "영문,숫자 포함 8 자리이상이어야 합니다.";
       else this.error.password = false;
 
       if (
@@ -248,6 +246,10 @@ export default {
       ) {
         this.error.passwordConfirm = "비밀번호가 다릅니다.";
       } else this.error.passwordConfirm = false;
+
+       if (this.phone.length < 1)
+        this.error.phone = "전화번호를 입력해주세요.";
+      else this.error.phone = false;
     },
 
     // 입력 정보가 다 유효하면 true, 아니면 false

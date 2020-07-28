@@ -28,6 +28,4 @@ public interface UserDao extends JpaRepository<User, String> {
 	"WHERE user_id = :userId", nativeQuery = true)
 	void setUserNicknameUserPwdUserCommentByUserId(String userId, String userNickname, String userPwd, String userComment); 
 
-
-
 }

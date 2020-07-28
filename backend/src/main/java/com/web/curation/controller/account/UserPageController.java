@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,7 +40,7 @@ public class UserPageController {
 	UserDao userdao;
 	
 	// 사용자가 팔로잉 하는 유저 리스트를 가져온다.
-	@GetMapping("/userpage/getfollowinglist")
+	@PostMapping("/userpage/getfollowinglist")
 	@ApiOperation(value = "[유저페이지] 팔로잉 유저 리스트 가져옴")
 	public Object getuserfollowing(@RequestParam(required = true) final String userEmail) {
 		
@@ -57,7 +58,7 @@ public class UserPageController {
 	}
 	
 	// 사용자를 팔로워 하는 유저 리스트를 가져온다.
-	@GetMapping("/userpage/getfollowerlist")
+	@PostMapping("/userpage/getfollowerlist")
 	@ApiOperation(value = "[유저페이지] 팔로워 유저 리스트 가져옴")
 	public Object getuserfollower(@RequestParam(required = true) final String userEmail) {
 		
@@ -154,8 +155,8 @@ public class UserPageController {
 		return result;
 	}
 	
-	@GetMapping("/userpage/getfollowingrequestlist")
-	@ApiOperation(value = "[유저페이지] 사용자를 팔로잉한 요청리스트 출력")
+	@PostMapping("/userpage/getfollowingrequestlist")
+	@ApiOperation(value = "[유저페이지] 사용자를 팔로잉요청한 리스트 가져옴")
 	public Object getfollowingrequestlist(@RequestParam(required = true) final String userEmail) {
 		
 		// 팔로워유저 Id리스트
@@ -172,5 +173,33 @@ public class UserPageController {
 		return userList;
 	}
 	
-	
+	@GetMapping("/userpage/acceptfollowing")
+	@ApiOperation(value = "[유저페이지] 팔로우요청한것을 수락해줌")
+	public Object acceptfollowing(@RequestParam(required = true) final String userEmail,
+			@RequestParam(required = true) final String opponentEmail) {
+		
+		ArrayList<User>userList = new ArrayList<>();
+		final BasicResponse result = new BasicResponse();
+		
+		User user = new User();
+		user = userdao.getUserByUserEmail(userEmail);
+		String userId = user.getUserId();
+		
+		user = userdao.getUserByUserEmail(opponentEmail);
+		String opponentId = user.getUserId();
+		try {
+			// 유저의 팔로워 리스트에 들어간다.
+			String result1 = userPageDao.insertFollowerUser(userId, opponentId);
+			// 요청리스트에서 지우고
+			String result2 = userPageDao.deleteFollowingrequestUser(userId, opponentId);
+			result.status = true;
+			result.data = "success";
+		}
+		catch (Exception e) {
+			result.status = true;
+			result.data = "fail";
+			return result;
+		}
+		return result;
+	}
 }

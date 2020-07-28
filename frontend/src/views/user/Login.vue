@@ -10,16 +10,17 @@
       <div class="wrapC">
         <!-- <h3>
           <router-link to="Home" class="btn-back">  </router-link>
-        </h3> -->
+        </h3>-->
         <!-- <br>
         <br>
         <br>
         <br>
         <br>
-        <br> -->
-        <br>
-        <br>
-        <h2 class="text-white">로그인</h2><hr>
+        <br>-->
+        <br />
+        <br />
+        <h2 class="text-white">로그인</h2>
+        <hr />
         <!-- <p class="text-center" style="color:white;">Login</p> -->
         <div class="input-with-label">
           <input
@@ -80,7 +81,7 @@
                 계정찾기
               </router-link>
             </p>
-          </div> -->
+          </div>-->
           <!-- <div class="wrap">
         <p>아직 회원이 아니신가요?</p>
         <router-link to="/user/join" class="btn-join"><strong>가입하기!</strong></router-link>
@@ -105,7 +106,7 @@ const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
 export default {
   components: {
     KakaoLogin,
-    GoogleLogin
+    GoogleLogin,
   },
   created() {
     this.component = this;
@@ -121,12 +122,12 @@ export default {
       .letters();
   },
   watch: {
-    password: function(v) {
+    password: function (v) {
       this.checkForm();
     },
-    email: function(v) {
+    email: function (v) {
       this.checkForm();
-    }
+    },
   },
   methods: {
     checkForm() {
@@ -142,7 +143,7 @@ export default {
       else this.error.password = false;
 
       let isSubmit = true;
-      Object.values(this.error).map(v => {
+      Object.values(this.error).map((v) => {
         if (v) isSubmit = false;
       });
       this.isSubmit = isSubmit;
@@ -178,23 +179,44 @@ export default {
     // },
 
     onLogin() {
+      if (this.email.length >= 0 && !EmailValidator.validate(this.email)) {
+        // console.log('이메일 확인')
+        alert("이메일을 확인해주세요");
+        return;
+      }
+
+      if (
+        this.password.length >= 0 &&
+        !this.passwordSchema.validate(this.password)
+      ) {
+        alert("비밀번호를 확인해주세요");
+        return;
+      }
+      // if (this.password.length == 0) {
+      //   return;
+      // }
       axios
         .get(
           `${SERVER_URL}/account/login?email=${this.email}&password=${this.password}`
         )
 
-        .then(response => {
-          console.log('로그인페이지')
-          console.log(response.data)
+        .then((response) => {
+          console.log("로그인페이지");
+          console.log(response.data);
 
+          this.$cookie.set("accesstoken", response.data, 1);
+          this.$cookie.set("useremail", this.email, 1);
+          // console.log()
+          console.log(this.$cookie.get("useremail"));
+
+          this.$router.push("/map");
         })
 
-        .catch(error => {
-          console.log(error.response)
-        })
-
-    }
-    
+        .catch((error) => {
+          console.log(error.response);
+          alert("로그인 실패");
+        });
+    },
   },
   data: () => {
     return {
@@ -203,12 +225,12 @@ export default {
       passwordSchema: new PV(),
       error: {
         email: false,
-        passowrd: false
+        passowrd: false,
       },
       isSubmit: false,
-      component: this
+      component: this,
     };
-  }
+  },
 };
 </script>
 

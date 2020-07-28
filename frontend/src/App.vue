@@ -65,16 +65,7 @@ import "./components/css/style.scss";
 export default {
   name: "app",
   methods: {
-    // onSignup(signupData) {
-    //   console.log('123');
-    //   axios.get(`${SERVER_URL}/account/signup/valid?nickname=${signupData.nickName}&email=${signupData.email}`)
-    //     .then(response => {
-    //       console.log(response)
-    //     })
-    //     .catch(error => {
-    //       console.log(error.response)
-    //     })
-    // }
+ 
   }
 };
   

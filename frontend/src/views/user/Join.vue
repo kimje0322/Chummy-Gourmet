@@ -76,12 +76,15 @@
 
 <script>
 import axios from "axios";
+import router from "@/routes";
 
-const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
+
 
 import * as EmailValidator from "email-validator";
 import PV from "password-validator";
 import UserApi from "../../api/UserApi";
+
+const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
 
 export default {
   name: "Join",
@@ -167,6 +170,9 @@ export default {
         this.error.phone = "올바른 휴대폰 번호를 입력해주세요.";
       else this.error.phone = false;
     },
+    isTerm: function() {
+      if (this.isTerm) this.error.term = false;
+    }
   },
   methods: {
     checkFormAndSignUp() {
@@ -190,9 +196,17 @@ export default {
           // data : success / isExistEmail / isExistNickname
           var data = response.data.data;
 
-          // 이메일과 닉네임이 중복이 아니라면, 다음 페이지로
+          // 이메일과 닉네임이 중복이 아니라면,
           if (data == "success") {
-            this.$router.push("/user/joininfo");
+            let userInfo = {
+              email: this.email,
+              password: this.password,
+              nickName: this.nickName,
+              name: this.name,
+            };
+
+            // 현재 페이지에서 입력받은 정보를 params에 넣어서 다음 페이지로 이동
+            router.push({name : "JoinInfo", params : userInfo});
           } else if (data == "isExistEmail") {
             this.error.email =
               "사용중인 이메일입니다. 다른 이메일을 입력해주세요.";
@@ -235,6 +249,8 @@ export default {
         this.error.passwordConfirm = "비밀번호가 다릅니다.";
       } else this.error.passwordConfirm = false;
     },
+
+    // 입력 정보가 다 유효하면 true, 아니면 false
     isValidForm() {
       for (let key in this.error) {
         if (this.error[key]) return false;

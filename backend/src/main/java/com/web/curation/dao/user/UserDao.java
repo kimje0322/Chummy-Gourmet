@@ -13,7 +13,7 @@ public interface UserDao extends JpaRepository<User, String> {
 
     SignupRequest save(SignupRequest signupRequest);
 
-	User getUserByUserName(String userName);
+    User getUserByUserId(String userId);
 	
 	User getUserByUserEmail(String email);
 	
@@ -27,7 +27,5 @@ public interface UserDao extends JpaRepository<User, String> {
 	"user_comment = :userComment "+
 	"WHERE user_id = :userId", nativeQuery = true)
 	void setUserNicknameUserPwdUserCommentByUserId(String userId, String userNickname, String userPwd, String userComment); 
-
-
 
 }

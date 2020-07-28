@@ -1,3 +1,6 @@
+import Vue from 'vue'
+import VueRouter from 'vue-router';
+
 import Login from './views/user/Login.vue'
 import Join from './views/user/Join.vue'
 import JoinRule from './views/user/JoinRule.vue'
@@ -16,6 +19,7 @@ import Pref from './views/user/Preference.vue'
 import Map from './views/map/map.vue'
 import MapParty from './views/map/party.vue'
 import Home from './views/user/Home.vue'
+import FoundPw from './views/user/FoundPw.vue'
 
 
 export default [
@@ -121,5 +125,6 @@ export default [
         meta: {
             navbar: true
         }
-    }
-]
+
+    ]
+});

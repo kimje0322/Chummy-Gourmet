@@ -20,6 +20,8 @@ public interface UserDao extends JpaRepository<User, String> {
 	User getUserByUserNickname(String nickname);
 
 	Optional<User> findUserByUserEmailAndUserPwd(String email, String password);
+	
+	Optional<User> findUserByUserEmail(String email);
 
 
 	@Query(value = "UPDATE user SET user_nickname = :userNickname ,"+

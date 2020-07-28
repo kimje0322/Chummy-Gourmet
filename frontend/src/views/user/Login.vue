@@ -108,7 +108,8 @@ import GoogleLogin from "../../components/user/snsLogin/Google.vue";
 import UserApi from "../../api/UserApi";
 import axios from "axios";
 
-const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "http://localhost:8080";
 
 export default {
   components: {
@@ -155,36 +156,9 @@ export default {
       });
       this.isSubmit = isSubmit;
     },
-    // onLogin() {
-    //   if (this.isSubmit) {
-    //     let { email, password } = this;
-    //     let data = {
-    //       email,
-    //       password
-    //     };
-
-    //     //요청 후에는 버튼 비활성화
-    //     this.isSubmit = false;
-
-    //     UserApi.requestLogin(
-    //       data,
-    //       res => {
-    //         //통신을 통해 전달받은 값 콘솔에 출력
-    //         //console.log(res);
-
-    //         //요청이 끝나면 버튼 활성화
-    //         this.isSubmit = true;
-
-    //         this.$router.push("/main");
-    //       },
-    //       error => {
-    //         //요청이 끝나면 버튼 활성화
-    //         this.isSubmit = true;
-    //       }
-    //     );
-    //   }
-    // },
-
+  
+// 쿠키를 사용한 로그인 부분
+// 로그인이 성공했을 때 쿠키에 토큰와 userId를 저장한다.
     onLogin() {
       if (this.email.length >= 0 && !EmailValidator.validate(this.email)) {
         // console.log('이메일 확인')
@@ -199,9 +173,7 @@ export default {
         alert("비밀번호를 확인해주세요");
         return;
       }
-      // if (this.password.length == 0) {
-      //   return;
-      // }
+
       axios
         .get(
           `${SERVER_URL}/account/login?email=${this.email}&password=${this.password}`
@@ -212,9 +184,7 @@ export default {
           console.log(response.data);
 
           this.$cookie.set("accesstoken", response.data, 1);
-          this.$cookie.set("useremail", this.email, 1);
-          // console.log()
-          console.log(this.$cookie.get("useremail"));
+          this.$cookie.set("userId", response.data.object.userId, 1);
 
           this.$router.push("/map");
         })

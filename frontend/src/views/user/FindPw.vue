@@ -99,16 +99,20 @@ export default {
       axios.post(`${SERVER_URL}/account/senduserpwd`, userData)
         .then(res => {
           // isNotExistName / isNotExistEmail / success  
+          console.log(res)
           var data = res.data.data;
           
           if(data == 'isNotExistName'){
             console.log('isNotExistName');
+            this.error.name = '가입되지 않는 이름입니다.'
           }
-          else if (data == 'isNotExistEmail'){
+          if (data == 'isNotExistEmail'){
             console.log('isNotExistEmail');
+            this.error.email = '가입되지 않는 이메일입니다.'
           }
           else if (data == 'success'){
             console.log('success');
+            this.$router.push("/user/foundpw")
           }
 
         })

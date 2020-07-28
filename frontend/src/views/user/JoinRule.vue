@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h2>돈독한 미식가 이용약관</h2>
-    <br>
+    <br><h2>돈독한 미식가 이용약관</h2><br><br>
     <p>
       제 1 조 (목적) <br>
 
@@ -53,5 +52,5 @@ export default {
 </script>
 
 <style>
-
+  
 </style>

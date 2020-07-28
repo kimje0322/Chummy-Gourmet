@@ -1,6 +1,9 @@
 package com.web.curation.controller.account;
 
 
+import java.util.ArrayList;
+import java.util.Map;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -12,9 +15,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.HttpClientErrorException.Gone;
 
 import com.web.curation.dao.user.FindPwdDao;
 import com.web.curation.model.BasicResponse;
@@ -28,7 +30,7 @@ import io.swagger.annotations.ApiResponses;
         @ApiResponse(code = 404, message = "Not Found", response = BasicResponse.class),
         @ApiResponse(code = 500, message = "Failure", response = BasicResponse.class) })
 
-@CrossOrigin(origins = { "http://localhost:3000" })
+@CrossOrigin(origins = { "*" })
 @RestController
 public class FindPwdController {
 	
@@ -39,57 +41,54 @@ public class FindPwdController {
 	@Autowired
 	private JavaMailSender mailSender;
 	
-	// 비교를 위해 저장될 사용자이름변수
-	private String GlobalUserName=""; String GlobalUserEmail="";
-	
-	// 이메일입력 할때 이름과 이메일이 디비에 같은 것인지 아닌지 ajax통신을 위함
-	@PostMapping("/account/equalsemail")
-	@ApiOperation(value = "사용자이름으로 찾은 이메일과 지금 입력한 이메일이 일치하는지검사")
-	public Object emailequalsusername(@RequestParam(required = true) final String userName,
-			@RequestParam(required = true) final String userEmail) {
+	// 최종적으로 확인버튼 눌렀을때 이메일로 임시비밀번호를 보내기
+	@PostMapping("/account/senduserpwd")
+	@ApiOperation(value = "[비밀번호찾기] 이름존재검사, 이메일=이름 일치한지 검사 , 이메일로임시비밀번호보내기")
+	public Object sendpwd(@RequestBody Map<String, Object> param) {
 		
-		// db에 한번만 갔다 와서 유저 이름에 대한 db에 저장된 이메일을 저장하기 위함
-		if(GlobalUserName.equals("") || !GlobalUserName.equals(userName)) {
-			System.out.println("여기까지 왔는가?");
-			GlobalUserName = userName;
-			// 해당 유저이름에 대한 유저이메일을 디비에 가서 가져온다.
-			GlobalUserEmail = findpwdDao.getUserEmailByUserName(userName);
-			System.out.println("검사하고 왔따");
-		}
-		System.out.println(GlobalUserEmail);
+		final BasicResponse result = new BasicResponse();
 		
+		String userName = (String) param.get("userName");
+	    String userEmail = (String) param.get("userEmail");
+
+		// db에 사용자 이름이 있는지 검사
+		int count = findpwdDao.countByUserName(userName);
+		System.out.println(userName+"으로 검색한 결과 count = "+result);
 		// 성공 or 실패 리턴 저장위함
 		ResponseEntity response = null;
+		// db에 사용자가 존재하지않음
 		
-		// 사용자가 입력한 유저이메일과 디비에 저장된 유저이메일이 같은가?
-		if(userEmail.equals(GlobalUserEmail)) {
-			// 일치하다
-			return response = new ResponseEntity<>("success", HttpStatus.OK);
+		if(count == 0) {
+			 result.status = false;
+	         result.data = "isNotExistName";
+	         return new ResponseEntity<>(result, HttpStatus.OK);
 		}
-		// 불일치하다
-		else {
-			return response = new ResponseEntity<>("fail", HttpStatus.NOT_FOUND);
+		 
+		// 해당 유저이름에 대한 유저이메일을 디비에 가서 가져온다.
+		ArrayList<String>UserEmailList = findpwdDao.getUserEmailByUserName(userName);
+		boolean flag = false;
+		for (String userEmaillist : UserEmailList) {
+			// 사용자 이름으로 검색한 이메일 리스트중 입력한 이메일과 동일한것이 존재
+			if(userEmaillist.equals(userEmail)) {
+				flag = true;
+				System.out.println(userEmaillist);
+			}
+		}
+		// 일치하는게 존재 하지 않는다
+		if(!flag) {
+			 result.status = false;
+	         result.data = "isNotExistEmail";
+	         return new ResponseEntity<>(result, HttpStatus.OK);
 		}
 		
-	}
-	
-	// 최종적으로 확인버튼 눌렀을때 이메일로 임시비밀번호를 보내기
-	@PostMapping("/account/sendpwd")
-	@ApiOperation(value = "이메일로임시비밀번호보내기")
-	public Object sendpwd(@RequestParam(required = true) final String userName,
-			@RequestParam(required = true) final String userEmail) {
-
-		// 임시 비밀번호 저장 변수
+		// 임시 비밀번호 생성 저장 변수
 		String userPwd = "";
 		for (int i = 0; i < 12; i++) {
 			userPwd += (char) ((Math.random() * 26) + 97);
 		}
-		// 이미 이전부분에서 정확히 이름과 이메일을 입력하기 때문에 오류가 나지 않을거라고 생각함
+		// 이미 여기 함수 이전부분에서 정확히 이름과 이메일을 입력하기 때문에 오류가 나지 않을거라고 생각함
 		int num = findpwdDao.setUserPwdByUserNameAndUserEmail(userPwd, userName, userEmail);
 
-		// 성공 or 실패 리턴 저장위함
-		ResponseEntity response = null;
-		
 		try {
 			MimeMessage msg = mailSender.createMimeMessage();
 			MimeMessageHelper messageHelper = new MimeMessageHelper(msg, true, "UTF-8");
@@ -100,11 +99,13 @@ public class FindPwdController {
 			msg.setRecipients(MimeMessage.RecipientType.TO, InternetAddress.parse(userEmail));
 			System.out.println(messageHelper);
 			mailSender.send(msg);
-			response = new ResponseEntity<>("success", HttpStatus.OK);
+			result.status = true;
+	        result.data = "success";
 		} catch (MessagingException e) {
-			response = new ResponseEntity<>("Fail", HttpStatus.NOT_FOUND);
+			result.status = false;
+	        result.data = "fail";
 		}
-		return response;
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	

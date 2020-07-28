@@ -1,17 +1,27 @@
 <template>
   <v-app id="app">
-    <div class="img-info">
-      <!-- <img src="../../assets/images/logo_ex.png" alt="log" width="100"> -->
-    </div>
+    <!-- <div class="img-info"> -->
+    <!-- <img src="../../assets/images/logo_ex.png" alt="log" width="100"> -->
+    <!-- </div> -->
     <!-- <router-view></router-view> -->
 
     <div class="user" id="login">
+      <!-- <img src="../../assets/images/background.jpg" width="500"> -->
       <div class="wrapC">
-        <!-- <h1>
-        돈독한
-        <br />미식가
-        </h1>-->
-
+        <!-- <h3>
+          <router-link to="Home" class="btn-back">  </router-link>
+        </h3>-->
+        <!-- <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>-->
+        <br />
+        <br />
+        <h2 class="text-white">로그인</h2>
+        <hr />
+        <!-- <p class="text-center" style="color:white;">Login</p> -->
         <div class="input-with-label">
           <input
             v-model="email"
@@ -20,6 +30,7 @@
             id="email"
             placeholder="이메일을 입력하세요."
             type="text"
+            class="border-white"
           />
           <label for="email">이메일</label>
           <div class="error-text" v-if="error.email">{{error.email}}</div>
@@ -33,18 +44,19 @@
             id="password"
             @keyup.enter="Login"
             placeholder="비밀번호를 입력하세요."
+            class="border-white"
           />
           <label for="password">비밀번호</label>
           <div class="error-text" v-if="error.password">{{error.password}}</div>
         </div>
 
-        <v-btn color="warning" width="100%">로그인</v-btn>
+        <v-btn width="100%" @click="onLogin">로그인</v-btn>
 
-        <!-- <v-btn color="info" class="btn btn--back btn--login"
-      @click="onLogin"
-      :disabled="!isSubmit"
-      :class="{disabled : !isSubmit}"
-        >로그인</v-btn>-->
+        <div>
+          <router-link to="/user/findpw">
+            <p color="white">비밀번호 찾기</p>
+          </router-link>
+        </div>
 
         <div class="sns-login">
           <div class="text">
@@ -59,12 +71,13 @@
         <p>혹시</p>
         <div class="bar"></div>
           </div>-->
-          <br>
-          <br>
-          <br>
-          <br>
-          <br>
-          <div class="row">
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <router-link to="/user/findpw"><p>비밀번호 찾기</p></router-link>
+          <!-- <div class="row">
             <p class="d-flex mx-auto">
               <router-link to="/user/join">
                 <img src="../../assets/images/join_logo.png" alt="join_log" width="15" />
@@ -75,7 +88,7 @@
                 계정찾기
               </router-link>
             </p>
-          </div>
+          </div>-->
           <!-- <div class="wrap">
         <p>아직 회원이 아니신가요?</p>
         <router-link to="/user/join" class="btn-join"><strong>가입하기!</strong></router-link>
@@ -93,11 +106,14 @@ import * as EmailValidator from "email-validator";
 import KakaoLogin from "../../components/user/snsLogin/Kakao.vue";
 import GoogleLogin from "../../components/user/snsLogin/Google.vue";
 import UserApi from "../../api/UserApi";
+import axios from "axios";
+
+const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
 
 export default {
   components: {
     KakaoLogin,
-    GoogleLogin
+    GoogleLogin,
   },
   created() {
     this.component = this;
@@ -113,61 +129,101 @@ export default {
       .letters();
   },
   watch: {
-    password: function(v) {
+    password: function (v) {
       this.checkForm();
     },
-    email: function(v) {
+    email: function (v) {
       this.checkForm();
-    }
+    },
   },
   methods: {
     checkForm() {
-      if (this.email.length >= 0 && !EmailValidator.validate(this.email))
+      if (this.email.length > 0 && !EmailValidator.validate(this.email))
         this.error.email = "이메일 형식이 아닙니다.";
       else this.error.email = false;
 
       if (
-        this.password.length >= 0 &&
+        this.password.length > 0 &&
         !this.passwordSchema.validate(this.password)
       )
         this.error.password = "영문,숫자 포함 8 자리이상이어야 합니다.";
       else this.error.password = false;
 
       let isSubmit = true;
-      Object.values(this.error).map(v => {
+      Object.values(this.error).map((v) => {
         if (v) isSubmit = false;
       });
       this.isSubmit = isSubmit;
     },
+    // onLogin() {
+    //   if (this.isSubmit) {
+    //     let { email, password } = this;
+    //     let data = {
+    //       email,
+    //       password
+    //     };
+
+    //     //요청 후에는 버튼 비활성화
+    //     this.isSubmit = false;
+
+    //     UserApi.requestLogin(
+    //       data,
+    //       res => {
+    //         //통신을 통해 전달받은 값 콘솔에 출력
+    //         //console.log(res);
+
+    //         //요청이 끝나면 버튼 활성화
+    //         this.isSubmit = true;
+
+    //         this.$router.push("/main");
+    //       },
+    //       error => {
+    //         //요청이 끝나면 버튼 활성화
+    //         this.isSubmit = true;
+    //       }
+    //     );
+    //   }
+    // },
+
     onLogin() {
-      if (this.isSubmit) {
-        let { email, password } = this;
-        let data = {
-          email,
-          password
-        };
-
-        //요청 후에는 버튼 비활성화
-        this.isSubmit = false;
-
-        UserApi.requestLogin(
-          data,
-          res => {
-            //통신을 통해 전달받은 값 콘솔에 출력
-            //console.log(res);
-
-            //요청이 끝나면 버튼 활성화
-            this.isSubmit = true;
-
-            this.$router.push("/main");
-          },
-          error => {
-            //요청이 끝나면 버튼 활성화
-            this.isSubmit = true;
-          }
-        );
+      if (this.email.length >= 0 && !EmailValidator.validate(this.email)) {
+        // console.log('이메일 확인')
+        alert("이메일을 확인해주세요");
+        return;
       }
-    }
+
+      if (
+        this.password.length >= 0 &&
+        !this.passwordSchema.validate(this.password)
+      ) {
+        alert("비밀번호를 확인해주세요");
+        return;
+      }
+      // if (this.password.length == 0) {
+      //   return;
+      // }
+      axios
+        .get(
+          `${SERVER_URL}/account/login?email=${this.email}&password=${this.password}`
+        )
+
+        .then((response) => {
+          console.log("로그인페이지");
+          console.log(response.data);
+
+          this.$cookie.set("accesstoken", response.data, 1);
+          this.$cookie.set("useremail", this.email, 1);
+          // console.log()
+          console.log(this.$cookie.get("useremail"));
+
+          this.$router.push("/map");
+        })
+
+        .catch((error) => {
+          console.log(error.response);
+          alert("로그인 실패");
+        });
+    },
   },
   data: () => {
     return {
@@ -176,12 +232,12 @@ export default {
       passwordSchema: new PV(),
       error: {
         email: false,
-        passowrd: false
+        passowrd: false,
       },
       isSubmit: false,
-      component: this
+      component: this,
     };
-  }
+  },
 };
 </script>
 
@@ -200,7 +256,15 @@ export default {
   text-align: center;
 }
 
+label {
+  color: black;
+}
+
 .container {
   height: 50%;
+  /* padding: 0px !important;  */
+}
+::placeholder {
+  color: black;
 }
 </style>

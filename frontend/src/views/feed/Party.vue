@@ -1,5 +1,8 @@
 <template>
   <div class="user join wrapC">
+    <h2>일정</h2>
+    <br />
+    <br />
     <div class="input-group mb-3">
       <!-- <div class="input-group-prepend">
         <span class="input-group-text" id="basic-addon1">@</span>
@@ -12,6 +15,28 @@
         aria-describedby="basic-addon1"
       />
     </div>
+
+    <div class="input-group mb-3">
+      <!-- <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">@</span>
+      </div>-->
+      <!-- <input
+        type="text"
+        class="form-control"
+        placeholder="제목"
+        aria-label="Username"
+        aria-describedby="basic-addon1"
+      />-->
+      <v-textarea solo name="input-7-4" label="일정 내용을 입력하세요."></v-textarea>
+    </div>
+
+    <v-form>
+      <v-container>
+        <v-row>
+          <v-text-field solo label="장소" append-icon="mdi-map-marker"></v-text-field>
+        </v-row>
+      </v-container>
+    </v-form>
     <!-- modal -->
     <v-row justify="center">
       <!-- calendar dialog -->
@@ -20,7 +45,7 @@
           <v-btn color="primary" dark v-bind="attrs" v-on="on">Calendar</v-btn>
         </template>->
         <!-- calendar -->
-        <v-row class="fill-height mx-auto ">
+        <v-row class="fill-height mx-auto">
           <v-col>
             <v-sheet height="64">
               <v-toolbar flat color="white">
@@ -104,10 +129,31 @@
       </v-dialog>
     </v-row>
     <br />
-        
+
     <!-- modal/location -->
+    <!-- <div class="section">
+      <div class="article place">
+        <span class="tit">장소</span>
+        <div class="pos_right">
+          <a href="http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=722f0c506c2743378fac318284106578" class="_view_map _map_help btn_sy">
+            <span class="ico add_map"></span>
+            <strong>지도</strong>
+          </a>
+        </div>
+        <div class="pos_input">
+          <input type="text" max_length="100">
+        </div>
+      </div>
+    </div>-->
+
+    <!-- <div class="article date _date_time_area" style="display: block;">
+      <span class="tit"></span>
+      <div class="cont">
+        <div style="display: block;"></div>
+      </div>
+    </div>-->
     <v-row justify="center">
-      <v-dialog v-model="dialog1   " persistent max-width="290">
+      <v-dialog v-model="dialog1 " persistent max-width="290">
         <template v-slot:activator="{ on, attrs }">
           <v-btn color="primary" dark v-bind="attrs" v-on="on">Location</v-btn>
         </template>
@@ -123,6 +169,7 @@
         </v-card>
       </v-dialog>
     </v-row>
+
     <!-- dropdown -->
     <v-container id="dropdown-example">
       <v-row>
@@ -147,7 +194,7 @@ export default {
       month: "Month",
       week: "Week",
       day: "Day",
-      "4day": "4 Days"
+      "4day": "4 Days",
     },
     selectedEvent: {},
     selectedElement: null,
@@ -160,7 +207,7 @@ export default {
       "cyan",
       "green",
       "orange",
-      "grey darken-1"
+      "grey darken-1",
     ],
     names: [
       "Meeting",
@@ -170,8 +217,8 @@ export default {
       "Event",
       "Birthday",
       "Conference",
-      "Party"
-    ]
+      "Party",
+    ],
   }),
   mounted() {
     // this.$refs.calendar.checkChange();
@@ -191,7 +238,7 @@ export default {
       var container = document.getElementById("map");
       var options = {
         center: new kakao.maps.LatLng(33.450701, 126.570667),
-        level: 3
+        level: 3,
       };
 
       var map = new kakao.maps.Map(container, options);
@@ -249,7 +296,7 @@ export default {
           start: first,
           end: second,
           color: this.colors[this.rnd(0, this.colors.length - 1)],
-          timed: !allDay
+          timed: !allDay,
         });
       }
 
@@ -257,8 +304,8 @@ export default {
     },
     rnd(a, b) {
       return Math.floor((b - a + 1) * Math.random()) + a;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -267,5 +314,18 @@ export default {
   width: 100px;
   height: 100px;
   z-index: 10;
+}
+.section .article {
+  position: relative;
+  color: black;
+}
+div {
+  display: block;
+}
+.tit {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  font-weight: bold;
 }
 </style>

@@ -11,13 +11,16 @@
         <!-- <h3>
           <router-link to="Home" class="btn-back">  </router-link>
         </h3> -->
+        <!-- <br>
         <br>
         <br>
         <br>
         <br>
+        <br> -->
         <br>
         <br>
-        <p class="text-center" style="color:white;">Login</p>
+        <h2 class="text-white">로그인</h2><hr>
+        <!-- <p class="text-center" style="color:white;">Login</p> -->
         <div class="input-with-label">
           <input
             v-model="email"
@@ -46,7 +49,7 @@
           <div class="error-text" v-if="error.password">{{error.password}}</div>
         </div>
 
-        <v-btn color="white" width="100%">로그인</v-btn>
+        <v-btn width="100%">로그인</v-btn>
 
         <div class="sns-login">
           <div class="text">
@@ -203,13 +206,14 @@ export default {
 }
 
 label {
-  color:white;
+  color: black;
 }
 
 .container {
   height: 50%;
+  /* padding: 0px !important;  */
 }
 ::placeholder {
-  color: white;
+  color: black;
 }
 </style>

@@ -47,7 +47,7 @@ export default {
     },
     phone: function(v) {
       if (this.phone.length > 0 && isNaN(this.phone))
-        this.error.phone = "올바른 휴대폰 번호를 입력해주세요."
+        this.error.phone = "올바른 휴대폰 번호를 입력해주세요.";
       else this.error.email = false;
     }
   },

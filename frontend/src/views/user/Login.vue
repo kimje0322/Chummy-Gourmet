@@ -49,7 +49,7 @@
           <div class="error-text" v-if="error.password">{{error.password}}</div>
         </div>
 
-        <v-btn width="100%">로그인</v-btn>
+        <v-btn width="100%" @click="onLogin">로그인</v-btn>
 
         <div class="sns-login">
           <div class="text">
@@ -98,6 +98,9 @@ import * as EmailValidator from "email-validator";
 import KakaoLogin from "../../components/user/snsLogin/Kakao.vue";
 import GoogleLogin from "../../components/user/snsLogin/Google.vue";
 import UserApi from "../../api/UserApi";
+import axios from "axios";
+
+const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
 
 export default {
   components: {
@@ -144,35 +147,54 @@ export default {
       });
       this.isSubmit = isSubmit;
     },
+    // onLogin() {
+    //   if (this.isSubmit) {
+    //     let { email, password } = this;
+    //     let data = {
+    //       email,
+    //       password
+    //     };
+
+    //     //요청 후에는 버튼 비활성화
+    //     this.isSubmit = false;
+
+    //     UserApi.requestLogin(
+    //       data,
+    //       res => {
+    //         //통신을 통해 전달받은 값 콘솔에 출력
+    //         //console.log(res);
+
+    //         //요청이 끝나면 버튼 활성화
+    //         this.isSubmit = true;
+
+    //         this.$router.push("/main");
+    //       },
+    //       error => {
+    //         //요청이 끝나면 버튼 활성화
+    //         this.isSubmit = true;
+    //       }
+    //     );
+    //   }
+    // },
+
     onLogin() {
-      if (this.isSubmit) {
-        let { email, password } = this;
-        let data = {
-          email,
-          password
-        };
+      axios
+        .get(
+          `${SERVER_URL}/account/login?email=${this.email}&password=${this.password}`
+        )
 
-        //요청 후에는 버튼 비활성화
-        this.isSubmit = false;
+        .then(response => {
+          console.log('로그인페이지')
+          console.log(response.data)
 
-        UserApi.requestLogin(
-          data,
-          res => {
-            //통신을 통해 전달받은 값 콘솔에 출력
-            //console.log(res);
+        })
 
-            //요청이 끝나면 버튼 활성화
-            this.isSubmit = true;
+        .catch(error => {
+          console.log(error.response)
+        })
 
-            this.$router.push("/main");
-          },
-          error => {
-            //요청이 끝나면 버튼 활성화
-            this.isSubmit = true;
-          }
-        );
-      }
     }
+    
   },
   data: () => {
     return {

@@ -108,8 +108,8 @@ import GoogleLogin from "../../components/user/snsLogin/Google.vue";
 import UserApi from "../../api/UserApi";
 import axios from "axios";
 
-const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
-// const SERVER_URL = "http://localhost:8080";
+// const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "http://localhost:8080";
 
 export default {
   components: {

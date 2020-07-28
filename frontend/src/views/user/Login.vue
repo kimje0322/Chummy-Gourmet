@@ -66,6 +66,7 @@
           <br />
           <br />
           <br />
+          <router-link to="/user/findpw"><p>비밀번호 찾기</p></router-link>
           <!-- <div class="row">
             <p class="d-flex mx-auto">
               <router-link to="/user/join">

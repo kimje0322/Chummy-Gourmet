@@ -66,7 +66,7 @@ export default {
         console.log('함수 실행 전');
         this.onFindPw();
         console.log('비번찾기 함수 실행 후');
-        this.$router.push("/user/foundpw")
+        // this.$router.push("/user/foundpw")
       }
     },
     checkForm() {
@@ -96,7 +96,12 @@ export default {
       return true;
     },
     onFindPw() {
-      axios.get(`${SERVER_URL}/account/sendpwd?userEmail=${this.email}&userName=${this.name}`)
+      let userData = {
+        userEmail : this.email,
+        userName : this.name
+      };
+      console.log(userData);
+      axios.post(`${SERVER_URL}/account/senduserpwd`, userData)
         .then(res => {
           console.log(res)
         })

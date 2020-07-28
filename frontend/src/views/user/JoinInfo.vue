@@ -48,7 +48,6 @@
     <!-- 선호 음식 -->
     <h3 class="userInfo">선호음식</h3>
     <ul class="select-many">
-      <form id="favoriteFood">
         <li>
           <input type="checkbox" v-model="checkedFoods" id="han" name="food" />
           <label for="han" class="food">
@@ -91,7 +90,6 @@
             뷔페
           </label>
         </li>
-      </form>
     </ul>
     <br /><br /><br /><br/>
 

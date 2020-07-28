@@ -51,9 +51,10 @@
       </div>
     </div>
     <div class="input-with-label cell-label">
-      <input id="cellphone" placeholder="휴대폰 번호를 입력하세요." type="text" />
-      <v-btn @click="onSignup" class="cell-auth" color="error">인증</v-btn>
+      <input v-model="phone" id="cellphone" placeholder="휴대폰 번호를 입력하세요." type="text" />
       <label for="cellphone">휴대폰</label>
+      <div class="error-text" v-if="error.phone">{{error.phone}}</div>
+      <v-btn @click="onSignup" class="cell-auth" color="error">인증</v-btn>
     </div>
 
     <label>
@@ -105,6 +106,7 @@ export default {
       passwordConfirm: "",
       nickName: "",
       name: "",
+      phone: "",
       isTerm: false,
       isLoading: false,
       error: {
@@ -113,7 +115,8 @@ export default {
         password: false,
         nickName: false,
         passwordConfirm: false,
-        term: false
+        term: false,
+        phone: false,
       },
       isSubmit: false,
       passwordType: "password",
@@ -158,7 +161,12 @@ export default {
     },
     isTerm: function() {
       if (this.isTerm) this.error.term = false;
-    }
+    },
+    phone: function (v) {
+      if (this.phone.length > 0 && isNaN(this.phone))
+        this.error.phone = "올바른 휴대폰 번호를 입력해주세요.";
+      else this.error.phone = false;
+    },
   },
   methods: {
     checkFormAndSignUp() {

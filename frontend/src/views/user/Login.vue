@@ -52,6 +52,12 @@
 
         <v-btn width="100%" @click="onLogin">로그인</v-btn>
 
+        <div>
+          <router-link to="/user/findpw">
+            <p color="white">비밀번호 찾기</p>
+          </router-link>
+        </div>
+
         <div class="sns-login">
           <div class="text">
             <p>SNS 간편 로그인</p>

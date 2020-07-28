@@ -406,8 +406,8 @@ export default {
         };
         axios
           .post(
-            // `${SERVER_URL}/account/signup/`, newUser
-            `http://localhost:8080/account/signup/`, newUser
+            `${SERVER_URL}/account/signup/`, newUser
+            // `http://localhost:8080/account/signup/`, newUser
           )
           .then((response) => {
             var data = response.data.data;

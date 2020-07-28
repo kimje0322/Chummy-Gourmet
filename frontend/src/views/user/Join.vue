@@ -187,8 +187,8 @@ export default {
     onSignup() {
       axios
         .get(
-          // `${SERVER_URL}/account/signup/valid?nickname=${this.nickName}&email=${this.email}`
-          `http://localhost:8080/account/signup/valid?nickname=${this.nickName}&email=${this.email}`
+          `${SERVER_URL}/account/signup/valid?nickname=${this.nickName}&email=${this.email}`
+          // `http://localhost:8080/account/signup/valid?nickname=${this.nickName}&email=${this.email}`
         )
         .then(response => {
           // data : success / isExistEmail / isExistNickname

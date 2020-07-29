@@ -1,5 +1,7 @@
 package com.web.curation.dao.review;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -20,4 +22,8 @@ public interface RestaurantDao extends JpaRepository<Restaurant, String> {
 	//가게가 있을경우 리뷰++
 	@Query(value = "UPDATE restaurant set rest_review = rest_review+1 where rest_name = :name", nativeQuery = true)
 	void updateRestaurantReview(String name); 
+	
+	//name으로 가게가 있는지 없는지 검색 - review 등록용도'맛찬들'
+		@Query(value = "SELECT * from restaurant where rest_name in (:name)", nativeQuery = true)
+				List<Restaurant> seletRestNameBySearchName(List<String> name); 
 }

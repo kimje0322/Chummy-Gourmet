@@ -5,7 +5,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -18,7 +20,7 @@ import org.json.simple.parser.ParseException;
 
 public class KakaoApi {
 
-    public static void main(String location) {
+    public static List<String> main(String location) {
         String clientId = "dapi.kakao.com"; //애플리케이션 클라이언트 아이디값"
         String clientSecret = "KakaoAK e4cd88afa207146436293dbd18d2b89f"; //애플리케이션 클라이언트 시크릿값"
 
@@ -36,9 +38,9 @@ public class KakaoApi {
         requestHeaders.put("Authorization", clientSecret);
         String responseBody = get(apiURL,requestHeaders);
 
-        System.out.println(responseBody);
+//        System.out.println(responseBody);
         
-        String name = "";
+        List<String> name = new ArrayList<String>();
         //json으로 받아온 값을 식당이름/분류로 나눔
         try {
         	JSONParser jsonParse = new JSONParser();
@@ -50,18 +52,20 @@ public class KakaoApi {
 				JSONObject temp =(JSONObject) store.get(i);
 				StringTokenizer st = new StringTokenizer((String) temp.get("category_name"),">");
 				st.nextToken();
-				System.out.println(temp.get("place_name"));
-				name += temp.get("place_name");
-				if(!(i==store.size()-1))name += ",";
-				System.out.println(st.nextToken().trim());
-				System.out.println(temp.get("road_address_name"));
-				System.out.println("----------------------------");
+				name.add((String) temp.get("place_name"));
+//				System.out.println(temp.get("place_name"));
+//				name += "'"+temp.get("place_name")+"'";
+//				if(!(i==store.size()-1))name += ",";
+//				System.out.println(st.nextToken().trim());
+//				System.out.println(temp.get("road_address_name"));
+//				System.out.println("----------------------------");
 			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        System.out.println(name);
+//        System.out.println(name);
+        return name;
     }
 
     private static String get(String apiUrl, Map<String, String> requestHeaders){

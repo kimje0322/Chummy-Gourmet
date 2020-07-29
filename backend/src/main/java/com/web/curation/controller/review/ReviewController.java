@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dao.review.RestaurantDao;
+import com.web.curation.dao.review.ReviewDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.review.Restaurant;
 
@@ -24,6 +25,9 @@ public class ReviewController {
 
 	@Autowired
 	RestaurantDao restDao;
+	
+	@Autowired
+	ReviewDao reviewDao;
 	
 	@GetMapping("/review/add")
 	public void addReview(@RequestParam(required = true) final String name,
@@ -46,6 +50,9 @@ public class ReviewController {
 			System.out.println("있다.");
 			restDao.updateRestaurantReview(name);
 		}
+		
+		reviewDao.insertReview(name, category, writer, content);
+		
 		System.out.println(name+" "+category +" "+ writer+" "+ content);
 	}
 }

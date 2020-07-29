@@ -53,7 +53,13 @@
             v-on="on"
           ></v-text-field>
         </template>
-        <v-date-picker v-model="date" no-title scrollable>
+        <v-date-picker
+          :max="new Date().toISOString().substr(0, 10)"
+          min="2020-01-01"
+          v-model="date"
+          no-title
+          scrollable
+        >
           <v-spacer></v-spacer>
           <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
           <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn>
@@ -77,9 +83,15 @@
 </template>
 
 <script>
+import axios from "axios";
+
+// const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "http://localhost:8080";
+
 export default {
   data: () => ({
-    date: new Date().toISOString().substr(0, 10),
+    // date: new Date().toISOString().substr(0, 10),
+    date: null,
     menu: false,
     dropdown_font: ["1", "2", "3", "4"],
   }),
@@ -98,34 +110,38 @@ export default {
   },
   methods: {
     meetUp() {
-      if(this.title.length === 0) {
-        alert("제목을 작성해주세요.")
+      if (this.title.length === 0) {
+        alert("제목을 작성해주세요.");
         return;
       }
 
-      if(this.content.length === 0) {
-        alert("내용을 작성해주세요.")
+      if (this.content.length === 0) {
+        alert("내용을 작성해주세요.");
         return;
       }
-      
-      if(this.date.length === 0) {
-        alert("날짜를 선택해주세요.")
-        return;
-      }
-      
-      if(this.count.length === 0) {
-        alert("인원을 선택해주세요.")
-        return;
-      }
-      console.log(this.title)
-      console.log(this.title.length)
-      console.log(this.content)
-      console.log(this.content.length)
-      console.log(this.date)
-      console.log(this.date.length)
-      console.log(this.count)
-      console.log(this.count.length)
 
+      if (this.date.length === 0) {
+        alert("날짜를 선택해주세요.");
+        return;
+      }
+
+      if (this.count.length === 0) {
+        alert("인원을 선택해주세요.");
+        return;
+      }
+      console.log(this.title);
+      console.log(this.title.length);
+      console.log(this.content);
+      console.log(this.content.length);
+      console.log(this.date);
+      console.log(this.date.length);
+      console.log(this.count);
+      console.log(this.count.length);
+
+      // axios
+      //   .get(
+      //     `${SERVER_URL}/party?title=${this.title}&content=${this.content}`
+      //   )
     },
     initMap() {
       var container = document.getElementById("map");

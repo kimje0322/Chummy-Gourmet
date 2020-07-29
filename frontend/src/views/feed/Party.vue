@@ -31,11 +31,17 @@
     </div>
 
     <v-form>
-      <v-container>
-        <v-row>
-          <v-text-field solo label="장소" append-icon="mdi-map-marker"></v-text-field>
-        </v-row>
-      </v-container>
+      <v-row>
+         <!-- v-model="dialog1" @click:append-icon="map" -->
+        <v-text-field solo label="장소" append-icon="mdi-map-marker" v-model="dialog1"></v-text-field>
+        <!-- <v-btn icon> -->
+
+        <!-- <v-icon x-large dark>mdi-home</v-icon> -->
+        <!-- </v-btn> -->
+      </v-row>
+      <v-row>
+        <v-text-field solo label="날짜" append-icon="mdi-calendar-check"></v-text-field>
+      </v-row>
     </v-form>
     <!-- modal -->
     <v-row justify="center">

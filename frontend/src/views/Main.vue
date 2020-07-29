@@ -88,15 +88,18 @@ export default {
   created(){
     // alert(this.$cookie.get("userId"));
     this.userId = this.$cookie.get("userId");
+    console.log('axios 실행전')
     axios
       .get(
         `${SERVER_URL}/userpage/getuser?userId=`+this.userId
       )
       .then((response) => {
+      console.log('axios 실행 성공')
       console.log(response.data);
       this.users = response.data;
       })
       .catch((error) => {
+        console.log('axios 실행 실패')
         console.log(error.response);
       });
   },

@@ -19,6 +19,7 @@ import Pref from './views/user/Preference.vue'
 import Map from './views/map/map.vue'
 import MapParty from './views/map/party.vue'
 import Home from './views/user/Home.vue'
+import Following from './views/Following.vue'
 
 Vue.use(VueRouter);
 export default new VueRouter({
@@ -127,6 +128,12 @@ export default new VueRouter({
             meta: {
                 navbar: true
             }
-        }
+        },
+        {
+            path: '/following',
+            name: 'Following',
+            component: Following,
+            props: true
+        },
     ]
 });

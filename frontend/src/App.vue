@@ -72,6 +72,7 @@ import axios from "axios";
 export default {
   name: "app",
   methods: {
+    
   },
   created() {
     //로그인 유지가 아닐경우
@@ -105,6 +106,7 @@ export default {
         });
     }
   }
+
 };
   
 </script>

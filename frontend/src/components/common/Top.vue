@@ -2,15 +2,17 @@
   <v-layout>
     <v-toolbar dark>
       <!-- 중앙정렬 하기 위해 2개씀 -->
+      <v-spacer></v-spacer><v-spacer></v-spacer>
+      <v-spacer></v-spacer><v-spacer></v-spacer>
+      <p class="my-auto">돈독한 미식가</p>
       <v-spacer></v-spacer>
-      <v-spacer></v-spacer>
-      돈독한 미식가
-      <v-spacer></v-spacer>
+      
       <v-btn @click.stop="drawer = !drawer" depressed>
         <v-app-bar-nav-icon></v-app-bar-nav-icon>
       </v-btn>
     </v-toolbar>
     
+    <!-- 햄버거? 눌렀을 때 -->
     <v-navigation-drawer v-model="drawer" temporary absolute right>
       <v-system-bar></v-system-bar>
       <v-list>
@@ -22,8 +24,8 @@
 
         <v-list-item link>
           <v-list-item-content>
-            <v-list-item-title class="title">Sony</v-list-item-title>
-            <v-list-item-subtitle>hm_son7@instagram.com</v-list-item-subtitle>
+            <v-list-item-title class="title">돈독이</v-list-item-title><br>
+            <v-list-item-subtitle>dd@instagram.com</v-list-item-subtitle>
           </v-list-item-content>
 
           <v-list-item-action>
@@ -51,17 +53,37 @@
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        drawer: null,
-        items: [
-        { text: 'My list', icon: 'mdi-folder' },
-        { text: 'Meet Up', icon: 'mdi-account-multiple' },
-        { text: 'favorite', icon: 'mdi-star' },
-        { text: 'Recent', icon: 'mdi-history' },
-      ],
-      }
+import axios from "axios";
+
+const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
+
+export default {
+  data () {
+    return {
+      drawer: null,
+      items: [
+      { text: 'Meet Up', icon: 'mdi-account-multiple' },
+      // { text: 'favorite', icon: 'mdi-star' },
+      { text: '팔로우 요청', icon: 'mdi-account-plus' },
+      { text: '스크랩', icon: 'mdi-folder' },
+      { text: '회원정보 설정', icon: 'mdi-account-box' },
+      { text: '로그아웃', icon: 'mdi-logout' },
+    ],
     }
+  },
+  created() {
+    axios
+      .get(
+        `${SERVER_URL}/userpage/getuser?userId=${this.userId}`
+      )
+      .then((res) => {
+        console.log(res.data);
+      })
   }
+};
 </script>
+<style scoped>
+  .my-auto {
+      font-family: 'Jua', sans-serif;
+  }
+</style>

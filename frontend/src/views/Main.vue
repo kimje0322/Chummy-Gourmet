@@ -25,15 +25,14 @@
           <!-- profile -->
           <v-card-text v-else>
                 <h2>{{ item }}</h2>
+                <!-- 캘린더 보여줄 부분 -->
+                <p>캘린더 - 일정</p>
                 {{ text }}
               </v-card-text>
         </v-card>
       </v-tab-item>
     </v-tabs-items>
     </div>
-    
-    <!-- 하단 -->
-    <Footer></Footer>
 
   </v-app>
   
@@ -44,8 +43,10 @@ import Top from "../components/common/Top";
 import Topsub from "../components/common/Topsub";
 import Message from "../components/common/Message";
 import History from "../components/common/History";
-import Footer from "../components/common/Footer";
 import "../assets/css/components.scss";
+import axios from "axios";
+
+const SERVER_URL = "http://localhost:8080";
 
 export default {
   name: "components",
@@ -54,7 +55,6 @@ export default {
     Topsub,
     Message,
     History,
-    Footer,
   },
   data: () => {
     return {
@@ -65,6 +65,7 @@ export default {
       ],
       text: '대한민국 국적의 토트넘 홋스퍼 FC 소속 축구 선수이자 대한민국 축구 국가대표팀의 주장이며 프리미어 리그와 UEFA 챔피언스 리그 아시아인 통산 최다 득점자로 2019년에는 아시아 선수 최초로 FIFA/FIFPro 월드 XI 후보 55인, 발롱도르 후보 30인에 선정되었다.',
       methods: {
+
       },
       buttons: [
         {

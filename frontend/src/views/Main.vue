@@ -2,11 +2,12 @@
   <v-app>
     <!-- 상단 -->
      <v-toolbar-title>
-      <Top></Top>
+      <!-- <Top></Top> -->
       <Topsub></Topsub>
     </v-toolbar-title>
     <!-- 가운데 부분 -->
     <div>
+      <!-- tab view -->
       <v-tabs dark v-model="currentItem" fixed-tabs slider-color="grey">
       <v-tab v-for="item in items" :key="item" :href="'#tab-' + item">
         <v-icon v-if="item=='Profile'">mdi-account-box</v-icon>
@@ -33,28 +34,28 @@
     </div>
     
     <!-- 하단 -->
-    <Footer></Footer>
+    <!-- <Footer></Footer> -->
 
   </v-app>
   
 </template>
 
 <script>
-import Top from "../components/common/Top";
+// import Top from "../components/common/Top";
 import Topsub from "../components/common/Topsub";
 import Message from "../components/common/Message";
 import History from "../components/common/History";
-import Footer from "../components/common/Footer";
+// import Footer from "../components/common/Footer";
 import "../assets/css/components.scss";
 
 export default {
   name: "components",
   components: {
-    Top,
+    // Top,
     Topsub,
     Message,
     History,
-    Footer,
+    // Footer,
   },
   data: () => {
     return {

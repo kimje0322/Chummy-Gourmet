@@ -42,9 +42,9 @@ public class FindPwdController {
 	private JavaMailSender mailSender;
 	
 	// 최종적으로 확인버튼 눌렀을때 이메일로 임시비밀번호를 보내기
-	@PostMapping("/account/senduserpwd")
-	@ApiOperation(value = "[비밀번호찾기] 이름존재검사, 이메일=이름 일치한지 검사 , 이메일로임시비밀번호보내기")
-	public Object sendpwd(@RequestBody Map<String, Object> param) {
+	@PostMapping("/account/checkUser")
+	@ApiOperation(value = "[비밀번호찾기] 이름존재검사, 이메일=이름 일치한지 검사")
+	public Object checkUser(@RequestBody Map<String, Object> param) {
 		
 		final BasicResponse result = new BasicResponse();
 		
@@ -80,12 +80,28 @@ public class FindPwdController {
 	         result.data = "isNotExistEmail";
 	         return new ResponseEntity<>(result, HttpStatus.OK);
 		}
+		else {
+			result.status = true;
+	        result.data = "success";
+	        return new ResponseEntity<>(result, HttpStatus.OK);
+		}
 		
+		
+	}
+	// 최종적으로 확인버튼 눌렀을때 이메일로 임시비밀번호를 보내기
+	@PostMapping("/account/sendUserPwd")
+	@ApiOperation(value = "[비밀번호찾기] 이메일로임시비밀번호보내기")
+	public Object sendUserPwd(@RequestBody Map<String, Object> param) {
+		final BasicResponse result = new BasicResponse();
+		
+		String userName = (String) param.get("userName");
+	    String userEmail = (String) param.get("userEmail");
 		// 임시 비밀번호 생성 저장 변수
 		String userPwd = "";
 		for (int i = 0; i < 12; i++) {
 			userPwd += (char) ((Math.random() * 26) + 97);
 		}
+		userPwd += (int)(Math.random() * 9)+1;
 		// 이미 여기 함수 이전부분에서 정확히 이름과 이메일을 입력하기 때문에 오류가 나지 않을거라고 생각함
 		int num = findpwdDao.setUserPwdByUserNameAndUserEmail(userPwd, userName, userEmail);
 
@@ -107,6 +123,5 @@ public class FindPwdController {
 		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-
 	
 }

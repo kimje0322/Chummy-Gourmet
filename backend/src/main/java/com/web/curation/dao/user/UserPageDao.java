@@ -33,8 +33,12 @@ public interface UserPageDao extends JpaRepository<UserPage, String> {
     @Query(value = "SELECT user_comment FROM user WHERE user_id  = :userId", nativeQuery = true)
     String getUserCommentByUserId(String userId);
     
-    @Query(value = "SELECT count(*) FROM following WHERE user_id = :userId and user_following = :objectId", nativeQuery = true)
-    int getFollowingByUserIdByUserFollowing(String userId, String objectId);
+    @Query(value = "SELECT count(*) FROM following WHERE user_id = :userId and user_following = :followeruserId", nativeQuery = true)
+    int getFollowingCountByUserIdByUserFollowing(String userId, String followeruserId);
+    
+    
+    @Query(value = "SELECT count(*) FROM following_request WHERE user_id = :followeruserId and user_following = :userId", nativeQuery = true)
+    int getFollowingRequestCountByUserIdByUserFollowing(String userId, String followeruserId);
 
     // 유저이메일로 검색해서 유저를 팔로잉 요청한 아이디 가져옴
     @Query(value = "SELECT b.user_following "+ 
@@ -50,4 +54,9 @@ public interface UserPageDao extends JpaRepository<UserPage, String> {
     		"(user_id, user_follower) " +
     		"value (:userId, :followingRequestId)", nativeQuery = true)
     String insertFollowerUser(String userId, String followingRequestId);
+    
+    @Query(value = "INSERT INTO following_request"+ 
+    		"(user_id, user_following) " +
+    		"value (:followerId, :userId)", nativeQuery = true)
+    String setUserIdByUserIdAndfollowerId(String userId, String followerId);
 }

@@ -68,7 +68,7 @@ public class UserPageController {
 	
 	// 사용자를 팔로워 하는 유저 리스트를 가져온다.
 	@GetMapping("/userpage/getfollowerlist")
-	@ApiOperation(value = "[유저페이지] 나를 팔로워하는 유저 리스트 가져옴(나도 그 사람을 팔로우했으면 followerFollowing가 true 아니면 false")
+	@ApiOperation(value = "[유저페이지] 나를 팔로워하는 유저 리스트 가져옴(나도 그 사람을 팔로우하거나 요청한 상태면 followerFollowing가 true 아니면 false")
 	public Object getuserfollower(@RequestParam(required = true) final String userId) {
 		// 팔로워유저 Id리스트
 		ArrayList<String>followerIdList = userPageDao.getUserFollowerByUserId(userId);
@@ -84,9 +84,12 @@ public class UserPageController {
 			map.put("followerNickname", user.getUserNickname());
 			map.put("followerPhone", user.getUserPhone());
 			map.put("followerComment", user.getUserComment());
-			int ans = userPageDao.getFollowingByUserIdByUserFollowing(userId, followeruserId);
+			int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, followeruserId);
+			
+			int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, followeruserId);
+			
 			// 내가 팔로잉 중ㅇ
-			if(ans > 0) {
+			if(ans1 > 0 || ans2 > 0) {
 				map.put("followerFollowing", "true");
 				System.out.println("나("+userId+")는 상대방인 "+user.getUserName()+" 님을 팔로우 한 상태입니다.");
 			}
@@ -204,5 +207,24 @@ public class UserPageController {
 			return result;
 		}
 		return result;
+	}
+	
+	// 사용자의 유저정보 변경
+	@PostMapping("/userpage/insertfollowingRequest")
+	@ApiOperation(value = "[유저페이지] 상대방을 팔로잉하기 버튼누름")
+	public Object insertfollowingRequest(@RequestParam(required = true) final String userId,
+			@RequestParam(required = true) final String followerId) {
+		final BasicResponse result = new BasicResponse();
+		// 내 id가 상대방 요청 리스트로 들어감
+		try {
+			userPageDao.setUserIdByUserIdAndfollowerId(userId, followerId);
+			result.status = true;
+			result.data = "success";
+		} catch (Exception e) {
+			// TODO: handle exception
+			result.status = false;
+			result.data = "fail";
+		}
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 }

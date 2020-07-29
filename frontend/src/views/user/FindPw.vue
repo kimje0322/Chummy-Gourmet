@@ -61,11 +61,9 @@ export default {
     checkFormAndFindpw() {
       // 전체 폼 체크(형식)
       this.checkForm();
-      // 
+      // 유효한 data이면
       if (this.isValidForm()){
-        this.onFindPw();
-        // this.$router.push("/user/foundpw")
-      }
+        this.onFindPw();}      
     },
     checkForm() {
       if (this.name.length < 1) this.error.name = "이름 입력해주세요.";
@@ -77,7 +75,6 @@ export default {
         this.error.email = "이메일 형식이 아닙니다.";
       else this.error.email = false;
       
-
       // if(this.phone.length < 1)
       //   this.error.phone = "휴대폰 번호를 입력해주세요.";
       // else if (this.phone.length > 0 && isNaN(this.phone))
@@ -90,13 +87,14 @@ export default {
       }
       return true;
     },
+    
     onFindPw() {
       let userData = {
         userEmail : this.email,
         userName : this.name
       };
       console.log(userData);
-      axios.post(`${SERVER_URL}/account/senduserpwd`, userData)
+      axios.post(`${SERVER_URL}/account/checkUser`, userData)
         .then(res => {
           // isNotExistName / isNotExistEmail / success  
           console.log(res)
@@ -113,8 +111,8 @@ export default {
           else if (data == 'success'){
             console.log('success');
             this.$router.push("/user/foundpw")
+            axios.post(`${SERVER_URL}/account/sendUserPwd`, userData)
           }
-
         })
         .catch(error => {
           console.log(error.res)

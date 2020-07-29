@@ -133,6 +133,7 @@ export default {
     password: function (v) {
       this.checkForm();
     },
+    
     email: function (v) {
       this.checkForm();
     },

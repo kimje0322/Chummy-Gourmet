@@ -118,7 +118,10 @@ export default new VueRouter({
         {
             path: '/party',
             name: 'Party',
-            component: Party
+            component: Party,
+            meta: {
+                navbar: true
+            }
         },
         {
             path: '/',

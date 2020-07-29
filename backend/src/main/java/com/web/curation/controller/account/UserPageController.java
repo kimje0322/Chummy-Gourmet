@@ -55,7 +55,6 @@ public class UserPageController {
 			map.put("followingId", user.getUserId());
 			map.put("followingName", user.getUserName());
 			map.put("followingEmail", user.getUserEmail());
-			map.put("followingPWd", user.getUserPwd());
 			map.put("followingNickname", user.getUserNickname());
 			map.put("followingPhone", user.getUserPhone());
 			map.put("followingComment", user.getUserComment());
@@ -82,7 +81,6 @@ public class UserPageController {
 			map.put("followerId", user.getUserId());
 			map.put("followerName", user.getUserName());
 			map.put("followerEmail", user.getUserEmail());
-			map.put("followerPWd", user.getUserPwd());
 			map.put("followerNickname", user.getUserNickname());
 			map.put("followerPhone", user.getUserPhone());
 			map.put("followerComment", user.getUserComment());
@@ -172,7 +170,6 @@ public class UserPageController {
 			map.put("followingRequestId", user.getUserId());
 			map.put("followingRequestName", user.getUserName());
 			map.put("followingRequestEmail", user.getUserEmail());
-			map.put("followingRequestPWd", user.getUserPwd());
 			map.put("followingRequestNickname", user.getUserNickname());
 			map.put("followingRequestPhone", user.getUserPhone());
 			map.put("followingRequestComment", user.getUserComment());

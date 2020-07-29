@@ -66,13 +66,20 @@ export default {
         this.onFindPw();}      
     },
     checkForm() {
-      if (this.name.length < 1) this.error.name = "이름 입력해주세요.";
+      if (this.name.length < 1){
+        this.error.name = "이름 입력해주세요.";
+        return;
+      }
       else this.error.name = false;
     
-      if(this.email.length < 1)
+      if(this.email.length < 1){
         this.error.email = "이메일을 입력해주세요.";
-      else if (this.email.length > 0 && !EmailValidator.validate(this.email))
+        return;
+      }
+      else if (this.email.length > 0 && !EmailValidator.validate(this.email)){
         this.error.email = "이메일 형식이 아닙니다.";
+        return;
+      }
       else this.error.email = false;
       
       // if(this.phone.length < 1)

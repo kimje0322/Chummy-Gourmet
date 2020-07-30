@@ -373,7 +373,7 @@ export default {
         return false;
       }
       if (this.checkedAge == "") {
-        this.error.age = "성별을 선택해주세요.";
+        this.error.age = "연령을 선택해주세요.";
         return false;
       }
       if (this.checkedFoods.length < 1){
@@ -414,7 +414,7 @@ export default {
   
             if (data == "success") {
               alert("가입성공");
-              this.$router.push("/user/finishjoin");
+              this.$router.push("/login");
             } else {
               alert("가입실패");
             }

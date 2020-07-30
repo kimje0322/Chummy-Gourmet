@@ -99,8 +99,19 @@
             </v-list-item-avatar>
 
             <v-list-item-content>
-              <v-list-item-title v-html="review.title"></v-list-item-title>
-              <v-list-item-subtitle v-html="review.subtitle"></v-list-item-subtitle>
+              <!-- <v-list-item-title v-html="review.title"></v-list-item-title> -->
+              <!-- <v-list-item-subtitle v-html="review.subtitle"></v-list-item-subtitle> -->
+              <v-list-item-title>
+                {{review.title}}
+                <span class="text-caption grey--text text--lighten-1" style="float:right;" v-text="review.date"></span>
+              </v-list-item-title>
+              <v-list-item-subtitle>
+                <span class="text--primary" v-for="(m, index) in meetups[review.meetupId].member" :key="index">
+                  <span class="blue--text" v-if="index == 0">{{m}} </span>
+                  <span v-else>{{m}} </span>
+                </span>
+                &mdash; {{review.contents}}
+              </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </template>
@@ -149,34 +160,71 @@ export default {
         // { header: 'Today' },
         {
           avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-          title: '육즙 터집니다<span style="float:right;" class="text-caption grey--text text--lighten-1"> 4일전</span>',
-          subtitle: "<span class='text--primary'><span class='blue--text'>김승범</span>, 조민기, 박세훈</span> &mdash; 리얼 존맛탱",
+          title : '육즙 터집니다',
+          contents : '리얼 존맛탱',
+          meetupId : 1,
+          date : '2020-07-26',
         },
         // { divider: true, inset: true },
         {
           avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
-          title: '한국와서 정말 맛있는 고기를... <span style="float:right;" class="text-caption grey--text text--lighten-1"> 6일전</span>',
-          subtitle: "<span class='text--primary'><span class='blue--text'>Alex</span>, Scott, Jennifer</span> &mdash; Wish I could come, but I'm out of town this weekend.",
+          title : '한국와서 정말 맛있는...',
+          contents : "Wish I could come, but I'm out of town this weekend.",
+          meetupId : 2,
+          date : '2020-07-23',
         },
         // { divider: true, inset: true },
         {
           avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
-          title: '마시써영 <span style="float:right;" class="text-caption grey--text text--lighten-1">7일전</span>',
-          subtitle: "<span class='text--primary'><span class='blue--text'>Sandra Adams</span></span> &mdash; 담에 같이 먹으러 갈 분 팔로우 신청 해주세여~",
+          title : '마시써영',
+          contents : "맛있어너무너무너무",
+          meetupId : 3,
+          date : '2020-07-16',
         },
         // { divider: true, inset: true },
         {
           avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
-          title: '와 맛있당 <span style="float:right;" class="text-caption grey--text text--lighten-1">9일전</span>',
-          subtitle: "<span class='blue--text'>Trevor Hansen</span> &mdash; Have any ideas about what we should get Heidi for her birthday?",
+          title : '와 맛있당',
+          contents : "고기대박",
+          meetupId : 4,
+          date : '2020-07-13',
         },
         // { divider: true, inset: true },
         {
           avatar: 'https://cdn.vuetifyjs.com/images/lists/5.jpg',
-          title: '돼지잡내가쫌나네요 <span style="float:right;" class="text-caption grey--text text--lighten-1">13일전</span>',
-          subtitle: "<span class='text--primary'><span class='blue--text'>Britta Holt</span>, 김승범</span> &mdash; 그냥저냥 먹고갑니다...",
+          title : '돼지잡내가쫌나네요',
+          contents : "그냥저냥 먹고갑니다...",
+          meetupId : 5,
+          date : '2020-07-11',
         },
       ],
+      meetups : [{},
+        {
+          id : 1,
+          master : '김승범',
+          members : ['김승범','조민기', '박세훈']
+        },
+        {
+          id : 2,
+          master : '하정우',
+          members : ['하정우','김성균', '최민식']
+        },
+        {
+          id : 3,
+          master : '이정재',
+          members : ['이정재','황정민']
+        },
+        {
+          id : 4,
+          master : '한지민',
+          members : ['한지민','조민기', '박세훈']
+        },
+        {
+          id : 5,
+          master : '조민기',
+          members : ['조민기', '쯔위', '박세훈', '김승범']
+        }
+      ]
     };
   },
   created() {

@@ -34,6 +34,7 @@ public class MeetUpController {
 	public MeetUp searchMeetUp(@RequestParam(required = true) final int id) {
 		
 		Optional<MeetUp> data = meetupDao.selectMeetUpById(id);
+		MeetUp test= data.get();
 		System.out.println(data.get());
 		
 		return data.get();

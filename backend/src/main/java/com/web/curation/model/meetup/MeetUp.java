@@ -22,8 +22,6 @@ public class MeetUp {
 
 	@Column(name = "meetup_master")
 	private String master;
-	@Column(name = "meetup_member")
-	private String member;
 	@Column(name = "meetup_title")
 	private String title;
 	@Column(name = "meetup_content")
@@ -47,14 +45,6 @@ public class MeetUp {
 
 	public void setMaster(String master) {
 		this.master = master;
-	}
-
-	public String getMember() {
-		return member;
-	}
-
-	public void setMember(String member) {
-		this.member = member;
 	}
 
 	public String getTitle() {
@@ -91,8 +81,8 @@ public class MeetUp {
 
 	@Override
 	public String toString() {
-		return "MeetUp [id=" + id + ", master=" + master + ", member=" + member + ", title=" + title + ", content="
-				+ content + ", location=" + location + ", date=" + date + "]";
+		return "MeetUp [id=" + id + ", master=" + master + ", title=" + title + ", content=" + content + ", location="
+				+ location + ", date=" + date + "]";
 	}
 
 }

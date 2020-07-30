@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Review {
 
 	@Id
@@ -32,7 +31,30 @@ public class Review {
 	private String writer;
 	@Column(name = "review_content")
 	private String content;
+	@Column(name = "review_time")
+	private String time;
+	@Column(name = "rest_id")
+	private String restid;
 	
+	
+	@Override
+	public String toString() {
+		return "Review [id=" + id + ", name=" + name + ", category=" + category + ", writer=" + writer + ", content="
+				+ content + ", time=" + time + ", restid=" + restid + "]";
+	}
+	
+	public String getTime() {
+		return time;
+	}
+	public void setTime(String time) {
+		this.time = time;
+	}
+	public String getRestid() {
+		return restid;
+	}
+	public void setRestid(String restid) {
+		this.restid = restid;
+	}
 	public String getId() {
 		return id;
 	}

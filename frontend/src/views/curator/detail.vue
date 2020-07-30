@@ -118,6 +118,12 @@
 <script>
 // import FeedDetail from "../../components/feed/FeedDetail.vue";
 // this.$route.params.email,
+
+import axios from "axios";
+
+// const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "http://localhost:8080";
+
 export default {
   data() {
     return {
@@ -224,6 +230,17 @@ export default {
   },
   created() {
     console.log(this.$route.params);
+    axios
+        .get(`${SERVER_URL}/review/search?id=1`)
+
+        .then((response) => {
+          console.log(response);
+        })
+
+        .catch((error) => {
+          console.log(error.response);
+          alert("로그인 실패");
+        });
   },
   methods : {
     test(review) {

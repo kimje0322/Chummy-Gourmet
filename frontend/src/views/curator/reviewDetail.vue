@@ -4,7 +4,6 @@
 
     <v-carousel
       :continuous="false"
-      :cycle="cycle"
       show-arrows
       hide-delimiter-background
       height="300"
@@ -45,7 +44,7 @@
                   <v-icon color="indigo">mdi-map-marker-outline</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
-                  <v-list-item-title>맛찬들</v-list-item-title>
+                  <v-list-item-title v-text="meetup.location"></v-list-item-title>
                   <!-- <v-list-item-title v-if="restaurant.location" v-text="restaurant.location"></v-list-item-title> -->
                   <!-- <v-list-item-subtitle v-if="restaurant.location" v-text="restaurant.location"></v-list-item-subtitle> -->
                 </v-list-item-content>
@@ -56,7 +55,7 @@
                   <v-icon color="indigo">mdi-calendar-month-outline</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
-                  <v-list-item-title>2020년 7월 30일 20:00</v-list-item-title>
+                  <v-list-item-title v-text="meetup.date"></v-list-item-title>
                   <!-- <v-list-item-subtitle>Mobile</v-list-item-subtitle> -->
                 </v-list-item-content>
               </v-list-item>
@@ -66,7 +65,7 @@
                   <v-icon color="indigo">mdi-crown-outline</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
-                  <v-list-item-title>조민기</v-list-item-title>
+                  <v-list-item-title v-text="meetup.master"></v-list-item-title>
                   <!-- <v-list-item-title v-if="restaurant.telphone" v-text="restaurant.telphone"></v-list-item-title> -->
                   <!-- <v-list-item-subtitle>Mobile</v-list-item-subtitle> -->
                 </v-list-item-content>
@@ -77,7 +76,7 @@
                   <v-icon color="indigo">mdi-account-group-outline</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
-                  <v-list-item-title>김승범 박세훈</v-list-item-title>
+                  <v-list-item-title v-for="(member,index) in members" :key="index">@{{member}}</v-list-item-title>
                   <!-- <v-list-item-title v-if="restaurant.telphone" v-text="restaurant.telphone"></v-list-item-title> -->
                   <!-- <v-list-item-subtitle>Mobile</v-list-item-subtitle> -->
                 </v-list-item-content>
@@ -88,9 +87,7 @@
                   <v-icon color="indigo">mdi-information-outline</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
-                  <v-list-item-title>안녕안녕안녕안녕안녕안녕</v-list-item-title>
-                  <v-list-item-title>안녕안녕안녕안녕안녕안녕</v-list-item-title>
-                  <v-list-item-title>안녕안녕안녕안녕안녕안녕</v-list-item-title>
+                  <v-list-item-title v-text="meetup.content"></v-list-item-title>
                   <!-- <v-list-item-subtitle>Mobile</v-list-item-subtitle> -->
                 </v-list-item-content>
               </v-list-item>
@@ -100,95 +97,58 @@
       
         <v-expansion-panel>
           <v-expansion-panel-header>리뷰상세조회</v-expansion-panel-header>
+
           <v-expansion-panel-content>
-            <v-list>
-              <v-list-item>
-                <v-list-item-icon>
-                  <v-icon color="indigo">mdi-map-marker-outline</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title>맛찬들</v-list-item-title>
-                  <!-- <v-list-item-title v-if="restaurant.location" v-text="restaurant.location"></v-list-item-title> -->
-                  <!-- <v-list-item-subtitle v-if="restaurant.location" v-text="restaurant.location"></v-list-item-subtitle> -->
-                </v-list-item-content>
-              </v-list-item>
+            <v-spacer></v-spacer>
+            <v-card class="mx-auto" max-width="400">
+              <v-card-title>
+                <span class="title font-weight-bold">제목</span>
+              </v-card-title>
 
-              <v-list-item>
-                <v-list-item-icon>
-                  <v-icon color="indigo">mdi-calendar-month-outline</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title>2020년 7월 30일 20:00</v-list-item-title>
-                  <!-- <v-list-item-subtitle>Mobile</v-list-item-subtitle> -->
-                </v-list-item-content>
-              </v-list-item>
+              <v-card-text class="headline font-weight-bold" v-text="review.content">
+              </v-card-text>
 
-              <v-list-item>
-                <v-list-item-icon>
-                  <v-icon color="indigo">mdi-crown-outline</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title>조민기</v-list-item-title>
-                  <!-- <v-list-item-title v-if="restaurant.telphone" v-text="restaurant.telphone"></v-list-item-title> -->
-                  <!-- <v-list-item-subtitle>Mobile</v-list-item-subtitle> -->
-                </v-list-item-content>
-              </v-list-item>
-
-              <v-list-item>
-                <v-list-item-icon>
-                  <v-icon color="indigo">mdi-account-group-outline</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title>김승범 박세훈</v-list-item-title>
-                  <!-- <v-list-item-title v-if="restaurant.telphone" v-text="restaurant.telphone"></v-list-item-title> -->
-                  <!-- <v-list-item-subtitle>Mobile</v-list-item-subtitle> -->
-                </v-list-item-content>
-              </v-list-item>
-
-              <v-list-item>
-                <v-list-item-icon>
-                  <v-icon color="indigo">mdi-information-outline</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title>안녕안녕안녕안녕안녕안녕</v-list-item-title>
-                  <v-list-item-title>안녕안녕안녕안녕안녕안녕</v-list-item-title>
-                  <v-list-item-title>안녕안녕안녕안녕안녕안녕</v-list-item-title>
-                  <!-- <v-list-item-subtitle>Mobile</v-list-item-subtitle> -->
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-expansion-panel-content>
-          
-          
-          
-          <v-expansion-panel-content>
-            <v-list>
-              <template v-for="(review, index) in temp">
-                <v-divider :key="index"></v-divider>
-                <v-subheader v-if="review.header" :key="review.header" v-text="review.header"></v-subheader>
-                <v-divider v-else-if="review.divider" :key="index" :inset="review.inset"></v-divider>
-                <v-list-item v-else :key="review.title" @click="test(review)">
-                  <v-list-item-avatar>
-                    <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg"></v-img>
+              <v-card-actions>
+                <v-list-item class="grow">
+                  <v-list-item-avatar color="grey darken-3">
+                    <v-img
+                      class="elevation-6"
+                      src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
+                    ></v-img>
                   </v-list-item-avatar>
 
                   <v-list-item-content>
-                    <!-- <v-list-item-title v-html="review.title"></v-list-item-title> -->
-                    <!-- <v-list-item-subtitle v-html="review.subtitle"></v-list-item-subtitle> -->
+                    <v-list-item-title v-text="meetup.master"></v-list-item-title>
+                    <v-list-item-subtitle>master</v-list-item-subtitle>
+                  </v-list-item-content>
+
+                </v-list-item>
+              </v-card-actions>
+            </v-card>
+          </v-expansion-panel-content>
+          
+          <v-expansion-panel-content>
+            <v-list>
+              <template v-for="(comment, index) in comments">
+                <v-divider :key="index"></v-divider>
+                <v-subheader v-if="comment.header" :key="comment.header" v-text="comment.header"></v-subheader>
+                <v-divider v-else-if="comment.divider" :key="index" :inset="comment.inset"></v-divider>
+                <v-list-item v-else :key="comment">
+                  <v-list-item-avatar>
+                    <v-img src="https://cdn.vuetifyjs.com/images/lists/`${imgNum}`.jpg"></v-img>
+                  </v-list-item-avatar>
+
+                  <v-list-item-content>
+                    <!-- <v-list-item-title v-html="comment.comment"></v-list-item-title> -->
+                    <!-- <v-list-item-sXbtitle v-html="review.subtitle"></v-list-item-subtitle> -->
                     <v-list-item-title>
-                      {{temp}}
-                      <span
+                      {{comment.comment}}
+                      <!-- <span
                         class="text-caption grey--text text--lighten-1"
                         style="float:right;"
-                        v-text="review.date"
-                      ></span>
+                      >2020-07-30</span> -->
                     </v-list-item-title>
-                    <v-list-item-subtitle>
-                      <span class="text--primary" v-for="(member, index) in temp" :key="index">
-                        <span class="blue--text" v-if="index == 0">{{member}}</span>
-                        <span v-else>{{member}}</span>
-                      </span>
-                      <!-- &mdash; {{review.content}} -->
+                    <v-list-item-subtitle>2020-07-30
                     </v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
@@ -219,20 +179,25 @@ export default {
     return {
       show: false,
       temp: "temp",
-      review : ''
+      review : '',
+      meetup : '',
+      members : [],
+      comments : [],
+      imgNum : 1
     };
   },
   created() {
-    this.review = this.$route.params;
+    this.members = this.$route.params.members;
+    this.review = this.$route.params.review;
+    console.log(this.members);
     console.log(this.review);
     axios
         .get(`${SERVER_URL}/review/searchcomment?id=${this.review.id}`)
 
         .then((response) => {
           console.log(response.data);
-          // this.reviews = response.data.review;
-          // this.members = response.data.member[0];
-
+          this.meetup = response.data.meetup;
+          this.comments = response.data.comment;
         })
 
         .catch((error) => {

@@ -7,17 +7,19 @@ import vuetify from '@/plugins/vuetify'
 
 import VueCookie from 'vue-cookie'
 
+import VueSimpleAlert from "vue-simple-alert";
 Vue.config.productionTip = false
 
 // Vue.use(VueRouter)
 
 Vue.use(VueCookie)
-
+Vue.use(VueSimpleAlert)
 // const router = new VueRouter({
 //     routes,
 // });
 
 new Vue({
+    VueSimpleAlert,
     vuetify,
     router,
     store,

@@ -7,15 +7,15 @@
       </v-list-item-avatar>
       {{proptoTopsub.userName}}
       <v-spacer></v-spacer>
-        <v-btn @click="getFollowings" depressed>{{proptoTopsub.followingCount}} <br>팔로잉</v-btn>
+        <v-btn @click="getFollows" depressed>{{proptoTopsub.followerCount}}<br>팔로워</v-btn>
       <v-spacer></v-spacer>
-        <v-btn depressed>{{proptoTopsub.followerCount}}<br>팔로워</v-btn>
+        <v-btn @click="getFollows" depressed>{{proptoTopsub.followingCount}} <br>팔로잉</v-btn>
       <v-spacer></v-spacer>
     </v-toolbar>
   </v-layout>
 </template>
 <script>
-import Following from "../../views/Following";
+// import Following from "../../views/Following";
 import router from "@/routes";
 import axios from "axios";
 
@@ -27,38 +27,20 @@ export default {
       type : Object
     },
   },
-  data() {
-    return {
-    followingUser: {
-      name: [],
-      nickname: [],
-      }
-    }
-  },
+  // data() {
+  //   return {
+  //   followingUser: {
+  //     name: [],
+  //     nickname: [],
+  //     }
+  //   }
+  // },
   methods: {
-    getFollowings () {
-      axios
-      .get(
-        `${SERVER_URL}/userpage/getfollowinglist?userId=`+this.proptoTopsub.userId
-      )
-      .then((response) => {
-        // data = [{…}, {…}, {…}]
-        if (response.data) {
-          let data = response.data
-          console.log(data[2].followingName)
-          for (var i=0; i<data.length; i++) {
-          // alert(data[i].followingName); 
-            this.followingUser.name.push(data[i].followingName)
-            this.followingUser.nickname.push(data[i].followingNickname)
-          }
-          console.log(this.followingUser)          
-        }
-        router.push({name : "Following", params: this.followingUser});
-      })
-      .catch((error) => {
-        console.log(error.response);
-      });
+   
+    getFollows () {
+      this.$router.push('/followlist')
     }
   }
+
 }
 </script>

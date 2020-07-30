@@ -2,9 +2,9 @@
   <v-layout>
     <v-toolbar dark>
       <!-- 중앙정렬 하기 위해 2개씀 -->
-      <v-spacer></v-spacer><v-spacer></v-spacer>
-      <v-spacer></v-spacer><v-spacer></v-spacer>
-      <p class="my-auto">돈독한 미식가</p>
+      <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
+      <v-spacer></v-spacer>
+      <p class="my-auto">MY PAGE</p>
       <v-spacer></v-spacer>
       
       <v-btn @click.stop="drawer = !drawer" depressed>
@@ -74,7 +74,7 @@ export default {
   created() {
     axios
       .get(
-        `${SERVER_URL}/userpage/getuser?userId=${this.userId}`
+        `${SERVER_URL}/userpage/getuser?userId=${this.$cookie.get("userId")}`
       )
       .then((res) => {
         console.log(res.data);
@@ -85,5 +85,9 @@ export default {
 <style scoped>
   .my-auto {
       font-family: 'Jua', sans-serif;
+  }
+  .fa-chevron-left {
+    color: white; 
+    margin-left: 7px;
   }
 </style>

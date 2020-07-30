@@ -10,19 +10,16 @@
       <v-tab>팔로우</v-tab>
     </v-tabs>
   </v-card>
-    <div class="following-page">
-      
+    <div class="following-page">   
     <!-- <h3>팔로잉 페이지</h3> -->
       <ul>
-    <!-- 마지막 변수명 나오는 거 해결하기 -->
         <li v-for="nickname in followingUser.nicknames" :key="nickname">
         <v-icon class="usericon">mdi-account-circle</v-icon>
         <span>{{ nickname }}</span>
         <v-btn small class="following-btn">팔로잉</v-btn>
-      </li>
-    
+        </li>
       <!-- key값 해결하기 -->
-      <!-- <li v-for="name in followingUser.names">{{ name }}</li> -->
+      <!-- <li v-for="(name, i) in followingUser.names :key=i>{{ name }}</li> -->
       </ul>
     </div>
   </div>
@@ -33,9 +30,9 @@ export default {
   name: 'Following',
   data() {
     return {
-    followingUser: {
-      names: [],
-      nicknames: [],
+      followingUser: {
+        names: [],
+        nicknames: [],
       }
     }
   },

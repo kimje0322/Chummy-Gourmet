@@ -26,7 +26,7 @@
           <v-card-text v-else>
                 <h2>Meet Up</h2>
                 <!-- <h2>{{ item }}</h2> -->
-                {{ text }}
+                <!-- {{ text }} -->
                 <!-- 캘린더 보여줄 부분 -->           
                 <v-row>
                   <v-col>
@@ -123,11 +123,11 @@ export default {
       category: ['Development', 'Meetings', 'Slacking'],
       // calender 코드 끝
       contents: "",
-      currentItem: 'tab-Web',
+      currentItem: '',
       items: [
         'Profile', 'History', 'Message'
       ],
-      text: '돈독이님의 Meet Up 일정입니다.',
+      // text: '돈독이님의 Meet Up 일정입니다.',
 
       buttons: [
         {
@@ -162,5 +162,8 @@ export default {
 
 </script>
 
-<style scoped>
+<style>
+  .container nothome {
+    padding: 0px !important;
+  }
 </style>

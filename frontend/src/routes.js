@@ -19,7 +19,8 @@ import Pref from './views/user/Preference.vue'
 import Map from './views/map/map.vue'
 import MapParty from './views/map/party.vue'
 import Home from './views/user/Home.vue'
-import Following from './views/Following.vue'
+import FollowList from './components/common/Followlist.vue'
+
 
 Vue.use(VueRouter);
 export default new VueRouter({
@@ -130,10 +131,11 @@ export default new VueRouter({
             }
         },
         {
-            path: '/following',
-            name: 'Following',
-            component: Following,
-            props: true
+            path: '/followlist',
+            name: 'FollowList',
+            component: FollowList,
+            meta: { transitionName: 'slide' },
         },
+
     ]
 });

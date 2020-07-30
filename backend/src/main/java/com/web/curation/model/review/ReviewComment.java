@@ -27,8 +27,8 @@ public class ReviewComment {
 	private String userid;
 	@Column(name = "review_comment")
 	private String comment;
-//	@Column(name = "user_nickname")
-//	private String nickname;
+	@Column(name = "user_nickname")
+	private String nickname;
 
 	public String getReviewid() {
 		return reviewid;
@@ -59,13 +59,13 @@ public class ReviewComment {
 		return "ReviewComment [reviewid=" + reviewid + ", userid=" + userid + ", comment=" + comment + "]";
 	}
 
-//	public String getNickname() {
-//		return nickname;
-//	}
-//
-//	public void setNickname(String nickname) {
-//		this.nickname = nickname;
-//	}
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
 //
 //	@Override
 //	public String toString() {

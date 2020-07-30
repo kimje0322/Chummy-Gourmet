@@ -29,6 +29,8 @@ public class Review {
 	private String category;
 	@Column(name = "review_writer")
 	private String writer;
+	@Column(name = "review_title")
+	private String title;
 	@Column(name = "review_content")
 	private String content;
 	@Column(name = "review_date")

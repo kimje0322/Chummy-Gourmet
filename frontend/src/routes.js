@@ -19,8 +19,9 @@ import Pref from './views/user/Preference.vue'
 import Map from './views/map/map.vue'
 import MapParty from './views/map/party.vue'
 import Home from './views/user/Home.vue'
-// addReview추가 - 세훈
-import AddReview from './views/review/addReview.vue'
+
+//추가
+import UpdateUser from './views/user/UpdateUser.vue'
 
 Vue.use(VueRouter);
 export default new VueRouter({
@@ -31,6 +32,12 @@ export default new VueRouter({
             meta: {
                 navbar: true
             }
+        },
+        //추가
+        {
+            path: '/user/updateUser',
+            name: 'UpdateUser',
+            component: UpdateUser,
         },
         {
             path: '/user/join',
@@ -120,13 +127,10 @@ export default new VueRouter({
         {
             path: '/party',
             name: 'Party',
-            component: Party
-        },
-        {
-            //review 작성 - 세훈
-            path: '/review/add',
-            name: 'AddReview',
-            component: AddReview
+            component: Party,
+            meta: {
+                navbar: true
+            }
         },
         {
             path: '/',

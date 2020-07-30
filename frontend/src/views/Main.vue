@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="mypage">
     <!-- 상단 -->
      <v-toolbar-title>
       <!-- <Top></Top> -->
@@ -97,5 +97,6 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
+
 </style>

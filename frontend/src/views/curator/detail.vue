@@ -11,16 +11,11 @@
     >
       <v-carousel-item v-for="i of 5" :key="i">
         <v-img
-          :src="restaurant.src"
+          src="https://img.siksinhot.com/place/1485274468095571.jpg?w=307&h=300&c=Y"
           class="white--text align-end"
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
           height="100%"
         ></v-img>
-        <!-- <v-sheet :color="colors[i]" height="100%" tile>
-          <v-row class="fill-height" align="center" justify="center">
-            <div class="display-3">{{ slide }} Slide</div>
-          </v-row>
-        </v-sheet>-->
       </v-carousel-item>
     </v-carousel>
 
@@ -30,8 +25,8 @@
           <v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
         </v-list-item-avatar>-->
         <v-list-item-content>
-          <v-list-item-title v-text="restaurant.restName"></v-list-item-title>
-          <v-list-item-subtitle v-text="restaurant.restCategory"></v-list-item-subtitle>
+          <v-list-item-title v-text="restaurant.name"></v-list-item-title>
+          <v-list-item-subtitle v-text="restaurant.category"></v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-action>
           <v-btn icon @click="show = !show">
@@ -50,8 +45,8 @@
               <v-icon color="indigo">mdi-map-marker</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title v-text="restaurantDetails[restaurant.restId].restAddr"></v-list-item-title>
-              <v-list-item-subtitle v-text="restaurantDetails[restaurant.restId].restJibun"></v-list-item-subtitle>
+              <v-list-item-title v-text="restaurant.location"></v-list-item-title>
+              <v-list-item-subtitle v-text="restaurant.location"></v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
 
@@ -60,7 +55,7 @@
               <v-icon color="indigo">mdi-phone</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title v-text="restaurantDetails[restaurant.restId].restPhone"></v-list-item-title>
+              <v-list-item-title v-text="restaurant.telphone"></v-list-item-title>
               <!-- <v-list-item-subtitle>Mobile</v-list-item-subtitle> -->
             </v-list-item-content>
           </v-list-item>
@@ -70,7 +65,7 @@
               <v-icon color="indigo">mdi-clock-outline</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title v-text="restaurantDetails[restaurant.restId].restRunning"></v-list-item-title>
+              <v-list-item-title>10:00 - 22:00</v-list-item-title>
               <!-- <v-list-item-subtitle>Mobile</v-list-item-subtitle> -->
             </v-list-item-content>
           </v-list-item>
@@ -80,7 +75,7 @@
               <v-icon color="indigo">mdi-parking</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title v-text="restaurantDetails[restaurant.restId].restParking"></v-list-item-title>
+              <v-list-item-title>주차가능</v-list-item-title>
               <!-- <v-list-item-subtitle>Mobile</v-list-item-subtitle> -->
             </v-list-item-content>
           </v-list-item>
@@ -106,7 +101,7 @@
                 <span class="text-caption grey--text text--lighten-1" style="float:right;" v-text="review.date"></span>
               </v-list-item-title>
               <v-list-item-subtitle>
-                <span class="text--primary" v-for="(m, index) in meetups[review.meetupId].member" :key="index">
+                <span class="text--primary" v-for="(m, index) in meetups[review.meetupId].members" :key="index">
                   <span class="blue--text" v-if="index == 0">{{m}} </span>
                   <span v-else>{{m}} </span>
                 </span>
@@ -129,33 +124,33 @@ export default {
       cycle: false,
       show: false,
       restaurant: this.$route.params,
-      restaurantDetails: [
-        {},
-        {
-          restId: 1,
-          restAddr: "대전 유성구 온천북로13번길 35",
-          restJibun: "대전 유성구 봉명동 612-3",
-          restPhone: "042-485-3766",
-          restRunning: "10:30 - 02:00",
-          restParking: "주차가능",
-        },
-        {
-          restId: 2,
-          restAddr: "대전 유성구 대학로 56",
-          restJibun: "대전 유성구 봉명동 615-1",
-          restPhone: "042-822-6022",
-          restRunning: "11:00 - 23:30",
-          restParking: "주차가능",
-        },
-        {
-          restId: 3,
-          restAddr: "대전 유성구 대학로 60",
-          restJibun: "대전 유성구 봉명동 612-3 매드블럭 6층",
-          restPhone: "042-485-3766",
-          restRunning: "11:00 - 22:00",
-          restParking: "주차가능",
-        },
-      ],
+      // restaurantDetails: [
+      //   {},
+      //   {
+      //     restId: 1,
+      //     restAddr: "대전 유성구 온천북로13번길 35",
+      //     restJibun: "대전 유성구 봉명동 612-3",
+      //     restPhone: "042-485-3766",
+      //     restRunning: "10:30 - 02:00",
+      //     restParking: "주차가능",
+      //   },
+      //   {
+      //     restId: 2,
+      //     restAddr: "대전 유성구 대학로 56",
+      //     restJibun: "대전 유성구 봉명동 615-1",
+      //     restPhone: "042-822-6022",
+      //     restRunning: "11:00 - 23:30",
+      //     restParking: "주차가능",
+      //   },
+      //   {
+      //     restId: 3,
+      //     restAddr: "대전 유성구 대학로 60",
+      //     restJibun: "대전 유성구 봉명동 612-3 매드블럭 6층",
+      //     restPhone: "042-485-3766",
+      //     restRunning: "11:00 - 22:00",
+      //     restParking: "주차가능",
+      //   },
+      // ],
       reviews: [
         // { header: 'Today' },
         {

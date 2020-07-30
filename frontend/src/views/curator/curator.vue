@@ -69,15 +69,15 @@ export default {
     };
   },
   mounted() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(pos => {
-          console.log(pos);
-          var curLat = pos.coords.latitude;
-          var curLng = pos.coords.longitude;
-          console.log(curLat + "," + curLng);
+      // if (navigator.geolocation) {
+      //   navigator.geolocation.getCurrentPosition(pos => {
+      //     console.log(pos);
+      //     var curLat = pos.coords.latitude;
+      //     var curLng = pos.coords.longitude;
+      //     console.log(curLat + "," + curLng);
           
-        });
-      }
+      //   });
+      // }
   },
   methods: {
     search() {
@@ -85,7 +85,7 @@ export default {
         .get(`${SERVER_URL}/curation?location=${this.location}`)
 
         .then((response) => {
-          this.restaurants = response.data;
+          this.restaurants = response.data.list;
           // console.log(this.restaurants);
         })
 
@@ -95,7 +95,6 @@ export default {
         });
     },
     moveDetail(restaurant) {
-      // console.log(restaurant);
       router.push({name : "Detail", params : restaurant});
     }
   },

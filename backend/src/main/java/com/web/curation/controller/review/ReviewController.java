@@ -1,6 +1,9 @@
 package com.web.curation.controller.review;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dao.review.RestaurantDao;
 import com.web.curation.dao.review.ReviewDao;
+import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.review.Restaurant;
 import com.web.curation.model.review.Review;
+import com.web.curation.model.user.User;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -30,7 +35,8 @@ public class ReviewController {
 
 	@Autowired
 	RestaurantDao restDao;
-	
+	@Autowired
+	UserDao userDao;
 	@Autowired
 	ReviewDao reviewDao;
 	
@@ -67,16 +73,30 @@ public class ReviewController {
 	//리뷰 검색
 	@GetMapping("/review/search")
 	@ApiOperation(value = "리뷰 검색")
-	public List<Review> searchReview(@RequestParam(required = true) final int id) {
+	public Map<String, Object> searchReview(@RequestParam(required = true) final int id) {
 		System.out.println(id);
 		//1. 음식점 id를 가져온다
 		//2. 음식점 id로 리뷰 검색
+		//3. 리뷰의 밋업 id로 팀원 닉네임 검색
 		List<Review> list = reviewDao.selectReviewById(id);
 		
+		List<String>[] nickname = new ArrayList[list.size()];
+		int index = 0;
 		for(Review a : list) {
-			System.out.println(a);
+			nickname[index] = new ArrayList<String>();
+			List<User> temp = userDao.selectUserNickNameByMeetUpId(Integer.parseInt(a.getId()));
+			for(User b : temp) {
+				nickname[index].add(b.getUserNickname());
+			}
+			index++;
 		}
 		
-		return list;
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("review", list);
+		map.put("member", nickname);
+		
+		
+		return map;
 	}
 }

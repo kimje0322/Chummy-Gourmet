@@ -18,4 +18,6 @@ public interface ReviewDao extends JpaRepository<Review, String>{
 	//리뷰 조회
 	@Query(value = "Select * from review where rest_id = :id", nativeQuery = true)
 	List<Review> selectReviewById(int id);
+	
+	
 }

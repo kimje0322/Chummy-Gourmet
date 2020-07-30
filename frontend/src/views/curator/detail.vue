@@ -85,21 +85,21 @@
           <v-list-item v-else :key="review.title" @click="moveReviewDetail(review)">
 
             <v-list-item-avatar>
-              <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg"></v-img>
+              <v-img src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"></v-img>
             </v-list-item-avatar>
 
             <v-list-item-content>
               <!-- <v-list-item-title v-html="review.title"></v-list-item-title> -->
               <!-- <v-list-item-subtitle v-html="review.subtitle"></v-list-item-subtitle> -->
               <v-list-item-title>
-                {{review.content}}
-                <span class="text-caption grey--text text--lighten-1" style="float:right;" v-text="review.date"></span>
+                고기 맛있게 먹었습니다.
               </v-list-item-title>
               <v-list-item-subtitle>
                 <span class="text--primary" v-for="(member, index) in members" :key="index">
                   <span class="blue--text" v-if="index == 0">@{{member}} </span>
                   <span v-else>@{{member}} </span>
                 </span>
+                <span class="text-caption grey--text text--lighten-1" style="float:right;" v-text="review.date"></span>
                 <!-- &mdash; {{review.content}} -->
               </v-list-item-subtitle>
             </v-list-item-content>
@@ -134,7 +134,7 @@ export default {
         .get(`${SERVER_URL}/review/search?id=${this.restaurant.id}`)
 
         .then((response) => {
-          // console.log(response.data);
+          console.log(response.data);
           this.reviews = response.data.review;
           this.members = response.data.member[0];
 

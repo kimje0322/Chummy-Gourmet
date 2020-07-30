@@ -36,7 +36,10 @@
 
       <v-expansion-panels accordion multiple hover>
         <v-expansion-panel>
-          <v-expansion-panel-header>밋업상세조회</v-expansion-panel-header>
+          <v-expansion-panel-header @click="show =! show">
+            <span v-if="!show">밋업상세조회</span>
+            <span v-else>{{meetup.title}}</span>
+          </v-expansion-panel-header>
           <v-expansion-panel-content>
             <v-list>
               <v-list-item>
@@ -87,7 +90,8 @@
                   <v-icon color="indigo">mdi-information-outline</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
-                  <v-list-item-title v-text="meetup.content"></v-list-item-title>
+                  {{meetup.content}}
+                  <!-- <v-list-item-title v-text="meetup.content"></v-list-item-title> -->
                   <!-- <v-list-item-subtitle>Mobile</v-list-item-subtitle> -->
                 </v-list-item-content>
               </v-list-item>
@@ -102,7 +106,7 @@
             <v-spacer></v-spacer>
             <v-card class="mx-auto" max-width="400">
               <v-card-title>
-                <span class="title font-weight-bold">제목</span>
+                <span class="title font-weight-bold">고기 맛있게 먹었습니다.</span>
               </v-card-title>
 
               <v-card-text class="headline font-weight-bold" v-text="review.content">
@@ -125,9 +129,7 @@
                 </v-list-item>
               </v-card-actions>
             </v-card>
-          </v-expansion-panel-content>
-          
-          <v-expansion-panel-content>
+
             <v-list>
               <template v-for="(comment, index) in comments">
                 <v-divider :key="index"></v-divider>
@@ -135,7 +137,7 @@
                 <v-divider v-else-if="comment.divider" :key="index" :inset="comment.inset"></v-divider>
                 <v-list-item v-else :key="comment">
                   <v-list-item-avatar>
-                    <v-img src="https://cdn.vuetifyjs.com/images/lists/`${imgNum}`.jpg"></v-img>
+                    <v-img :src="imgs[index]"/>
                   </v-list-item-avatar>
 
                   <v-list-item-content>
@@ -154,7 +156,6 @@
                 </v-list-item>
               </template>
             </v-list>
-
           </v-expansion-panel-content>
 
         </v-expansion-panel>
@@ -183,7 +184,13 @@ export default {
       meetup : '',
       members : [],
       comments : [],
-      imgNum : 1
+      imgs : [
+        "https://cdn.vuetifyjs.com/images/lists/1.jpg",
+        "https://cdn.vuetifyjs.com/images/lists/2.jpg",
+        "https://cdn.vuetifyjs.com/images/lists/3.jpg",
+        "https://cdn.vuetifyjs.com/images/lists/4.jpg",
+        "https://cdn.vuetifyjs.com/images/lists/5.jpg",
+      ],
     };
   },
   created() {

@@ -50,12 +50,7 @@
             </v-container>
           </v-sheet>
           <!-- home.vue 이외 -->
-          <v-sheet
-            v-if="$route.name !== 'Home'"
-            id="scroll-area-1"
-            class="overflow-y-auto"
-            max-height="667"
-          >
+          <v-sheet v-if="$route.name !== 'Home'"  id="scroll-area-1" class="overflow-y-auto" max-height="610">
             <v-container class="nothome" style="height: 100%;">
               <router-view></router-view>
             </v-container>

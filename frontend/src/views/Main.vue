@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="mypage">
     <!-- 상단 -->
      <v-toolbar-title>
       <Top></Top>
@@ -7,6 +7,7 @@
     </v-toolbar-title>
     <!-- 가운데 부분 -->
     <div>
+      <!-- tab view -->
       <v-tabs dark v-model="currentItem" fixed-tabs slider-color="grey">
       <v-tab v-for="item in items" :key="item" :href="'#tab-' + item">
         <v-icon v-if="item=='Profile'">mdi-account-box</v-icon>
@@ -68,7 +69,7 @@
 </template>
 
 <script>
-import Top from "../components/common/Top";
+// import Top from "../components/common/Top";
 import Topsub from "../components/common/Topsub";
 import Message from "../components/common/Message";
 import History from "../components/common/History";
@@ -80,7 +81,7 @@ const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
 export default {
   name: "components",
   components: {
-    Top,
+    // Top,
     Topsub,
     Message,
     History,
@@ -94,12 +95,10 @@ export default {
         `${SERVER_URL}/userpage/getuser?userId=`+this.userId
       )
       .then((response) => {
-      console.log('axios 실행 성공')
-      console.log(response.data);
-      this.users = response.data;
+        // console.log(response.data);
+        this.users = response.data;
       })
       .catch((error) => {
-        console.log('axios 실행 실패')
         console.log(error.response);
       });
   },

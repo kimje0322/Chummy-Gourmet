@@ -55,6 +55,7 @@ public class AccountController {
          @RequestParam(required = true) final String password) {
 
       Optional<User> userOpt = userDao.findUserByUserEmailAndUserPwd(email, password);
+      System.out.println(userOpt+"?");
       ResponseEntity response = null;
       if (userOpt.isPresent()) {
          final BasicResponse result = new BasicResponse();

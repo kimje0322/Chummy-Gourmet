@@ -13,7 +13,7 @@
     </v-toolbar>
     
     <!-- 햄버거? 눌렀을 때 -->
-    <v-navigation-drawer v-model="drawer" temporary absolute right>
+    <v-navigation-drawer dark v-model="drawer" temporary absolute right>
       <v-system-bar></v-system-bar>
       <v-list>
         <v-list-item>
@@ -22,27 +22,72 @@
           </v-list-item-avatar>
         </v-list-item>
 
-        <v-list-item link>
+        <v-list-item>
           <v-list-item-content>
-            <v-list-item-title class="title">돈독이</v-list-item-title><br>
-            <v-list-item-subtitle>dd@instagram.com</v-list-item-subtitle>
+            <v-list-item-title class="title">{{user.userName}}</v-list-item-title><br>
+            <v-list-item-subtitle>{{user.userEmail}}</v-list-item-subtitle>
           </v-list-item-content>
-
-          <v-list-item-action>
+          <!-- <v-list-item-action>
             <v-icon>mdi-menu-down</v-icon>
-          </v-list-item-action>
+          </v-list-item-action> -->
         </v-list-item>
       </v-list>
-      <v-divider></v-divider>
-      <v-list nav dense>
-        <v-list-item-group v-model="items" color="primary">
-          <v-list-item v-for="(item, i) in items" :key="i">
-            <v-list-item-icon>
-              <v-icon v-text="item.icon"></v-icon>
-            </v-list-item-icon>
 
+      <v-divider></v-divider>
+
+      <v-list nav dense>
+        <v-list-item-group>
+          <v-list-item>
+            <v-list-item-icon>
+              <v-icon>mdi-account-multiple</v-icon>
+            </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title v-text="item.text"></v-list-item-title>
+              <v-list-item-title>Meet Up(x)</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item>
+            <v-list-item-icon>
+              <v-icon>mdi-star</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>favorite(x)</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item>
+            <v-list-item-icon>
+              <v-icon>mdi-account-plus</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>팔로우요청(x)</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item>
+            <v-list-item-icon>
+              <v-icon>mdi-folder</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>스크랩(x)</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item @click="updateUser">
+            <v-list-item-icon>
+              <v-icon>mdi-account-box</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>회원정보 설정(o)</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item @click="logout">
+            <v-list-item-icon>
+              <v-icon>mdi-logout</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>로그아웃(o)</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
@@ -60,15 +105,21 @@ const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
 export default {
   data () {
     return {
+      user:{},
       drawer: null,
-      items: [
-      { text: 'Meet Up', icon: 'mdi-account-multiple' },
-      // { text: 'favorite', icon: 'mdi-star' },
-      { text: '팔로우 요청', icon: 'mdi-account-plus' },
-      { text: '스크랩', icon: 'mdi-folder' },
-      { text: '회원정보 설정', icon: 'mdi-account-box' },
-      { text: '로그아웃', icon: 'mdi-logout' },
-    ],
+    }
+  },
+  methods:{
+    updateUser(){
+      this.$router.push('/user/updateUser');
+    },
+    logout (){
+      this.$confirm("로그아웃 하시겠습니까?").then(() => {
+      //do something...
+      this.$cookie.delete('accesstoken');
+      this.$cookie.delete('userId');
+      this.$router.push('/');
+    });
     }
   },
   created() {
@@ -77,7 +128,7 @@ export default {
         `${SERVER_URL}/userpage/getuser?userId=${this.$cookie.get("userId")}`
       )
       .then((res) => {
-        console.log(res.data);
+        this.user = res.data;
       })
   }
 };

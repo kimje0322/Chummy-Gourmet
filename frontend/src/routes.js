@@ -22,6 +22,9 @@ import Home from './views/user/Home.vue'
 import FollowList from './components/common/Followlist.vue'
 
 
+//추가
+import UpdateUser from './views/user/UpdateUser.vue'
+
 Vue.use(VueRouter);
 export default new VueRouter({
     routes: [{
@@ -31,6 +34,12 @@ export default new VueRouter({
             meta: {
                 navbar: true
             }
+        },
+        //추가
+        {
+            path: '/user/updateUser',
+            name: 'UpdateUser',
+            component: UpdateUser,
         },
         {
             path: '/user/join',
@@ -120,7 +129,10 @@ export default new VueRouter({
         {
             path: '/party',
             name: 'Party',
-            component: Party
+            component: Party,
+            meta: {
+                navbar: true
+            }
         },
         {
             path: '/',

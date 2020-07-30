@@ -69,7 +69,7 @@
 </template>
 
 <script>
-// import Top from "../components/common/Top";
+import Top from "../components/common/Top";
 import Topsub from "../components/common/Topsub";
 import Message from "../components/common/Message";
 import History from "../components/common/History";
@@ -81,7 +81,7 @@ const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
 export default {
   name: "components",
   components: {
-    // Top,
+    Top,
     Topsub,
     Message,
     History,

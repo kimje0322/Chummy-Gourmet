@@ -42,19 +42,14 @@ export default {
       /* global kakao */
       script.onload = () => kakao.maps.load(this.initMap);
       script.src =
-        "http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=722f0c506c2743378fac318284106578";
+        "http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=90891b3c4fa765cd378361c6b16e4dd6";
       document.head.appendChild(script);
     }
   },
   beforeUpdate() {},
   methods: {
     initMap() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(pos => {
-          var curLat = pos.coords.latitude;
-          var curLng = pos.coords.longitude;
-          // console.log(curLat + "," + curLng);
-          var container = document.getElementById("map");
+      var container = document.getElementById("map");
           var options = {
             center: new kakao.maps.LatLng(CURLAT, CURLNG),
             level: 3
@@ -128,7 +123,7 @@ export default {
                      <div class="wrap">
                         <div class="info">
                             <div class="title">
-                                <a href="#/map/party" class="btn-bottom">${meetUps[i].title}</a>
+                                <a href="#/map/party" class="">${meetUps[i].title}</a>
                             </div>
                             <div class="body">
                                 <div class="img">
@@ -147,8 +142,14 @@ export default {
             kakao.maps.event.addListener(marker, "click", toggleInfoWindow(this.map, marker, overlay));
             marker.setMap(this.map);
           }
-        });
-      }
+      // if (navigator.geolocation) {
+      //   navigator.geolocation.getCurrentPosition(pos => {
+      //     var curLat = pos.coords.latitude;
+      //     var curLng = pos.coords.longitude;
+      //     // console.log(curLat + "," + curLng);
+          
+      //   });
+      // }
     },
     zoomIn() {
       this.map.setLevel(this.map.getLevel() - 1);
@@ -185,7 +186,7 @@ export default {
   width: 36px;
   height: 80px;
   overflow: hidden;
-  z-index: 1;
+  z-index: 15;
   background-color: #f5f5f5;
 }
 .custom_zoomcontrol span {

@@ -19,6 +19,8 @@ import Pref from './views/user/Preference.vue'
 import Map from './views/map/map.vue'
 import MapParty from './views/map/party.vue'
 import Home from './views/user/Home.vue'
+// addReview추가 - 세훈
+import AddReview from './views/review/addReview.vue'
 
 Vue.use(VueRouter);
 export default new VueRouter({
@@ -122,6 +124,12 @@ export default new VueRouter({
             meta: {
                 navbar: true
             }
+        },
+        {
+            //review 작성 - 세훈
+            path: '/review/add',
+            name: 'AddReview',
+            component: AddReview
         },
         {
             path: '/',

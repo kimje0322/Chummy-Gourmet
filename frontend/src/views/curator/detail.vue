@@ -231,7 +231,7 @@ export default {
   created() {
     console.log(this.$route.params);
     axios
-        .get(`${SERVER_URL}/review/search?id=1`)
+        .get(`${SERVER_URL}/review/searchcomment?id=1`)
 
         .then((response) => {
           console.log(response);

@@ -9,7 +9,8 @@ import com.web.curation.model.meetup.MeetUp;
 import com.web.curation.model.review.Restaurant;
 
 public interface MeetUpDao extends JpaRepository<MeetUp, String> {
-	// name으로 가게가 있는지 없는지 검색 - review 등록용도
+
+	//리뷰 아이디로 밋업 객체 가져오기
 	@Query(value = "SELECT * from meetup where meetup_id = :id", nativeQuery = true)
 //	MeetUp selectMeetUpById(int id);
 	Optional<MeetUp> selectMeetUpById(int id);

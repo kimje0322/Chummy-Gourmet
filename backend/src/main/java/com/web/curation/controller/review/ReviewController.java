@@ -12,12 +12,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.web.curation.dao.meetup.MeetUpDao;
 import com.web.curation.dao.review.RestaurantDao;
+import com.web.curation.dao.review.ReviewCommentDao;
 import com.web.curation.dao.review.ReviewDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
+import com.web.curation.model.meetup.MeetUp;
 import com.web.curation.model.review.Restaurant;
 import com.web.curation.model.review.Review;
+import com.web.curation.model.review.ReviewComment;
 import com.web.curation.model.user.User;
 
 import io.swagger.annotations.ApiOperation;
@@ -39,6 +43,10 @@ public class ReviewController {
 	UserDao userDao;
 	@Autowired
 	ReviewDao reviewDao;
+	@Autowired
+	ReviewCommentDao reviewCommentDao;
+	@Autowired
+	MeetUpDao meetUpDao;
 	
 	//리뷰 추가
 	@GetMapping("/review/add")
@@ -98,5 +106,24 @@ public class ReviewController {
 		
 		
 		return map;
+	}
+	
+	//리뷰 상세페이지 검색
+	@GetMapping("/review/searchcomment")
+	@ApiOperation(value = "리뷰 상세페이지")
+	public Map<String, Object> searchReviewComment(@RequestParam(required = true) int id) {
+		//1. 리뷰id 입력받음
+		//2. 리뷰 아이디로 리뷰 객체 가져오기 // 없어도됨
+		//3. 리뷰 아이디로 밋업 객체 가져오기
+		//4. 리뷰아이디로 파티원 객체 가져오기 //없어도됨
+		//5. 리뷰 아이디로 파티원 코멘트 가져오기
+		Optional<MeetUp> meetUp = meetUpDao.selectMeetUpById(id);
+		List<ReviewComment> comment = reviewCommentDao.selectReviewCommentByReviewId(id);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("meetup", meetUp);
+		map.put("comment", comment);
+		return map;
+	
 	}
 }

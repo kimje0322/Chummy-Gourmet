@@ -31,8 +31,8 @@ public class Review {
 	private String writer;
 	@Column(name = "review_content")
 	private String content;
-	@Column(name = "review_time")
-	private String time;
+	@Column(name = "review_date")
+	private String date;
 	@Column(name = "rest_id")
 	private String restid;
 	
@@ -40,14 +40,14 @@ public class Review {
 	@Override
 	public String toString() {
 		return "Review [id=" + id + ", name=" + name + ", category=" + category + ", writer=" + writer + ", content="
-				+ content + ", time=" + time + ", restid=" + restid + "]";
+				+ content + ", date=" + date + ", restid=" + restid + "]";
 	}
 	
-	public String getTime() {
-		return time;
+	public String getDate() {
+		return date;
 	}
-	public void setTime(String time) {
-		this.time = time;
+	public void setDate(String date) {
+		this.date = date;
 	}
 	public String getRestid() {
 		return restid;

@@ -45,8 +45,8 @@
               <v-icon color="indigo">mdi-map-marker</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title v-text="restaurant.location"></v-list-item-title>
-              <v-list-item-subtitle v-text="restaurant.location"></v-list-item-subtitle>
+              <v-list-item-title v-if="restaurant.location" v-text="restaurant.location"></v-list-item-title>
+              <v-list-item-subtitle  v-if="restaurant.location" v-text="restaurant.location"></v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
 
@@ -55,7 +55,7 @@
               <v-icon color="indigo">mdi-phone</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title v-text="restaurant.telphone"></v-list-item-title>
+              <v-list-item-title  v-if="restaurant.telphone" v-text="restaurant.telphone"></v-list-item-title>
               <!-- <v-list-item-subtitle>Mobile</v-list-item-subtitle> -->
             </v-list-item-content>
           </v-list-item>
@@ -87,25 +87,25 @@
           <v-divider :key="index"></v-divider>
           <v-subheader v-if="review.header" :key="review.header" v-text="review.header"></v-subheader>
           <v-divider v-else-if="review.divider" :key="index" :inset="review.inset"></v-divider>
-          <v-list-item v-else :key="review.title" @click="test(review)">
+          <v-list-item v-else :key="review.title" @click="moveReviewDetail(review)">
 
             <v-list-item-avatar>
-              <v-img :src="review.avatar"></v-img>
+              <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg"></v-img>
             </v-list-item-avatar>
 
             <v-list-item-content>
               <!-- <v-list-item-title v-html="review.title"></v-list-item-title> -->
               <!-- <v-list-item-subtitle v-html="review.subtitle"></v-list-item-subtitle> -->
               <v-list-item-title>
-                {{review.title}}
+                {{review.content}}
                 <span class="text-caption grey--text text--lighten-1" style="float:right;" v-text="review.date"></span>
               </v-list-item-title>
               <v-list-item-subtitle>
-                <span class="text--primary" v-for="(m, index) in meetups[review.meetupId].members" :key="index">
-                  <span class="blue--text" v-if="index == 0">{{m}} </span>
-                  <span v-else>{{m}} </span>
+                <span class="text--primary" v-for="(member, index) in members" :key="index">
+                  <span class="blue--text" v-if="index == 0">{{member}} </span>
+                  <span v-else>{{member}} </span>
                 </span>
-                &mdash; {{review.contents}}
+                <!-- &mdash; {{review.content}} -->
               </v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
@@ -116,10 +116,9 @@
 </template>
 
 <script>
-// import FeedDetail from "../../components/feed/FeedDetail.vue";
-// this.$route.params.email,
-
 import axios from "axios";
+import router from "@/routes";
+
 
 // const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
 const SERVER_URL = "http://localhost:8080";
@@ -130,33 +129,6 @@ export default {
       cycle: false,
       show: false,
       restaurant: this.$route.params,
-      // restaurantDetails: [
-      //   {},
-      //   {
-      //     restId: 1,
-      //     restAddr: "대전 유성구 온천북로13번길 35",
-      //     restJibun: "대전 유성구 봉명동 612-3",
-      //     restPhone: "042-485-3766",
-      //     restRunning: "10:30 - 02:00",
-      //     restParking: "주차가능",
-      //   },
-      //   {
-      //     restId: 2,
-      //     restAddr: "대전 유성구 대학로 56",
-      //     restJibun: "대전 유성구 봉명동 615-1",
-      //     restPhone: "042-822-6022",
-      //     restRunning: "11:00 - 23:30",
-      //     restParking: "주차가능",
-      //   },
-      //   {
-      //     restId: 3,
-      //     restAddr: "대전 유성구 대학로 60",
-      //     restJibun: "대전 유성구 봉명동 612-3 매드블럭 6층",
-      //     restPhone: "042-485-3766",
-      //     restRunning: "11:00 - 22:00",
-      //     restParking: "주차가능",
-      //   },
-      // ],
       reviews: [
         // { header: 'Today' },
         // {
@@ -199,42 +171,19 @@ export default {
         //   date : '2020-07-11',
         // },
       ],
-      meetups : [{},
-        {
-          id : 1,
-          master : '김승범',
-          members : ['김승범','조민기', '박세훈']
-        },
-        {
-          id : 2,
-          master : '하정우',
-          members : ['하정우','김성균', '최민식']
-        },
-        {
-          id : 3,
-          master : '이정재',
-          members : ['이정재','황정민']
-        },
-        {
-          id : 4,
-          master : '한지민',
-          members : ['한지민','조민기', '박세훈']
-        },
-        {
-          id : 5,
-          master : '조민기',
-          members : ['조민기', '쯔위', '박세훈', '김승범']
-        }
-      ]
+      members : [],
     };
   },
   created() {
+    console.log(this.restaurant)
     axios
         .get(`${SERVER_URL}/review/search?id=${this.restaurant.id}`)
 
         .then((response) => {
-          console.log(response.data);
-          this.reviews = response.data;
+          // console.log(response.data);
+          this.reviews = response.data.review;
+          this.members = response.data.member[0];
+
         })
 
         .catch((error) => {
@@ -243,8 +192,8 @@ export default {
         });
   },
   methods : {
-    test(review) {
-      console.log(review);
+    moveReviewDetail(review) {
+      router.push({name : "ReviewDetail", params : review});
     }
   }
   // components : {FeedDetail}

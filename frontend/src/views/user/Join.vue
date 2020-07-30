@@ -135,6 +135,7 @@ export default {
     name: function() {
       if (this.name.length < 1) this.error.name = "이름 입력해주세요.";
       else this.error.name = false;
+      return;
     },
     password: function(v) {
       if (
@@ -143,16 +144,19 @@ export default {
       )
       this.error.password = "영문,숫자 포함 8 자리이상이어야 합니다.";
       else this.error.password = false;
+      return;
     },
     nickName: function(v) {
       if (this.nickName.length < 1)
         this.error.nickName = "닉네임을 입력해주세요.";
       else this.error.nickName = false;
+      return;
     },
     email: function(v) {
       if (this.email.length > 0 && !EmailValidator.validate(this.email))
         this.error.email = "이메일 형식이 아닙니다.";
       else this.error.email = false;
+      return;
     },
     passwordConfirm: function(v) {
       if (
@@ -161,28 +165,33 @@ export default {
       ) {
         this.error.passwordConfirm = "비밀번호가 다릅니다.";
       } else this.error.passwordConfirm = false;
+      return;
     },
     isTerm: function() {
       if (this.isTerm) this.error.term = false;
+      return;
     },
     phone: function (v) {
       if (this.phone.length > 0 && isNaN(this.phone))
         this.error.phone = "올바른 휴대폰 번호를 입력해주세요.";
       else this.error.phone = false;
+      return;
     },
   },
   methods: {
     checkFormAndSignUp() {
-      // 전체적으로 폼들 체크하고,
-      this.checkForm();
+      // 전체적으로 폼들 유효성 체크하고,
+      if(this.checkForm()){
+       
+       // 약관 동의 체크하고, 
+        if (!this.isTerm) this.error.term = "약관에 동의해주세요.";
+       
+       // 입력한 정보에 이상이 없다면, 중복검사
+        if (this.isValidForm())
+          this.onSignup();
+      }
 
-      // 약관 동의 체크하고, 
-      if (!this.isTerm) this.error.term = "약관에 동의해주세요.";
 
-      // 다 됐으면 중복검사
-      if (this.isValidForm())
-        this.onSignup();
-      
     },
     onSignup() {
       axios
@@ -218,26 +227,40 @@ export default {
         });
     },
     checkForm() {
-      if (this.name.length < 1) this.error.name = "이름을 입력해주세요.";
+      if (this.name.length < 1) {
+        this.error.name = "이름을 입력해주세요.";
+        return false;
+      }
       else this.error.name = false;
+      
 
-      if (this.nickName.length < 1)
+      if (this.nickName.length < 1){
         this.error.nickName = "닉네임을 입력해주세요.";
+        return false;
+      }
       else this.error.nickName = false;
 
-      if(this.email.length < 1)
+      if(this.email.length < 1){
         this.error.email = "이메일을 입력해주세요.";
-      else if (this.email.length > 0 && !EmailValidator.validate(this.email))
-        this.error.email = "이메일 형식이 아닙니다.";
+        return false;
+      }
+      else if (this.email.length > 0 && !EmailValidator.validate(this.email)){
+          this.error.email = "이메일 형식이 아닙니다.";
+          return false;
+      }
       else this.error.email = false;
 
-      if(this.password.length < 1)
+      if(this.password.length < 1){
         this.error.password = "영문,숫자 포함 8 자리이상이어야 합니다.";
+        return false;
+      }
       else if (
         this.password.length > 0 &&
         !this.passwordSchema.validate(this.password)
-      )
-      this.error.password = "영문,숫자 포함 8 자리이상이어야 합니다.";
+      ){
+        this.error.password = "영문,숫자 포함 8 자리이상이어야 합니다.";
+        return false;
+      }
       else this.error.password = false;
 
       if (
@@ -245,11 +268,16 @@ export default {
         this.passwordConfirm != this.password
       ) {
         this.error.passwordConfirm = "비밀번호가 다릅니다.";
+        return false;
       } else this.error.passwordConfirm = false;
 
-       if (this.phone.length < 1)
+       if (this.phone.length < 1){
         this.error.phone = "전화번호를 입력해주세요.";
+        return false;
+      }
       else this.error.phone = false;
+
+      return true;
     },
 
     // 입력 정보가 다 유효하면 true, 아니면 false

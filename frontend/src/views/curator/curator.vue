@@ -104,7 +104,9 @@ export default {
         .get(`${SERVER_URL}/curation?location=${this.location}`)
 
         .then((response) => {
-          alert("성공");
+         alert("성공");
+         console.log("성공");
+         console.log(response.data[0]);
         })
 
         .catch((error) => {

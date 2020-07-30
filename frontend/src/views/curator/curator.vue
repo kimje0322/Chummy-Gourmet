@@ -29,6 +29,8 @@ export default {
 
         .then((response) => {
          alert("성공");
+         console.log("성공");
+         console.log(response.data[0]);
         })
 
         .catch((error) => {

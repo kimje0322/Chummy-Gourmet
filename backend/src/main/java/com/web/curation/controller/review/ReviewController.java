@@ -1,5 +1,7 @@
 package com.web.curation.controller.review;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,8 +40,9 @@ public class ReviewController {
 		//1. DB의 가게 테이블에 name 상호명을 가진 가게가 있는지 검색
 		//2. 없을 경우 가게 테이블에 입력(review = 1), 있을경우 review++
 		//3. 리뷰 테이블에 정보 입력
-		System.out.println(restDao.seletRestNameByName(name));
-		Restaurant rest = restDao.seletRestNameByName(name);
+		System.out.println(restDao.selectRestNameByName(name));
+//		Restaurant rest = restDao.selectRestNameByName(name);
+		Optional<Restaurant> rest = restDao.selectRestNameByName(name);
 		System.out.println(rest);
 		if(rest == null) {
 			System.out.println("없다");

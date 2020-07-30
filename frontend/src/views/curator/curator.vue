@@ -85,7 +85,7 @@ export default {
         .get(`${SERVER_URL}/curation?location=${this.location}`)
 
         .then((response) => {
-          this.restaurants = response.data;
+          this.restaurants = response.data.list;
           console.log(this.restaurants);
         })
 
@@ -95,7 +95,9 @@ export default {
         });
     },
     moveDetail(restaurant) {
+      console.log("넘어간다잇");
       console.log(restaurant);
+      alert("쓩");
       router.push({name : "Detail", params : restaurant});
     }
   },

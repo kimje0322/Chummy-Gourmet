@@ -120,9 +120,9 @@ public class CurationController {
 			}
 		}
 
-		for (Restaurant ad : list) {
-			System.out.println(ad);
-		}
+//		for (Restaurant ad : list) {
+//			System.out.println(ad);
+//		}
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("list", list);
 		return map;

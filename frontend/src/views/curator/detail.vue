@@ -159,45 +159,45 @@ export default {
       // ],
       reviews: [
         // { header: 'Today' },
-        {
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
-          title : '육즙 터집니다',
-          contents : '리얼 존맛탱',
-          meetupId : 1,
-          date : '2020-07-26',
-        },
-        // { divider: true, inset: true },
-        {
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
-          title : '한국와서 정말 맛있는...',
-          contents : "Wish I could come, but I'm out of town this weekend.",
-          meetupId : 2,
-          date : '2020-07-23',
-        },
-        // { divider: true, inset: true },
-        {
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
-          title : '마시써영',
-          contents : "맛있어너무너무너무",
-          meetupId : 3,
-          date : '2020-07-16',
-        },
-        // { divider: true, inset: true },
-        {
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
-          title : '와 맛있당',
-          contents : "고기대박",
-          meetupId : 4,
-          date : '2020-07-13',
-        },
-        // { divider: true, inset: true },
-        {
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/5.jpg',
-          title : '돼지잡내가쫌나네요',
-          contents : "그냥저냥 먹고갑니다...",
-          meetupId : 5,
-          date : '2020-07-11',
-        },
+        // {
+        //   avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
+        //   title : '육즙 터집니다',
+        //   contents : '리얼 존맛탱',
+        //   meetupId : 1,
+        //   date : '2020-07-26',
+        // },
+        // // { divider: true, inset: true },
+        // {
+        //   avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg',
+        //   title : '한국와서 정말 맛있는...',
+        //   contents : "Wish I could come, but I'm out of town this weekend.",
+        //   meetupId : 2,
+        //   date : '2020-07-23',
+        // },
+        // // { divider: true, inset: true },
+        // {
+        //   avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
+        //   title : '마시써영',
+        //   contents : "맛있어너무너무너무",
+        //   meetupId : 3,
+        //   date : '2020-07-16',
+        // },
+        // // { divider: true, inset: true },
+        // {
+        //   avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
+        //   title : '와 맛있당',
+        //   contents : "고기대박",
+        //   meetupId : 4,
+        //   date : '2020-07-13',
+        // },
+        // // { divider: true, inset: true },
+        // {
+        //   avatar: 'https://cdn.vuetifyjs.com/images/lists/5.jpg',
+        //   title : '돼지잡내가쫌나네요',
+        //   contents : "그냥저냥 먹고갑니다...",
+        //   meetupId : 5,
+        //   date : '2020-07-11',
+        // },
       ],
       meetups : [{},
         {
@@ -229,12 +229,12 @@ export default {
     };
   },
   created() {
-    console.log(this.$route.params);
     axios
-        .get(`${SERVER_URL}/review/search?id=1`)
+        .get(`${SERVER_URL}/review/search?id=${this.restaurant.id}`)
 
         .then((response) => {
-          console.log(response);
+          console.log(response.data);
+          this.reviews = response.data;
         })
 
         .catch((error) => {

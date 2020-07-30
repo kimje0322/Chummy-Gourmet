@@ -1,4 +1,5 @@
 <template>
+<!-- 부모 -->
   <v-layout>
     <v-toolbar dark>
       <v-list-item-avatar>
@@ -6,17 +7,19 @@
       </v-list-item-avatar>
       {{proptoTopsub.userName}}
       <v-spacer></v-spacer>
-        <v-btn @click="getFollowings" depressed>{{proptoTopsub.followingCount}} <br>팔로잉</v-btn>
+        <v-btn @click="getFollows" depressed>{{proptoTopsub.followerCount}}<br>팔로워</v-btn>
       <v-spacer></v-spacer>
-        <v-btn @click="getFollowers" depressed>{{proptoTopsub.followerCount}}<br>팔로워</v-btn>
+        <v-btn @click="getFollows" depressed>{{proptoTopsub.followingCount}} <br>팔로잉</v-btn>
+      <v-spacer></v-spacer>
     </v-toolbar>
   </v-layout>
 </template>
 <script>
 // import Following from "../../views/Following";
+import router from "@/routes";
 import axios from "axios";
 
-const SERVER_URL = "http://localhost:8080";
+const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
 
 export default {
   props:{
@@ -24,18 +27,20 @@ export default {
       type : Object
     },
   },
+  // data() {
+  //   return {
+  //   followingUser: {
+  //     name: [],
+  //     nickname: [],
+  //     }
+  //   }
+  // },
   methods: {
-    logout(){
-      this.$cookie.delete('accesstoken');
-      this.$cookie.delete('userId');
-      this.$router.push('/')
-    },
-    getFollowings () {
-      this.$router.push({ name: "List", prams:{flag:"FollowingList"}})
-    },
-    getFollowers () {
-      this.$router.push({ name: "List", prams:{flag:"FollowerList"}})
+   
+    getFollows () {
+      this.$router.push('/followlist')
     }
   }
+
 }
 </script>

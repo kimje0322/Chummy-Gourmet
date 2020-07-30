@@ -2,8 +2,8 @@
   <v-app class="mypage">
     <!-- 상단 -->
      <v-toolbar-title>
-      <!-- <Top></Top> -->
-      <Topsub></Topsub>
+      <Top></Top>
+      <Topsub :proptoTopsub="users"></Topsub>
     </v-toolbar-title>
     <!-- 가운데 부분 -->
     <div>
@@ -25,48 +25,109 @@
           <History v-else-if="item=='History'"></History>
           <!-- profile -->
           <v-card-text v-else>
-                <h2>{{ item }}</h2>
-                {{ text }}
+                <h2>Meet Up</h2>
+                <!-- <h2>{{ item }}</h2> -->
+                <!-- {{ text }} -->
+                <!-- 캘린더 보여줄 부분 -->           
+                <v-row>
+                  <v-col>
+                    <v-sheet height="500">
+                      <v-calendar
+                        :now="today"
+                        :value="today"
+                        color="primary"
+                      >
+                        <template v-slot:day="{ present, past, date }">
+                          <v-row
+                            class="fill-height"
+                          >
+                            <template v-if="past && tracked[date]">
+                              <v-sheet
+                                v-for="(percent, i) in tracked[date]"
+                                :key="i"
+                                :title="category[i]"
+                                :color="colors[i]"
+                                :width="`${percent}%`"
+                                height="100%"
+                                tile
+                              ></v-sheet>
+                            </template>
+                          </v-row>
+                        </template>
+                      </v-calendar>
+                    </v-sheet>
+                  </v-col>
+                </v-row>
               </v-card-text>
         </v-card>
       </v-tab-item>
     </v-tabs-items>
     </div>
-    
-    <!-- 하단 -->
-    <!-- <Footer></Footer> -->
 
   </v-app>
   
 </template>
 
 <script>
-// import Top from "../components/common/Top";
+import Top from "../components/common/Top";
 import Topsub from "../components/common/Topsub";
 import Message from "../components/common/Message";
 import History from "../components/common/History";
-// import Footer from "../components/common/Footer";
 import "../assets/css/components.scss";
+import axios from "axios";
+
+const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
 
 export default {
   name: "components",
   components: {
-    // Top,
+    Top,
     Topsub,
     Message,
     History,
-    // Footer,
+  },
+  created(){
+    // alert(this.$cookie.get("userId"));
+    this.userId = this.$cookie.get("userId");
+    console.log('axios 실행전')
+    axios
+      .get(
+        `${SERVER_URL}/userpage/getuser?userId=`+this.userId
+      )
+      .then((response) => {
+        // console.log(response.data);
+        this.users = response.data;
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
   },
   data: () => {
     return {
+      users: {},
+      userId: "",
+      today: '2020-07-31',
+      tracked: {
+        '2020-07-29': [23, 45, 10],
+        '2020-07-08': [10],
+        '2020-07-17': [0, 78, 5],
+        '2020-07-20': [0, 0, 50],
+        '2020-07-05': [0, 10, 23],
+        '2020-07-04': [2, 90],
+        '2020-07-03': [10, 32],
+        '2020-07-02': [80, 10, 10],
+        '2020-07-11': [20, 25, 10],
+      },
+      colors: ['#FFF176', '#FDD835', '#F9A825'],
+      category: ['Development', 'Meetings', 'Slacking'],
+      // calender 코드 끝
       contents: "",
-      currentItem: 'tab-Web',
+      currentItem: '',
       items: [
         'Profile', 'History', 'Message'
       ],
-      text: '대한민국 국적의 토트넘 홋스퍼 FC 소속 축구 선수이자 대한민국 축구 국가대표팀의 주장이며 프리미어 리그와 UEFA 챔피언스 리그 아시아인 통산 최다 득점자로 2019년에는 아시아 선수 최초로 FIFA/FIFPro 월드 XI 후보 55인, 발롱도르 후보 30인에 선정되었다.',
-      methods: {
-      },
+      // text: '돈독이님의 Meet Up 일정입니다.',
+
       buttons: [
         {
           title: "확인",
@@ -93,10 +154,15 @@ export default {
         }
       ]
     };
-  },
+  },  
 };
+
+
+
 </script>
 
 <style>
-
+  .container nothome {
+    padding: 0px !important;
+  }
 </style>

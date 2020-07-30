@@ -175,7 +175,7 @@ export default {
     };
   },
   created() {
-    console.log(this.restaurant)
+    // console.log(this.restaurant)
     axios
         .get(`${SERVER_URL}/review/search?id=${this.restaurant.id}`)
 

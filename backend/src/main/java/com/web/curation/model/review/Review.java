@@ -43,10 +43,8 @@ public class Review {
 		return "Review [id=" + id + ", name=" + name + ", category=" + category + ", writer=" + writer + ", content="
 				+ content + ", date=" + date + ", restid=" + restid + "]";
 	}
-<<<<<<< HEAD
+
 	
-=======
->>>>>>> f40ad09132af7058b0ecbadcc86b83b11cfdf0ce
 	public String getDate() {
 		return date;
 	}

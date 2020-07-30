@@ -207,17 +207,39 @@
 </template>
 
 <script>
-import ReviewDetail from "../../components/feed/ReviewDetail.vue";
+import axios from "axios";
+import router from "@/routes";
+
+
+// const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "http://localhost:8080";
 
 export default {
   data() {
     return {
       show: false,
       temp: "temp",
+      review : ''
     };
   },
   created() {
-    console.log(this.$route.params);
+    this.review = this.$route.params;
+    console.log(this.review);
+    axios
+        .get(`${SERVER_URL}/review/searchcomment?id=${this.review.id}`)
+
+        .then((response) => {
+          console.log(response.data);
+          // this.reviews = response.data.review;
+          // this.members = response.data.member[0];
+
+        })
+
+        .catch((error) => {
+          console.log(error.response);
+          alert("로그인 실패");
+        });
+
   },
 };
 </script>

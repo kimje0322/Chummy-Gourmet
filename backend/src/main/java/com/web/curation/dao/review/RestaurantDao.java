@@ -1,6 +1,7 @@
 package com.web.curation.dao.review;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,7 +13,7 @@ public interface RestaurantDao extends JpaRepository<Restaurant, String> {
 	
 	//name으로 가게가 있는지 없는지 검색 - review 등록용도
 	@Query(value = "SELECT * from restaurant where rest_name = :name", nativeQuery = true)
-			Restaurant seletRestNameByName(String name); 
+			Optional<Restaurant> selectRestNameByName(String name); 
 	
 	//가게가 없을경우 가게 등록
 	@Query(value = "Insert into restaurant (rest_name,rest_category,rest_review)"

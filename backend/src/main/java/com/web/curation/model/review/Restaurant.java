@@ -31,7 +31,39 @@ public class Restaurant {
 	private String like;
 	@Column(name = "rest_review")
 	private String review;
+	@Column(name = "rest_scrap")
+	private String scrap;
+	@Column(name = "rest_telphone")
+	private String telphone;
+	@Column(name = "rest_location")
+	private String location;
+	@Column(name = "rest_url")
+	private String url;
 	
+	public String getScrap() {
+		return scrap;
+	}
+	public void setScrap(String scrap) {
+		this.scrap = scrap;
+	}
+	public String getTelphone() {
+		return telphone;
+	}
+	public void setTelphone(String telphone) {
+		this.telphone = telphone;
+	}
+	public String getLocation() {
+		return location;
+	}
+	public void setLocation(String location) {
+		this.location = location;
+	}
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
+	}
 	public String getId() {
 		return id;
 	}
@@ -65,8 +97,10 @@ public class Restaurant {
 	@Override
 	public String toString() {
 		return "Restaurant [id=" + id + ", name=" + name + ", category=" + category + ", like=" + like + ", review="
-				+ review + "]";
+				+ review + ", scrap=" + scrap + ", telphone=" + telphone + ", location=" + location + ", url=" + url
+				+ "]";
 	}
+
 	
 	
 }

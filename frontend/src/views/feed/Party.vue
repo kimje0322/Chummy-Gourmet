@@ -1,5 +1,5 @@
 <template>
-  <div class="user join wrapC">
+  <div class="user join">
     <v-bottom-navigation
       v-if="$route.name === 'Party'"
       scroll-target="#scroll-area-2"
@@ -15,70 +15,92 @@
         <v-btn value="right" @click="meetUp">생성</v-btn>
       </v-btn-toggle>
     </v-bottom-navigation>
-    <h2>일정</h2>
-    <br />
-    <br />
-    <div class="input-group mb-3">
-      <v-text-field v-model="title" solo label="제목"></v-text-field>
-    </div>
+    <v-app>
+      <v-toolbar-title>
+        <v-toolbar dark>
+          <a @click="$router.go(-1)">
+            <i class="fas fa-chevron-left"></i>
+          </a>
+          <v-spacer></v-spacer>
+          <v-spacer></v-spacer>
+          <p class="my-auto">Meet Up</p>
+          <v-spacer></v-spacer>
+          <v-spacer></v-spacer>
+        </v-toolbar>
+      </v-toolbar-title>
+      <br />
 
-    <div class="input-group mb-3">
-      <v-textarea v-model="content" solo name="input-7-4" label="일정 내용을 입력하세요."></v-textarea>
-    </div>
+      <div class="party wrapC">
+        <div class="input-group mb-3">
+          <v-text-field v-model="title" solo label="제목"></v-text-field>
+        </div>
 
-    <v-form>
-      <v-row>
-        <v-text-field solo label="장소" append-icon="mdi-map-marker"></v-text-field>
-      </v-row>
-    </v-form>
+        <div class="input-group mb-3">
+          <v-textarea v-model="content" solo name="input-7-4" label="일정 내용을 입력하세요."></v-textarea>
+        </div>
 
-    <v-row>
-      <v-menu
-        ref="menu"
-        v-model="menu"
-        :close-on-content-click="false"
-        :return-value.sync="date"
-        transition="scale-transition"
-        offset-y
-        min-width="300px"
-      >
-        <template v-slot:activator="{ on, attrs }">
+        <v-form>
+          <!-- <v-row> -->
           <v-text-field
             solo
-            v-model="date"
-            label="날짜"
-            append-icon="mdi-calendar-check"
-            readonly
-            v-bind="attrs"
-            v-on="on"
+            label="장소"
+            :append-icon="isColor ? 'mdi-map-marker orange--text text--lighten-2' : 'mdi-map-marker'"
+            @click:append="isColor = !isColor"
+            @click:input="isClick = !isClick"
           ></v-text-field>
-        </template>
-        <v-date-picker
-          :max="new Date().toISOString().substr(0, 10)"
-          min="2020-01-01"
-          v-model="date"
-          no-title
-          scrollable
-        >
-          <v-spacer></v-spacer>
-          <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
-          <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn>
-        </v-date-picker>
-      </v-menu>
-    </v-row>
+          <!-- </v-row> -->
+        </v-form>
 
-    <!-- dropdown -->
-    <v-row id="dropdown-example">
-      <v-overflow-btn
-        v-model="count"
-        solo
-        class="my-2"
-        :items="dropdown_font"
-        label="인원"
-        style="margin:0px;"
-        target="#dropdown-example"
-      ></v-overflow-btn>
-    </v-row>
+        <!-- <v-row> -->
+        <v-menu
+          ref="menu"
+          v-model="menu"
+          :close-on-content-click="false"
+          :return-value.sync="date"
+          transition="scale-transition"
+          offset-y
+          min-width="300px"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field
+              solo
+              v-model="date"
+              label="날짜"
+              :append-icon="isColor1 ? 'mdi-calendar-check orange--text text--lighten-2' : 'mdi-calendar-check'"
+              @click:append="isColor1 = !isColor1"
+              readonly
+              v-bind="attrs"
+              v-on="on"
+            ></v-text-field>
+          </template>
+          <v-date-picker
+            :max="new Date().toISOString().substr(0, 10)"
+            min="2020-01-01"
+            v-model="date"
+            no-title
+            scrollable
+          >
+            <v-spacer></v-spacer>
+            <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
+            <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn>
+          </v-date-picker>
+        </v-menu>
+        <!-- </v-row> -->
+
+        <!-- dropdown -->
+        <div id="dropdown-example">
+          <v-overflow-btn
+            v-model="count"
+            solo
+            class="my-2"
+            :items="dropdown_font"
+            label="인원"
+            style="margin:0px;"
+            target="#dropdown-example"
+          ></v-overflow-btn>
+        </div>
+      </div>
+    </v-app>
   </div>
 </template>
 
@@ -93,6 +115,10 @@ export default {
     // date: new Date().toISOString().substr(0, 10),
     date: null,
     menu: false,
+    isColor: false,
+    isColor1: false,
+    isClick: false,
+
     dropdown_font: ["1", "2", "3", "4"],
   }),
 
@@ -158,6 +184,12 @@ export default {
 </script>
 
 <style>
+.nothome {
+  padding: 0px !important;
+}
+.party {
+  padding: 0px 12px;
+}
 #map {
   width: 100px;
   height: 100px;

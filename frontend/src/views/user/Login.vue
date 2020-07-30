@@ -6,23 +6,12 @@
     <!-- <router-view></router-view> -->
 
     <div class="user" id="login">
+      <div>
+        <img class="logo_margin" src="../../assets/images/logo.png" alt style="width:20%;" />
+      </div>
       <!-- <img src="../../assets/images/background.jpg" width="500"> -->
       <div class="wrapC">
-        <!-- <h3>
-          <router-link to="Home" class="btn-back">  </router-link>
-        </h3>-->
-        <!-- <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>-->
-        <br />
-        <br />
-        <h2 class="text-white">로그인</h2>
-        <hr />
-        <!-- <p class="text-center" style="color:white;">Login</p> -->
-        <div class="input-with-label">
+        <div class="input-with-label email_margin">
           <input
             v-model="email"
             v-bind:class="{error : error.email, complete:!error.email&&email.length!==0}"
@@ -31,6 +20,7 @@
             placeholder="이메일을 입력하세요."
             type="text"
             class="border-white"
+            style="color: white"
           />
           <label for="email">이메일</label>
           <div class="error-text" v-if="error.email">{{error.email}}</div>
@@ -45,39 +35,42 @@
             @keyup.enter="Login"
             placeholder="비밀번호를 입력하세요."
             class="border-white"
+            style="color: white"
           />
           <label for="password">비밀번호</label>
           <div class="error-text" v-if="error.password">{{error.password}}</div>
         </div>
 
-        <v-btn width="100%" @click="onLogin">로그인</v-btn>
+        <v-btn
+          width="100%"
+          @click="onLogin"
+          class="dfddf"
+          v-bind:class="{error : error.password||error.email||email.length<=0||password.length<=0}"
+        >로그인</v-btn>
 
         <div>
           <router-link to="/user/findpw">
-            <p color="white">비밀번호 찾기</p>
+            <p style="text-center">비밀번호를 잊으셨습니까?</p>
           </router-link>
         </div>
 
         <div class="sns-login">
           <div class="text">
-            <p>SNS 간편 로그인</p>
+            <p class="sns-login_bottom">SNS 간편 로그인</p>
             <div class="bar"></div>
           </div>
           <kakaoLogin :component="component" />
           <GoogleLogin :component="component" />
         </div>
-        <div class="add-option">
-          <!-- <div class="text">
+        <!-- <div class="add-option"> -->
+        <!-- <div class="text">
         <p>혹시</p>
         <div class="bar"></div>
-          </div>-->
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <router-link to="/user/findpw"><p>비밀번호 찾기</p></router-link>
-          <!-- <div class="row">
+        </div>-->
+        <!-- <router-link to="/user/findpw">
+            <p>비밀번호 찾기</p>
+        </router-link>-->
+        <!-- <div class="row">
             <p class="d-flex mx-auto">
               <router-link to="/user/join">
                 <img src="../../assets/images/join_logo.png" alt="join_log" width="15" />
@@ -88,12 +81,12 @@
                 계정찾기
               </router-link>
             </p>
-          </div>-->
-          <!-- <div class="wrap">
+        </div>-->
+        <!-- <div class="wrap">
         <p>아직 회원이 아니신가요?</p>
         <router-link to="/user/join" class="btn-join"><strong>가입하기!</strong></router-link>
-          </div>-->
-        </div>
+        </div>-->
+        <!-- </div> -->
       </div>
     </div>
   </v-app>
@@ -133,7 +126,7 @@ export default {
     password: function (v) {
       this.checkForm();
     },
-    
+
     email: function (v) {
       this.checkForm();
     },
@@ -157,9 +150,9 @@ export default {
       });
       this.isSubmit = isSubmit;
     },
-  
-// 쿠키를 사용한 로그인 부분
-// 로그인이 성공했을 때 쿠키에 토큰와 userId를 저장한다.
+
+    // 쿠키를 사용한 로그인 부분
+    // 로그인이 성공했을 때 쿠키에 토큰와 userId를 저장한다.
     onLogin() {
       if (this.email.length >= 0 && !EmailValidator.validate(this.email)) {
         // console.log('이메일 확인')
@@ -229,6 +222,20 @@ export default {
 
 label {
   color: black;
+}
+
+.logo_margin {
+  margin-left: 150px;
+  margin-top: 100px;
+}
+
+.sns-login_bottom {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+
+.email_margin {
+  margin-top: 40px;
 }
 
 .container {

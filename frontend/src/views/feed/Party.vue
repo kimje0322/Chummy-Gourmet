@@ -10,16 +10,20 @@
       horizontal
     >
       <v-btn-toggle v-model="text" tile color="deep-purple accent-3" group>
-        <v-btn value="center">취소</v-btn>
+        <!-- <v-col cols="6"> -->
+          <v-btn @click="$router.go(-1)" value="center">취소</v-btn>
+        <!-- </v-col> -->
 
-        <v-btn value="right" @click="meetUp">생성</v-btn>
+        <!-- <v-col cols="6"> -->
+          <v-btn value="right" @click="meetUp">생성</v-btn>
+        <!-- </v-col> -->
       </v-btn-toggle>
     </v-bottom-navigation>
     <v-app>
       <v-toolbar-title>
         <v-toolbar dark>
           <a @click="$router.go(-1)">
-            <i class="fas fa-chevron-left"></i>
+            <i class="fas fa-chevron-left back"></i>
           </a>
           <v-spacer></v-spacer>
           <v-spacer></v-spacer>
@@ -74,8 +78,8 @@
             ></v-text-field>
           </template>
           <v-date-picker
-            :max="new Date().toISOString().substr(0, 10)"
-            min="2020-01-01"
+            :min="new Date().toISOString().substr(0, 10)"
+            max="2050-01-01"
             v-model="date"
             no-title
             scrollable
@@ -184,6 +188,9 @@ export default {
 </script>
 
 <style>
+.back {
+  color: white !important;
+}
 .nothome {
   padding: 0px !important;
 }

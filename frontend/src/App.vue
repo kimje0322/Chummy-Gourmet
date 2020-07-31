@@ -5,7 +5,7 @@
         <v-card class="overflow-hidden mx-auto" height="667" max-width="375">
           <!-- <v-app-bar color="deep-blue accent-4" dense dark>
             <v-toolbar-title style="margin:auto;">돈독한 미식가</v-toolbar-title>
-          </v-app-bar> -->
+          </v-app-bar>-->
           <v-bottom-navigation
             v-if="!$route.meta.navbar"
             scroll-target="#scroll-area-2"
@@ -29,7 +29,7 @@
 
             <v-btn text color="deep-purple accent-4">
               <router-link to="/feed/main">
-              <v-icon>fas fa-list</v-icon>
+                <v-icon>fas fa-list</v-icon>
               </router-link>
             </v-btn>
 
@@ -39,21 +39,31 @@
               </router-link>
             </v-btn>
           </v-bottom-navigation>
-          <v-sheet v-if="$route.name === 'Login'"  id="scroll-area-1" class="overflow-y-auto" max-height="667">
+          <v-sheet
+            v-if="$route.name === 'Login'"
+            id="scroll-area-1"
+            class="overflow-y-auto"
+            max-height="667"
+          >
             <v-container class="home-padding" style="height: 100%;">
-              <router-view ></router-view>
+              <router-view></router-view>
             </v-container>
           </v-sheet>
           <!-- home.vue 이외 -->
-          <v-sheet v-if="$route.name !== 'Home'"  id="scroll-area-1" class="overflow-y-auto" max-height="667">
+          <v-sheet v-if="$route.name !== 'Home'"  id="scroll-area-1" class="overflow-y-auto" max-height="610">
             <v-container class="nothome" style="height: 100%;">
-              <router-view ></router-view>
+              <router-view></router-view>
             </v-container>
           </v-sheet>
           <!-- home -->
-          <v-sheet v-if="$route.name === 'Home'"  id="scroll-area-1" class="overflow-y-auto" max-height="667">
+          <v-sheet
+            v-if="$route.name === 'Home'"
+            id="scroll-area-1"
+            class="overflow-y-auto"
+            max-height="667"
+          >
             <v-container class="home-padding" style="height: 100%;">
-              <router-view ></router-view>
+              <router-view></router-view>
             </v-container>
           </v-sheet>
           <!-- Login -->
@@ -63,29 +73,34 @@
   </div>
 </template>
 <script>
-
 const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
 // const SERVER_URL = "http://localhost:8080";
 import "./components/css/style.scss";
 import axios from "axios";
-  
+
 export default {
   name: "app",
   methods: {
+    
   },
   created() {
     //로그인 유지가 아닐경우
-    if(this.$cookie.get("loginSave")=="false"||this.$cookie.get("loginSave")==null){
+    if (
+      this.$cookie.get("loginSave") == "false" ||
+      this.$cookie.get("loginSave") == null
+    ) {
       //저장되어있는 쿠키를 제거한다.
       this.$cookie.delete("accesstoken");
       this.$cookie.delete("userId");
     }
     //로그인 유지일 경우
-    else{
+    else {
       //새 토큰을 받아온다.
-       axios
+      axios
         .get(
-          `${SERVER_URL}/account/loginSave?email=${this.$cookie.get('useremail')}`
+          `${SERVER_URL}/account/loginSave?email=${this.$cookie.get(
+            "useremail"
+          )}`
         )
 
         .then((response) => {
@@ -105,12 +120,12 @@ export default {
         });
     }
   }
+
 };
-  
 </script>
 
 <style>
-  .home-padding {
-    padding: 0px !important;
-  }
+.home-padding {
+  padding: 0px !important;
+}
 </style>

@@ -1,9 +1,31 @@
 <template>
-<v-app>
-  <div class="feed newsfeed">
-    <div class="wrapB">
-      <!-- 상단 탭 시작 -->
-      <div class="row" style="height : 40px">
+  <v-app>
+    <div class="feed newsfeed">
+      <div class="wrapB">
+        <v-combobox
+          solo
+          v-model="model"
+          :items="items"
+          :search-input.sync="search"
+          hide-selected
+          label="검색어를 입력하세요."
+          multiple
+          persistent-hint
+          small-chips
+        >
+          <template v-slot:no-data>
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>
+                  No results matching "
+                  <strong>{{ search }}</strong>".
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
+        </v-combobox>
+        <!-- 상단 탭 시작 -->
+        <!-- <div class="row" style="height : 40px">
         <div class="col" style="text-align : center;">
           <div class="like likeScrap">
           <svg
@@ -41,10 +63,7 @@
               d="M448 0H64C28.7 0 0 28.7 0 64v288c0 35.3 28.7 64 64 64h96v84c0 7.1 5.8 12 12 12 2.4 0 4.9-.7 7.1-2.4L304 416h144c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64zm16 352c0 8.8-7.2 16-16 16H288l-12.8 9.6L208 428v-60H64c-8.8 0-16-7.2-16-16V64c0-8.8 7.2-16 16-16h384c8.8 0 16 7.2 16 16v288z"
             />
           </svg>
-          <!-- <i class="far fa-comment-alt icon"></i> -->
-        
         </div>
-        <!---->
         </div>
         <div class="col" style="text-align : center">
           <div class="share">
@@ -65,16 +84,18 @@
           </svg>
         </div>
         </div>
-      </div>
-  <!-- 상단 탭 종료 -->
-      <input type="text" style="width : 100%;" placeholder="검색">      
-      <InputComponent />
-      <br><br>
-      <FeedItem />
-      <FeedItem />
-      <FeedItem />
-      <FeedItem />
-       <v-bottom-navigation
+        </div>-->
+        <!-- 상단 탭 종료 -->
+        <!-- <input type="text" style="width : 100%;" placeholder="검색" /> -->
+        <InputComponent />
+        <InputComponent />
+        <InputComponent />
+        <InputComponent />
+        <FeedItem />
+        <FeedItem />
+        <FeedItem2 />
+        <FeedItem3 />
+        <!-- <v-bottom-navigation
        scroll-target="#scroll-area-2"
       hide-on-scroll
       scroll-threshold="500"
@@ -97,10 +118,10 @@
         <span>Nearby</span>
         <v-icon>mdi-map-marker</v-icon>
       </v-btn>
-    </v-bottom-navigation>
+        </v-bottom-navigation>-->
+      </div>
     </div>
-  </div>
-</v-app>
+  </v-app>
 </template>
 
 <script>
@@ -108,13 +129,23 @@ import { mapState } from "vuex";
 import "../../components/css/feed/feed-item.scss";
 import "../../components/css/feed/newsfeed.scss";
 import FeedItem from "../../components/feed/FeedItem.vue";
+import FeedItem2 from "../../components/feed/FeedItem2.vue";
+import FeedItem3 from "../../components/feed/FeedItem3.vue";
+
 import TextareaComponent from "../../components/common/Textarea";
 import InputComponent from "../../components/common/Input";
 
 export default {
+  data: () => ({
+    items: [],
+    model: [],
+    search: null,
+
+  }),
+
   props: ["keyword"],
 
-  components: { FeedItem,InputComponent }
+  components: { FeedItem, FeedItem2, FeedItem3, InputComponent },
 };
 </script>
 

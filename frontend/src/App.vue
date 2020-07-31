@@ -28,7 +28,7 @@
             </v-btn>
 
             <v-btn text color="deep-purple accent-4">
-              <router-link to="/feed/main">
+              <router-link to="/curator">
                 <v-icon>fas fa-list</v-icon>
               </router-link>
             </v-btn>

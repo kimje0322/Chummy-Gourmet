@@ -64,10 +64,11 @@
 > 회원가입 후 서비스 이용 가능하며, 로그인 후 사용자 위치 기반 지도를 보여줍니다. 지도내에 생성된 __meetup__ 내용을 확인할 수 있습니다. __meetup__ 생성을 원할시 `+` 버튼을 눌러 내용 입력하여 생성가능합니다. 또한, 맛집 리스트와 상세 리뷰 및 마이페이지 기능까지 확인할 수 있습니다.
 
 1. 회원가입
-   ![](img/join.png)
-
+   
+![](img/join.png)
    
 
+   
 2. 로그인
 
    ![](img/login.png)
@@ -90,7 +91,6 @@
 
    ![](img/review.png)
    
-
 6. 마이페이지
 
    ![](img/mypage.png)
@@ -108,14 +108,13 @@
 >
 >   ![](img/server.png)
 >   
->
-> - Frontend
+>- Frontend
 >   ![](img/frontend.png)
->
-> - Backend
+> 
+>- Backend
 >   ![](img/backend.png)
->
-> - DB
->
->   ![](img/DB.png)
+> 
+>- DB
+> 
+>  ![](img/DB.png)
 

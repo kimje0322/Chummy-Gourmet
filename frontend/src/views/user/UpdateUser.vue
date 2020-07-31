@@ -31,17 +31,17 @@
       <v-flex xs4 order-md1 order-xs3>
       </v-flex>
     </v-layout>
+    
+    <v-layout>
     <v-content>
       
-    </v-content>
-    
-    <v-content>
       <v-text-field
         color="dark"
         v-model="userNickname"
         label="Nickname"
-        outlined>
-      </v-text-field>
+        outlined
+        >
+      </v-text-field >
       
       <v-text-field 
         color="dark"
@@ -50,7 +50,8 @@
         :type="show1 ? 'text' : 'password'"
         @click:append="show1 = !show1"
         label="Password" 
-        outlined>
+        outlined
+        >
       </v-text-field>
 
       <v-text-field 
@@ -62,13 +63,13 @@
 
       <v-btn
         block
-        @click="updateUser"
+        @click="checkForm"
       >
         프로필 수정
       </v-btn>
     </v-content>
-    
-    <v-content>
+    </v-layout>
+    <v-layout>
       <v-list>
         <v-list-item-title>프로필 정보</v-list-item-title>
         <v-list-item-content>
@@ -80,18 +81,25 @@
           <v-list-item-title>{{user.userPhone}}</v-list-item-title>
         </v-list-item-content>
       </v-list>
-    </v-content>
+    </v-layout>
   </v-app>
 </template>
 
 <script>
-
+import PV from "password-validator";
 import axios from "axios";
-const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
+//const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "http://localhost:8080";
+
 
 export default {
   data: () => {
     return {
+      passwordSchema: new PV(),
+      nickName: "",
+      error: {
+        nickName: true,
+      },
       show1: false,
       user : {},
       userNickname : "",
@@ -100,11 +108,48 @@ export default {
     };
   },
   methods: {
+    checkpwd() {
+      
+    },
+    checkForm() {
+      this.error.nickName = false;
+      this.updateUser();
+    },
     updateUser (){
-      alert("수정하러 함 가보제이(코딩중)");
+      if (this.userPwd.length > 0 && !this.passwordSchema.validate(this.userPwd))
+        this.$alert("영문,숫자 포함 8 자리이상이어야 합니다.");
+      else{
+        axios
+        .put(
+          `${SERVER_URL}/userpage/updateuser?userId=${this.user.userId}&userNickname=${this.userNickname}&userPwd=${this.userPwd}&userComment=${this.userComment}`
+        )
+        .then((response) => {
+          if(response.data.data == "isExistNickname"){
+            this.$alert("사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.");
+              
+          }
+          else{
+            // 정상 동작
+            this.$alert("수정완료");
+            this.$router.go(-1);
+          }
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });  
+      }
     }
   },
   created(){
+    this.passwordSchema
+      .is()
+      .min(8)
+      .is()
+      .max(100)
+      .has()
+      .digits()
+      .has()
+      .letters();
     axios
       .get(
         `${SERVER_URL}/userpage/getuser?userId=${this.$cookie.get("userId")}`

@@ -42,7 +42,7 @@
               <v-icon>mdi-account-multiple</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>Meet Up(x)</v-list-item-title>
+              <v-list-item-title>Meet Up()</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -51,7 +51,7 @@
               <v-icon>mdi-star</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>favorite(x)</v-list-item-title>
+              <v-list-item-title>favorite()</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -60,7 +60,7 @@
               <v-icon>mdi-account-plus</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>팔로우요청(x)</v-list-item-title>
+              <v-list-item-title>팔로우요청()</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -69,7 +69,7 @@
               <v-icon>mdi-folder</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>스크랩(x)</v-list-item-title>
+              <v-list-item-title>스크랩()</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -78,7 +78,7 @@
               <v-icon>mdi-account-box</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>회원정보 설정(o)</v-list-item-title>
+              <v-list-item-title>회원정보 설정()</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -87,7 +87,7 @@
               <v-icon>mdi-logout</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>로그아웃(o)</v-list-item-title>
+              <v-list-item-title>로그아웃()</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>

@@ -44,7 +44,6 @@
         <v-btn
           width="100%"
           @click="onLogin"
-          class="dfddf"
           v-bind:class="{error : error.password||error.email||email.length<=0||password.length<=0}"
         >로그인</v-btn>
 
@@ -207,6 +206,7 @@ export default {
 
 
 <style scoped>
+
 .login-entire {
   padding: 0;
 }

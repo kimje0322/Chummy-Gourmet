@@ -134,13 +134,31 @@ public class UserPageController {
 	
 	// 사용자의 유저정보 변경
 	@PutMapping("/userpage/updateuser")
-	@ApiOperation(value = "[유저페이지] 사용자의 유저정보 변경(닉네임, 비밀번호, 한줄소개)")
+	@ApiOperation(value = "[유저페이지] 사용자의 유저정보 변경(닉네임(중복검사실시), 비밀번호, 한줄소개)")
 	public Object updateuser(@RequestParam(required = true) final String userId,
 			@RequestParam(required = true) final String userNickname,
 			@RequestParam(required = true) final String userPwd,
 			@RequestParam(required = true) final String userComment) {
+		
+		User originUser = null;
 		final BasicResponse result = new BasicResponse();
-		// 계정 설정 화면에서는 닉네임, 비밀번호, 한줄 소개 변경 가능
+		boolean isExistNickname = false;
+      
+		// 닉네임 중복 검사
+		originUser = userdao.getUserByUserNickname(userNickname);
+		System.out.println(originUser);
+		if (originUser != null && originUser.getUserId() != userId)
+			isExistNickname = true;
+
+		// 기존에 가입한 동일 닉네임이 있다면
+		if (isExistNickname) {
+			result.status = false;
+			result.data = "isExistNickname";
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		}
+      
+		// 기존 유저가 없다면
+		else {
 			User user = new User();
 			user = userdao.getUserByUserId(userId);
 			user.setUserNickname(userNickname);
@@ -155,6 +173,7 @@ public class UserPageController {
 				result.status = false;
 				result.data = "fail";
 			}
+		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	

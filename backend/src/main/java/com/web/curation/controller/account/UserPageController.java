@@ -4,6 +4,7 @@ package com.web.curation.controller.account;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,13 +13,16 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dao.user.UserDao;
+import com.web.curation.dao.user.UserDetailDao;
 import com.web.curation.dao.user.UserPageDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.user.User;
+import com.web.curation.model.user.UserDetail;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -39,6 +43,33 @@ public class UserPageController {
 	@Autowired
 	UserDao userdao;
 	
+	@Autowired
+	UserDetailDao userDetailDao;
+	
+	// 사용자의 유저 추가정보 업데이트
+	@PutMapping("/userpage/putuserInfo")
+	@ApiOperation(value = "[유저페이지] 사용자의 유저추가정보 업데이트")
+	public Object putUserInfo(@RequestBody Map<String, Object> param) {
+		UserDetail userdetail = new UserDetail();
+		String userId = (String)param.get("userId");
+		ArrayList<String>list = (ArrayList<String>) param.get("userFavorite");
+		String userFavorite = param.get("userFavorite").toString();
+		String userPersonality = param.get("userPersonality").toString();
+		String userInterest = param.get("userInterest").toString();
+		int num = userDetailDao.setUserDetailByUserId(userId,userFavorite,userPersonality,userInterest);
+		return num;
+	}
+		
+	// 사용자의 유저 추가정보 가져오기
+	@GetMapping("/userpage/getuserInfo")
+	@ApiOperation(value = "[유저페이지] 사용자의 유저추가정보 가져오기")
+	public Object getUserInfo(@RequestParam(required = true) final String userId) {
+		UserDetail userdetail = new UserDetail();
+		userdetail = userDetailDao.getUserDetailByUserId(userId);
+		
+		return userdetail;
+	}
+		
 	// 사용자가 팔로잉 하는 유저 리스트를 가져온다.
 	@GetMapping("/userpage/getfollowinglist")
 	@ApiOperation(value = "[유저페이지] 내가 팔로잉하는 유저 리스트 가져옴")
@@ -176,6 +207,7 @@ public class UserPageController {
 		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+
 	
 	@GetMapping("/userpage/getfollowingrequest")
 	@ApiOperation(value = "[유저페이지] 사용자를 팔로잉요청한 리스트 가져옴")

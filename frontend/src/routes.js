@@ -24,6 +24,7 @@ import FollowList from './components/common/Followlist.vue'
 
 //추가
 import UpdateUser from './views/user/UpdateUser.vue'
+import UpdateUserInfo from './views/user/UpdateUserInfo.vue'
 
 Vue.use(VueRouter);
 export default new VueRouter({
@@ -40,6 +41,11 @@ export default new VueRouter({
             path: '/user/updateUser',
             name: 'UpdateUser',
             component: UpdateUser,
+        },
+        {
+            path: '/user/updateUserInfo',
+            name: 'UpdateUserInfo',
+            component: UpdateUserInfo,
         },
         {
             path: '/user/join',

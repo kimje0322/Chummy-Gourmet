@@ -42,7 +42,7 @@
               <v-icon>mdi-account-multiple</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>Meet Up()</v-list-item-title>
+              <v-list-item-title>Meet Up</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -51,7 +51,7 @@
               <v-icon>mdi-star</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>favorite()</v-list-item-title>
+              <v-list-item-title>favorite</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -60,7 +60,7 @@
               <v-icon>mdi-account-plus</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>팔로우요청()</v-list-item-title>
+              <v-list-item-title>팔로우요청</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -69,7 +69,7 @@
               <v-icon>mdi-folder</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>스크랩()</v-list-item-title>
+              <v-list-item-title>스크랩</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -78,7 +78,16 @@
               <v-icon>mdi-account-box</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>회원정보 설정()</v-list-item-title>
+              <v-list-item-title>회원정보 설정</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item @click="updateUserInfo">
+            <v-list-item-icon>
+              <v-icon>mdi-account-box</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>추가정보 설정</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -87,7 +96,7 @@
               <v-icon>mdi-logout</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>로그아웃()</v-list-item-title>
+              <v-list-item-title>로그아웃</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
@@ -101,7 +110,7 @@
 import axios from "axios";
 
 const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
-
+// const SERVER_URL = "http://localhost:8080";
 export default {
   data () {
     return {
@@ -112,6 +121,9 @@ export default {
   methods:{
     updateUser(){
       this.$router.push('/user/updateUser');
+    },
+    updateUserInfo(){
+      this.$router.push('/user/updateUserInfo');
     },
     logout (){
       this.$confirm("로그아웃 하시겠습니까?").then(() => {

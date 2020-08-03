@@ -15,19 +15,17 @@
     <!-- 햄버거? 눌렀을 때 -->
     <v-navigation-drawer dark v-model="drawer" app right>
       <v-system-bar></v-system-bar>
-      <v-list>
-        <v-list-item>
-          <v-list-item-avatar>
-            <v-img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR_doKnSS8nyn0SYPV-J4cQgaE7uHtbsKlB9A&usqp=CAU"></v-img>
-          </v-list-item-avatar>
-        </v-list-item>
-
+      <v-list >
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-title class="title">{{user.userName}}</v-list-item-title><br>
+            <v-list-item-title class="title">{{user.userNickname}}</v-list-item-title><br>
             <v-list-item-subtitle>{{user.userEmail}}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
+
+          <v-btn @click="updateUser" block>
+            프로필 수정
+          </v-btn>
       </v-list>
 
       <v-divider></v-divider>
@@ -54,11 +52,15 @@
 
           <v-list-item @click="followRequestList">
             <v-list-item-icon>
-              <v-icon>mdi-account-plus</v-icon>
+              <v-badge v-model="show" color="indigo">
+                <span slot="badge">{{user.followingRequestCount}}</span>
+                <v-icon>mdi-account-plus</v-icon>
+              </v-badge>
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title>팔로우요청</v-list-item-title>
             </v-list-item-content>
+            
           </v-list-item>
 
           <v-list-item>
@@ -67,15 +69,6 @@
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title>스크랩</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-list-item @click="updateUser">
-            <v-list-item-icon>
-              <v-icon>mdi-account-box</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>회원정보 설정</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -106,14 +99,19 @@
 <script>
 import axios from "axios";
 
-// const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
-const SERVER_URL = "http://localhost:8080";
+const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "http://localhost:8080";
 export default {
   data () {
     return {
       user:{},
       drawer: null,
+      show: false,
+      badgeData: { value: '!' },
+      followCount :"",
     }
+  },
+  computed: {
   },
   methods:{
     followRequestList(){
@@ -141,6 +139,9 @@ export default {
       )
       .then((res) => {
         this.user = res.data;
+        if(this.user.followingRequestCount != 0){
+          this.show = true;
+        }
       })
   }
 };

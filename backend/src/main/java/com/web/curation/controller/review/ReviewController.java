@@ -18,7 +18,7 @@ import com.web.curation.dao.review.ReviewCommentDao;
 import com.web.curation.dao.review.ReviewDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
-import com.web.curation.model.meetup.MeetUp;
+import com.web.curation.model.meetup.Meetup;
 import com.web.curation.model.review.Restaurant;
 import com.web.curation.model.review.Review;
 import com.web.curation.model.review.ReviewComment;
@@ -119,8 +119,7 @@ public class ReviewController {
 		//3. 리뷰 아이디로 밋업 객체 가져오기
 		//4. 리뷰아이디로 파티원 객체 가져오기 //없어도됨
 		//5. 리뷰 아이디로 파티원 코멘트 가져오기
-		System.out.println(id);
-		Optional<MeetUp> meetUp = meetUpDao.selectMeetUpById(id);
+		Optional<Meetup> meetUp = meetUpDao.selectMeetUpById(id);
 		List<ReviewComment> comment = reviewCommentDao.selectReviewCommentByReviewId(id);
 		System.out.println(meetUp.get());
 		Map<String, Object> map = new HashMap<String, Object>();

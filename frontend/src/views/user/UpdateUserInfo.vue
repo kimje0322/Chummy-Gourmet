@@ -1,63 +1,14 @@
 <template>
-  <div>
-    <v-toolbar dark>
-      <!-- 중앙정렬 하기 위해 2개씀 -->
-      <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
-      <!-- <v-spacer></v-spacer> -->
-      <p class="my-auto">추가정보 입력</p>
-      <v-spacer></v-spacer>
-    </v-toolbar>
-    <div class="entire">
-    <!-- <button @click="getCheckedlists">체크된 정보</button> -->
-    <!-- 성별 -->
-    <div class="label-with-input">
-      <label class="userInfo">성별</label>
-
-      <ul class="select-gender">
-        <li>
-          <input type="radio" v-model="checkedGender" value="1" id="man" name="gender" />
-          <label for="man" class="gender">남성</label>
-        </li>
-        <li>
-          <input type="radio" v-model="checkedGender" value="2" id="woman" name="gender" />
-          <label for="woman" class="gender">여성</label>
-        </li>
-        <div class="error-text" v-if="error.gender">{{error.gender}}</div>
-      </ul>
-    </div>
-    <!-- 나이 -->
-
-    <div class="label-with-input">
-      <label class="userInfo">나이</label>
-      <ul class="select-gender">
-        <li>
-          <input type="radio" v-model="checkedAge" value="1" id="10" name="age" />
-          <label for="10" class="age">10대</label>
-        </li>
-        <li>
-          <input type="radio" v-model="checkedAge" value="2" id="20" name="age" />
-          <label for="20" class="age">20대</label>
-        </li>
-        <li>
-          <input type="radio" v-model="checkedAge" value="3" id="30" name="age" />
-          <label for="30" class="age">30대</label>
-        </li>
-        <li>
-          <input type="radio" v-model="checkedAge" value="4" id="40" name="age" />
-          <label for="40" class="age">40대</label>
-        </li>
-        <li>
-          <input type="radio" v-model="checkedAge" value="5" id="50" name="age" />
-          <label for="50" class="age">50대</label>
-        </li>
-        <li>
-          <input type="radio" v-model="checkedAge" value="6" id="60" name="age" />
-          <label for="60" class="age">60 +</label>
-        </li>
-        <div class="error-text" v-if="error.age">{{error.age}}</div>
-      </ul>
-    </div>
-
+  <div id="joininfo">
+    <v-toolbar-title >
+      <v-toolbar dark>
+        <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
+        <v-spacer></v-spacer>
+        <p class="my-auto">Profile 수정</p>
+        <v-spacer></v-spacer>
+        <v-spacer></v-spacer>
+      </v-toolbar>
+    </v-toolbar-title>
     <!-- 선호 음식 -->
     <div class="label-with-input">
       <label class="userInfo">선호음식</label>
@@ -317,17 +268,18 @@
     </div>
     <!-- <span class="selectInfo">게임</span> -->
     <!-- <router-link to="/user/finishjoin"> -->
-    <v-btn color="warning" class="next-btn" @click="signUp">
-      <h4>제출</h4>
+    <v-btn color="warning" class="next-btn" @click="update">
+      <h4>수정</h4>
     </v-btn>
     <!-- </router-link> -->
-    </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+
 const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "http://localhost:8080";
 
 export default {
   name: "JoinInfo",
@@ -338,6 +290,7 @@ export default {
       checkedFoods: [],
       checkedPersonalities: [],
       checkedInterests: [],
+      userId:"",
       error: {
         gender: false,
         age: false,
@@ -372,9 +325,89 @@ export default {
       else this.error.interests = false;
     },
   },
-  methods: {
+  methods:{
+    update(){
+      let userData = {
+        userId : this.userId,
+        userFavorite : this.checkedFoods,
+        userPersonality : this.checkedPersonalities,
+        userInterest  : this.checkedInterests
+      };
+      axios
+        .put(
+          `${SERVER_URL}/userpage/putuserInfo`, userData
+        )
+        .then((response)=>{
+          if(response.data){
+            alert("수정완료");
+            this.$router.go(-1);
+          }
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
+    }
+  },
+   created() {
+    this.userId = this.$cookie.get("userId")
+    axios
+      .get(
+        `${SERVER_URL}/userpage/getuserInfo?userId=${this.userId}`
+      )
+      .then((response) => {
+        // alert(response.data.userFavorite);
+        var tmp = response.data.userFavorite.replace('[','').replace(']',''); 
+        var s = "";
+        for (let i = 0; i < tmp.length; i++) {
+          if(tmp[i] == ','){
+            this.checkedFoods.push(s);
+            s = "";
+          }
+          else if(tmp[i] == ' '){
+            continue;
+          }
+          else{
+            s += tmp[i];
+          }
+        }
+        this.checkedFoods.push(s);
+        tmp = response.data.userPersonality.replace('[','').replace(']',''); 
+        s = "";
+        for (let i = 0; i < tmp.length; i++) {
+          if(tmp[i] == ','){
+            this.checkedPersonalities.push(s);
+            s = "";
+          }
+          else if(tmp[i] == ' '){
+            continue;
+          }
+          else{
+            s += tmp[i];
+          }
+        }
+        this.checkedPersonalities.push(s);
+
+        tmp = response.data.userInterest.replace('[','').replace(']',''); 
+        s = "";
+        for (let i = 0; i < tmp.length; i++) {
+          if(tmp[i] == ','){
+            this.checkedInterests.push(s);
+            s = "";
+          }
+          else if(tmp[i] == ' '){
+            continue;
+          }
+          else{
+            s += tmp[i];
+          }
+        }
+        this.checkedInterests.push(s);
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+    },
     isVaildJoinInfo() {
-      
       if (this.checkedGender == "") {
         this.error.gender = "성별을 선택해주세요.";
         return false;
@@ -397,49 +430,10 @@ export default {
       }
       return true;
     },
-    signUp() {
-      if(this.isVaildJoinInfo()){
-        var newUser = {
-          userEmail: this.$route.params.email,
-          userName: this.$route.params.name,
-          userPwd: this.$route.params.password,
-          userNickname: this.$route.params.nickName,
-          userGender: this.checkedGender,
-          userAge: this.checkedAge,
-          userFavorite: this.checkedFoods,
-          userPersonality: this.checkedPersonalities,
-          userInterest: this.checkedInterests,
-          userPhone: "01000000000",
-        };
-        axios
-          .post(
-            `${SERVER_URL}/account/signup/`, newUser
-            // `http://localhost:8080/account/signup/`, newUser
-          )
-          .then((response) => {
-            var data = response.data.data;
-  
-            if (data == "success") {
-              alert("가입성공");
-              this.$router.push("/login");
-            } else {
-              alert("가입실패");
-            }
-          })
-          .catch((error) => {
-            alert("가입실패");
-            console.log(error.response);
-          });
-      }
-    },
-  },
 };
 </script>
 
 <style scoped>
-.entire {
-  padding: 18px;
-}
 .title {
   text-align: center;
 }
@@ -466,7 +460,7 @@ img {
 .next-btn {
   margin: 20px 20px;
   height: 200px;
-  width: 85%;
+  width: 80%;
   text-align: center;
 }
 

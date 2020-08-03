@@ -37,9 +37,30 @@ public class Review {
 	private String date;
 	@Column(name = "rest_id")
 	private String restid;
+	@Column(name = "meetup_id")
+	private String meetupid;
 	
 	
-	
+	public String getTitle() {
+		return title;
+	}
+
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+
+	public String getMeetupid() {
+		return meetupid;
+	}
+
+
+	public void setMeetupid(String meetupid) {
+		this.meetupid = meetupid;
+	}
+
+
 	@Override
 	public String toString() {
 		return "Review [id=" + id + ", name=" + name + ", category=" + category + ", writer=" + writer + ", content="

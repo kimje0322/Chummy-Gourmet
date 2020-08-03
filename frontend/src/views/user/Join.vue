@@ -40,7 +40,7 @@
           id="password"
           :type="passwordType"
           placeholder="비밀번호를 입력하세요."
-        />
+        />A
         <label for="password">비밀번호</label>
         <div class="error-text" v-if="error.password">{{error.password}}</div>
       </div>

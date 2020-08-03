@@ -20,14 +20,16 @@ import Map from './views/map/map.vue'
 import MapParty from './views/map/party.vue'
 import Home from './views/user/Home.vue'
 import FollowList from './components/common/Followlist.vue'
-
+import FollowRequestList from './components/common/FollowRequestList.vue'
 
 //추가
 import UpdateUser from './views/user/UpdateUser.vue'
+import UpdateUserInfo from './views/user/UpdateUserInfo.vue'
 
 Vue.use(VueRouter);
 export default new VueRouter({
-    routes: [{
+    routes: [
+        {
             path: '/login',
             name: 'Login',
             component: Login,
@@ -35,12 +37,23 @@ export default new VueRouter({
                 navbar: true
             }
         },
-        //추가
+        //승범 추가
+        {
+            path: '/user/FollowRequestList',
+            name: 'FollowRequestList',
+            component: FollowRequestList,
+        },
         {
             path: '/user/updateUser',
             name: 'UpdateUser',
             component: UpdateUser,
         },
+        {
+            path: '/user/updateUserInfo',
+            name: 'UpdateUserInfo',
+            component: UpdateUserInfo,
+        },
+        // 여기까지
         {
             path: '/user/join',
             name: 'Join',

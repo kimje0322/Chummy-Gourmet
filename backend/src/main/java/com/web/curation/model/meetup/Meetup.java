@@ -5,6 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Null;
+
+import org.springframework.lang.Nullable;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MeetUp {
+public class Meetup {
 	@Id
 	@Column(name = "meetup_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +33,28 @@ public class MeetUp {
 	private String location;
 	@Column(name = "meetup_date")
 	private String date;
+	@Column(name = "meetup_personnel")
+	private String personnel;
+	@Column(name = "meetup_create_date")
+	private String createDate;
+
+	public Meetup() {
+	}
+
+	public Meetup(String id, String master, String title, String content, String location, String date,
+			String personnel) {
+		super();
+		this.id = id;
+		this.master = master;
+		this.title = title;
+		this.content = content;
+		this.location = location;
+		this.date = date;
+		this.personnel = personnel;
+	}
+
+
+
 
 	public String getId() {
 		return id;
@@ -79,10 +104,26 @@ public class MeetUp {
 		this.date = date;
 	}
 
+	public String getPersonnel() {
+		return personnel;
+	}
+
+	public void setPersonnel(String personnel) {
+		this.personnel = personnel;
+	}
+
+	public String getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
+	}
+
 	@Override
 	public String toString() {
 		return "MeetUp [id=" + id + ", master=" + master + ", title=" + title + ", content=" + content + ", location="
-				+ location + ", date=" + date + "]";
+				+ location + ", date=" + date + ", personnel=" + personnel + ", createDate=" + createDate + "]";
 	}
 
 }

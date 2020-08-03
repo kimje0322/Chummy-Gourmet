@@ -47,22 +47,7 @@
               </router-link>
             </v-btn>
           </v-bottom-navigation>
-          <v-sheet
-            v-if="$route.name === 'Login'"
-            id="scroll-area-1"
-            class="overflow-y-auto"
-            max-height="667"
-          >
-            <v-container class="home-padding" style="height: 100%;">
-              <router-view></router-view>
-            </v-container>
-          </v-sheet>
-          <!-- home.vue 이외 -->
-          <v-sheet v-if="$route.name !== 'Home'"  id="scroll-area-1" class="overflow-y-auto" max-height="610">
-            <v-container class="nothome" style="height: 100%;">
-              <router-view></router-view>
-            </v-container>
-          </v-sheet>
+
           <!-- home -->
           <v-sheet
             v-if="$route.name === 'Home'"
@@ -74,7 +59,26 @@
               <router-view></router-view>
             </v-container>
           </v-sheet>
+
           <!-- Login -->
+          <v-sheet
+            v-if="$route.name === 'Login'"
+            id="scroll-area-1"
+            class="overflow-y-auto"
+            max-height="667"
+          >
+            <v-container class="home-padding" style="height: 100%;">
+              <router-view></router-view>
+            </v-container>
+          </v-sheet>
+          
+          <!-- home, login 이외 -->
+          <v-sheet v-if="$route.name !== 'Home'"  id="scroll-area-1" class="overflow-y-auto" max-height="610">
+            <v-container class="nothome" style="height: 100%;">
+              <router-view></router-view>
+            </v-container>
+          </v-sheet>
+          
         </v-card>
       </v-main>
     </v-app>

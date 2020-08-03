@@ -13,7 +13,7 @@
     </v-toolbar>
     
     <!-- 햄버거? 눌렀을 때 -->
-    <v-navigation-drawer dark v-model="drawer" temporary absolute right>
+    <v-navigation-drawer dark v-model="drawer" app right>
       <v-system-bar></v-system-bar>
       <v-list>
         <v-list-item>
@@ -27,9 +27,6 @@
             <v-list-item-title class="title">{{user.userName}}</v-list-item-title><br>
             <v-list-item-subtitle>{{user.userEmail}}</v-list-item-subtitle>
           </v-list-item-content>
-          <!-- <v-list-item-action>
-            <v-icon>mdi-menu-down</v-icon>
-          </v-list-item-action> -->
         </v-list-item>
       </v-list>
 
@@ -55,7 +52,7 @@
             </v-list-item-content>
           </v-list-item>
 
-          <v-list-item>
+          <v-list-item @click="followRequestList">
             <v-list-item-icon>
               <v-icon>mdi-account-plus</v-icon>
             </v-list-item-icon>
@@ -109,8 +106,8 @@
 <script>
 import axios from "axios";
 
-const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
-// const SERVER_URL = "http://localhost:8080";
+// const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "http://localhost:8080";
 export default {
   data () {
     return {
@@ -119,6 +116,9 @@ export default {
     }
   },
   methods:{
+    followRequestList(){
+      this.$router.push('/user/FollowRequestList');
+    },
     updateUser(){
       this.$router.push('/user/updateUser');
     },

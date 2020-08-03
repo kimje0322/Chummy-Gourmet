@@ -17,7 +17,14 @@
           >
             <v-btn class="nav-btn" text color="deep-purple accent-4">
               <router-link to="/map">
-                <v-icon>fas fa-search</v-icon>
+                <!-- <v-icon>fas fa-search</v-icon> -->
+                <v-icon>mdi-map-marker-radius</v-icon>
+              </router-link>
+            </v-btn>
+
+            <v-btn text color="deep-purple accent-4">
+              <router-link to=/newsfeed>
+                <v-icon>mdi-history</v-icon>
               </router-link>
             </v-btn>
 
@@ -29,7 +36,8 @@
 
             <v-btn text color="deep-purple accent-4">
               <router-link to="/curator">
-                <v-icon>fas fa-list</v-icon>
+                <!-- <v-icon>fas fa-list</v-icon> -->
+                <v-icon>mdi-magnify</v-icon>
               </router-link>
             </v-btn>
 

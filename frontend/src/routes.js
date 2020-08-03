@@ -20,6 +20,7 @@ import Map from './views/map/map.vue'
 import MapParty from './views/map/party.vue'
 import Home from './views/user/Home.vue'
 import FollowList from './components/common/Followlist.vue'
+import NewsFeed from './views/feed/newsfeed.vue'
 
 
 //추가
@@ -35,7 +36,7 @@ export default new VueRouter({
                 navbar: true
             }
         },
-        //추가
+
         {
             path: '/user/updateUser',
             name: 'UpdateUser',
@@ -148,6 +149,11 @@ export default new VueRouter({
             component: FollowList,
             meta: { transitionName: 'slide' },
         },
+        {
+            path: '/newsfeed',
+            name: 'NewsFeed',
+            component: NewsFeed,
+        }
 
     ]
 });

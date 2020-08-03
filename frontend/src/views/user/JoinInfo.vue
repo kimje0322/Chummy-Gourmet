@@ -1,7 +1,13 @@
 <template>
-  <div id="joininfo">
-    <h2 class="title">추가정보 입력</h2>
-    <hr />
+  <div>
+    <v-toolbar dark>
+      <!-- 중앙정렬 하기 위해 2개씀 -->
+      <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
+      <!-- <v-spacer></v-spacer> -->
+      <p class="my-auto">추가정보 입력</p>
+      <v-spacer></v-spacer>
+    </v-toolbar>
+    <div class="entire">
     <!-- <button @click="getCheckedlists">체크된 정보</button> -->
     <!-- 성별 -->
     <div class="label-with-input">
@@ -315,6 +321,7 @@
       <h4>제출</h4>
     </v-btn>
     <!-- </router-link> -->
+    </div>
   </div>
 </template>
 
@@ -430,6 +437,9 @@ export default {
 </script>
 
 <style scoped>
+.entire {
+  padding: 18px;
+}
 .title {
   text-align: center;
 }
@@ -456,7 +466,7 @@ img {
 .next-btn {
   margin: 20px 20px;
   height: 200px;
-  width: 80%;
+  width: 85%;
   text-align: center;
 }
 

@@ -133,7 +133,7 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style>
   .my-auto {
       font-family: 'Jua', sans-serif;
   }

@@ -1,7 +1,7 @@
 
 <template>
   <div class="map_wrap">
-    <div id="map" style="height : 590px">map</div>
+    <div id="map" style="height : 590px; position:'unset'">map</div>
     <div class="custom_zoomcontrol radius_border">
       <span @click="zoomIn">
         <img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_plus.png" alt="확대" />
@@ -169,7 +169,6 @@ export default {
 }
 
 .map_wrap {
-  position: relative;
   overflow: hidden;
   width: 100%;
   height: 667px;

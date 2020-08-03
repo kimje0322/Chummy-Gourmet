@@ -16,7 +16,7 @@ public interface MeetUpDao extends JpaRepository<Meetup, String> {
 	@Query(value = "SELECT meetup_id,user_name AS meetup_master, meetup_title, meetup_content,meetup_location,meetup_date " + 
 			"FROM meetup a " + 
 			"INNER JOIN user b ON a.meetup_master = b.user_id " + 
-"where a.meetup_id = :id", nativeQuery = true)
+            "where a.meetup_id = (select meetup_id from review where review_id = :id)", nativeQuery = true)
 	Optional<Meetup> selectMeetUpById(int id);
 	
 	@Query(value = "INSERT INTO meetup "

@@ -30,6 +30,9 @@ public interface UserPageDao extends JpaRepository<UserPage, String> {
     @Query(value = "SELECT count(*) FROM follower WHERE user_id  = :userId", nativeQuery = true)
     int getUserFollowerCount(String userId);
     
+    @Query(value = "SELECT count(*) FROM following_request WHERE user_id  = :userId", nativeQuery = true)
+    int getUserFolloingRequestCount(String userId);
+    
     @Query(value = "SELECT user_comment FROM user WHERE user_id  = :userId", nativeQuery = true)
     String getUserCommentByUserId(String userId);
     
@@ -60,3 +63,5 @@ public interface UserPageDao extends JpaRepository<UserPage, String> {
     		"value (:followerId, :userId)", nativeQuery = true)
     String setUserIdByUserIdAndfollowerId(String userId, String followerId);
 }
+
+

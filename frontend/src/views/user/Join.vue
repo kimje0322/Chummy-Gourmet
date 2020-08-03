@@ -5,9 +5,15 @@
     Sub PJT I에서는 UX, 디자인 등을 포함하여 백엔드를 제외하여 개발합니다.
  -->
 <template>
-  <div class="entire" @keyup.enter="test">
-    <h2>회원 가입</h2>
-    <hr />
+  <div>
+    <v-toolbar dark>
+      <!-- 중앙정렬 하기 위해 2개씀 -->
+      <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
+      <p class="my-auto">회원가입</p>
+      <v-spacer></v-spacer>
+    </v-toolbar>
+
+    <div class="entire" @keyup.enter="test">
     <div class="form-wrap">
       <div class="input-with-label">
         <input v-model="name" id="name" placeholder="이름을 입력하세요." type="text" />
@@ -71,6 +77,7 @@
     <v-btn color="warning" class="next-btn" @click="checkFormAndSignUp">다음</v-btn>
     <!-- @click="$emit('signup', signupData)" type="submit" -->
     <!-- </router-link> -->
+    </div>
   </div>
 </template>
 
@@ -292,7 +299,13 @@ export default {
 </script>
 
 
-<style scoped>
+<style>
+.entire {
+  padding: 18px
+}
+.my-auto {
+  font-size: 20px;
+}
 /* h1 {
     margin: 0 0 10px 0;
   } */

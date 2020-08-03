@@ -1,227 +1,132 @@
 <template>
-  <div class="user join wrapC">
-    <h2>일정</h2>
-    <br />
-    <br />
-    <div class="input-group mb-3">
-      <!-- <div class="input-group-prepend">
-        <span class="input-group-text" id="basic-addon1">@</span>
-      </div>-->
-      <input
-        type="text"
-        class="form-control"
-        placeholder="제목"
-        aria-label="Username"
-        aria-describedby="basic-addon1"
-      />
-    </div>
+  <div class="user join">
+    <v-bottom-navigation
+      v-if="$route.name === 'Party'"
+      scroll-target="#scroll-area-2"
+      hide-on-scroll
+      scroll-threshold="500"
+      absolute
+      color="white"
+      horizontal
+    >
+      <v-btn-toggle v-model="text" tile color="deep-purple accent-3" group>
+        <!-- <v-col cols="6"> -->
+          <v-btn @click="$router.go(-1)" value="center">취소</v-btn>
+        <!-- </v-col> -->
 
-    <div class="input-group mb-3">
-      <!-- <div class="input-group-prepend">
-        <span class="input-group-text" id="basic-addon1">@</span>
-      </div>-->
-      <!-- <input
-        type="text"
-        class="form-control"
-        placeholder="제목"
-        aria-label="Username"
-        aria-describedby="basic-addon1"
-      />-->
-      <v-textarea solo name="input-7-4" label="일정 내용을 입력하세요."></v-textarea>
-    </div>
-
-    <v-form>
-      <v-container>
-        <v-row>
-          <v-text-field solo label="장소" append-icon="mdi-map-marker"></v-text-field>
-        </v-row>
-      </v-container>
-    </v-form>
-    <!-- modal -->
-    <v-row justify="center">
-      <!-- calendar dialog -->
-      <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn color="primary" dark v-bind="attrs" v-on="on">Calendar</v-btn>
-        </template>->
-        <!-- calendar -->
-        <v-row class="fill-height mx-auto">
-          <v-col>
-            <v-sheet height="64">
-              <v-toolbar flat color="white">
-                <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">Today</v-btn>
-                <v-btn fab text small color="grey darken-2" @click="prev">
-                  <v-icon small>mdi-chevron-left</v-icon>
-                </v-btn>
-                <v-btn fab text small color="grey darken-2" @click="next">
-                  <v-icon small>mdi-chevron-right</v-icon>
-                </v-btn>
-                <v-toolbar-title v-if="$refs.calendar">{{ $refs.calendar.title }}</v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-menu bottom right>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn outlined color="grey darken-2" v-bind="attrs" v-on="on">
-                      <span>{{ typeToLabel[type] }}</span>
-                      <v-icon right>mdi-menu-down</v-icon>
-                    </v-btn>
-                  </template>
-                  <v-list>
-                    <v-list-item @click="type = 'day'">
-                      <v-list-item-title>Day</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item @click="type = 'week'">
-                      <v-list-item-title>Week</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item @click="type = 'month'">
-                      <v-list-item-title>Month</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item @click="type = '4day'">
-                      <v-list-item-title>4 days</v-list-item-title>
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
-              </v-toolbar>
-            </v-sheet>
-            <v-sheet height="600">
-              <v-calendar
-                ref="calendar"
-                v-model="focus"
-                color="primary"
-                :events="events"
-                :event-color="getEventColor"
-                :type="type"
-                @click:event="showEvent"
-                @click:more="viewDay"
-                @click:date="viewDay"
-                @change="updateRange"
-              ></v-calendar>
-              <v-menu
-                v-model="selectedOpen"
-                :close-on-content-click="false"
-                :activator="selectedElement"
-                offset-x
-              >
-                <v-card color="grey lighten-4" min-width="350px" flat>
-                  <v-toolbar :color="selectedEvent.color" dark>
-                    <v-btn icon>
-                      <v-icon>mdi-pencil</v-icon>
-                    </v-btn>
-                    <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
-                    <v-spacer></v-spacer>
-                    <v-btn icon>
-                      <v-icon>mdi-heart</v-icon>
-                    </v-btn>
-                    <v-btn icon>
-                      <v-icon>mdi-dots-vertical</v-icon>
-                    </v-btn>
-                  </v-toolbar>
-                  <v-card-text>
-                    <span v-html="selectedEvent.details"></span>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-btn text color="secondary" @click="selectedOpen = false">Cancel</v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-menu>
-            </v-sheet>
-          </v-col>
-        </v-row>
-      </v-dialog>
-    </v-row>
-    <br />
-
-    <!-- modal/location -->
-    <!-- <div class="section">
-      <div class="article place">
-        <span class="tit">장소</span>
-        <div class="pos_right">
-          <a href="http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=722f0c506c2743378fac318284106578" class="_view_map _map_help btn_sy">
-            <span class="ico add_map"></span>
-            <strong>지도</strong>
+        <!-- <v-col cols="6"> -->
+          <v-btn value="right" @click="meetUp">생성</v-btn>
+        <!-- </v-col> -->
+      </v-btn-toggle>
+    </v-bottom-navigation>
+    <v-app>
+      <v-toolbar-title>
+        <v-toolbar dark>
+          <a @click="$router.go(-1)">
+            <i class="fas fa-chevron-left back"></i>
           </a>
-        </div>
-        <div class="pos_input">
-          <input type="text" max_length="100">
-        </div>
-      </div>
-    </div>-->
+          <v-spacer></v-spacer>
+          <v-spacer></v-spacer>
+          <p class="my-auto">Meet Up</p>
+          <v-spacer></v-spacer>
+          <v-spacer></v-spacer>
+        </v-toolbar>
+      </v-toolbar-title>
+      <br />
 
-    <!-- <div class="article date _date_time_area" style="display: block;">
-      <span class="tit"></span>
-      <div class="cont">
-        <div style="display: block;"></div>
-      </div>
-    </div>-->
-    <v-row justify="center">
-      <v-dialog v-model="dialog1 " persistent max-width="290">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn color="primary" dark v-bind="attrs" v-on="on">Location</v-btn>
-        </template>
-        <v-card>
-          <v-card-title class="headline">Location</v-card-title>
-          <img src="../../assets/images/map.png" alt />
-          <!-- <div id="map"></div> -->
-          <v-card-actions>
+      <div class="party wrapC">
+        <div class="input-group mb-3">
+          <v-text-field v-model="title" solo label="제목"></v-text-field>
+        </div>
+
+        <div class="input-group mb-3">
+          <v-textarea v-model="content" solo name="input-7-4" label="일정 내용을 입력하세요."></v-textarea>
+        </div>
+
+        <v-form>
+          <!-- <v-row> -->
+          <v-text-field
+            solo
+            label="장소"
+            :append-icon="isColor ? 'mdi-map-marker orange--text text--lighten-2' : 'mdi-map-marker'"
+            @click:append="isColor = !isColor"
+            @click:input="isClick = !isClick"
+          ></v-text-field>
+          <!-- </v-row> -->
+        </v-form>
+
+        <!-- <v-row> -->
+        <v-menu
+          ref="menu"
+          v-model="menu"
+          :close-on-content-click="false"
+          :return-value.sync="date"
+          transition="scale-transition"
+          offset-y
+          min-width="300px"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field
+              solo
+              v-model="date"
+              label="날짜"
+              :append-icon="isColor1 ? 'mdi-calendar-check orange--text text--lighten-2' : 'mdi-calendar-check'"
+              @click:append="isColor1 = !isColor1"
+              readonly
+              v-bind="attrs"
+              v-on="on"
+            ></v-text-field>
+          </template>
+          <v-date-picker
+            :min="new Date().toISOString().substr(0, 10)"
+            max="2050-01-01"
+            v-model="date"
+            no-title
+            scrollable
+          >
             <v-spacer></v-spacer>
-            <v-btn color="green darken-1" text @click="dialog1 = false">Disagree</v-btn>
-            <v-btn color="green darken-1" text @click="dialog1 = false">Agree</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-row>
+            <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
+            <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn>
+          </v-date-picker>
+        </v-menu>
+        <!-- </v-row> -->
 
-    <!-- dropdown -->
-    <v-container id="dropdown-example">
-      <v-row>
-        <v-col>
-          <p>파티 인원</p>
-          <v-overflow-btn class="my-2" :items="dropdown_font" label="명" target="#dropdown-example"></v-overflow-btn>
-        </v-col>
-      </v-row>
-    </v-container>
+        <!-- dropdown -->
+        <div id="dropdown-example">
+          <v-overflow-btn
+            v-model="count"
+            solo
+            class="my-2"
+            :items="dropdown_font"
+            label="인원"
+            style="margin:0px;"
+            target="#dropdown-example"
+          ></v-overflow-btn>
+        </div>
+      </div>
+    </v-app>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
+// const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "http://localhost:8080";
+
 export default {
   data: () => ({
-    dialog: false,
-    dialog1: false,
+    // date: new Date().toISOString().substr(0, 10),
+    date: null,
+    menu: false,
+    isColor: false,
+    isColor1: false,
+    isClick: false,
+
     dropdown_font: ["1", "2", "3", "4"],
-    focus: "",
-    type: "month",
-    typeToLabel: {
-      month: "Month",
-      week: "Week",
-      day: "Day",
-      "4day": "4 Days",
-    },
-    selectedEvent: {},
-    selectedElement: null,
-    selectedOpen: false,
-    events: [],
-    colors: [
-      "blue",
-      "indigo",
-      "deep-purple",
-      "cyan",
-      "green",
-      "orange",
-      "grey darken-1",
-    ],
-    names: [
-      "Meeting",
-      "Holiday",
-      "PTO",
-      "Travel",
-      "Event",
-      "Birthday",
-      "Conference",
-      "Party",
-    ],
   }),
+
   mounted() {
-    // this.$refs.calendar.checkChange();
     if (window.kakao && window.kakao.maps) {
       this.initMap();
     } else {
@@ -234,6 +139,40 @@ export default {
     }
   },
   methods: {
+    meetUp() {
+      if (this.title.length === 0) {
+        alert("제목을 작성해주세요.");
+        return;
+      }
+
+      if (this.content.length === 0) {
+        alert("내용을 작성해주세요.");
+        return;
+      }
+
+      if (this.date.length === 0) {
+        alert("날짜를 선택해주세요.");
+        return;
+      }
+
+      if (this.count.length === 0) {
+        alert("인원을 선택해주세요.");
+        return;
+      }
+      console.log(this.title);
+      console.log(this.title.length);
+      console.log(this.content);
+      console.log(this.content.length);
+      console.log(this.date);
+      console.log(this.date.length);
+      console.log(this.count);
+      console.log(this.count.length);
+
+      // axios
+      //   .get(
+      //     `${SERVER_URL}/party?title=${this.title}&content=${this.content}`
+      //   )
+    },
     initMap() {
       var container = document.getElementById("map");
       var options = {
@@ -244,72 +183,20 @@ export default {
       var map = new kakao.maps.Map(container, options);
       // map.setMapTypeId(kakao.maps.MapTypeId.HYBRID);
     },
-    viewDay({ date }) {
-      this.focus = date;
-      this.type = "day";
-    },
-    getEventColor(event) {
-      return event.color;
-    },
-    setToday() {
-      this.focus = "";
-    },
-    prev() {
-      this.$refs.calendar.prev();
-    },
-    next() {
-      this.$refs.calendar.next();
-    },
-    showEvent({ nativeEvent, event }) {
-      const open = () => {
-        this.selectedEvent = event;
-        this.selectedElement = nativeEvent.target;
-        setTimeout(() => (this.selectedOpen = true), 10);
-      };
-
-      if (this.selectedOpen) {
-        this.selectedOpen = false;
-        setTimeout(open, 10);
-      } else {
-        open();
-      }
-
-      nativeEvent.stopPropagation();
-    },
-    updateRange({ start, end }) {
-      const events = [];
-
-      const min = new Date(`${start.date}T00:00:00`);
-      const max = new Date(`${end.date}T23:59:59`);
-      const days = (max.getTime() - min.getTime()) / 86400000;
-      const eventCount = this.rnd(days, days + 20);
-
-      for (let i = 0; i < eventCount; i++) {
-        const allDay = this.rnd(0, 3) === 0;
-        const firstTimestamp = this.rnd(min.getTime(), max.getTime());
-        const first = new Date(firstTimestamp - (firstTimestamp % 900000));
-        const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000;
-        const second = new Date(first.getTime() + secondTimestamp);
-
-        events.push({
-          name: this.names[this.rnd(0, this.names.length - 1)],
-          start: first,
-          end: second,
-          color: this.colors[this.rnd(0, this.colors.length - 1)],
-          timed: !allDay,
-        });
-      }
-
-      this.events = events;
-    },
-    rnd(a, b) {
-      return Math.floor((b - a + 1) * Math.random()) + a;
-    },
   },
 };
 </script>
 
 <style>
+.back {
+  color: white !important;
+}
+.nothome {
+  padding: 0px !important;
+}
+.party {
+  padding: 0px 12px;
+}
 #map {
   width: 100px;
   height: 100px;
@@ -328,4 +215,7 @@ div {
   left: 0;
   font-weight: bold;
 }
+/* .btn-person{
+  margin: 0px;
+} */
 </style>

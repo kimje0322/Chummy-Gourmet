@@ -53,7 +53,7 @@
           </div>
           <div class="fc">
             <div class="fc-frame" tabindex="0">
-              <div style="padding-bottom: 125%; display: block; overflow: hidden;">
+              <div class="fc-fr">
                 <img
                   src="https://scontent-gmp1-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/117040004_3363435173707035_6496624469306050608_n.jpg?_nc_ht=scontent-gmp1-1.cdninstagram.com&_nc_cat=103&_nc_ohc=yr4oYNu9CN8AX-G4MoN&oh=f0e109fc179bc3767505d41bc029774e&oe=5F525B05"
                   class="fc-img"
@@ -98,14 +98,18 @@ export default {
 } */
 
 .fc {
-  -webkit-box-align: start;
-  align-items: flex-start;
+  -webkit-box-align: stretch;
+  align-items: stretch;
   display: flex;
-  -webkit-box-flex: 1;
-  flex-grow: 1;
-  flex-shrink: 1;
-  margin-left: 12px;
-  overflow: hidden;
+  border: 0 solid black;
+  box-sizing: border-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  flex-direction: column;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  position: relative;
 }
 
 .hc1 {
@@ -126,7 +130,8 @@ export default {
   -webkit-box-align: center;
   align-items: center;
   align-self: center;
-  display: block;
+  /* display: block; */
+  float: left;
   -webkit-box-flex: 0;
   flex: none;
   -webkit-box-pack: center;
@@ -154,6 +159,7 @@ export default {
   -webkit-box-aligh: start;
   align-items: flex-start;
   display: flex;
+  /* float: left; */
   -webkit-box-flex: 1;
   flex-grow: 1;
   flex-shrink: 1;
@@ -178,6 +184,8 @@ export default {
 }
 
 .pf-n-a {
+  padding-left: 12px;
+  padding-top: 4px;
   appearance: none;
   background: 0 0;
   text-align: center;
@@ -199,6 +207,7 @@ export default {
   border: 0;
   font: inherit;
   vertical-align: baseline;
+  position: relative;
 }
 
 .fc-frame {
@@ -208,6 +217,22 @@ export default {
   border: 0 solid black;
   box-sizing: border-box;
   display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  flex-direction: column;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.fc-fr {
+  padding-bottom: 125%;
+  display: block;
+  overflow: hidden;
+  align-items: stretch;
+  border: 0 solid black;
+  box-sizing: border-box;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   flex-direction: column;

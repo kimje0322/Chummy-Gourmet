@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -46,6 +47,7 @@ public class UserPageController {
 	@Autowired
 	UserDetailDao userDetailDao;
 	
+		
 	// 사용자의 유저 추가정보 업데이트
 	@PutMapping("/userpage/putuserInfo")
 	@ApiOperation(value = "[유저페이지] 사용자의 유저추가정보 업데이트")
@@ -138,7 +140,7 @@ public class UserPageController {
 	
 	// 사용자의 유저정보, 팔로잉수, 팔로워수 가져오기
 	@GetMapping("/userpage/getuser")
-	@ApiOperation(value = "[유저페이지] 사용자의 유저정보, 팔로잉, 팔로워 수 가져오기")
+	@ApiOperation(value = "[유저페이지] 사용자의 유저정보, 팔로잉, 팔로워 수 가져오기,팔로잉요청수까지")
 	public Object getUser(@RequestParam(required = true) final String userId) {
 		User user = new User();
 		user = userdao.getUserByUserId(userId);
@@ -158,6 +160,9 @@ public class UserPageController {
 		// 팔로워 수
 		count = userPageDao.getUserFollowerCount(user.getUserId());
 		map.put("followerCount", count);
+		
+		count = userPageDao.getUserFolloingRequestCount(user.getUserId());
+		map.put("followingRequestCount", count);
 		
 		System.out.println(map);
 		return map;
@@ -208,6 +213,20 @@ public class UserPageController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
+	@DeleteMapping("/userpage/deletefollowingrequest")
+	@ApiOperation(value = "[유저페이지] 팔로잉 요청 거절")
+	public Object deletefollowingrequest(@RequestParam(required = true) final String userId,
+			@RequestParam(required = true) final String followingRequestId) {
+		
+		final BasicResponse result = new BasicResponse();
+		
+		userPageDao.deleteFollowingrequestUser(userId, followingRequestId);
+		
+		result.status = true;
+		result.data = "success";
+		
+		return result;
+	}
 	
 	@GetMapping("/userpage/getfollowingrequest")
 	@ApiOperation(value = "[유저페이지] 사용자를 팔로잉요청한 리스트 가져옴")
@@ -237,7 +256,7 @@ public class UserPageController {
 	}
 	
 	@GetMapping("/userpage/acceptfollowingrequest")
-	@ApiOperation(value = "[유저페이지] 팔로우요청한것을 수락해줌")
+	@ApiOperation(value = "[유저페이지] 팔로잉요청한것을 수락해줌")
 	public Object acceptfollowingrequest(@RequestParam(required = true) final String userId,
 			@RequestParam(required = true) final String followingRequestId) {
 		
@@ -279,3 +298,4 @@ public class UserPageController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 }
+

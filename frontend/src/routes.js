@@ -24,6 +24,8 @@ import FollowList from './components/common/Followlist.vue'
 
 //추가
 import UpdateUser from './views/user/UpdateUser.vue'
+import Profile from './views/user/Profile.vue'
+
 
 Vue.use(VueRouter);
 export default new VueRouter({
@@ -36,6 +38,11 @@ export default new VueRouter({
             }
         },
         //추가
+        {
+            path: '/user/profile',
+            name: 'Profile',
+            component: Profile,
+        },
         {
             path: '/user/updateUser',
             name: 'UpdateUser',

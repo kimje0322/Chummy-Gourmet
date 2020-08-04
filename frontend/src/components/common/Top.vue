@@ -13,7 +13,7 @@
     </v-toolbar>
     
     <!-- 햄버거? 눌렀을 때 -->
-    <v-navigation-drawer dark v-model="drawer" temporary absolute right>
+    <v-navigation-drawer dark v-model="drawer" app right>
       <v-system-bar></v-system-bar>
       <v-list>
         <v-list-item>

@@ -89,7 +89,6 @@ export default {
   created(){
     // alert(this.$cookie.get("userId"));
     this.userId = this.$cookie.get("userId");
-    console.log('axios 실행전')
     axios
       .get(
         `${SERVER_URL}/userpage/getuser?userId=`+this.userId

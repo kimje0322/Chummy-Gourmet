@@ -1,16 +1,17 @@
 <template>
-<!-- 부모 -->
   <v-layout>
     <v-toolbar dark>
       <v-list-item-avatar>
         <v-img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR_doKnSS8nyn0SYPV-J4cQgaE7uHtbsKlB9A&usqp=CAU"></v-img>
       </v-list-item-avatar>
-      {{proptoTopsub.userNickname}}
+
+        {{proptoTopsub.userNickname}}
+
       <v-btn><br>매너온도</v-btn>
       <v-spacer></v-spacer>
-        <v-btn @click="getFollows" depressed>{{proptoTopsub.followerCount}}<br>팔로워</v-btn>
+        <v-btn @click="getFollowers" depressed>{{proptoTopsub.followerCount}}<br>팔로워</v-btn>
       <v-spacer></v-spacer>
-        <v-btn class="followListBtn" @click="getFollows" depressed>{{proptoTopsub.followingCount}} <br>팔로잉</v-btn>
+        <v-btn @click="getFollowings" depressed>{{proptoTopsub.followingCount}} <br>팔로잉</v-btn>
       <v-spacer></v-spacer>
     </v-toolbar>
   </v-layout>
@@ -37,8 +38,14 @@ export default {
   //   }
   // },
   methods: {
-    getFollows () {
+    getFollowers () {
       this.$router.push('/followlist')
+    },
+    getFollowings () {
+      let userInfo = {
+              info: "follow",
+            };
+      this.$router.push({name :'FollowList', params: userInfo});
     },
   }
 

@@ -58,8 +58,8 @@ import axios from "axios";
 import router from "@/routes";
 
 
-const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
-// const SERVER_URL = "http://localhost:8080";
+// const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "http://localhost:8080";
 
 export default {
   data() {

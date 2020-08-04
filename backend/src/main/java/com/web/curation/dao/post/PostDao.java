@@ -17,4 +17,15 @@ public interface PostDao extends JpaRepository<Post, String> {
 	
 	@Query(value = "select * from post where post_userid in (:list)", nativeQuery = true)
 	List<Post> selectAllByUserFollowing(List<Integer> list);
+	
+	@Query(value = "insert into post (post_userid,post_content,post_date)"
+			+ "values(:#{#post.postuserid},:#{#post.postcontent},now())",nativeQuery=true)
+	void insert(Post post);
+
+	@Query(value = "update post set post_content = :#{#post.postcontent}, post_date = now() "
+			+ "where post_id = :#{#post.postid}",nativeQuery=true)
+	void update(Post post);
+	
+	@Query(value = "delete from post where post_id = :#{#post.postid}",nativeQuery=true)
+	void delete(Post post);
 }

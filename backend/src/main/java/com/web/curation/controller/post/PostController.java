@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dao.post.PostDao;
@@ -51,17 +52,13 @@ public class PostController {
 		list.add(Integer.parseInt(userid));
 		
 		List<Integer> following= postDao.selectFollowingByUserId(Integer.parseInt(userid));
-		System.out.println(1);
 		for(int i = 0 ;i<following.size();i++) {
 			list.add(following.get(i));
 		}
 		
-		System.out.println(2);
 		List<Post> post = new ArrayList<Post>();
-		System.out.println(3);
 		post = postDao.selectAllByUserFollowing(list);
 		
-		System.out.println(4);
 		Map<String, Object> data = new HashMap<String, Object>();
 		
 		data.put("data", post);
@@ -72,20 +69,19 @@ public class PostController {
 	
 	@PostMapping("/post")
 	@ApiOperation(value = "게시글 등록")
-	public int insert() {
-		
-		return 0;
+	public void insert(@RequestBody Post post) {
+		postDao.insert(post);
 	}
 	
 	@PutMapping("/post")
 	@ApiOperation(value = "게시글 수정")
-	public int update() {
-		return 0;
+	public void update(@RequestBody Post post) {
+		postDao.update(post);
 	}
 	
 	@DeleteMapping("/post")
 	@ApiOperation(value = "게시글 삭제")
-	public int delete() {
-		return 0;
+	public void delete(@RequestBody Post post) {
+		postDao.delete(post);
 	}
 }

@@ -5,6 +5,7 @@
     <v-img
         v-if="imageUrl" :src="imageUrl"
     ></v-img>
+    <v-img :src="require(`@/assets/images/feed/${img}.png`)">나와라잇</v-img>
   </div>
 </template>
 
@@ -13,15 +14,16 @@ import axios from "axios";
 import router from "@/routes";
 
 
-// const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
-const SERVER_URL = "http://localhost:8080";
+const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "http://localhost:8080";
 
 
 export default {
 data() {
         return {
             imageUrl: null,
-            file : null
+            file : null,
+            img:"test"
         }
     },
     methods: {

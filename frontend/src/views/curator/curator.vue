@@ -1,7 +1,7 @@
 <template>
   <div style="padding : 0">
     <input
-      v-model="location"
+      v-model="keyword"
       @keyup.enter="search"
       type="text"
       placeholder="원하는 지역 검색"
@@ -9,7 +9,43 @@
     />
 
     <v-btn width="100%" @click="search">검색</v-btn>
-    <p>{{location}}에 대한 결과</p>
+    <p>{{keyword}}에 대한 결과</p>
+
+<!--  pop over  -->
+      <div>
+          <v-menu
+            v-model="menu"
+            :close-on-content-click="false"
+            :nudge-width="375"
+            transition="slide-y-transition"
+            offset-y
+          >
+          <template v-slot:activator="{on}">
+            <v-btn
+              slot="activator"
+              v-on="on"
+            >
+              필터
+            </v-btn>
+          </template>
+
+            <v-card>
+              <v-card-actions>
+                <v-btn-toggle>
+                  <v-btn outlined @click="getNear">거리순</v-btn>
+                  <v-btn outlined @click="getRating">평점순</v-btn>
+                  <v-btn outlined @click="getManyReview">리뷰순</v-btn>
+                  <v-btn outlined @click="getProperties">선호음식</v-btn>
+                </v-btn-toggle>
+                <!-- <v-spacer></v-spacer>
+                <v-btn @click="menu = false">Cancel</v-btn>
+                <v-btn color="primary" @click="menu = false">Save</v-btn> -->
+              </v-card-actions>
+            </v-card>
+          </v-menu>
+        </div>
+
+
     <v-card class="mx-auto" max-width="500">
         <v-row dense>
           <v-col v-for="restaurant in restaurants" :key="restaurant.restId" cols="12">
@@ -64,28 +100,76 @@ const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
 export default {
   data() {
     return {
-      location: "",
+      on : '',
+      fav: true,
+      menu: false,
+      message: false,
+      hints: true,
+      
+      targetLocation :{
+        lat : '',
+        lng : '',
+      },
+
+
+      keyword: "",
       restaurants : []
     };
   },
   mounted() {
-      // if (navigator.geolocation) {
-      //   navigator.geolocation.getCurrentPosition(pos => {
-      //     console.log(pos);
-      //     var curLat = pos.coords.latitude;
-      //     var curLng = pos.coords.longitude;
-      //     console.log(curLat + "," + curLng);
-          
-      //   });
-      // }
+    const script = document.createElement("script");
+    /* global kakao */
+    script.onload = () => kakao.maps.load(this.initMap);
+    script.src =
+      "http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=90891b3c4fa765cd378361c6b16e4dd6&libraries=services";
+    document.head.appendChild(script);
+
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(pos => {
+          // console.log(pos);
+          this.targetLocation.lat = pos.coords.latitude;
+          this.targetLocation.lng = pos.coords.longitude;
+          // console.log(this.targetLocation.lat + "," + this.targetLocation.lng);
+        });
+      }
   },
   methods: {
+    getNear(){
+      console.log("거리순");
+
+
+    },
+    getRating(){
+      console.log("평점순");
+      
+    },
+    getManyReview(){
+      console.log("리뷰순");
+      
+    },
+    getProperties(){
+      console.log("선호음식");
+      
+    },
+
     search() {
+      // 주소-좌표 변환 객체를 생성합니다
+      var geocoder = new kakao.maps.services.Geocoder();
       axios
-        .get(`${SERVER_URL}/curation?location=${this.location}`)
+        .get(`${SERVER_URL}/curation?location=${this.keyword}`)
 
         .then((response) => {
           this.restaurants = response.data.list;
+          console.log(this.restaurants);
+          this.restaurants.forEach(restaurant => {
+            geocoder.addressSearch(restaurant.location, (result, status) => {
+              if (status === kakao.maps.services.Status.OK) {
+                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+              }
+              this.restaurant["position"] = coords;
+            })
+          });
           console.log(this.restaurants);
         })
 

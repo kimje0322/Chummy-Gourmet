@@ -130,13 +130,30 @@ export default {
           // console.log(pos);
           this.targetLocation.lat = pos.coords.latitude;
           this.targetLocation.lng = pos.coords.longitude;
-          // console.log(this.targetLocation.lat + "," + this.targetLocation.lng);
+          console.log(this.targetLocation.lat + "," + this.targetLocation.lng);
         });
       }
   },
   methods: {
     getNear(){
       console.log("거리순");
+
+      this.restaurants.forEach(restaurant => {
+        var polyline = new kakao.maps.Polyline({
+          path: [
+              new kakao.maps.LatLng(this.targetLocation.lat, this.targetLocation.lng),
+              restaurant.position
+          ],
+        });
+        restaurant.dist = polyline.getLength();
+        console.log(polyline.getLength());
+      });
+      console.log(this.restaurants);
+      this.restaurants.sort((a, b) => {
+        return a.dist - b.dist;
+      })
+      console.log(this.restaurants);
+
 
 
     },
@@ -161,15 +178,17 @@ export default {
 
         .then((response) => {
           var restaurants = response.data.list;
-          console.log(this.restaurants);
-          this.restaurants.forEach(restaurant => {
+
+          // console.log(restaurants);
+          restaurants.forEach(restaurant => {
             geocoder.addressSearch(restaurant.location, (result, status) => {
               if (status === kakao.maps.services.Status.OK) {
                 var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
               }
-              this.restaurant.position = coords;
+              restaurant.position = coords;
             })
           });
+          this.restaurants = restaurants;
           console.log(this.restaurants);
         })
 

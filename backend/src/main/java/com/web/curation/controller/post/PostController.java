@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.web.curation.api.EncryptoApi;
 import com.web.curation.dao.post.PostDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.post.Post;
@@ -41,11 +43,21 @@ public class PostController {
 	PostDao postDao;
 
 	@PostMapping("/post/test")
-	public void test(@RequestParam("file") MultipartFile file) throws IOException {
+	public String test(@RequestParam("file") MultipartFile file) throws Exception {
 		System.out.println("파일 이름 : " + file.getOriginalFilename());
 	    System.out.println("파일 크기 : " + file.getSize());
+	    StringTokenizer st = new StringTokenizer(file.getOriginalFilename(),".");
+	    String fileName = st.nextToken();
+	    String extension =st.nextToken();
+	    System.out.println(fileName);
+	    System.out.println(extension);
 	    
-	    FileCopyUtils.copy(file.getBytes(), new File("/home/ubuntu/deploy/dist/img/feed/test.img"));
+	    EncryptoApi en = new EncryptoApi();
+	    
+	    String fileFullName = en.Encrypt(fileName, "tpgns")+"."+extension;
+	    
+	    FileCopyUtils.copy(file.getBytes(), new File("/home/ubuntu/deploy/img/test/"+fileFullName));
+	    return fileFullName;
 	}
 	
 	@GetMapping("/post")
@@ -97,4 +109,7 @@ public class PostController {
 	public void delete(@RequestBody Post post) {
 		postDao.delete(post);
 	}
+	
+	
+	
 }

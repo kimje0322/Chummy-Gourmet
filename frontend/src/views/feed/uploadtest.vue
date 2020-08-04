@@ -5,7 +5,7 @@
     <v-img
         v-if="imageUrl" :src="imageUrl"
     ></v-img>
-    <v-img :src="require(`@/assets/images/feed/${img}.png`)">나와라잇</v-img>
+    <v-img src="http://i3b302.p.ssafy.io:8080/post/img?imgname=5pMrYo1oaADwgpxFVeVcqg==.png">나와라잇</v-img>
   </div>
 </template>
 
@@ -37,12 +37,15 @@ data() {
 
             const file = new FormData();
             file.append('file',this.file);
+
+            //이미지 서버에 전송해서 저장하는부분
              axios
-              .post(`${SERVER_URL}/post/test`,file)
+              .post(`${SERVER_URL}/post/test`,
+                 file
+                )
 
               .then((response) => {
-                this.restaurants = response.data.list;
-                console.log(this.restaurants);
+                console.log(response);
               })
 
               .catch((error) => {

@@ -160,14 +160,14 @@ export default {
         .get(`${SERVER_URL}/curation?location=${this.keyword}`)
 
         .then((response) => {
-          this.restaurants = response.data.list;
+          var restaurants = response.data.list;
           console.log(this.restaurants);
           this.restaurants.forEach(restaurant => {
             geocoder.addressSearch(restaurant.location, (result, status) => {
               if (status === kakao.maps.services.Status.OK) {
                 var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
               }
-              this.restaurant["position"] = coords;
+              this.restaurant.position = coords;
             })
           });
           console.log(this.restaurants);

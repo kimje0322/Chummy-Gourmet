@@ -5,7 +5,12 @@
     <v-img
         v-if="imageUrl" :src="imageUrl"
     ></v-img>
-    <v-img src="http://i3b302.p.ssafy.io:8080/post/img?imgname=5pMrYo1oaADwgpxFVeVcqg==.png">나와라잇</v-img>
+    <v-img :src=this.img+this.name>테스트</v-img>
+     <input
+      v-model="name"
+      type="text"
+      style="width : 100%; border : 1px solid"
+    />
   </div>
 </template>
 
@@ -23,7 +28,8 @@ data() {
         return {
             imageUrl: null,
             file : null,
-            img:"test"
+            img:"http://i3b302.p.ssafy.io:8080/post/img?imgname=",
+            name:"a6XSazfXDtbgn2AJXhUtNOeJM6IO8Ow5C6s4HsQvoZE=.jpg"
         }
     },
     methods: {

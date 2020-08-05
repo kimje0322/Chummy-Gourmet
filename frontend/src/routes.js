@@ -22,6 +22,7 @@ import Home from './views/user/Home.vue'
 import FollowList from './components/common/Followlist.vue'
 import NewsFeed from './views/feed/newsfeed.vue'
 import FollowRequestList from './components/common/FollowRequestList.vue'
+import Feedcomment from './views/feed/comment.vue'
 
 //추가
 import UpdateUser from './views/user/UpdateUser.vue'
@@ -45,6 +46,7 @@ export default new VueRouter({
             }
         },
         {
+
             path: '/login',
             name: 'Login',
             component: Login,
@@ -186,6 +188,11 @@ export default new VueRouter({
             path: '/newsfeed',
             name: 'NewsFeed',
             component: NewsFeed,
+        },
+        {
+            path: '/newsfeed/comment',
+            name: 'Comment',
+            component: Feedcomment,
         }
 
     ]

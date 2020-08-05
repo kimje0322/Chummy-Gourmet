@@ -25,6 +25,8 @@ import FollowRequestList from './components/common/FollowRequestList.vue'
 
 //추가
 import UpdateUser from './views/user/UpdateUser.vue'
+import Profile from './views/user/Profile.vue'
+
 import UpdateUserInfo from './views/user/UpdateUserInfo.vue'
 
 //사진업로드 테스트용
@@ -56,6 +58,11 @@ export default new VueRouter({
             path: '/user/FollowRequestList',
             name: 'FollowRequestList',
             component: FollowRequestList,
+        },
+        {
+            path: '/user/profile',
+            name: 'Profile',
+            component: Profile,
         },
         {
             path: '/user/updateUser',
@@ -113,11 +120,11 @@ export default new VueRouter({
             name: 'FoundPw',
             component: FoundPw
         },
-        {
-            path: '/user/pref',
-            name: 'Pref',
-            component: Pref
-        },
+        // {
+        //     path: '/user/pref',
+        //     name: 'Pref',
+        //     component: Pref
+        // },
         {
             path: '/map',
             name: 'Map',

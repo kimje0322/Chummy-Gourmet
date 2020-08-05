@@ -20,16 +20,31 @@ import Map from './views/map/map.vue'
 import MapParty from './views/map/party.vue'
 import Home from './views/user/Home.vue'
 import FollowList from './components/common/Followlist.vue'
-
+import NewsFeed from './views/feed/newsfeed.vue'
+import FollowRequestList from './components/common/FollowRequestList.vue'
 
 //추가
 import UpdateUser from './views/user/UpdateUser.vue'
 import Profile from './views/user/Profile.vue'
 
+import UpdateUserInfo from './views/user/UpdateUserInfo.vue'
+
+//사진업로드 테스트용
+import UploadTest from './views/feed/uploadtest.vue'
 
 Vue.use(VueRouter);
 export default new VueRouter({
-    routes: [{
+    routes: [
+        //사진업로드 테스트용 추후 삭제.
+        {
+            path: '/uploadtest',
+            name: 'UploadTest',
+            component: UploadTest,
+            meta: {
+                navbar: true
+            }
+        },
+        {
             path: '/login',
             name: 'Login',
             component: Login,
@@ -37,7 +52,13 @@ export default new VueRouter({
                 navbar: true
             }
         },
-        //추가
+
+        //승범 추가
+        {
+            path: '/user/FollowRequestList',
+            name: 'FollowRequestList',
+            component: FollowRequestList,
+        },
         {
             path: '/user/profile',
             name: 'Profile',
@@ -48,6 +69,12 @@ export default new VueRouter({
             name: 'UpdateUser',
             component: UpdateUser,
         },
+        {
+            path: '/user/updateUserInfo',
+            name: 'UpdateUserInfo',
+            component: UpdateUserInfo,
+        },
+        // 여기까지
         {
             path: '/user/join',
             name: 'Join',
@@ -93,11 +120,11 @@ export default new VueRouter({
             name: 'FoundPw',
             component: FoundPw
         },
-        {
-            path: '/user/pref',
-            name: 'Pref',
-            component: Pref
-        },
+        // {
+        //     path: '/user/pref',
+        //     name: 'Pref',
+        //     component: Pref
+        // },
         {
             path: '/map',
             name: 'Map',
@@ -155,6 +182,11 @@ export default new VueRouter({
             component: FollowList,
             meta: { transitionName: 'slide' },
         },
+        {
+            path: '/newsfeed',
+            name: 'NewsFeed',
+            component: NewsFeed,
+        }
 
     ]
 });

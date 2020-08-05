@@ -136,6 +136,7 @@ export default {
       if (this.$route.params.info == 'follow') {
       this.currentItem = 'tab-following'
     }
+
      this.userId = this.$cookie.get("userId");
      axios
       .get(

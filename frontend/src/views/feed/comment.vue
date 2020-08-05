@@ -38,12 +38,17 @@
           </div>
         </section>
         <div class="lst">
-          <ul>
+          <ul style="height: 494px;">
             <div class="lst-div" tabindex="0">
-              <li>
+              <li
+                style="width: 335px; margin-left: 0px; padding-left: 16px; border-bottom: 1px solid rgba(var(--ce3, 239, 239, 239), 1);"
+              >
                 <div class="lst-box">
                   <div class="lst-cover">
-                    <div class="lst-prf" style="height: 32px; width: 32px; margin-right: 18px;">
+                    <div
+                      class="lst-prf"
+                      style="float: left; height: 32px; width: 32px; margin-right: 18px;"
+                    >
                       <span class="prf" style="margin-left: 0px;">
                         <img
                           style="height: 100%; width: 100%; -webkit-user-drag: none;"
@@ -51,19 +56,72 @@
                         />
                       </span>
                     </div>
-                    <div style="display: inline-block; flex-direction: column; position: relative;">
-                      <h2
-                        style="align-items: center; display: inline-flex; margin-right: 4px; display: flex; -webkit-box-orient: vertical;"
-                      >
-                        <div style="display: flex; flex-direction: column;">
-                          <a class="prf-link" href="#">dlwlrma</a>
-                        </div>
-                      </h2>
+                    <div
+                      style="float: left; width: 285px; flex-direction: column; position: relative;"
+                    >
+                      <!-- <div style="display: inline-flex;"> -->
+                        <h2
+                          style="font-size: 14px; font-weight: 600; align-items: center; display: inline-flex; margin-right: 4px;"
+                        >
+                          <div style="display: flex; flex-direction: column;">
+                            <a class="prf-link" href="#">dlwlrma</a>
+                          </div>
+                        </h2>
+                      <!-- </div> -->
+                      <span>
+                        게시글 내용 나오는 부분입니다.
+                        <br />게시글 내용 나오는 부분입니다.
+                        <br />게시글 내용 나오는 부분입니다.
+                        <br />게시글 내용 나오는 부분입니다.
+                        <br />
+                      </span>
                     </div>
                   </div>
                 </div>
               </li>
             </div>
+            <ul style="margin-bottom: 16px; padding-top: 0 !important;">
+              <div>
+                <li v-for="(lst, i) in commentlst" :key="i">
+                  <div style="flex-direction: column;">
+                    <div style="width: 307px;">
+                      <div
+                        class="lst-prf"
+                        style="float: left; height: 32px; width: 32px; margin-right: 18px;"
+                      >
+                        <span class="prf" style="margin-left: 0px;">
+                          <img
+                            style="height: 100%; width: 100%; -webkit-user-drag: none;"
+                            src="https://scontent-gmp1-1.cdninstagram.com/v/t51.2885-19/s150x150/64568083_346714766240529_8023659861445181440_n.jpg?_nc_ht=scontent-gmp1-1.cdninstagram.com&_nc_ohc=Bxek_7qbsNkAX_0dv-_&oh=a14ba48d56d9821b9ab60764d1f14258&oe=5F515501"
+                          />
+                        </span>
+                      </div>
+                      <div style="float: left;">
+                        <!-- <h3 style="display: inline-flex;"></h3> -->
+                        <h3
+                          style="align-items: center; display: inline-flex; margin-right: 4px; display: flex;"
+                        >
+                          <div style="display: flex; flex-direction: column;">
+                            <a class="prf-link" href="#">dlwlrma</a>
+                          </div>
+                        </h3>
+                        <span>
+                          <!-- {{lst}} -->
+                          {{ lst.usernickname }}
+                          <br />
+                          {{ lst.commentdate }}
+                          <br />게시글 내용 나오는 부분입니다.
+                          <br />게시글 내용 나오는 부분입니다.
+                          <br />
+                        </span>
+                      </div>
+                      <div></div>
+                    </div>
+                    <span></span>
+                  </div>
+                </li>
+              </div>
+            </ul>
           </ul>
         </div>
       </div>
@@ -74,13 +132,28 @@
 <script>
 import axios from "axios";
 
-// const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
-const SERVER_URL = "http://localhost:8080";
+const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "http://localhost:8080";
 
 export default {
-  data: () => ({}),
-
+  data() {
+    return {
+      commentlst: [],
+    };
+  },
   mounted() {},
+  created() {
+    console.log(this.$route.params);
+    axios
+      .get(`${SERVER_URL}/post/comment?commentid=${this.$route.params.postid}`)
+      .then((response) => {
+        console.log(response);
+        this.commentlst = response.data.data;
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+  },
   methods: {},
 };
 </script>
@@ -101,7 +174,7 @@ export default {
   padding: 0;
 }
 .lst-cover {
-  display: flex;
+  display: unset;
   flex-direction: column;
   position: relative;
 }
@@ -114,17 +187,17 @@ export default {
 li {
   padding-bottom: 16px;
   padding-right: 28px;
-  margin-left: -12px;
+  /* margin-left: -12px; */
   margin-right: 0;
   padding: 12px 16px;
   width: auto;
   overflow: hidden;
   position: relative;
   margin-top: -5px;
-  border-bottom: 1px solid rgba(var(--ce3, 239, 239, 239), 1);
+  /* border-bottom: 1px solid rgba(var(--ce3, 239, 239, 239), 1); */
   margin-bottom: 16px;
   display: list-item;
-  list-style: none;
+  /* list-style: none; */
 }
 .lst-div {
   touch-action: manipulation;
@@ -140,9 +213,9 @@ ul {
   height: cal(100% - 32px);
   overflow-y: scroll;
   /* padding: 16px 12px; */
-  padding: 12px 28px 16px 12px !important;
+  padding: 12px 28px 16px 0 !important;
   position: absolute;
-  width: calc(100% - 8px);
+  /* width: calc(100% - 8px); */
   list-style: none;
   margin: 0;
   display: block;
@@ -158,7 +231,7 @@ ul {
   padding: 0;
   border: 0;
   vertical-align: baseline;
-  -webkit-box-direction: normal;
+  /* -webkit-box-direction: normal; */
 }
 .text {
   text-rendering: auto;
@@ -169,7 +242,7 @@ ul {
   border: 0;
   color: rgba(var(--i1d, 38, 38, 38), 1);
   display: flex;
-  -webkit-box-flex: 1;
+  /* -webkit-box-flex: 1; */
   flex-grow: 1;
   max-height: 80px;
   outline: 0;
@@ -182,12 +255,12 @@ ul {
 }
 
 .text-box {
-  -webkit-box-align: center;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
+  /* -webkit-box-align: center; */
+  /* -webkit-box-orient: horizontal; */
+  /* -webkit-box-direction: normal; */
   flex-direction: row;
   display: flex;
-  -webkit-box-flex: 1;
+  /* -webkit-box-flex: 1; */
   flex-grow: 1;
   flex-shrink: 1;
   position: relative;
@@ -214,8 +287,8 @@ ul {
   background-color: rgba(var(--b3f, 250, 250, 250), 1);
   border-radius: 50%;
   box-sizing: border-box;
-  display: block;
-  -webkit-box-flex: 0;
+  /* display: block; */
+  /* -webkit-box-flex: 0; */
   flex: 0 0 auto;
   overflow: hidden;
   position: relative;
@@ -238,8 +311,8 @@ ul {
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-align: stretch;
-  -webkit-box-direction: normal;
-  -webkit-box-pack: center;
+  /* -webkit-box-direction: normal; */
+  /* -webkit-box-pack: center; */
   justify-content: center;
   position: relative;
   flex-direction: column;
@@ -249,10 +322,10 @@ ul {
 .top {
   /* background-repeat: no-repeat; */
   height: 60px;
-  -webkit-box-align: center;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -webkit-box-pack: start;
+  /* -webkit-box-align: center; */
+  /* -webkit-box-orient: horizontal; */
+  /* -webkit-box-direction: normal; */
+  /* -webkit-box-pack: start; */
   flex-flow: row wrap;
   align-items: center;
   justify-content: flex-start;

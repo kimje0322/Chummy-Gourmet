@@ -26,7 +26,10 @@
 
       <div style="flex-direction: column; padding-bottom: 5600px; padding-top: 0px">
         <!-- <span v-for="(n, i) in 10" :key="i">{{ n }} </span> -->
+        <p>dkfjdlf=adfldfa;lkdfj;lkj</p>
+
         <article v-for="(lst, i) in postlst" :key="i">
+          <p>{{ lst.postid }}</p>
           <div role="button" tabindex="-1">
             <header class="hc1 hc2" style="postion: relative;">
               <div class="hc-d1" tabindex="-1">
@@ -45,7 +48,12 @@
               <div class="pf">
                 <div>
                   <div class="pf-n">
-                    <a class="pf-n-a" href="#" tabindex="0" style="color: black;">{{lst.postid}}dlwlrma</a>
+                    <a
+                      class="pf-n-a"
+                      href="#"
+                      tabindex="0"
+                      style="color: black;"
+                    >{{lst.postid}}dlwlrma</a>
                   </div>
                 </div>
                 <div></div>
@@ -77,14 +85,19 @@
                 </button>
               </span>
               <span style="display: inline-block;">
-                <button style="background: 0 0; border: 0; display: flex; padding: 8px;">
+                <button
+                  @click="onComment(lst.postid)"
+                  style="background: 0 0; border: 0; display: flex; padding: 8px;"
+                >
                   <div>
-                    <router-link to="/newsfeed/comment">
-                      <i
-                        style="display: block; position: relative; height: 24px; width: 24px;"
-                        class="far fa-comment"
-                      ></i>
-                    </router-link>
+                    <!-- <router-link to="/newsfeed/comment"> -->
+                    <!-- <div :v-model="pid" @click="onComment"> -->
+                    <i
+                      style="display: block; position: relative; height: 24px; width: 24px;"
+                      class="far fa-comment"
+                    ></i>
+                    <!-- </div> -->
+                    <!-- </router-link> -->
                   </div>
                 </button>
               </span>
@@ -105,6 +118,17 @@
 
               </span>-->
             </section>
+            <section style="margin-bottom: 8px;">
+              <div style="flex: 1 1 auto;">
+                <p style="font-weight: 600;">
+                  좋아요
+                  <span>{{ lst.postlike }} </span>
+                  개
+                </p>
+              </div>
+
+            </section>
+            <p>{{ lst.postcontent }}</p>
           </div>
         </article>
         <!-- <article>
@@ -178,12 +202,17 @@
 
 <script>
 import axios from "axios";
+import router from "@/routes";
 
 const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
 // const SERVER_URL = "http://localhost:8080";
 
 export default {
-  data: () => ({}),
+  data() {
+    return {
+      postlst: [],
+    };
+  },
 
   mounted() {},
   created() {
@@ -192,15 +221,24 @@ export default {
       .get(`${SERVER_URL}/post?userid=${this.$cookie.get("userId")}`)
       .then((response) => {
         console.log(response);
-        this.postlst = response.data.data
-        alert(this.postlst.length)
-
+        this.postlst = response.data.data;
+        alert(this.postlst.length);
+        console.log(this.postlst);
       })
       .catch((error) => {
         console.log(error.response);
       });
   },
-  methods: {},
+  methods: {
+    onComment(pid) {
+      let postinfo = {
+        postid: pid,
+      };
+      console.log("dfsdafgfgfdfadf");
+      console.log(pid);
+      router.push({ name: "Comment", params: postinfo });
+    },
+  },
 };
 </script>
 

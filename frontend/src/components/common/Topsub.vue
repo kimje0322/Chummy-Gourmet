@@ -7,7 +7,7 @@
 
         {{proptoTopsub.userNickname}}
 
-      <v-btn><br>매너온도</v-btn>
+      <!-- <v-btn><br>매너온도</v-btn> -->
       <v-spacer></v-spacer>
         <v-btn @click="getFollowers" depressed>{{proptoTopsub.followerCount}}<br>팔로워</v-btn>
       <v-spacer></v-spacer>

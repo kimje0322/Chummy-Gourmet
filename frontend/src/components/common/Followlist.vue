@@ -28,7 +28,7 @@
               @keyup="onSearchFollower"
               v-model="searchFollower"
               label="검색"
-              :append-icon="isColor ? 'mdi-map-marker orange--text text--lighten-2' : 'mdi-account-search-outline'"
+              :append-icon="'mdi-account-search-outline'"
               hide-details
               solo
             ></v-text-field>             
@@ -50,8 +50,8 @@
                 <v-btn @click="onFollow(user)" v-if="user.followerFollowing !== 'true'">
                     팔로잉
                 </v-btn>
-                <v-btn  disabled v-else >
-                    팔로잉
+                <v-btn @click="unFollow(user)" v-else>
+                    언팔로우
                 </v-btn>
 
             </v-list-item>
@@ -67,7 +67,7 @@
                 @keyup="onSearchFollowing"
                 v-model="searchFollowing"
                 label="검색"
-                :append-icon="isColor ? 'mdi-map-marker orange--text text--lighten-2' : 'mdi-account-search-outline'"
+                :append-icon="'mdi-account-search-outline'"
                 hide-details
                 solo
               ></v-text-field>             
@@ -78,8 +78,8 @@
                     <v-list-item-content>
                     <v-list-item-title @click="gotoProfile(user)" v-text="user.followingNickname"></v-list-item-title>
                     </v-list-item-content>
-                    <v-btn disabled>
-                      팔로잉
+                    <v-btn @click="unFollow(user)">
+                      언팔로우
                     </v-btn>
                 </v-list-item>
             </v-list-item-group>
@@ -106,6 +106,7 @@ export default {
  
   data: () => {
     return {
+        anotherId:"",
         nicknameForProfile: "",
         searchFollower: "",
         searchFollowing:"",
@@ -128,12 +129,14 @@ export default {
     };
   },
   created(){
-    if (this.$route.params.info == 'follow') {
+    this.whenCreated();
+  },
+  methods: {
+    whenCreated() {
+      if (this.$route.params.info == 'follow') {
       this.currentItem = 'tab-following'
     }
-      // if (this.$route.params = true) {
-      //   console.log('팔로잉')
-      // }
+
      this.userId = this.$cookie.get("userId");
      axios
       .get(
@@ -141,8 +144,6 @@ export default {
       )
       .then((response) => {
         this.followingList = response.data;
-        console.log(this.followingList);
-        console.log('팔로잉 리스트')
       })
       .catch((error) => {
         console.log(error.response);
@@ -153,31 +154,36 @@ export default {
       )
       .then((response) => {
         this.followerList = response.data;
-        console.log(this.followerList);
-        console.log('팔로워 리스트')
+        // console.log(this.followerList);
         // for (var i=0; i<this.followerList.length; i++) {
         //   if (this.followerList[i].followerFollowing)
-
         // }
       })
       .catch((error) => {
         console.log(error.response);
-      });     
-  },
-  methods: {
+      });    
+    },
     gotoProfile(user) {
-      console.log('프로필용 userid 보기')
-      console.log(user.followerId)
-      let profileInfo = {
+      // console.log(user.followingId)
+      if (user.followerId) {
+        let profileInfo = {
         userId: user.followerId,
+        followerFollowing: user.followerFollowing
         };
-      this.$router.push({name :'Profile', params: profileInfo});
+        // console.log('user.followerId,')
+        this.$router.push({name :'Profile', params: profileInfo});
+      } else { 
+        let profileInfo = {
+        userId: user.followingId,
+        followerFollowing: "true",
+        };
+        this.$router.push({name :'Profile', params: profileInfo});
+      }
       // axios
       // .get(
       //   `${SERVER_URL}/userpage/getuser?userId=`+user.userId
       // )
     },
-
     onSearchFollower () {
       axios
       .get(
@@ -186,8 +192,7 @@ export default {
       .then((response) => {
         this.followerList = []
         this.followerList = response.data;
-        console.log('검색된 팔로워 리스트')
-        console.log(this.followerList);
+        // console.log(this.followerList);
       })
       .catch((error) => {
         console.log(error.response);
@@ -202,8 +207,7 @@ export default {
       .then((response) => {
         this.followingList = []
         this.followingList = response.data;
-        console.log(this.followingList);
-        console.log('검색된 팔로잉 리스트')
+        // console.log(this.followingList);
       })
       .catch((error) => {
         console.log(error.response);
@@ -220,8 +224,26 @@ export default {
       .catch((error) => {
         console.log(error.response);
       });
-    }
-    
+    },
+    unFollow(user) {
+      //언팔로우 요청
+      if (user.followerId) {
+        this.anotherId = user.followerId
+      } else {
+        this.anotherId = user.followingId
+      }
+        axios
+      .delete(
+        `${SERVER_URL}/userpage/unfollowRequest?anotherId=`+this.anotherId+`&userId=`+this.userId
+      )
+      .then((response) => {
+        console.log('언팔로우')
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+      this.whenCreated();
+    },
   }
 };
 </script>

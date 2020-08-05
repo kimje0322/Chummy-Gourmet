@@ -12,14 +12,19 @@
       <v-list-item-avatar>
         <v-img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR_doKnSS8nyn0SYPV-J4cQgaE7uHtbsKlB9A&usqp=CAU"></v-img>
       </v-list-item-avatar>
-      <v-btn><br>매너온도</v-btn>
+      {{ userNickname }}
+      <!-- <v-btn><br>매너온도</v-btn> -->
       <v-spacer></v-spacer>
-        <v-btn depressed><br>팔로워</v-btn>
+        <v-btn depressed>매너평가</v-btn>
       <v-spacer></v-spacer>
-        <v-btn class="followListBtn" depressed><br>팔로잉</v-btn>
+        <v-btn v-if="followerFollowing" class="followListBtn" depressed>언팔로우</v-btn>
+        <v-btn v-else class="followListBtn" depressed>팔로우</v-btn>
+
       <v-spacer></v-spacer>
     </v-toolbar>
   </v-layout>
+
+
   </div>
 </template>
 
@@ -29,13 +34,20 @@ import axios from "axios";
 export default {
   name: "Profile",
   created() {
-    // userID = this.$route.params
+    let userID = this.$route.params.userId
+    if (this.$route.params.followerFollowing == 'true') {
+      this.followerFollowing = true
+    } 
+
     axios
       .get(
-        `${SERVER_URL}/userpage/getuser?userId=`+this.$route.params
+        `${SERVER_URL}/userpage/getuser?userId=`+userID
       )
       .then((response) => {
-        console.log(this.userID);
+        console.log(response)
+        this.followerCount =  response.data.followerCount
+        this.followingCount = response.data.followingCount
+        this.userNickname = response.data.userNickname
       })
       .catch((error) => {
         console.log(error.response);
@@ -43,6 +55,10 @@ export default {
   },
   data() {
     return {
+      followerFollowing: false,
+      followerCount: null,
+      followingCount: null,
+      userNickname: "",
     }
   }
 }

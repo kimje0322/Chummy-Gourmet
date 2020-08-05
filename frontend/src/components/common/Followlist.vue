@@ -129,14 +129,13 @@ export default {
     };
   },
   created(){
-    this.whenCreated();
+    this.whenCreated(); 
   },
   methods: {
     whenCreated() {
       if (this.$route.params.info == 'follow') {
       this.currentItem = 'tab-following'
     }
-
      this.userId = this.$cookie.get("userId");
      axios
       .get(
@@ -234,16 +233,19 @@ export default {
       }
         axios
       .delete(
-        `${SERVER_URL}/userpage/unfollowRequest?anotherId=`+this.anotherId+`&userId=`+this.userId
+        `${SERVER_URL}/userpage/deletefollowing?anotherId=`+this.anotherId+`&userId=`+this.userId
       )
       .then((response) => {
-        console.log('언팔로우')
+        if(response.data.data == "success"){
+          this.whenCreated();
+        }
       })
       .catch((error) => {
         console.log(error.response);
       });
       this.whenCreated();
-    },
+    }
+    
   }
 };
 </script>

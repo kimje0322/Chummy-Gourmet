@@ -4,6 +4,7 @@ package com.web.curation.controller.account;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.StringTokenizer;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,120 @@ public class UserPageController {
 	@Autowired
 	UserDetailDao userDetailDao;
 	
+	// 사용자가 팔로잉 하는 유저 리스트를 가져온다.
+	@GetMapping("/userpage/getfollowinglist")
+	@ApiOperation(value = "[유저페이지] 내가 팔로잉하는 유저 리스트 가져옴")
+	public Object getuserfollowing(@RequestParam(required = true) final String userId,
+			@RequestParam(required = true) final String searchName) {
+		
+		// 팔로잉유저 Id리스트
+		ArrayList<String>followingIdList = userPageDao.getUserFollowingByUserId(userId);
+		// 팔로잉 유저 리스트
+		ArrayList<Map<String, Object>>userList = new ArrayList<>();
+		
+		for (String followinguserId : followingIdList) {
+			
+			if(searchName == "") {
+				User user;
+				user = userdao.getUserByUserId(followinguserId);
+				Map<String, Object>map = new HashMap();
+				map.put("followingId", user.getUserId());
+				map.put("followingName", user.getUserName());
+				map.put("followingEmail", user.getUserEmail());
+				map.put("followingNickname", user.getUserNickname());
+				map.put("followingPhone", user.getUserPhone());
+				map.put("followingComment", user.getUserComment());
+				userList.add(map);
+			}
+			// 유저 검색을 한 경우
+			else {
+				Optional<User> user;
+				user = userdao.getUserByUserId(followinguserId, searchName);
+				if(user.isPresent()) {
+					Map<String, Object>map = new HashMap();
+					map.put("followingId", user.get().getUserId());
+					map.put("followingName", user.get().getUserName());
+					map.put("followingEmail", user.get().getUserEmail());
+					map.put("followingNickname", user.get().getUserNickname());
+					map.put("followingPhone", user.get().getUserPhone());
+					map.put("followingComment", user.get().getUserComment());
+					userList.add(map);
+				}
+			}
+		}
+		System.out.println("내가 팔로잉 하는 유저 리스트 =" + userList);
+		return userList;
+	}
+	// 사용자를 팔로워 하는 유저 리스트를 가져온다.
+	@GetMapping("/userpage/getfollowerlist")
+	@ApiOperation(value = "[유저페이지] 나를 팔로워하는 유저 리스트 가져옴(나도 그 사람을 팔로우하거나 요청한 상태면 followerFollowing가 true 아니면 false")
+	public Object getuserfollower(@RequestParam(required = true) final String userId,
+			@RequestParam(required = true) final String searchName) {
+		System.out.println("searchname = "+ searchName);
+		// 팔로워유저 Id리스트
+		ArrayList<String>followerIdList = userPageDao.getUserFollowerByUserId(userId);
+		// user리스트
+		ArrayList<Map<String, Object>>userList = new ArrayList<>();
+		Map<String, Object>map;
+		for (String followeruserId : followerIdList) {
+			if(searchName == "") {
+				User user;
+				map = new HashMap();
+				user = userdao.getUserByUserId(followeruserId);
+				map.put("followerId", user.getUserId());
+				map.put("followerName", user.getUserName());
+				map.put("followerEmail", user.getUserEmail());
+				map.put("followerNickname", user.getUserNickname());
+				map.put("followerPhone", user.getUserPhone());
+				map.put("followerComment", user.getUserComment());
+				int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, followeruserId);
+				int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, followeruserId);
+				
+				// 내가 팔로잉 중ㅇ
+				if(ans1 > 0 || ans2 > 0) {
+					map.put("followerFollowing", "true");
+					System.out.println("나("+userId+")는 상대방인 "+user.getUserName()+" 님을 팔로우 한 상태입니다.");
+				}
+				else {
+					map.put("followerFollowing", "false");
+					System.out.println(userId+ "님은 상대방인 "+user.getUserName()+" 님을 팔로우 하지 않은 상태입니다.");
+				}
+				userList.add(map);
+			}
+			// 유저 검색을 한 경우
+			else {
+				map = new HashMap();
+				if(userdao.getUserByUserId(followeruserId, searchName) != null) {
+					Optional<User> user;
+					user = userdao.getUserByUserId(followeruserId, searchName);
+					if(user.isPresent()) {
+						map.put("followerId", user.get().getUserId());
+						map.put("followerName", user.get().getUserName());
+						map.put("followerEmail", user.get().getUserEmail());
+						map.put("followerNickname", user.get().getUserNickname());
+						map.put("followerPhone", user.get().getUserPhone());
+						map.put("followerComment", user.get().getUserComment());
+						int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, followeruserId);
+						int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, followeruserId);
+						
+						// 내가 팔로잉 중ㅇ
+						if(ans1 > 0 || ans2 > 0) {
+							map.put("followerFollowing", "true");
+							System.out.println("나("+userId+")는 상대방인 "+user.get().getUserName()+" 님을 팔로우 한 상태입니다.");
+						}
+						else {
+							map.put("followerFollowing", "false");
+							System.out.println(userId+ "님은 상대방인 "+user.get().getUserName()+" 님을 팔로우 하지 않은 상태입니다.");
+						}
+						userList.add(map);
+					}
+					
+				}
+			}
+		}
+		System.out.println("나를 팔로워 하는 유저 리스트 =" + userList);
+		return userList;
+	}
 		
 	// 사용자의 유저 추가정보 업데이트
 	@PutMapping("/userpage/putuserInfo")
@@ -72,72 +187,6 @@ public class UserPageController {
 		return userdetail;
 	}
 		
-	// 사용자가 팔로잉 하는 유저 리스트를 가져온다.
-	@GetMapping("/userpage/getfollowinglist")
-	@ApiOperation(value = "[유저페이지] 내가 팔로잉하는 유저 리스트 가져옴")
-	public Object getuserfollowing(@RequestParam(required = true) final String userId) {
-		
-		// 팔로잉유저 Id리스트
-		ArrayList<String>followingIdList = userPageDao.getUserFollowingByUserId(userId);
-		// 팔로잉 유저 리스트
-		ArrayList<Map<String, Object>>userList = new ArrayList<>();
-		
-		for (String followinguserId : followingIdList) {
-			User user = userdao.getUserByUserId(followinguserId);
-			Map<String, Object>map = new HashMap();
-			map.put("followingId", user.getUserId());
-			map.put("followingName", user.getUserName());
-			map.put("followingEmail", user.getUserEmail());
-			map.put("followingNickname", user.getUserNickname());
-			map.put("followingPhone", user.getUserPhone());
-			map.put("followingComment", user.getUserComment());
-			
-			userList.add(map);
-		}
-		System.out.println("내가 팔로잉 하는 유저 리스트 =" + userList);
-		
-		return userList;
-	}
-	
-	// 사용자를 팔로워 하는 유저 리스트를 가져온다.
-	@GetMapping("/userpage/getfollowerlist")
-	@ApiOperation(value = "[유저페이지] 나를 팔로워하는 유저 리스트 가져옴(나도 그 사람을 팔로우하거나 요청한 상태면 followerFollowing가 true 아니면 false")
-	public Object getuserfollower(@RequestParam(required = true) final String userId) {
-		// 팔로워유저 Id리스트
-		ArrayList<String>followerIdList = userPageDao.getUserFollowerByUserId(userId);
-		// user리스트
-		ArrayList<Map<String, Object>>userList = new ArrayList<>();
-		
-		for (String followeruserId : followerIdList) {
-			User user = userdao.getUserByUserId(followeruserId);
-			Map<String, Object>map = new HashMap();
-			map.put("followerId", user.getUserId());
-			map.put("followerName", user.getUserName());
-			map.put("followerEmail", user.getUserEmail());
-			map.put("followerNickname", user.getUserNickname());
-			map.put("followerPhone", user.getUserPhone());
-			map.put("followerComment", user.getUserComment());
-			int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, followeruserId);
-			
-			int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, followeruserId);
-			
-			// 내가 팔로잉 중ㅇ
-			if(ans1 > 0 || ans2 > 0) {
-				map.put("followerFollowing", "true");
-				System.out.println("나("+userId+")는 상대방인 "+user.getUserName()+" 님을 팔로우 한 상태입니다.");
-			}
-			else {
-				map.put("followerFollowing", "false");
-				System.out.println(userId+ "님은 상대방인 "+user.getUserName()+" 님을 팔로우 하지 않은 상태입니다.");
-			}
-			userList.add(map);
-		}
-		
-		System.out.println("나를 팔로워 하는 유저 리스트 =" + userList);
-		
-		return userList;
-	}
-	
 	// 사용자의 유저정보, 팔로잉수, 팔로워수 가져오기
 	@GetMapping("/userpage/getuser")
 	@ApiOperation(value = "[유저페이지] 사용자의 유저정보, 팔로잉, 팔로워 수 가져오기,팔로잉요청수까지")
@@ -212,7 +261,21 @@ public class UserPageController {
 		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-
+	@DeleteMapping("/userpage/deletefollowing")
+	@ApiOperation(value = "[유저페이지] 팔로잉 취소")
+	public Object deletefollowing(@RequestParam(required = true) final String userId,
+			@RequestParam(required = true) final String anotherId) {
+		
+		final BasicResponse result = new BasicResponse();
+		
+		userPageDao.deleteFollowing(userId, anotherId);
+		
+		result.status = true;
+		result.data = "success";
+		
+		return result;
+	}
+	
 	@DeleteMapping("/userpage/deletefollowingrequest")
 	@ApiOperation(value = "[유저페이지] 팔로잉 요청 거절")
 	public Object deletefollowingrequest(@RequestParam(required = true) final String userId,
@@ -298,4 +361,3 @@ public class UserPageController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 }
-

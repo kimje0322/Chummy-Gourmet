@@ -12,24 +12,24 @@ import sun.misc.BASE64Encoder;
 
 public class EncryptoApi
 {
-	public static void main(String[] args)
-	{
-		try
-		{
-			String originalText = "plain text";
-			String key = "key";
-			String en = Encrypt(originalText, key);
-			String de = Decrypt(en, key);
-			System.out.println("Original Text is " + originalText);
-			System.out.println("Encrypted Text is " + en);
-			System.out.println("Decrypted Text is " + de);
-		}
-
-		catch (Exception ex)
-		{
-			System.out.println("오류");
-		}
-	}
+//	public static void main(String[] args)
+//	{
+//		try
+//		{
+//			String originalText = "plain text";
+//			String key = "key";
+//			String en = Encrypt(originalText, key);
+//			String de = Decrypt(en, key);
+//			System.out.println("Original Text is " + originalText);
+//			System.out.println("Encrypted Text is " + en);
+//			System.out.println("Decrypted Text is " + de);
+//		}
+//
+//		catch (Exception ex)
+//		{
+//			System.out.println("오류");
+//		}
+//	}
 
 	public static String Decrypt(String text, String key) throws Exception
 

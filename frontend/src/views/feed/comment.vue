@@ -33,7 +33,14 @@
               />
             </span>
             <form style="height: 42px;" class="text-box" method="POST">
-              <textarea style="height: 18px;" class="text" placeholder="write here!"></textarea>
+              <textarea
+               
+                style="height: 18px;"
+                class="text"
+                placeholder="write here!"
+                v-model="commentText"
+              ></textarea>
+              <button class="upload">게시</button>
             </form>
           </div>
         </section>
@@ -60,13 +67,13 @@
                       style="float: left; width: 285px; flex-direction: column; position: relative;"
                     >
                       <!-- <div style="display: inline-flex;"> -->
-                        <h2
-                          style="font-size: 14px; font-weight: 600; align-items: center; display: inline-flex; margin-right: 4px;"
-                        >
-                          <div style="display: flex; flex-direction: column;">
-                            <a class="prf-link" href="#">dlwlrma</a>
-                          </div>
-                        </h2>
+                      <h2
+                        style="font-size: 14px; font-weight: 600; align-items: center; display: inline-flex; margin-right: 4px;"
+                      >
+                        <div style="display: flex; flex-direction: column;">
+                          <a class="prf-link" href="#">dlwlrma</a>
+                        </div>
+                      </h2>
                       <!-- </div> -->
                       <span>
                         게시글 내용 나오는 부분입니다.
@@ -138,6 +145,7 @@ const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
 export default {
   data() {
     return {
+      commentText: "",
       commentlst: [],
     };
   },
@@ -159,6 +167,9 @@ export default {
 </script>
 
 <style>
+.upload[disabled] {
+  opacity: 0.3;
+}
 .prf-link {
   color: black !important;
   border: 0;

@@ -119,6 +119,8 @@ public class ReviewController {
 		//3. 리뷰 아이디로 밋업 객체 가져오기
 		//4. 리뷰아이디로 파티원 객체 가져오기 //없어도됨
 		//5. 리뷰 아이디로 파티원 코멘트 가져오기
+		
+		System.out.println("들어왓니?");
 		Optional<Meetup> meetUp = meetUpDao.selectMeetUpById(id);
 		List<ReviewComment> comment = reviewCommentDao.selectReviewCommentByReviewId(id);
 		System.out.println(meetUp.get());

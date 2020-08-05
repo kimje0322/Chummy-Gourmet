@@ -27,9 +27,21 @@ import FollowRequestList from './components/common/FollowRequestList.vue'
 import UpdateUser from './views/user/UpdateUser.vue'
 import UpdateUserInfo from './views/user/UpdateUserInfo.vue'
 
+//사진업로드 테스트용
+import UploadTest from './views/feed/uploadtest.vue'
+
 Vue.use(VueRouter);
 export default new VueRouter({
     routes: [
+        //사진업로드 테스트용 추후 삭제.
+        {
+            path: '/uploadtest',
+            name: 'UploadTest',
+            component: UploadTest,
+            meta: {
+                navbar: true
+            }
+        },
         {
             path: '/login',
             name: 'Login',

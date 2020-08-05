@@ -53,7 +53,7 @@ public class PostController {
 	    System.out.println(extension);
 	    
 	    EncryptoApi en = new EncryptoApi();
-	    
+	     
 	    String fileFullName = en.Encrypt(fileName, "tpgns")+"."+extension;
 	    
 	    FileCopyUtils.copy(file.getBytes(), new File("/home/ubuntu/deploy/img/test/"+fileFullName));

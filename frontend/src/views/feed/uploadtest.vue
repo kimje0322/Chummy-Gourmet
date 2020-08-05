@@ -11,6 +11,18 @@
       type="text"
       style="width : 100%; border : 1px solid"
     />
+    <v-img src="http://i3b302.p.ssafy.io:8080/post/img?imgname=logo.png"></v-img>
+    <v-img src="http://i3b302.p.ssafy.io:8080/post/img?imgname=logo_ex.png"></v-img>
+    <v-img src="http://i3b302.p.ssafy.io:8080/post/img?imgname=map.png"></v-img>
+    <v-img src="http://i3b302.p.ssafy.io:8080/post/img?imgname=profile_default.png"></v-img>
+    <v-img src="http://i3b302.p.ssafy.io:8080/post/img?imgname=select-arrow.png"></v-img>
+    <v-img src="http://i3b302.p.ssafy.io:8080/post/img?imgname=testImage.png"></v-img>
+<v-img src="http://i3b302.p.ssafy.io:8080/post/img?imgname=test(1).jpg"></v-img>
+    <v-img src="http://i3b302.p.ssafy.io:8080/post/img?imgname=test(2).jpg"></v-img>
+    <v-img src="http://i3b302.p.ssafy.io:8080/post/img?imgname=test(3).jpg"></v-img>
+    <v-img src="http://i3b302.p.ssafy.io:8080/post/img?imgname=test(4).jpg"></v-img>
+    <v-img src="http://i3b302.p.ssafy.io:8080/post/img?imgname=test(5).jpg"></v-img>
+    <v-img src="http://i3b302.p.ssafy.io:8080/post/img?imgname=test(6).jpg"></v-img>
   </div>
 </template>
 

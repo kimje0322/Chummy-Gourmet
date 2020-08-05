@@ -31,6 +31,17 @@ public class Post {
 	private String postimgurl;
 	@Column(name = "post_like")
 	private String postlike;
+	@Column(name = "post_update_date")
+	private String postupdatedate;
+
+	
+	public String getPostupdatedate() {
+		return postupdatedate;
+	}
+
+	public void setPostupdatedate(String postupdatedate) {
+		this.postupdatedate = postupdatedate;
+	}
 
 	public String getPostid() {
 		return postid;

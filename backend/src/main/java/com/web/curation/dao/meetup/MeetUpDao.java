@@ -13,7 +13,7 @@ import com.web.curation.model.review.Restaurant;
 public interface MeetUpDao extends JpaRepository<Meetup, String> {
 
 	//리뷰테이블에 들어있는 밋업 아이디로 밋업 객체 가져오기
-	@Query(value = "SELECT meetup_id,user_name AS meetup_master, meetup_title, meetup_content,meetup_location,meetup_date " + 
+	@Query(value = "SELECT meetup_id,user_name AS meetup_master, meetup_title, meetup_content,meetup_location,meetup_date,meetup_create_date, meetup_personnel " + 
 			"FROM meetup a " + 
 			"INNER JOIN user b ON a.meetup_master = b.user_id " + 
             "where a.meetup_id = (select meetup_id from review where review_id = :id)", nativeQuery = true)

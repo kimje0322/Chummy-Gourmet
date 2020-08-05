@@ -85,7 +85,7 @@
   </div>
 </template>
 <script>
-const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 // const SERVER_URL = "http://localhost:8080";
 import "./components/css/style.scss";
 import axios from "axios";

@@ -22,6 +22,7 @@ import Home from './views/user/Home.vue'
 import FollowList from './components/common/Followlist.vue'
 import NewsFeed from './views/feed/newsfeed.vue'
 import FollowRequestList from './components/common/FollowRequestList.vue'
+import Feedcomment from './views/feed/comment.vue'
 
 //추가
 import UpdateUser from './views/user/UpdateUser.vue'
@@ -29,8 +30,7 @@ import UpdateUserInfo from './views/user/UpdateUserInfo.vue'
 
 Vue.use(VueRouter);
 export default new VueRouter({
-    routes: [
-        {
+    routes: [{
             path: '/login',
             name: 'Login',
             component: Login,
@@ -167,6 +167,11 @@ export default new VueRouter({
             path: '/newsfeed',
             name: 'NewsFeed',
             component: NewsFeed,
+        },
+        {
+            path: '/newsfeed/comment',
+            name: 'Comment',
+            component: Feedcomment,
         }
 
     ]

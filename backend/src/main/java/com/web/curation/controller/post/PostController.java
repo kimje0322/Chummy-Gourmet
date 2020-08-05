@@ -2,11 +2,15 @@ package com.web.curation.controller.post;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;
@@ -52,11 +56,17 @@ public class PostController {
 	    System.out.println(fileName);
 	    System.out.println(extension);
 	    
-	    EncryptoApi en = new EncryptoApi();
-	     
-	    String fileFullName = en.Encrypt(fileName, "tpgns")+"."+extension;
+	    Date today = new Date();
+	    SimpleDateFormat date = new SimpleDateFormat("yyyyMMdd");
+	    SimpleDateFormat time = new SimpleDateFormat("hhmmss");
 	    
-	    FileCopyUtils.copy(file.getBytes(), new File("/home/ubuntu/deploy/img/test/"+fileFullName));
+	    int r = (int)(Math.random()*1000000);
+	     
+	    String fileFullName = r+"_"+date.format(today)+time.format(today)+"."+extension;
+	    //서버에서 사용할때
+//	    FileCopyUtils.copy(file.getBytes(), new File("/home/ubuntu/deploy/img/test/"+fileFullName));
+	    //로컬에서 테스트할때
+	    FileCopyUtils.copy(file.getBytes(), new File("C:/"+fileFullName));
 	    return fileFullName;
 	}
 	
@@ -94,7 +104,7 @@ public class PostController {
 	
 	@PostMapping("/post")
 	@ApiOperation(value = "게시글 등록")
-	public void insert(@RequestBody Post post) {
+	public void insert(@Valid @RequestBody Post post) {
 		postDao.insert(post);
 	}
 	

@@ -29,7 +29,7 @@
             </v-btn>
 
             <v-btn text color="deep-purple accent-4">
-              <router-link to="/party">
+              <router-link to="/feed/add">
                 <v-icon>fas fa-plus</v-icon>
               </router-link>
             </v-btn>

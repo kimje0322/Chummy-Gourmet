@@ -1,6 +1,7 @@
 <template>
   <v-layout>
-    <v-toolbar dark>
+    <!-- color="orange" -->
+    <v-toolbar dark >
       <!-- 중앙정렬 하기 위해 2개씀 -->
       <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
       <v-spacer></v-spacer>
@@ -18,11 +19,10 @@
       <v-list >
         <v-list-item>
           <v-list-item-content>
-            <v-list-item-title class="title">{{user.userNickname}}</v-list-item-title><br>
-            <v-list-item-subtitle>{{user.userEmail}}</v-list-item-subtitle>
+            <v-list-item-title class="title">{{ user.userNickname }}</v-list-item-title><br>
+            <v-list-item-subtitle>{{ user.userEmail }}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
-
           <v-btn @click="updateUser" block>
             프로필 수정
           </v-btn>

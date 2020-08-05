@@ -48,6 +48,31 @@ public class UserPageController {
 	@Autowired
 	UserDetailDao userDetailDao;
 	
+	// 사용자의 유저 추가정보 가져오기
+	@GetMapping("/userpage/getuserMeetup")
+	@ApiOperation(value = "[유저페이지] 사용자의 밋업정보리스트 가져오기")
+	public Object getuserMeetup(@RequestParam(required = true) final String userId) {
+		
+		ArrayList<String>List = userPageDao.getMeetupByUserId(userId);
+		
+		// 팔로잉 유저 리스트
+		ArrayList<Map<String, Object>>meeUpList = new ArrayList<>();
+		for (String str : List) {
+			String[] array = str.split(",");
+			Map<String, Object>map = new HashMap();
+			map.put("meetupId", array[0]);
+			map.put("meetupMaster", array[1]);
+			map.put("meetupTitle", array[2]);
+			map.put("meetupContent", array[3]);
+			map.put("meetupLocation", array[4]);
+			map.put("meetupDate", array[5]);
+			map.put("meetupPersonnel", array[6]);
+			map.put("meetupCreateDate", array[7]);
+			meeUpList.add(map);
+		}
+		return meeUpList;
+	}
+		
 	// 사용자가 팔로잉 하는 유저 리스트를 가져온다.
 	@GetMapping("/userpage/getfollowinglist")
 	@ApiOperation(value = "[유저페이지] 내가 팔로잉하는 유저 리스트 가져옴")

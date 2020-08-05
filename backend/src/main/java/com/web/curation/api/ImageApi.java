@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class ImageApi {
 
-	@GetMapping(value = "/post/img", produces = MediaType.IMAGE_PNG_VALUE)
+	@GetMapping(value = "/img/post", produces = MediaType.IMAGE_PNG_VALUE)
 	public @ResponseBody byte[] getImage(final String imgname) throws IOException {
 		System.out.println("입력");
-		InputStream in = new FileInputStream("/home/ubuntu/deploy/img/test/"+imgname);
+		InputStream in = new FileInputStream("/home/ubuntu/deploy/img/newsfeed/"+imgname);
 		System.out.println(in);
 		return IOUtils.toByteArray(in);
 	}

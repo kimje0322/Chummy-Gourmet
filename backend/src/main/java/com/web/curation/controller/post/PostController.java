@@ -1,7 +1,6 @@
 package com.web.curation.controller.post;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,11 +23,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.web.curation.api.EncryptoApi;
 import com.web.curation.dao.post.PostDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.post.Post;
-import com.web.curation.model.user.Following;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -46,7 +43,7 @@ public class PostController {
 	@Autowired
 	PostDao postDao;
 
-	@PostMapping("/post/test")
+	@PostMapping("/post/img")
 	public String test(@RequestParam("file") MultipartFile file) throws Exception {
 		System.out.println("파일 이름 : " + file.getOriginalFilename());
 	    System.out.println("파일 크기 : " + file.getSize());
@@ -64,9 +61,9 @@ public class PostController {
 	     
 	    String fileFullName = r+"_"+date.format(today)+time.format(today)+"."+extension;
 	    //서버에서 사용할때
-//	    FileCopyUtils.copy(file.getBytes(), new File("/home/ubuntu/deploy/img/test/"+fileFullName));
+	    FileCopyUtils.copy(file.getBytes(), new File("/home/ubuntu/deploy/img/newsfeed/"+fileFullName));
 	    //로컬에서 테스트할때
-	    FileCopyUtils.copy(file.getBytes(), new File("C:/"+fileFullName));
+//	    FileCopyUtils.copy(file.getBytes(), new File("C:/"+fileFullName));
 	    return fileFullName;
 	}
 	

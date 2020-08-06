@@ -1,7 +1,10 @@
 package com.web.curation.controller.account;
 
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -10,6 +13,7 @@ import java.util.StringTokenizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.dao.user.UserDetailDao;
@@ -202,6 +207,7 @@ public class UserPageController {
 		map.put("userNickname", user.getUserNickname());
 		map.put("userPhone", user.getUserPhone());
 		map.put("userComment", user.getUserComment());
+		map.put("userImg",user.getUserImg());
 		// 팔로잉 수
 		int count = userPageDao.getUserFollowingCount(user.getUserId());
 		map.put("followingCount", count);
@@ -359,5 +365,38 @@ public class UserPageController {
 			result.data = "fail";
 		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	// 사용자의 프로필사진 변경
+	@GetMapping("/userpage/updateimg")
+	@ApiOperation(value ="[유저이미지 정보 저장]")
+	public void updateImg(@RequestParam(required = true) final String user_id,@RequestParam(required = true) final String user_img) {
+		System.out.println(user_id +" "+user_img);
+		userdao.setUserImgByUserId(user_img, user_id);
+	}
+	
+	@PostMapping("/userpage/img")
+	@ApiOperation(value ="[유저이미지파일 저장 후 파일 이름 리턴]")
+	public String test(@RequestParam("file") MultipartFile file) throws Exception {
+		System.out.println("파일 이름 : " + file.getOriginalFilename());
+	    System.out.println("파일 크기 : " + file.getSize());
+	    StringTokenizer st = new StringTokenizer(file.getOriginalFilename(),".");
+	    String fileName = st.nextToken();
+	    String extension =st.nextToken();
+	    System.out.println(fileName);
+	    System.out.println(extension);
+	    
+	    Date today = new Date();
+	    SimpleDateFormat date = new SimpleDateFormat("yyyyMMdd");
+	    SimpleDateFormat time = new SimpleDateFormat("hhmmss");
+	    
+	    int r = (int)(Math.random()*1000000);
+	     
+	    String fileFullName = r+"_"+date.format(today)+time.format(today)+"."+extension;
+	    //서버에서 사용할때
+	    FileCopyUtils.copy(file.getBytes(), new File("/home/ubuntu/deploy/img/user/"+fileFullName));
+	    //로컬에서 테스트할때
+//	    FileCopyUtils.copy(file.getBytes(), new File("C:/"+fileFullName));
+	    return fileFullName;
 	}
 }

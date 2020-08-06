@@ -22,27 +22,43 @@ import Home from './views/user/Home.vue'
 import FollowList from './components/common/Followlist.vue'
 import NewsFeed from './views/feed/newsfeed.vue'
 import FollowRequestList from './components/common/FollowRequestList.vue'
+import Feedcomment from './views/feed/comment.vue'
 
 //추가
 import UpdateUser from './views/user/UpdateUser.vue'
+import Profile from './views/user/Profile.vue'
+
 import UpdateUserInfo from './views/user/UpdateUserInfo.vue'
 
-//사진업로드 테스트용
-import UploadTest from './views/feed/uploadtest.vue'
+// //사진업로드 테스트용
+// import UploadTest from './views/feed/uploadtest.vue'
+
+//피드 게시글 업로드
+import AddFeed from './views/feed/addFeed.vue'        
 
 Vue.use(VueRouter);
 export default new VueRouter({
     routes: [
-        //사진업로드 테스트용 추후 삭제.
+        //피드 게시글 업로드
         {
-            path: '/uploadtest',
-            name: 'UploadTest',
-            component: UploadTest,
-            meta: {
-                navbar: true
-            }
+            path: '/feed/add',
+            name: 'AddFeed',
+            component: AddFeed,
+            // meta: {
+            //     navbar: true
+            // }
         },
+        //사진업로드 테스트용 추후 삭제.
+        // {
+        //     path: '/uploadtest',
+        //     name: 'UploadTest',
+        //     component: UploadTest,
+        //     meta: {
+        //         navbar: true
+        //     }
+        // },
         {
+
             path: '/login',
             name: 'Login',
             component: Login,
@@ -56,6 +72,11 @@ export default new VueRouter({
             path: '/user/FollowRequestList',
             name: 'FollowRequestList',
             component: FollowRequestList,
+        },
+        {
+            path: '/user/profile',
+            name: 'Profile',
+            component: Profile,
         },
         {
             path: '/user/updateUser',
@@ -113,11 +134,11 @@ export default new VueRouter({
             name: 'FoundPw',
             component: FoundPw
         },
-        {
-            path: '/user/pref',
-            name: 'Pref',
-            component: Pref
-        },
+        // {
+        //     path: '/user/pref',
+        //     name: 'Pref',
+        //     component: Pref
+        // },
         {
             path: '/map',
             name: 'Map',
@@ -179,6 +200,11 @@ export default new VueRouter({
             path: '/newsfeed',
             name: 'NewsFeed',
             component: NewsFeed,
+        },
+        {
+            path: '/newsfeed/comment',
+            name: 'Comment',
+            component: Feedcomment,
         }
 
     ]

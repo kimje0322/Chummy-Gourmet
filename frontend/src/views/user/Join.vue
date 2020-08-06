@@ -40,7 +40,7 @@
           id="password"
           :type="passwordType"
           placeholder="비밀번호를 입력하세요."
-        />A
+        />
         <label for="password">비밀번호</label>
         <div class="error-text" v-if="error.password">{{error.password}}</div>
       </div>
@@ -91,7 +91,7 @@ import * as EmailValidator from "email-validator";
 import PV from "password-validator";
 import UserApi from "../../api/UserApi";
 
-const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 
 export default {
   name: "Join",

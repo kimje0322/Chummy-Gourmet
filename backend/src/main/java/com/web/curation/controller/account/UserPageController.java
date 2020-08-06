@@ -261,7 +261,21 @@ public class UserPageController {
 		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-
+	@DeleteMapping("/userpage/deletefollowing")
+	@ApiOperation(value = "[유저페이지] 팔로잉 취소")
+	public Object deletefollowing(@RequestParam(required = true) final String userId,
+			@RequestParam(required = true) final String anotherId) {
+		
+		final BasicResponse result = new BasicResponse();
+		
+		userPageDao.deleteFollowing(userId, anotherId);
+		
+		result.status = true;
+		result.data = "success";
+		
+		return result;
+	}
+	
 	@DeleteMapping("/userpage/deletefollowingrequest")
 	@ApiOperation(value = "[유저페이지] 팔로잉 요청 거절")
 	public Object deletefollowingrequest(@RequestParam(required = true) final String userId,

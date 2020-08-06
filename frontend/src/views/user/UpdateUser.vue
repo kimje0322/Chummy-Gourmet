@@ -4,18 +4,19 @@
       <v-toolbar dark>
         <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
         <v-spacer></v-spacer>
-        <p class="my-auto">Profile 수정</p>
+        <p class="my-auto">프로필 수정</p>
         <v-spacer></v-spacer>
         <v-spacer></v-spacer>
       </v-toolbar>
     </v-toolbar-title>
     
+    <div class="entireClass">
     <v-layout row>
       <v-flex xs4 order-md2 order-xs1>
       </v-flex>
       <v-flex xs4 order-md3 order-xs2>
-        <v-avatar size="100" >
-          <v-img
+        <v-avatar class="p-img" size="100" >
+          <v-img 
             v-if="viewImg" :src="viewImg">
           </v-img>
         </v-avatar>
@@ -29,53 +30,101 @@
     <v-layout row>
       <v-flex xs3 order-md2 order-xs1>
       </v-flex>
-      <v-flex xs6 order-md3 order-xs2>
-        <v-btn type="button" @click="onClickImageChange" >수정</v-btn>
+      <v-flex xs6 order-md3 order-xs2 class="update-buttons">
+        <v-btn small type="button" class="mr-2" @click="onClickImageChange" >수정</v-btn>
         <input ref="imageInput" type="file" hidden @change="onChangeImage">
-        <v-btn @click="onClickSubmit">확인</v-btn>
+        <v-btn small @click="onClickSubmit">확인</v-btn>
       </v-flex>
       <v-flex xs3 order-md1 order-xs3>
       </v-flex>
     </v-layout>
-    
+
     <v-layout>
     <v-content>
-      
+
       <v-text-field
+        style="border-bottom-width: 15px;
+        margin: 7px 0 10px 0px;"
+        color="dark"
+        v-model="user.userName"
+        label="Name"       
+        disabled
+        hide-details
+        readonly
+        outlined
+        >
+      </v-text-field >
+
+      <v-text-field
+        style="border-bottom-width: 15px;
+        margin: 7px 0 10px 0px;"
         color="dark"
         v-model="userNickname"
         label="Nickname"
+        hide-details
         outlined
         >
       </v-text-field >
       
       <v-text-field 
         color="dark"
+        style="border-bottom-width: 15px;
+        margin: 7px 0 10px 0px;"
         v-model="userPwd"
         :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" 
         :type="show1 ? 'text' : 'password'"
         @click:append="show1 = !show1"
         label="Password" 
+        hide-details
         outlined
         >
       </v-text-field>
 
+      <v-text-field
+        style="border-bottom-width: 15px;
+        margin: 7px 0 10px 0px;"
+        color="dark"
+        v-model="user.userEmail"
+        label="Email"       
+        disabled
+        hide-details
+        readonly
+        outlined
+        >
+      </v-text-field >
+
+      <v-text-field
+        style="border-bottom-width: 15px;
+        margin: 7px 0 10px 0px;"
+        color="dark"
+        v-model="user.userPhone"
+        label="Phone"       
+        disabled
+        hide-details
+        readonly
+        outlined
+        >
+      </v-text-field >
+
       <v-text-field 
+        style="border-bottom-width: 15px;
+        margin: 7px 0 10px 0px;"
         color="dark"
         v-model="userComment" 
         label="Comment" 
+        hide-details
         outlined>
       </v-text-field>
 
       <v-btn
-        block
+        block dark
         @click="checkForm"
       >
         프로필 수정
       </v-btn>
     </v-content>
     </v-layout>
-    <v-layout>
+    <!-- <v-layout>
       <v-list>
         <v-list-item-title>프로필 정보</v-list-item-title>
         <v-list-item-content>
@@ -87,7 +136,8 @@
           <v-list-item-title>{{user.userPhone}}</v-list-item-title>
         </v-list-item-content>
       </v-list>
-    </v-layout>
+    </v-layout> -->
+    </div>
   </v-app>
 </template>
 
@@ -237,5 +287,14 @@ export default {
     color: white; 
     margin-left: 7px;
   }
-  
+  .update-buttons {
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .p-img {
+    margin: 1px 0 10px 12px;
+  }
+  .text-field-css{
+    margin: 3px;
+  }
 </style>

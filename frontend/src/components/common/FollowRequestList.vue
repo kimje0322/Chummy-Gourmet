@@ -27,13 +27,13 @@
         </v-list-item-content>
 
         <v-list-item-icon @click="acceptFollowing(item.followingRequestId)">
-          <v-btn color="blue">
+          <v-btn color="info">
             수락
           </v-btn>
         </v-list-item-icon>
 
         <v-list-item-icon @click="deleteFollowing(item.followingRequestId)">
-          <v-btn color="red">
+          <v-btn color="error">
             거절
           </v-btn>
         </v-list-item-icon>

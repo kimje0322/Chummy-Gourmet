@@ -77,6 +77,11 @@ public interface UserPageDao extends JpaRepository<UserPage, String> {
     		"FROM meetup_member " + 
     		"WHERE meetup_id = :meetupId", nativeQuery = true)
     ArrayList<String> getUsersByMeetupId(String meetupId);
+
+    @Query(value = "INSERT INTO following"+ 
+    		"(user_id, user_following) " +
+    		"value (:followingRequestId, :userId)", nativeQuery = true)
+	String insertFollowingUser(String userId, String followingRequestId);
 }
 
 

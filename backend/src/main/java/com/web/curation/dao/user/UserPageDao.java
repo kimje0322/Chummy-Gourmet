@@ -80,7 +80,7 @@ public interface UserPageDao extends JpaRepository<UserPage, String> {
 
     @Query(value = "INSERT INTO following"+ 
     		"(user_id, user_following) " +
-    		"value (:userId, :followingRequestId)", nativeQuery = true)
+    		"value (:followingRequestId, :userId)", nativeQuery = true)
 	String insertFollowingUser(String userId, String followingRequestId);
 }
 

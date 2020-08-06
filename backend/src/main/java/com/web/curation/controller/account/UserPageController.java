@@ -131,7 +131,7 @@ public class UserPageController {
 				map.put("followingNickname", user.getUserNickname());
 				map.put("followingPhone", user.getUserPhone());
 				map.put("followingComment", user.getUserComment());
-				
+				map.put("followingImg", user.getUserImg());
 				userList.add(map);
 			}
 			// 유저 검색을 한 경우
@@ -175,6 +175,7 @@ public class UserPageController {
 				map.put("followerNickname", user.getUserNickname());
 				map.put("followerPhone", user.getUserPhone());
 				map.put("followerComment", user.getUserComment());
+				map.put("followerImg", user.getUserImg());
 				int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, followeruserId);
 				int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, followeruserId);
 				

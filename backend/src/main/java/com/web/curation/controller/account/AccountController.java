@@ -98,7 +98,7 @@ public class AccountController {
 
    @GetMapping("/account/signup/valid")
    @ApiOperation(value = "닉네임, 이메일 중복체크")
-   public Object nicknameAndEmailVaildCheck(String nickname, String email) {
+   public Object nicknameAndEmailVaildCheck(@RequestParam(required = true) final String nickname,@RequestParam(required = true) final String email) {
       User originUser = null;
       final BasicResponse result = new BasicResponse();
       boolean isExistNickname = false;
@@ -150,6 +150,22 @@ public class AccountController {
             request.getUserInterest().toString());
       System.out.println(newUserDetail);
       userDetailDao.save(newUserDetail);
+
+      result.status = true;
+      result.data = "success";
+      
+      return new ResponseEntity<>(result, HttpStatus.OK);
+   }
+   
+   @PostMapping("/account/kakaosignup")
+   @ApiOperation(value = "카카오가입하기")
+   public Object kakaosignup(@Valid @RequestBody User request) {
+      final BasicResponse result = new BasicResponse();
+      System.out.println(request);
+      // user entity db 저장
+//      User newUser = new User(request.getUserPwd(), request.getUserEmail(),
+//            request.getUserNickname(),request.getUserComment());
+      userDao.save(request);
 
       result.status = true;
       result.data = "success";

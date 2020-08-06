@@ -331,6 +331,7 @@ public class UserPageController {
 		final BasicResponse result = new BasicResponse();
 		
 		userPageDao.deleteFollowing(userId, anotherId);
+		userPageDao.deleteFollower(userId, anotherId);
 		
 		result.status = true;
 		result.data = "success";

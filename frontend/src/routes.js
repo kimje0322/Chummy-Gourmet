@@ -17,7 +17,7 @@ import FoundPw from './views/user/FoundPw.vue'
 import UserInfo from './views/Main.vue'
 import Pref from './views/user/Preference.vue'
 import Map from './views/map/map.vue'
-import MapParty from './views/map/party.vue'
+import CreateParty from './views/map/createParty.vue'
 import Home from './views/user/Home.vue'
 import FollowList from './components/common/Followlist.vue'
 import NewsFeed from './views/feed/newsfeed.vue'
@@ -145,9 +145,9 @@ export default new VueRouter({
             component: Map
         },
         {
-            path: '/map/party',
-            name: 'MapParty',
-            component: MapParty
+            path: '/map/createParty',
+            name: 'CreateParty',
+            component: CreateParty
         },
         {
             path: '/feed/main',

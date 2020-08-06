@@ -4,12 +4,15 @@
               <v-btn
             fab
             small
-            color="accent-2"
+            color="blue accent-2"
             bottom
             right
             absolute
+            style="top:470px;"
           >
-            <v-icon>mdi-plus</v-icon>
+            <router-link to="/map/createParty">
+              <v-icon color="white">mdi-plus</v-icon>
+            </router-link>
           </v-btn>
     <div id="map1" style="position:unset;">map</div>
     <div class="custom_zoomcontrol radius_border">
@@ -187,7 +190,7 @@ export default {
 }
 .custom_zoomcontrol {
   position: absolute;
-  top: 475px;
+  top: 520px;
   right: 10px;
   width: 36px;
   height: 80px;

@@ -33,8 +33,29 @@ public class Post {
 	private String postlike;
 	@Column(name = "post_update_date")
 	private String postupdatedate;
-
+	@Column(name = "user_nickname")
+	private String usernickname;
+	@Column(name = "user_img")
+	private String user_img;
 	
+
+
+	public String getUsernickname() {
+		return usernickname;
+	}
+
+	public void setUsernickname(String usernickname) {
+		this.usernickname = usernickname;
+	}
+
+	public String getUser_img() {
+		return user_img;
+	}
+
+	public void setUser_img(String user_img) {
+		this.user_img = user_img;
+	}
+
 	public String getPostupdatedate() {
 		return postupdatedate;
 	}

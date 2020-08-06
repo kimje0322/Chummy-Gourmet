@@ -17,7 +17,6 @@
       >
         <v-list-item-avatar @click="showUser">
           <v-img
-            v-if="item.followingRequestUserImg"
             :src="item.followingRequestUserImg">
           </v-img>
 
@@ -48,8 +47,8 @@
 <script>
 
 import axios from "axios";
-// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-const SERVER_URL = "https://localhost:8080";
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "https://localhost:8080";
 export default {
   name: "components",
  
@@ -57,7 +56,6 @@ export default {
     return {
       userId :"",
       items: [],
-      list:[],
       viewImg:"",
       userImg:"",
     };
@@ -110,7 +108,6 @@ export default {
       )
       .then((response) => {
         if(response.data != ""){
-          // this.list = response.data;
           console.log(this.list);
           for (let i = 0; i < response.data.length; i++) {
             let userImg = response.data[i].followingRequestUserImg;

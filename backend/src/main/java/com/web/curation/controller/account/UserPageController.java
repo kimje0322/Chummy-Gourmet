@@ -48,7 +48,37 @@ public class UserPageController {
 	@Autowired
 	UserDetailDao userDetailDao;
 	
-	// 사용자의 유저 추가정보 가져오기
+	// 밋업에 대한 참가자들 가져오기
+	@GetMapping("/userpage/getMeetupMember")
+	@ApiOperation(value = "[유저페이지] 밋업 참가자들 데이터 가져오기")
+	public Object getMeetupMember(@RequestParam(required = true) final String meetupId,
+			@RequestParam(required = true) final String meetupMaster) {
+		
+		User masterUser= userdao.getUserByUserId(meetupMaster);
+		
+		ArrayList<String>List = userPageDao.getUsersByMeetupId(meetupId);
+		
+		// 밋업 유저 리스트
+		ArrayList<Map<String, Object>>meeUpUserList = new ArrayList<>();
+		Map<String, Object>map = new HashMap();
+		map.put("masterUserName", masterUser.getUserName());
+		map.put("masterUserNickname", masterUser.getUserNickname());
+		meeUpUserList.add(map);
+		
+		for (String userId : List) {
+			System.out.println(userId);
+			map = new HashMap();
+			
+			User member = userdao.getUserByUserId(userId);
+			map.put("memberUserName", member.getUserName());
+			map.put("memberUserNickname", member.getUserNickname());
+			
+			meeUpUserList.add(map);
+		}
+		return meeUpUserList;
+	}
+		
+	// 사용자의 밋업정보리스트 가져오기
 	@GetMapping("/userpage/getuserMeetup")
 	@ApiOperation(value = "[유저페이지] 사용자의 밋업정보리스트 가져오기")
 	public Object getuserMeetup(@RequestParam(required = true) final String userId) {

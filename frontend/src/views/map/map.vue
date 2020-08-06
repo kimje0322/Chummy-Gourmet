@@ -1,6 +1,16 @@
 
 <template>
   <div class="map_wrap_1">
+              <v-btn
+            fab
+            small
+            color="accent-2"
+            bottom
+            right
+            absolute
+          >
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
     <div id="map1" style="position:unset;">map</div>
     <div class="custom_zoomcontrol radius_border">
       <span @click="zoomIn">

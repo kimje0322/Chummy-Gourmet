@@ -369,12 +369,14 @@ public class UserPageController {
 	
 	// 사용자의 프로필사진 변경
 	@GetMapping("/userpage/updateimg")
+	@ApiOperation(value ="[유저이미지 정보 저장]")
 	public void updateImg(@RequestParam(required = true) final String user_id,@RequestParam(required = true) final String user_img) {
 		System.out.println(user_id +" "+user_img);
 		userdao.setUserImgByUserId(user_img, user_id);
 	}
 	
 	@PostMapping("/userpage/img")
+	@ApiOperation(value ="[유저이미지파일 저장 후 파일 이름 리턴]")
 	public String test(@RequestParam("file") MultipartFile file) throws Exception {
 		System.out.println("파일 이름 : " + file.getOriginalFilename());
 	    System.out.println("파일 크기 : " + file.getSize());
@@ -392,9 +394,9 @@ public class UserPageController {
 	     
 	    String fileFullName = r+"_"+date.format(today)+time.format(today)+"."+extension;
 	    //서버에서 사용할때
-//	    FileCopyUtils.copy(file.getBytes(), new File("/home/ubuntu/deploy/img/profile/"+fileFullName));
+	    FileCopyUtils.copy(file.getBytes(), new File("/home/ubuntu/deploy/img/user/"+fileFullName));
 	    //로컬에서 테스트할때
-	    FileCopyUtils.copy(file.getBytes(), new File("C:/"+fileFullName));
+//	    FileCopyUtils.copy(file.getBytes(), new File("C:/"+fileFullName));
 	    return fileFullName;
 	}
 }

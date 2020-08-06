@@ -24,11 +24,11 @@ public class ImageApi {
 	}
 	
 	@GetMapping(value = "/img/user", produces = MediaType.IMAGE_PNG_VALUE)
-	@ApiOperation(value = "[이미지 가져오기]")
+	@ApiOperation(value = "[유저 이미지 가져오기]")
 	public @ResponseBody byte[] getUserImage(final String imgname) throws IOException {
 		System.out.println("입력");
-//		InputStream in = new FileInputStream("/home/ubuntu/deploy/img/newsfeed/"+imgname);
-		InputStream in = new FileInputStream("C:/"+imgname);
+		InputStream in = new FileInputStream("/home/ubuntu/deploy/img/user/"+imgname);
+//		InputStream in = new FileInputStream("C:/"+imgname);
 		System.out.println(in);
 		return IOUtils.toByteArray(in);
 	}

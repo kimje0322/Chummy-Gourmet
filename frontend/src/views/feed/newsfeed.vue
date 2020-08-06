@@ -64,7 +64,7 @@
             <div class="fc-frame" tabindex="0">
               <div class="fc-fr">
                 <img
-                  :src="`http://i3b302.p.ssafy.io:8080/img/post?imgname=`+lst.postimgurl"
+                  :src="`https://i3b302.p.ssafy.io:8080/img/post?imgname=`+lst.postimgurl"
                   class="fc-img"
                 />
               </div>
@@ -204,7 +204,7 @@
 import axios from "axios";
 import router from "@/routes";
 
-const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 // const SERVER_URL = "http://localhost:8080";
 
 export default {

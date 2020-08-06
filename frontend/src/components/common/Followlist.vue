@@ -47,7 +47,7 @@
                 <!-- <v-list-item-title v-text="user.followingName"></v-list-item-title> -->
                 </v-list-item-content>
 
-                <v-btn @click="onFollow(user)" v-if="user.followerFollowing !== 'true'">
+                <v-btn color="blue" @click="onFollow(user)" v-if="user.followerFollowing !== 'true'">
                     팔로잉
                 </v-btn>
                 <v-btn @click="unFollow(user)" v-else>
@@ -96,8 +96,8 @@
 import Top from "../common/Top";
 
 import axios from "axios";
-const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
-// const SERVER_URL = "http://localhost:8080";
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "https://localhost:8080";
 export default {
   name: "components",
   components: {

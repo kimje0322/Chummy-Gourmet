@@ -14,18 +14,16 @@
     
     <v-list subheader>
       <v-list-item
-        v-for="item in list"
+        v-for="item in items"
         :key="item.userId"
       >
         <v-list-item-avatar @click="showUser">
-          <v-img
+          <!-- <v-img
             v-if="viewImg" :src="viewImg">
-          </v-img>
-
+          </v-img> -->
           <v-img
-            v-if="item.active" :src="item.avatar">
+            :src="item.img">
           </v-img>
-          <!-- <v-img :src="items[0].avatar"></v-img> -->
         </v-list-item-avatar>
 
          
@@ -64,9 +62,12 @@ export default {
   data: () => {
     return {
       userId :"",
-      items: [
-        // { active: true, avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg' },
+      tmp :[
+         { active: true, avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg' },
+      ],
 
+      items: [
+        
       ],
       list:[],
       viewImg:"",
@@ -121,12 +122,14 @@ export default {
       .then((response) => {
         if(response.data != ""){
           this.list = response.data;
-          this.userImg = this.list.followingImg;
-          this.viewImg = SERVER_URL+"/img/user?imgname="+this.userImg;
-          this.items.push({ active: true, avatar: this.viewImg })
-
-          console.log("userImg : "+this.viewImg);
+          for (let i = 0; i < this.list.length; i++) {
+            this.userImg = this.list[i].followingRequestUserImg;
+            this.viewImg = SERVER_URL+"/img/user?imgname="+this.userImg;
+            this.items.push({ active: true, img: this.viewImg })
+          }
         }
+        console.log(this.items)
+        console.log(this.items[0].img)
       })
       .catch((error) => {
         console.log(error.response);

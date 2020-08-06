@@ -9,8 +9,6 @@
         <v-spacer></v-spacer>
       </v-toolbar>
     </v-toolbar-title>
-    <!-- 가운데 부분 -->
-    <!-- 팔로워 -->
     
     <v-list subheader>
       <v-list-item
@@ -18,25 +16,21 @@
         :key="item.userId"
       >
         <v-list-item-avatar @click="showUser">
-          <!-- <v-img
-            v-if="viewImg" :src="viewImg">
-          </v-img> -->
           <v-img
-            :src="item.img">
+            v-if="item.followingRequestUserImg"
+            :src="item.followingRequestUserImg">
           </v-img>
+
         </v-list-item-avatar>
 
-         
         <v-list-item-content @click="showUser">
           <v-list-item-title>{{item.followingRequestNickname}}</v-list-item-title>
         </v-list-item-content>
 
-        
         <v-list-item-icon @click="acceptFollowing(item.followingRequestId)">
           <v-btn color="blue">
             수락
           </v-btn>
-          <!-- <v-icon>mdi-account-plus</v-icon> -->
         </v-list-item-icon>
 
         <v-list-item-icon @click="deleteFollowing(item.followingRequestId)">
@@ -54,21 +48,15 @@
 <script>
 
 import axios from "axios";
-const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-// const SERVER_URL = "https://localhost:8080";
+// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "https://localhost:8080";
 export default {
   name: "components",
  
   data: () => {
     return {
       userId :"",
-      tmp :[
-         { active: true, avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg' },
-      ],
-
-      items: [
-        
-      ],
+      items: [],
       list:[],
       viewImg:"",
       userImg:"",
@@ -114,22 +102,27 @@ export default {
       });
     },
     created(){
-     this.userId = this.$cookie.get("userId");
+      this.userId = this.$cookie.get("userId");
+      this.items =[]
     axios
       .get(
         `${SERVER_URL}/userpage/getfollowingrequest?userId=${this.userId}`
       )
       .then((response) => {
         if(response.data != ""){
-          this.list = response.data;
-          for (let i = 0; i < this.list.length; i++) {
-            this.userImg = this.list[i].followingRequestUserImg;
-            this.viewImg = SERVER_URL+"/img/user?imgname="+this.userImg;
-            this.items.push({ active: true, img: this.viewImg })
+          // this.list = response.data;
+          console.log(this.list);
+          for (let i = 0; i < response.data.length; i++) {
+            let userImg = response.data[i].followingRequestUserImg;
+            let viewImg = SERVER_URL+"/img/user?imgname=" + userImg;
+            console.log(viewImg);
+            this.items.push({
+              followingRequestId : response.data[i].followingRequestId,
+              followingRequestNickname : response.data[i].followingRequestNickname,
+              followingRequestUserImg: viewImg
+              })
           }
         }
-        console.log(this.items)
-        console.log(this.items[0].img)
       })
       .catch((error) => {
         console.log(error.response);

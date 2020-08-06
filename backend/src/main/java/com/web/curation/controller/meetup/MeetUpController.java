@@ -71,10 +71,11 @@ public class MeetUpController {
 	}
 	
 	//신규 밋업 등록
-	@PostMapping("/meetup/")
+	@PostMapping("/meetup")
 	@ApiOperation(value = "신규 밋업 등록")
 	public Object createMeetUp(@RequestBody Meetup meetup) {
 		final BasicResponse result = new BasicResponse();
+		System.out.println(meetup);
 		meetupDao.save(meetup);
 		// ==================
 		// 유효성 체크할 부분

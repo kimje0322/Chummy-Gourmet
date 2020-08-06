@@ -53,61 +53,6 @@ public class UserPageController {
 	@Autowired
 	UserDetailDao userDetailDao;
 	
-	// 밋업에 대한 참가자들 가져오기
-	@GetMapping("/userpage/getMeetupMember")
-	@ApiOperation(value = "[유저페이지] 밋업 참가자들 데이터 가져오기")
-	public Object getMeetupMember(@RequestParam(required = true) final String meetupId,
-			@RequestParam(required = true) final String meetupMaster) {
-		
-		User masterUser= userdao.getUserByUserId(meetupMaster);
-		
-		ArrayList<String>List = userPageDao.getUsersByMeetupId(meetupId);
-		
-		// 밋업 유저 리스트
-		ArrayList<Map<String, Object>>meeUpUserList = new ArrayList<>();
-		Map<String, Object>map = new HashMap();
-		map.put("masterUserName", masterUser.getUserName());
-		map.put("masterUserNickname", masterUser.getUserNickname());
-		meeUpUserList.add(map);
-		
-		for (String userId : List) {
-			System.out.println(userId);
-			map = new HashMap();
-			
-			User member = userdao.getUserByUserId(userId);
-			map.put("memberUserName", member.getUserName());
-			map.put("memberUserNickname", member.getUserNickname());
-			
-			meeUpUserList.add(map);
-		}
-		return meeUpUserList;
-	}
-		
-	// 사용자의 밋업정보리스트 가져오기
-	@GetMapping("/userpage/getuserMeetup")
-	@ApiOperation(value = "[유저페이지] 사용자의 밋업정보리스트 가져오기")
-	public Object getuserMeetup(@RequestParam(required = true) final String userId) {
-		
-		ArrayList<String>List = userPageDao.getMeetupByUserId(userId);
-		
-		// 팔로잉 유저 리스트
-		ArrayList<Map<String, Object>>meeUpList = new ArrayList<>();
-		for (String str : List) {
-			String[] array = str.split(",");
-			Map<String, Object>map = new HashMap();
-			map.put("meetupId", array[0]);
-			map.put("meetupMaster", array[1]);
-			map.put("meetupTitle", array[2]);
-			map.put("meetupContent", array[3]);
-			map.put("meetupLocation", array[4]);
-			map.put("meetupDate", array[5]);
-			map.put("meetupPersonnel", array[6]);
-			map.put("meetupCreateDate", array[7]);
-			meeUpList.add(map);
-		}
-		return meeUpList;
-	}
-
 	// 사용자가 팔로잉 하는 유저 리스트를 가져온다.
 	@GetMapping("/userpage/getfollowinglist")
 	@ApiOperation(value = "[유저페이지] 내가 팔로잉하는 유저 리스트 가져옴")
@@ -371,7 +316,11 @@ public class UserPageController {
 			map.put("followingRequestNickname", user.getUserNickname());
 			map.put("followingRequestPhone", user.getUserPhone());
 			map.put("followingRequestComment", user.getUserComment());
-			map.put("followingRequestUserImg", user.getUserImg());
+			if( user.getUserImg() != null)
+				map.put("followingRequestUserImg", user.getUserImg());
+			else {
+				map.put("followingRequestUserImg", "profile_default.png");
+			}
 			userList.add(map);
 		}
 		

@@ -26,12 +26,12 @@
 
       <div style="flex-direction: column; padding-bottom: 5600px; padding-top: 0px">
         <!-- <span v-for="(n, i) in 10" :key="i">{{ n }} </span> -->
-        <p>dkfjdlf=adfldfa;lkdfj;lkj</p>
+        <!-- <p>dkfjdlf=adfldfa;lkdfj;lkj</p> -->
 
         <article v-for="(lst, i) in postlst" :key="i">
-          <p>{{ lst.postid }}</p>
+          <!-- <p>{{ lst.postid }}</p> -->
           <div role="button" tabindex="-1">
-            <header class="hc1 hc2" style="postion: relative;">
+            <div class="hc1 hc2" style="postion: relative; padding-right: 17px;">
               <div class="hc-d1" tabindex="-1">
                 <canvas
                   height="84"
@@ -52,13 +52,27 @@
                       class="pf-n-a"
                       href="#"
                       tabindex="0"
-                      style="color: black;"
-                    >{{lst.postid}}dlwlrma</a>
+                      style="color: black; font-weight: 600;"
+                    >{{lst.usernickname}}</a>
+                    <div style="float: right; margin-left:190px; ">
+                      <button>
+                        <div style="padding: 2px; width: 24px; height: 24px;">
+                          <i class="fas fa-ellipsis-v"></i>
+                        </div>
+                      </button>
+                    </div>
                   </div>
                 </div>
                 <div></div>
               </div>
-            </header>
+            </div>
+            <!-- <div style="float: right; width: 40px; height: 60px;">
+              <button>
+                <div style="padding: 8px; width: 24px; height: 24px;">
+                  <i class="fas fa-ellipsis-v"></i>
+                </div>
+              </button>
+            </div> -->
           </div>
           <div class="fc">
             <div class="fc-frame" tabindex="0">
@@ -86,7 +100,7 @@
               </span>
               <span style="display: inline-block;">
                 <button
-                  @click="onComment(lst.postid)"
+                  @click="onComment(lst.postid, lst.usernickname)"
                   style="background: 0 0; border: 0; display: flex; padding: 8px;"
                 >
                   <div>
@@ -118,83 +132,43 @@
 
               </span>-->
             </section>
-            <section style="margin-bottom: 8px;">
+            <section style="height: 17.6px; margin-bottom: 8px;">
               <div style="flex: 1 1 auto;">
                 <p style="font-weight: 600;">
                   좋아요
-                  <span>{{ lst.postlike }} </span>
+                  <span>{{ lst.postlike }}</span>
                   개
                 </p>
               </div>
-
             </section>
-            <p>{{ lst.postcontent }}</p>
-          </div>
-        </article>
-        <!-- <article>
-          <div role="button" tabindex="-1">
-            <header class="hc1 hc2" style="postion: relative;">
-              <div class="hc-d1" tabindex="-1">
-                <canvas
-                  height="84"
-                  width="84"
-                  style="position: absolute; top: -5px; left: -5px; width: 42px; height: 42px;"
-                ></canvas>
-                <a class="a-img1 a-img2" href="#" tabindex="0" style="width: 32px; height: 32px;">
-                  <img
-                    style="height: 100%; width: 100%;"
-                    src="https://scontent-gmp1-1.cdninstagram.com/v/t51.2885-19/s150x150/64568083_346714766240529_8023659861445181440_n.jpg?_nc_ht=scontent-gmp1-1.cdninstagram.com&_nc_ohc=Bxek_7qbsNkAX_0dv-_&oh=a14ba48d56d9821b9ab60764d1f14258&oe=5F515501"
-                  />
-                </a>
-              </div>
-              <div class="pf">
+            <div style="margin-bottom: 4px;">
+              <div>
                 <div>
-                  <div class="pf-n">
-                    <a class="pf-n-a" href="#" tabindex="0" style="color: black;">dlwlrma</a>
+                  <div>
+                    <a
+                      style="text-decoration: none; font-weight: 600; font-size: 14px; padding-left: 5px; color: rgba(var(--i1d,38,38,38),1)"
+                      href="#"
+                    >{{lst.usernickname}}</a>&nbsp;
+                    <span>{{ lst.postcontent }}</span>
                   </div>
                 </div>
-                <div></div>
-              </div>
-            </header>
-          </div>
-          <div class="fc">
-            <div class="fc-frame" tabindex="0">
-              <div class="fc-fr">
-                <img
-                  src="https://scontent-gmp1-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/117040004_3363435173707035_6496624469306050608_n.jpg?_nc_ht=scontent-gmp1-1.cdninstagram.com&_nc_cat=103&_nc_ohc=yr4oYNu9CN8AX-G4MoN&oh=f0e109fc179bc3767505d41bc029774e&oe=5F525B05"
-                  class="fc-img"
-                />
+                <div>
+                  <div style="marign-bottom: 4px; padding-left: 5px;">
+                    <a
+                      style="font-size: 14px; font-weight: 400; color: #8e8e8e;"
+                      @click="onComment(lst.postid)"
+                      href="#"
+                    >
+                      댓글
+                      <span>몇</span>개 모두 보기
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
+            <!-- <p>{{ lst.postcontent }}</p> -->
           </div>
-          <div class="fb">
-            <section class="func">
-              <span class="heart">
-                <button class="heart-btn">
-                  <div class="heart-div">
-                    <span style="margin: 0;   height: 24px; width: 24px;">
-                      <i style="display: block; position: relative; height: 24px; width: 24px;" class="far fa-heart"></i>
-                    </span>
-                  </div>
-                </button>
-              </span>
-              <span style="display: inline-block;">
-                <button style="background: 0 0; border: 0; display: flex; padding: 8px;">
-                  <div>
-                    <i style="display: block; position: relative; height: 24px; width: 24px;" class="far fa-comment"></i>
-                  </div>
-                </button>
-              </span>
-              <span style="display: inline-block;">
-                <button style="background: 0 0; border: 0; display: flex; padding: 8px;">
-                  <div>
-                    <i style="display: block; position: relative; height: 24px; width: 24px;" class="far fa-paper-plane"></i>
-                  </div>
-                </button>
-              </span>
-            </section>
-          </div>
-        </article>-->
+        </article>
       </div>
     </v-app>
   </section>
@@ -230,9 +204,11 @@ export default {
       });
   },
   methods: {
-    onComment(pid) {
+    onComment(pid, pname) {
       let postinfo = {
         postid: pid,
+        postnickname: pname,
+        // postid:
       };
       console.log("dfsdafgfgfdfadf");
       console.log(pid);
@@ -242,7 +218,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 /* div {
   -webkit-box-align: stretch;
   align-items: stretch;

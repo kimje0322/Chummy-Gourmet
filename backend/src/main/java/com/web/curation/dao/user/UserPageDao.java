@@ -65,6 +65,18 @@ public interface UserPageDao extends JpaRepository<UserPage, String> {
     
     @Query(value = "DELETE FROM following WHERE user_id = :userId and user_following = :anotherId", nativeQuery = true)
     String deleteFollowing(String userId, String anotherId);
+    
+    
+    @Query(value = "SELECT a.* " + 
+    		"FROM meetup a " + 
+    		"INNER JOIN meetup_member b ON a.meetup_id = b.meetup_id " + 
+    		"WHERE b.meetup_member = :userId", nativeQuery = true)
+    ArrayList<String> getMeetupByUserId(String userId);
+    
+    @Query(value = "SELECT meetup_member "+ 
+    		"FROM meetup_member " + 
+    		"WHERE meetup_id = :meetupId", nativeQuery = true)
+    ArrayList<String> getUsersByMeetupId(String meetupId);
 }
 
 

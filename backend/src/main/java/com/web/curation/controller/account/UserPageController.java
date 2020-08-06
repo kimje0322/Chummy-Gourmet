@@ -76,6 +76,7 @@ public class UserPageController {
 				map.put("followingNickname", user.getUserNickname());
 				map.put("followingPhone", user.getUserPhone());
 				map.put("followingComment", user.getUserComment());
+				
 				userList.add(map);
 			}
 			// 유저 검색을 한 경우
@@ -315,7 +316,7 @@ public class UserPageController {
 			map.put("followingRequestNickname", user.getUserNickname());
 			map.put("followingRequestPhone", user.getUserPhone());
 			map.put("followingRequestComment", user.getUserComment());
-			
+			map.put("followingRequestUserImg", user.getUserImg());
 			userList.add(map);
 		}
 		

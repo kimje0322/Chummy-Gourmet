@@ -28,6 +28,6 @@ public interface PostCommentDao extends JpaRepository<PostComment, String> {
 			+ "where comment_id = :#{#postcomment.commentid}",nativeQuery=true)
 	void update(PostComment postcomment);
 	
-	@Query(value = "delete from post_comment where comment_id = :#{#postcomment.commentid}",nativeQuery=true)
-	void delete(PostComment postcomment);
+	@Query(value = "delete from post_comment where comment_id = :commentid",nativeQuery=true)
+	void delete(String commentid);
 }

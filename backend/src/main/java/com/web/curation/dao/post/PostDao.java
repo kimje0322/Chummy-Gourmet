@@ -33,6 +33,6 @@ public interface PostDao extends JpaRepository<Post, String> {
 			+ "where post_id = :#{#post.postid}",nativeQuery=true)
 	void update(Post post);
 	
-	@Query(value = "delete from post where post_id = :#{#post.postid}",nativeQuery=true)
-	void delete(Post post);
+	@Query(value = "delete from post where post_id = :postid",nativeQuery=true)
+	void delete(String postid);
 }

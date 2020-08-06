@@ -1,6 +1,6 @@
 <template>
   <div class="user join">
-    <v-app>
+    <!-- <v-app> -->
     <v-bottom-navigation
       scroll-target="#scroll-area-2"
       hide-on-scroll
@@ -11,8 +11,6 @@
     >
       <v-btn-toggle tile color="deep-purple accent-3" group>
           <v-btn @click="$router.go(-1)" value="center">취소</v-btn>
-          <v-btn @click="checkForm" value="center">TEST</v-btn>
-
           <v-btn value="right" @click="meetUp">생성</v-btn>
       </v-btn-toggle>
     </v-bottom-navigation>
@@ -55,6 +53,7 @@
                   v-on="on"
                   v-model="meetup.location"
                   solo
+                  readonly
                   placeholder="장소"
                   :append-icon="isColor ? 'mdi-map-marker orange--text text--lighten-2' : 'mdi-map-marker'"
                   @click:append="isColor = !isColor"
@@ -78,27 +77,25 @@
                 <v-card-text style="height: 300px;">
                     <!-- 음식점 리스트 들어감 -->
                     
-               <v-card class="mx-auto" max-width="500">
-                <v-row dense>
-                  <v-col v-for="restaurant in restaurants" :key="restaurant.restId" cols="12">
-                    <v-hover v-slot:default="{ hover }">
-                       <v-flex xs12>
-                      <v-card  :elevation="hover ? 12 : 2"
-                      :class="{ 'on-hover': hover }"
-                      @click="moveDetail(restaurant)">
-                        <v-card-actions>
-                          <div>
-                            <v-card-title v-text="restaurant.name"></v-card-title>
-                            <v-card-subtitle v-text="restaurant.location"></v-card-subtitle>
-                          </div>
-                          <v-spacer></v-spacer>
-                        </v-card-actions>
+                    <v-card class="mx-auto" max-width="500">
+                        <v-row dense>
+                          <v-col v-for="restaurant in restaurants" :key="restaurant.restId" cols="12">
+                            <v-hover v-slot:default="{ hover }">
+                              <v-card  :elevation="hover ? 12 : 2"
+                              :class="{ 'on-hover': hover }"
+                              @click="select(restaurant)">
+                                <v-card-actions>
+                                  <div>
+                                    <v-card-title v-text="restaurant.name"></v-card-title>
+                                    <v-card-subtitle v-text="restaurant.location"></v-card-subtitle>
+                                  </div>
+                                  <v-spacer></v-spacer>
+                                </v-card-actions>
+                              </v-card>
+                            </v-hover>
+                          </v-col>
+                        </v-row>
                       </v-card>
-                       </v-flex>
-                    </v-hover>
-                  </v-col>
-                </v-row>
-            </v-card>
 
 
                 </v-card-text>
@@ -106,7 +103,7 @@
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-                  <v-btn color="blue darken-1" text @click="dialog = false">Save</v-btn>
+                  <!-- <v-btn color="blue darken-1" text @click="dialog = false">Save</v-btn> -->
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -115,6 +112,7 @@
         <!-- 파티 날짜 -->
         <v-menu
           ref="menu"
+          v-model="menu"
           :close-on-content-click="false"
           :return-value.sync="date"
           transition="scale-transition"
@@ -134,6 +132,7 @@
             ></v-text-field>
           </template>
           <v-date-picker
+             v-model="meetup.date"
             :min="new Date().toISOString().substr(0, 10)"
             max="2050-01-01"
             no-title
@@ -141,7 +140,7 @@
           >
             <v-spacer></v-spacer>
             <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
-            <v-btn text color="primary" @click="$refs.menu.save(date)">OK</v-btn>
+            <v-btn text color="primary" @click="$refs.menu.save(meetup.date)">OK</v-btn>
           </v-date-picker>
         </v-menu>
 
@@ -159,15 +158,15 @@
         </div>
 
       </div>
-    </v-app>
+    <!-- </v-app> -->
   </div>
 </template>
 
 <script>
 import axios from "axios";
 
-const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-// const SERVER_URL = "http://localhost:8080";
+// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "https://localhost:8080";
 
 export default {
   data: () => {
@@ -187,6 +186,7 @@ export default {
         title : '',
         content : '',
         location : '',
+        address : '',
         date : '',
         personnel : '',
         master : 70
@@ -246,19 +246,6 @@ export default {
     }
   },
   methods: {
-    toggle (index) {
-        const i = this.selected.indexOf(index)
-
-        if (i > -1) {
-          this.selected.splice(i, 1)
-        } else {
-          this.selected.push(index)
-        }
-      },
-
-
-
-
     meetUp() {
       if (this.meetup.title.length === 0) {
         alert("제목을 작성해주세요.");
@@ -280,10 +267,14 @@ export default {
         return;
       }
 
-      // axios
-      //   .get(
-      //     `${SERVER_URL}/party?title=${this.title}&content=${this.content}`
-      //   )
+      console.log(this.meetup);
+      axios
+        .post(`${SERVER_URL}/meetup`, this.meetup)
+        .then((response) => {
+          // console.log(response);
+          alert("밋업 등록이 완료됐습니다.");
+          this.$router.push("/map")
+        })
     },
     checkForm() {
       if (this.meetup.title.length < 1) this.error.title = "제목을 입력해주세요.";
@@ -323,15 +314,15 @@ export default {
               restaurant.position = coords;
               
               // 현위치에서 음식점까지의 거리(dist) 구하기
-              if(restaurant.position){
-                var polyline = new kakao.maps.Polyline({
-                  path: [
-                    new kakao.maps.LatLng(this.targetLocation.lat, this.targetLocation.lng),
-                    restaurant.position
-                  ],
-                });
-                restaurant.dist = polyline.getLength();
-              }
+              // if(restaurant.position){
+              //   var polyline = new kakao.maps.Polyline({
+              //     path: [
+              //       new kakao.maps.LatLng(this.targetLocation.lat, this.targetLocation.lng),
+              //       restaurant.position
+              //     ],
+              //   });
+              //   restaurant.dist = polyline.getLength();
+              // }
             });
           })
           this.restaurants = restaurants;
@@ -339,6 +330,11 @@ export default {
         .catch((error) => {
           console.log(error.response);
         })
+    },
+    select(restaurant){
+      this.meetup.location = restaurant.name;
+      this.meetup.address = restaurant.location;
+      this.dialog = false;
     },
     initMap() {
       var container = document.getElementById("map");

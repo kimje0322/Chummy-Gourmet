@@ -18,7 +18,14 @@
         :key="item.userId"
       >
         <v-list-item-avatar @click="showUser">
-          <v-img :src="items[0].avatar"></v-img>
+          <v-img
+            v-if="viewImg" :src="viewImg">
+          </v-img>
+
+          <v-img
+            v-if="item.active" :src="item.avatar">
+          </v-img>
+          <!-- <v-img :src="items[0].avatar"></v-img> -->
         </v-list-item-avatar>
 
          
@@ -58,9 +65,12 @@ export default {
     return {
       userId :"",
       items: [
-        { active: true, title: 'Jason Oner', avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg' },
+        // { active: true, avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg' },
+
       ],
       list:[],
+      viewImg:"",
+      userImg:"",
     };
   },
   methods :{
@@ -111,6 +121,11 @@ export default {
       .then((response) => {
         if(response.data != ""){
           this.list = response.data;
+          this.userImg = this.list.followingImg;
+          this.viewImg = SERVER_URL+"/img/user?imgname="+this.userImg;
+          this.items.push({ active: true, avatar: this.viewImg })
+
+          console.log("userImg : "+this.viewImg);
         }
       })
       .catch((error) => {

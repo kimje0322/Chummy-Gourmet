@@ -15,9 +15,9 @@
       </v-flex>
       <v-flex xs4 order-md3 order-xs2>
         <v-avatar size="100" >
-        <v-img
-           v-if="viewImg" :src="viewImg">
-           </v-img>
+          <v-img
+            v-if="viewImg" :src="viewImg">
+          </v-img>
         </v-avatar>
         
       </v-flex>
@@ -125,49 +125,44 @@ export default {
 
     //이미지 보이는부분 변경
     onChangeImage(e){
-      console.log("들어왓나 ");
-      console.log("this.file : "+e.target.files);
       this.file = e.target.files[0];
       this.viewImg = URL.createObjectURL(this.file);
-      console.log(this.viewImg);
     },
 
     //이미지 입력 버튼을 클릭했을때
     //서버와 통신하여 이미지를 저장하고 url을 반환.
     onClickSubmit(){
-             const file = new FormData();
-             file.append('file',this.file);
-             axios
-              .post(`${SERVER_URL}/userpage/img`,
-                 file
-                )
+      const file = new FormData();
+      file.append('file',this.file);
+      axios
+      .post(`${SERVER_URL}/userpage/img`,file)
 
-              .then((response) => {
-                this.userImg = response.data;
-                console.log(this.userImg);
-                this.addImg();
-              })
+      .then((response) => {
+        this.userImg = response.data;
+        console.log(this.userImg);
+        this.addImg();
+      })
 
-              .catch((error) => {
-                console.log(error.response);
-                alert("이미지 전송 실패");
-              });
+      .catch((error) => {
+        console.log(error.response);
+        alert("이미지 전송 실패");
+      });
     },
 
     addImg(){
-              this.userImgCpy = this.userImg;
-              axios
-              .get(`${SERVER_URL}/userpage/updateimg?user_img=${this.userImgCpy}&user_id=${this.userId}`
-                )
+      this.userImgCpy = this.userImg;
+      axios
+      .get(`${SERVER_URL}/userpage/updateimg?user_img=${this.userImgCpy}&user_id=${this.userId}`
+        )
 
-              .then((response) => {
-                alert("성공");
-              })
+      .then((response) => {
+        alert("성공");
+      })
 
-              .catch((error) => {
-                console.log(error.response);
-                alert("데이터 전송 실패");
-              });
+      .catch((error) => {
+        console.log(error.response);
+        alert("데이터 전송 실패");
+      });
     },
 
     checkpwd() {

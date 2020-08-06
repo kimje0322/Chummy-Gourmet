@@ -54,7 +54,7 @@ public class CurationController {
 	@GetMapping("/curation")
 	@ApiOperation(value = "장소를 중심으로 검색")
 //	public List<Restaurant> curation(@RequestParam(required = true) final String location) {
-	public Map<String,Object> curation(@RequestParam(required = true) final String location) {
+	public Map<String, Object> curation(@RequestParam(required = true) final String location) {
 
 		String text = new String();
 
@@ -110,7 +110,10 @@ public class CurationController {
 						rest.setTelphone((String) temp.get("phone"));
 						rest.setLocation((String) temp.get("address_name"));
 						rest.setUrl((String) temp.get("place_url"));
-						rest.setCategory(st.nextToken());
+						rest.setCategory(st.nextToken().trim());
+						rest.setLike("0");
+						rest.setReview("0");
+						rest.setScrap("0");
 						list.add(rest);
 					}
 

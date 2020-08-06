@@ -130,44 +130,64 @@ export default {
           // console.log(pos);
           this.targetLocation.lat = pos.coords.latitude;
           this.targetLocation.lng = pos.coords.longitude;
-          console.log(this.targetLocation.lat + "," + this.targetLocation.lng);
+          // console.log(this.targetLocation.lat + "," + this.targetLocation.lng);
         });
       }
   },
   methods: {
     getNear(){
       console.log("거리순");
-
-      this.restaurants.forEach(restaurant => {
-        var polyline = new kakao.maps.Polyline({
-          path: [
-              new kakao.maps.LatLng(this.targetLocation.lat, this.targetLocation.lng),
-              restaurant.position
-          ],
-        });
-        restaurant.dist = polyline.getLength();
-        console.log(polyline.getLength());
-      });
-      console.log(this.restaurants);
       this.restaurants.sort((a, b) => {
         return a.dist - b.dist;
       })
-      console.log(this.restaurants);
-
-
-
     },
     getRating(){
-      console.log("평점순");
-      
+      console.log("좋아요순");
+      this.restaurants.sort((a, b) => {
+        return a.like - b.like;
+      })
     },
     getManyReview(){
       console.log("리뷰순");
-      
+      this.restaurants.sort((a, b) => {
+        return a.review - b.review;
+      })
     },
     getProperties(){
       console.log("선호음식");
-      
+      axios
+        // .get(`${SERVER_URL}/userpage/getuserInfo?userId=${this.$cookie.get('userId')}`)
+        .get(`${SERVER_URL}/userpage/getuserInfo?userId=62`)
+        .then((response) => {
+          var userInfo = response.data;
+          var userFavoriteID = userInfo.userFavorite;
+          var userFavorite = [];
+          userFavoriteID = userFavoriteID.substr(1, userInfo.userFavorite.length - 2);
+          userFavoriteID = userFavoriteID.split(", ");
+          (userFavoriteID).forEach(category => {
+            if(category == 1){
+              userFavorite.push("한식");
+            } 
+            else if(category == 2){
+              userFavorite.push("양식");
+            }
+            else if(category == 3){
+              userFavorite.push("중식");
+            }
+            else if(category == 4){
+              userFavorite.push("일식");
+            }
+            else if(category == 5){
+              userFavorite.push("분식");
+            }
+            else if(category == 6){
+              userFavorite.push("뷔페");
+            }
+          });
+          this.restaurants.sort((a, b) => {
+            return (userFavorite.indexOf(a.category) - userFavorite.indexOf(b.category)) * -1;
+          })
+        })
     },
 
     search() {
@@ -175,23 +195,35 @@ export default {
       var geocoder = new kakao.maps.services.Geocoder();
       axios
         .get(`${SERVER_URL}/curation?location=${this.keyword}`)
-
         .then((response) => {
+          
+          // 음식점리스트 받기
           var restaurants = response.data.list;
 
-          // console.log(restaurants);
+          // 음식점리스트 돌면서 좌표(position), 거리(dist) 구하기
           restaurants.forEach(restaurant => {
+
+            // 주소 -> 좌표
             geocoder.addressSearch(restaurant.location, (result, status) => {
               if (status === kakao.maps.services.Status.OK) {
                 var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
               }
               restaurant.position = coords;
-            })
-          });
+              
+              // 현위치에서 음식점까지의 거리(dist) 구하기
+              if(restaurant.position){
+                var polyline = new kakao.maps.Polyline({
+                  path: [
+                    new kakao.maps.LatLng(this.targetLocation.lat, this.targetLocation.lng),
+                    restaurant.position
+                  ],
+                });
+                restaurant.dist = polyline.getLength();
+              }
+            });
+          })
           this.restaurants = restaurants;
-          console.log(this.restaurants);
         })
-
         .catch((error) => {
           console.log(error.response);
           alert("로그인 실패");

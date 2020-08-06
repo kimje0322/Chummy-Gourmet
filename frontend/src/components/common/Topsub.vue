@@ -21,7 +21,7 @@
 import router from "@/routes";
 import axios from "axios";
 
-const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 
 export default {
   props:{
@@ -48,10 +48,9 @@ export default {
       this.$router.push({name :'FollowList', params: userInfo});
     },
   }
-
 }
 </script>
 
 <style>
 
-</style>
+</style>s

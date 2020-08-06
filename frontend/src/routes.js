@@ -34,7 +34,7 @@ import UpdateUserInfo from './views/user/UpdateUserInfo.vue'
 // import UploadTest from './views/feed/uploadtest.vue'
 
 //피드 게시글 업로드
-import AddFeed from './views/feed/addFeed.vue'        
+import AddFeed from './views/feed/addFeed.vue'
 
 Vue.use(VueRouter);
 export default new VueRouter({
@@ -92,22 +92,31 @@ export default new VueRouter({
         {
             path: '/user/join',
             name: 'Join',
-            component: Join
+            component: Join,
+            meta: {
+                navbar: true
+            }
         },
         {
             path: '/user/info',
             name: 'UserInfo',
-            component: UserInfo
+            component: UserInfo,
         },
         {
             path: '/user/joinrule',
             name: 'Joinrule',
-            component: JoinRule
+            component: JoinRule,
+            meta: {
+                navbar: true
+            }
         },
         {
             path: '/user/joininfo',
             name: 'JoinInfo',
-            component: JoinInfo
+            component: JoinInfo,
+            meta: {
+                navbar: true
+            }
         },
         {
             path: '/user/findPw',

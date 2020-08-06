@@ -15,15 +15,33 @@
 </template>
 
 <script>
+import axios from "axios";
+import router from "@/routes";
+
 const CURLAT = 36.3587222, CURLNG = 127.3439205;
+// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "https://localhost:8080";
 
 export default {
   data: () => {
     return {
       map: "",
+      targetLocation :{
+        lat : '',
+        lng : '',
+      },
     };
   },
   mounted() {
+    // 현재 위치 확인
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(pos => {
+        this.targetLocation.lat = pos.coords.latitude;
+        this.targetLocation.lng = pos.coords.longitude;
+      });
+    }
+
+    // 카카오 맵 로딩
     if (window.kakao && window.kakao.maps) {
       this.initMap();
     } else {
@@ -31,115 +49,92 @@ export default {
       /* global kakao */
       script.onload = () => kakao.maps.load(this.initMap);
       script.src =
-        "https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=90891b3c4fa765cd378361c6b16e4dd6";
+        "https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=90891b3c4fa765cd378361c6b16e4dd6&libraries=services";
       document.head.appendChild(script);
     }
   },
-  beforeUpdate() {},
+  create() {
+
+  },
   methods: {
     initMap() {
+
+      // map 초기설정
       var container = document.getElementById("map1");
-          var options = {
-            center: new kakao.maps.LatLng(CURLAT, CURLNG),
-            level: 3
-          };
-          this.map = new kakao.maps.Map(container, options);
+      var options = {
+        center: new kakao.maps.LatLng(CURLAT, CURLNG),
+        level: 3
+      };
+      this.map = new kakao.maps.Map(container, options);
 
-          var positions = [
-            {
-              title: "봉명가든",
-              latlng: new kakao.maps.LatLng(CURLAT, CURLNG)
-            },
-            {
-              title: "봉명가든",
-              latlng: new kakao.maps.LatLng(CURLAT, CURLNG)
-            },
-            {
-              title: "맛찬들",
-              latlng: new kakao.maps.LatLng(CURLAT + 0.0005, CURLNG + 0.0005)
-            },
-            {
-              title: "대게나라",
-              latlng: new kakao.maps.LatLng(CURLAT - 0.0005, CURLNG - 0.0005)
-            }
-          ];
 
-          var meetUps = [
-            {
-              title: "삼겹살 먹으실 분",
-              date: "2020-07-16 18:00",
-              store: "맛찬들",
-              address: "",
-              members: "4/4",
-              img:
-                "https://img.siksinhot.com/place/1485274468095571.jpg?w=307&h=300&c=Y"
-            },
-            {
-              title: "고기땡기노",
-              date: "2020-07-16 17:00",
-              store: "맛찬들",
-              members: "2/4",
-              img:
-                "https://img.siksinhot.com/place/1485274468095571.jpg?w=307&h=300&c=Y"
-            },
-            {
-              title: "커피한잔해요",
-              date: "2020-07-16 19:00",
-              store: "봉명가든",
-              members: "3/4",
-              img: "https://t1.daumcdn.net/cfile/tistory/9977864D5B07565017"
-            },
-            {
-              title: "대게맛있는대게",
-              date: "2020-07-16 20:00",
-              store: "대게나라",
-              members: "4/7",
-              img: "https://t1.daumcdn.net/cfile/tistory/997F8E415A94097B0A"
-            }
-          ];
 
-          var markers = [];
-          var infoWindows = [];
-          for (var i = 0; i < positions.length; i++) {
-            var marker = new kakao.maps.Marker({
-              title: meetUps[i].title,
-              position: positions[i].latlng,
-              clickable: true
-            });
-            var overlay = new kakao.maps.CustomOverlay({     
-              position: marker.getPosition(),
-              content: 
-                  `
-                     <div class="_wrap">
-                        <div class="_info">
-                            <div class="_title">
-                                <a href="#/map/party" class="">${meetUps[i].title}</a>
-                            </div>
-                            <div class="_body">
-                                <div class="img">
-                                    <img src=${meetUps[i].img} width="73" height="70"/>
-                                </div>
-                                <div class="_desc">
-                                    <div class="ellipsis"><label>일시 : </label> ${meetUps[i].date}</div>
-                                    <div class="ellipsis"><label>위치 : </label> ${meetUps[i].store}</div>
-                                    <div><label>현재원 : </label> ${meetUps[i].members}</div>
-                                </div>
-                            </div>
-                        </div> 
-                    </div>
-                  `
-            });
-            kakao.maps.event.addListener(marker, "click", this.toggleInfoWindow(this.map, marker, overlay));
-            marker.setMap(this.map);
+      // 좌표->주소
+      var geocoder = new kakao.maps.services.Geocoder();
+      geocoder.coord2Address(CURLNG, CURLAT, (result, status) => {
+        if(status === kakao.maps.services.Status.OK){
+
+          // 현재 주소
+          var address = result[0].address;
+          if(result[0].road_address){
+            address = result[0].road_address;
           }
-      // if (navigator.geolocation) {
-      //   navigator.geolocation.getCurrentPosition(pos => {
-      //     var curLat = pos.coords.latitude;
-      //     var curLng = pos.coords.longitude;
-      //     // console.log(curLat + "," + curLng);
-          
-      //   });
-      // }
+
+          // 해당 위치 주변의 밋업 리스트          
+          axios
+            .get(`${SERVER_URL}/meetup/search/${address.region_1depth_name} ${address.region_2depth_name}`)
+            .then((response) => {
+              // console.log(response);
+              // 밋업 리스트
+              var meetups = response.data.object;
+
+              var markers = [];
+              var overlays = [];
+              meetups.forEach(meetup => {
+                geocoder.addressSearch(meetup.address, (result, status) => {
+                    if (status === kakao.maps.services.Status.OK) {
+                        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                        // marker 생성
+                        var marker = new kakao.maps.Marker({
+                          title: meetup.title,
+                          position: coords,
+                          clickable: true
+                        });
+
+                        // custom overlay infowindow 생성
+                        var overlay = new kakao.maps.CustomOverlay({     
+                          position: marker.getPosition(),
+                          content: 
+                            `
+                              <div class="_wrap">
+                                  <div class="_info">
+                                      <div class="_title">
+                                          <a href="#/map/party" class="">${meetup.title}</a>
+                                      </div>
+                                      <div class="_body">
+                                          <div class="img">
+                                              <img src="https://img.siksinhot.com/place/1485274468095571.jpg?w=307&h=300&c=Y" width="73" height="70"/>
+                                          </div>
+                                          <div class="_desc">
+                                              <div class="ellipsis"><label>일시 : </label> ${meetup.date}</div>
+                                              <div class="ellipsis"><label>위치 : </label> ${meetup.location}</div>
+                                              <div><label>현재원 : </label> ${meetup.personnel}</div>
+                                          </div>
+                                      </div>
+                                  </div> 
+                              </div>
+                            `
+                        });
+                        kakao.maps.event.addListener(marker, "click", this.toggleInfoWindow(this.map, marker, overlay));
+                        marker.setMap(this.map);
+                    } 
+                });    
+                  
+              });
+
+            })
+        }
+      });
     },
     zoomIn() {
       this.map.setLevel(this.map.getLevel() - 1);
@@ -157,7 +152,6 @@ export default {
       }
     },
   }
-
 }
 
 </script>

@@ -38,7 +38,7 @@ data() {
              const file = new FormData();
              file.append('file',this.file);
              axios
-              .post(`${SERVER_URL}/post/test`,
+              .post(`${SERVER_URL}/post/img`,
                  file
                 )
 

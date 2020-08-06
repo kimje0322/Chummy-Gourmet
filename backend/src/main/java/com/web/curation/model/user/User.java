@@ -47,6 +47,16 @@ public class User {
 	private String userPhone;
 	@Column(name = "user_comment")
 	private String userComment;
+	@Column(name = "user_img")
+	private String userImg;
+
+	public String getUserImg() {
+		return userImg;
+	}
+
+	public void setUserImg(String userImg) {
+		this.userImg = userImg;
+	}
 
 	public User() {
 		super();

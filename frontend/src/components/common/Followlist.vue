@@ -40,6 +40,13 @@
                 <!-- <v-list-item-avatar>
                 <v-img :src="item.avatar"></v-img>
                 </v-list-item-avatar> -->
+                
+                <!-- 사진 표기 -->
+                <v-list-item-avatar>
+                  <v-img
+                    :src="user.followerImg">
+                  </v-img>
+                </v-list-item-avatar>
 
                 <v-list-item-content>
                 <v-list-item-title @click="gotoProfile(user)" v-text="user.followerNickname"></v-list-item-title>
@@ -75,6 +82,14 @@
           </v-row>
             <v-list-item-group class="followlist" v-model="followingList">
                 <v-list-item v-for="(user, i) in followingList" :key="i">
+
+                    <!-- 사진 표기 -->
+                    <v-list-item-avatar>
+                      <v-img
+                        :src="user.followingImg">
+                      </v-img>
+                    </v-list-item-avatar>
+
                     <v-list-item-content>
                     <v-list-item-title @click="gotoProfile(user)" v-text="user.followingNickname"></v-list-item-title>
                     </v-list-item-content>
@@ -143,7 +158,16 @@ export default {
         `${SERVER_URL}/userpage/getfollowinglist?userId=`+this.userId+`&searchName=`+this.searchFollowing
       )
       .then((response) => {
-        this.followingList = response.data;
+        for (let i = 0; i <  response.data.length; i++) {
+          let userImg = response.data[i].followingImg;
+          let viewImg = SERVER_URL+"/img/user?imgname=" + userImg;
+          console.log(viewImg);
+          this.followingList.push({
+              followingId : response.data[i].followingId,
+              followingNickname : response.data[i].followingNickname,
+              followingImg: viewImg
+          })
+        }
       })
       .catch((error) => {
         console.log(error.response);
@@ -153,11 +177,16 @@ export default {
         `${SERVER_URL}/userpage/getfollowerlist?userId=`+this.userId+`&searchName=`+this.searchFollower
       )
       .then((response) => {
-        this.followerList = response.data;
-        // console.log(this.followerList);
-        // for (var i=0; i<this.followerList.length; i++) {
-        //   if (this.followerList[i].followerFollowing)
-        // }
+        for (let i = 0; i <  response.data.length; i++) {
+          let userImg = response.data[i].followerImg;
+          let viewImg = SERVER_URL+"/img/user?imgname=" + userImg;
+          console.log(viewImg);
+          this.followerList.push({
+              followerId : response.data[i].followerId,
+              followerNickname : response.data[i].followerNickname,
+              followerImg: viewImg
+          })
+        }
       })
       .catch((error) => {
         console.log(error.response);
@@ -191,8 +220,16 @@ export default {
       )
       .then((response) => {
         this.followerList = []
-        this.followerList = response.data;
-        // console.log(this.followerList);
+        for (let i = 0; i <  response.data.length; i++) {
+          let userImg = response.data[i].followerImg;
+          let viewImg = SERVER_URL+"/img/user?imgname=" + userImg;
+          console.log(viewImg);
+          this.followerList.push({
+              followerId : response.data[i].followerId,
+              followerNickname : response.data[i].followerNickname,
+              followerImg: viewImg
+          })
+        }
       })
       .catch((error) => {
         console.log(error.response);
@@ -206,8 +243,16 @@ export default {
       )
       .then((response) => {
         this.followingList = []
-        this.followingList = response.data;
-        // console.log(this.followingList);
+        for (let i = 0; i <  response.data.length; i++) {
+            let userImg = response.data[i].followingImg;
+            let viewImg = SERVER_URL+"/img/user?imgname=" + userImg;
+            console.log(viewImg);
+            this.followingList.push({
+                followingId : response.data[i].followingId,
+                followingNickname : response.data[i].followingNickname,
+                followingImg: viewImg
+            })
+          }
       })
       .catch((error) => {
         console.log(error.response);

@@ -32,8 +32,18 @@
                 src="https://scontent-gmp1-1.cdninstagram.com/v/t51.2885-19/s150x150/64568083_346714766240529_8023659861445181440_n.jpg?_nc_ht=scontent-gmp1-1.cdninstagram.com&_nc_ohc=Bxek_7qbsNkAX_0dv-_&oh=a14ba48d56d9821b9ab60764d1f14258&oe=5F515501"
               />
             </span>
-            <form style="height: 42px;" class="text-box" method="POST">
-              <textarea style="height: 18px;" class="text" placeholder="write here!"></textarea>
+            <form style="height: 42px;" class="text-box">
+              <textarea
+                aria-label="here"
+                autocomplete="off"
+                autocorrect="off"
+                data-focus-visible-added
+                style="height: 18px;"
+                class="text"
+                placeholder="write here!"
+                v-model="commentText"
+              ></textarea>
+              <button @click="onCreate(commentText)" class="upload">게시</button>
             </form>
           </div>
         </section>
@@ -60,13 +70,13 @@
                       style="float: left; width: 285px; flex-direction: column; position: relative;"
                     >
                       <!-- <div style="display: inline-flex;"> -->
-                        <h2
-                          style="font-size: 14px; font-weight: 600; align-items: center; display: inline-flex; margin-right: 4px;"
-                        >
-                          <div style="display: flex; flex-direction: column;">
-                            <a class="prf-link" href="#">dlwlrma</a>
-                          </div>
-                        </h2>
+                      <h2
+                        style="font-size: 14px; font-weight: 600; align-items: center; display: inline-flex; margin-right: 4px;"
+                      >
+                        <div style="display: flex; flex-direction: column;">
+                          <a class="prf-link" href="#">{{postname}}</a>
+                        </div>
+                      </h2>
                       <!-- </div> -->
                       <span>
                         게시글 내용 나오는 부분입니다.
@@ -82,8 +92,12 @@
             </div>
             <ul style="margin-bottom: 16px; padding-top: 0 !important;">
               <div>
-                <li v-for="(lst, i) in commentlst" :key="i">
-                  <div style="flex-direction: column;">
+                <li
+                  style="display: list-item; width: 335px; padding-bottom: 0;"
+                  v-for="(lst, i) in commentlst"
+                  :key="i"
+                >
+                  <div style="position: relative;">
                     <div style="width: 307px;">
                       <div
                         class="lst-prf"
@@ -98,27 +112,50 @@
                       </div>
                       <div style="float: left;">
                         <!-- <h3 style="display: inline-flex;"></h3> -->
-                        <h3
-                          style="align-items: center; display: inline-flex; margin-right: 4px; display: flex;"
+                        <h2
+                          style="font-size: 14px; font-weight: 600; align-items: center; display: inline-flex; margin-right: 4px;"
+                        >
+                          <div style="display: flex; flex-direction: column;">
+                            <a class="prf-link" href="#">{{ lst.usernickname }}</a>
+                          </div>
+                        </h2>
+                        <!-- <h3
+                          style="font-size: 14px; font-weight: 600; align-items: center; display: inline-flex; margin: 0; display: flex;"
                         >
                           <div style="display: flex; flex-direction: column;">
                             <a class="prf-link" href="#">dlwlrma</a>
                           </div>
-                        </h3>
+                        </h3>-->
                         <span>
                           <!-- {{lst}} -->
-                          {{ lst.usernickname }}
+                          {{lst.postcomment}}
                           <br />
                           {{ lst.commentdate }}
-                          <br />게시글 내용 나오는 부분입니다.
-                          <br />게시글 내용 나오는 부분입니다.
-                          <br />
+                          <!-- {{ }} -->
                         </span>
+                        <div style="color: #8e8e8e; margin-top: 12px; margin-bottom: 4px;">
+                          <a href="#" style="margin-right: 12px; color: #8e8e8e;">X시간</a>
+                          <!-- v-if="lst.commentid === userId" -->
+                          <button>수정하기</button>
+                        </div>
                       </div>
-                      <div></div>
                     </div>
-                    <span></span>
                   </div>
+                  <!-- v-if="commentid === user" -->
+                  <span style="margin-top: 9px;">
+                    <div style="float: right;">
+                      <button @click="onDelete(lst)">
+                        <div>
+                          <span>
+                            <i
+                              style="display: block; position: relative; height: 14px; width: 14px;"
+                              class="far fa-trash-alt"
+                            ></i>
+                          </span>
+                        </div>
+                      </button>
+                    </div>
+                  </span>
                 </li>
               </div>
             </ul>
@@ -131,6 +168,7 @@
 
 <script>
 import axios from "axios";
+import $ from "jquery";
 
 const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 // const SERVER_URL = "http://localhost:8080";
@@ -138,27 +176,63 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 export default {
   data() {
     return {
+      commentText: "",
       commentlst: [],
     };
+  },
+  watch: {
+    //   commentText: function (v) {
+    //   this.Text();
+    //   }
   },
   mounted() {},
   created() {
     console.log(this.$route.params);
+    console.log("aaaaaaaaaaaaaaaa");
+    // console.log(this.$cookie.get("userId"));
+
     axios
       .get(`${SERVER_URL}/post/comment?commentid=${this.$route.params.postid}`)
       .then((response) => {
         console.log(response);
         this.commentlst = response.data.data;
+        this.postname = this.$route.params.postnickname;
       })
       .catch((error) => {
         console.log(error.response);
       });
   },
-  methods: {},
+  methods: {
+    onDelete(lst) {
+      console.log(lst);
+      axios
+        .delete(`${SERVER_URL}/post/comment?commentid=${lst.commentid}`)
+        .then((response) => {})
+        .catch((error) => {});
+    },
+    onCreate(text) {
+      var commentxt = {
+        commentuserid: this.$cookie.get("userId"),
+        postcomment: text,
+        postid: this.$route.params.postid,
+      };
+      console.log(commentxt);
+      axios
+        .post(`${SERVER_URL}/post/comment`, commentxt)
+        .then((respose) => {})
+        .catch((error) => {});
+    },
+    // Text() {
+    //     $('.upload').css('color', 'blue')
+    // }
+  },
 };
 </script>
 
-<style>
+<style scoped>
+.upload[disabled] {
+  opacity: 0.3;
+}
 .prf-link {
   color: black !important;
   border: 0;

@@ -2,7 +2,7 @@
   <v-layout>
     <v-toolbar dark>
       <v-list-item-avatar>
-        <v-img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR_doKnSS8nyn0SYPV-J4cQgaE7uHtbsKlB9A&usqp=CAU"></v-img>
+        <v-img :src="'https://i3b302.p.ssafy.io:8080/img/user?imgname='+proptoTopsub.userImg"></v-img>
       </v-list-item-avatar>
 
         {{proptoTopsub.userNickname}}
@@ -31,10 +31,7 @@ export default {
   },
   // data() {
   //   return {
-  //   followingUser: {
-  //     name: [],
-  //     nickname: [],
-  //     }
+  //     UserImg : "",
   //   }
   // },
   methods: {
@@ -47,7 +44,7 @@ export default {
             };
       this.$router.push({name :'FollowList', params: userInfo});
     },
-  }
+  },
 }
 </script>
 

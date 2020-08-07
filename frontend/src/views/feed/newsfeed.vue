@@ -194,10 +194,14 @@ export default {
     axios
       .get(`${SERVER_URL}/post?userid=${this.$cookie.get("userId")}`)
       .then((response) => {
-        console.log(response);
-        this.postlst = response.data.data;
-        alert(this.postlst.length);
-        console.log(this.postlst);
+        // console.log(response);
+        var posts = response.data.data;
+        // alert(this.postlst.length);
+        // console.log(posts);
+        posts.sort((a, b) => {
+         return -1 * (a.postid - b.postid);
+        })
+        this.postlst = posts;
       })
       .catch((error) => {
         console.log(error.response);

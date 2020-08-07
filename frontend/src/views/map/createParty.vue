@@ -132,7 +132,7 @@
             ></v-text-field>
           </template>
           <v-date-picker
-             v-model="meetup.date"
+            v-model="meetup.date"
             :min="new Date().toISOString().substr(0, 10)"
             max="2050-01-01"
             no-title
@@ -171,6 +171,9 @@ const SERVER_URL = "https://localhost:8080";
 export default {
   data: () => {
     return {
+        time: null,
+        menu2: false,
+
       keyword : '',
       // date: new Date().toISOString().substr(0, 10),
       date: null,

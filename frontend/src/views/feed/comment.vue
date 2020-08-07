@@ -79,10 +79,7 @@
                       </h2>
                       <!-- </div> -->
                       <span>
-                        게시글 내용 나오는 부분입니다.
-                        <br />게시글 내용 나오는 부분입니다.
-                        <br />게시글 내용 나오는 부분입니다.
-                        <br />게시글 내용 나오는 부분입니다.
+                        {{ postcontent }}
                         <br />
                       </span>
                     </div>
@@ -197,6 +194,7 @@ export default {
         console.log(response);
         this.commentlst = response.data.data;
         this.postname = this.$route.params.postnickname;
+        this.postcontent = this.$route.params.postcontent;
       })
       .catch((error) => {
         console.log(error.response);
@@ -207,7 +205,9 @@ export default {
       console.log(lst);
       axios
         .delete(`${SERVER_URL}/post/comment?commentid=${lst.commentid}`)
-        .then((response) => {})
+        .then((response) => {
+          // console.log(response)
+        })
         .catch((error) => {});
     },
     onCreate(text) {

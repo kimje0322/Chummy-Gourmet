@@ -146,6 +146,8 @@ public class UserPageController {
 					map.put("followingNickname", user.get().getUserNickname());
 					map.put("followingPhone", user.get().getUserPhone());
 					map.put("followingComment", user.get().getUserComment());
+					map.put("followingImg", user.get().getUserImg());
+					
 					userList.add(map);
 				}
 			}
@@ -203,6 +205,8 @@ public class UserPageController {
 						map.put("followerNickname", user.get().getUserNickname());
 						map.put("followerPhone", user.get().getUserPhone());
 						map.put("followerComment", user.get().getUserComment());
+						map.put("followerImg", user.get().getUserImg());
+						
 						int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, followeruserId);
 						int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, followeruserId);
 						

@@ -156,8 +156,7 @@
                   <div style="marign-bottom: 4px; padding-left: 5px;">
                     <a
                       style="font-size: 14px; font-weight: 400; color: #8e8e8e;"
-                      @click="onComment(lst.postid)"
-                      href="#"
+                      @click="onComment(lst.postid, lst.usernickname)"
                     >
                       댓글
                       <span>몇</span>개 모두 보기
@@ -210,7 +209,7 @@ export default {
         postnickname: pname,
         // postid:
       };
-      console.log("dfsdafgfgfdfadf");
+      // console.log("dfsdafgfgfdfadf");
       console.log(pid);
       router.push({ name: "Comment", params: postinfo });
     },

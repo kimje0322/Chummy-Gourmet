@@ -36,25 +36,21 @@
           </v-row>
 
           <v-list-item-group class="followlist" v-model="followerList">
-            <v-list-item v-for="(user, i) in followerList" :key="i">
-                <!-- <v-list-item-avatar>
-                <v-img :src="item.avatar"></v-img>
-                </v-list-item-avatar> -->
-                
+            <v-list-item  v-for="(user, i) in followerList" :key="i">
                 <!-- 사진 표기 -->
-                <v-list-item-avatar>
+                <v-list-item-avatar @click="gotoProfile(user)">
                   <v-img
                     :src="user.followerImg">
                   </v-img>
                 </v-list-item-avatar>
-
+                
                 <v-list-item-content>
                 <v-list-item-title @click="gotoProfile(user)" v-text="user.followerNickname"></v-list-item-title>
                 <!-- 이름 표기 -->
                 <!-- <v-list-item-title v-text="user.followingName"></v-list-item-title> -->
                 </v-list-item-content>
 
-                <v-btn color="blue" @click="onFollow(user)" v-if="user.followerFollowing !== 'true'">
+                <v-btn color="blue"  @click="onFollow(user)" v-if="user.followerFollowing !== 'true'">
                     팔로잉
                 </v-btn>
                 <v-btn @click="unFollow(user)" v-else>
@@ -84,7 +80,7 @@
                 <v-list-item v-for="(user, i) in followingList" :key="i">
 
                     <!-- 사진 표기 -->
-                    <v-list-item-avatar>
+                    <v-list-item-avatar @click="gotoProfile(user)">
                       <v-img
                         :src="user.followingImg">
                       </v-img>
@@ -161,7 +157,6 @@ export default {
         for (let i = 0; i <  response.data.length; i++) {
           let userImg = response.data[i].followingImg;
           let viewImg = SERVER_URL+"/img/user?imgname=" + userImg;
-          console.log(viewImg);
           this.followingList.push({
               followingId : response.data[i].followingId,
               followingNickname : response.data[i].followingNickname,
@@ -180,7 +175,6 @@ export default {
         for (let i = 0; i <  response.data.length; i++) {
           let userImg = response.data[i].followerImg;
           let viewImg = SERVER_URL+"/img/user?imgname=" + userImg;
-          console.log(viewImg);
           this.followerList.push({
               followerId : response.data[i].followerId,
               followerNickname : response.data[i].followerNickname,
@@ -193,25 +187,21 @@ export default {
       });    
     },
     gotoProfile(user) {
-      // console.log(user.followingId)
       if (user.followerId) {
         let profileInfo = {
-        userId: user.followerId,
-        followerFollowing: user.followerFollowing
+          userId: user.followerId,
+          userImg : user.followerImg,
+          followerFollowing: user.followerFollowing
         };
-        // console.log('user.followerId,')
         this.$router.push({name :'Profile', params: profileInfo});
       } else { 
         let profileInfo = {
         userId: user.followingId,
+        userImg : user.followingImg,
         followerFollowing: "true",
         };
         this.$router.push({name :'Profile', params: profileInfo});
       }
-      // axios
-      // .get(
-      //   `${SERVER_URL}/userpage/getuser?userId=`+user.userId
-      // )
     },
     onSearchFollower () {
       axios
@@ -223,7 +213,6 @@ export default {
         for (let i = 0; i <  response.data.length; i++) {
           let userImg = response.data[i].followerImg;
           let viewImg = SERVER_URL+"/img/user?imgname=" + userImg;
-          console.log(viewImg);
           this.followerList.push({
               followerId : response.data[i].followerId,
               followerNickname : response.data[i].followerNickname,
@@ -246,7 +235,6 @@ export default {
         for (let i = 0; i <  response.data.length; i++) {
             let userImg = response.data[i].followingImg;
             let viewImg = SERVER_URL+"/img/user?imgname=" + userImg;
-            console.log(viewImg);
             this.followingList.push({
                 followingId : response.data[i].followingId,
                 followingNickname : response.data[i].followingNickname,

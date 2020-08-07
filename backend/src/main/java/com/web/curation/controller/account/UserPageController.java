@@ -378,7 +378,6 @@ public class UserPageController {
 			map.put("followingRequestPhone", user.getUserPhone());
 			map.put("followingRequestComment", user.getUserComment());
 			map.put("followingRequestUserImg", user.getUserImg());
-			map.put("followingRequestUserImg", "profile_default.png");
 			userList.add(map);
 		}
 		

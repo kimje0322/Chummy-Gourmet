@@ -71,7 +71,6 @@ public class UserPageController {
         meeUpUserList.add(map);
         
         for (String userId : List) {
-            System.out.println(userId);
             map = new HashMap();
             
             User member = userdao.getUserByUserId(userId);
@@ -152,7 +151,6 @@ public class UserPageController {
 				}
 			}
 		}
-		System.out.println("내가 팔로잉 하는 유저 리스트 =" + userList);
 		return userList;
 	}
 	// 사용자를 팔로워 하는 유저 리스트를 가져온다.
@@ -178,13 +176,20 @@ public class UserPageController {
 				map.put("followerPhone", user.getUserPhone());
 				map.put("followerComment", user.getUserComment());
 				map.put("followerImg", user.getUserImg());
+				// 내가 팔로잉 중이냐
 				int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, followeruserId);
+				// 내가 요청중이냐
 				int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, followeruserId);
 				
-				// 내가 팔로잉 중ㅇ
-				if(ans1 > 0 || ans2 > 0) {
+				// 내가 팔로잉 중임
+				if(ans1 > 0 ) {
 					map.put("followerFollowing", "true");
 					System.out.println("나("+userId+")는 상대방인 "+user.getUserName()+" 님을 팔로우 한 상태입니다.");
+				}
+				// 내가 요청중임
+				else if(ans2 > 0) {
+					map.put("followerFollowing", "doing");
+					System.out.println("나("+userId+")는 상대방인 "+user.getUserName()+" 님을 팔로우 요청한 상태입니다.");
 				}
 				else {
 					map.put("followerFollowing", "false");
@@ -207,13 +212,20 @@ public class UserPageController {
 						map.put("followerComment", user.get().getUserComment());
 						map.put("followerImg", user.get().getUserImg());
 						
+						// 내가 팔로잉 중이냐
 						int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, followeruserId);
+						// 내가 요청중이냐
 						int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, followeruserId);
 						
-						// 내가 팔로잉 중ㅇ
-						if(ans1 > 0 || ans2 > 0) {
+						// 내가 팔로잉 중임
+						if(ans1 > 0 ) {
 							map.put("followerFollowing", "true");
 							System.out.println("나("+userId+")는 상대방인 "+user.get().getUserName()+" 님을 팔로우 한 상태입니다.");
+						}
+						// 내가 요청중임
+						else if(ans2 > 0) {
+							map.put("followerFollowing", "doing");
+							System.out.println("나("+userId+")는 상대방인 "+user.get().getUserName()+" 님을 팔로우 요청한 상태입니다.");
 						}
 						else {
 							map.put("followerFollowing", "false");
@@ -225,7 +237,6 @@ public class UserPageController {
 				}
 			}
 		}
-		System.out.println("나를 팔로워 하는 유저 리스트 =" + userList);
 		return userList;
 	}
 		
@@ -328,6 +339,23 @@ public class UserPageController {
 		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+	
+	
+	@DeleteMapping("/userpage/deletefollowingRequest")
+	@ApiOperation(value = "[유저페이지] 팔로잉요청 취소")
+	public Object deletefollowingRequest(@RequestParam(required = true) final String userId,
+			@RequestParam(required = true) final String anotherId) {
+		
+		final BasicResponse result = new BasicResponse();
+		
+		userPageDao.deleteFollowingRequest(userId, anotherId);
+		
+		result.status = true;
+		result.data = "success";
+		
+		return result;
+	}
+	
 	@DeleteMapping("/userpage/deletefollowing")
 	@ApiOperation(value = "[유저페이지] 팔로잉 취소")
 	public Object deletefollowing(@RequestParam(required = true) final String userId,
@@ -380,8 +408,6 @@ public class UserPageController {
 			map.put("followingRequestUserImg", user.getUserImg());
 			userList.add(map);
 		}
-		
-		System.out.println("사용자를 팔로잉 요청한 리스트 =" + userList);
 		
 		return userList;
 	}

@@ -100,7 +100,7 @@
               </span>
               <span style="display: inline-block;">
                 <button
-                  @click="onComment(lst.postid, lst.usernickname)"
+                  @click="onComment(lst.postid, lst.usernickname, lst.postcontent)"
                   style="background: 0 0; border: 0; display: flex; padding: 8px;"
                 >
                   <div>
@@ -156,8 +156,7 @@
                   <div style="marign-bottom: 4px; padding-left: 5px;">
                     <a
                       style="font-size: 14px; font-weight: 400; color: #8e8e8e;"
-                      @click="onComment(lst.postid)"
-                      href="#"
+                      @click="onComment(lst.postid, lst.usernickname, lst.postcontent)"
                     >
                       댓글
                       <span>몇</span>개 모두 보기
@@ -208,13 +207,13 @@ export default {
       });
   },
   methods: {
-    onComment(pid, pname) {
+    onComment(pid, pname, pcontent) {
       let postinfo = {
         postid: pid,
         postnickname: pname,
-        // postid:
+        postcontent: pcontent,
       };
-      console.log("dfsdafgfgfdfadf");
+      // console.log("dfsdafgfgfdfadf");
       console.log(pid);
       router.push({ name: "Comment", params: postinfo });
     },

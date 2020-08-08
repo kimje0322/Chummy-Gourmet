@@ -17,9 +17,15 @@
       <v-spacer></v-spacer>
         <v-btn depressed>매너평가</v-btn>
       <v-spacer></v-spacer>
-        <v-btn v-if="followerFollowing" class="followListBtn" depressed>언팔로우</v-btn>
-        <v-btn v-else class="followListBtn" depressed>팔로우</v-btn>
-
+        <v-btn color="primary"  @click="onFollow()" v-if="followerFollowing === 'false'">
+            팔로우
+        </v-btn>
+        <v-btn depressed  @click="deleteFollowRequest()" v-else-if="followerFollowing === 'doing'">
+            요청중
+        </v-btn>
+        <v-btn depressed @click="unFollow()" v-else>
+            팔로잉
+        </v-btn>
       <v-spacer></v-spacer>
     </v-toolbar>
   </v-layout>
@@ -30,30 +36,83 @@
 
 <script>
 const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "https://localhost:8080";
+
 import axios from "axios";
 export default {
   data() {
     return {
-      followerFollowing: false,
+      anotherId:"",
+      userId:"",
+      followerFollowing: "",
       followerCount: null,
       followingCount: null,
       userNickname: "",
       userImg:"",
     }
   },
+  methods :{
+    deleteFollowRequest(){
+      this.followerFollowing = 'false'
+        //언팔로우 요청
+        axios
+          .delete(
+            `${SERVER_URL}/userpage/deletefollowingRequest?anotherId=`+this.anotherId+`&userId=`+this.userId
+          )
+          .then((response) => {
+            console.log('팔로우취소완료')
+          })
+          .catch((error) => {
+            console.log(error.response);
+          });
+    },
+    onFollow() {
+      this.followerFollowing = 'doing'
+      axios
+      .post(
+        `${SERVER_URL}/userpage/insertfollowingRequest?followerId=`+this.anotherId+`&userId=`+this.userId
+      )
+      .then((response) => {
+        console.log('팔로우성공')
+      })
+      .catch((error) => {
+          console.log(error.response);
+      });
+    },
+    unFollow() {
+        this.followerFollowing = 'false'
+      axios
+        .delete(
+          `${SERVER_URL}/userpage/deletefollowing?anotherId=`+this.anotherId+`&userId=`+this.userId
+        )
+        .then((response) => {
+          console.log("언팔로우 성공")
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
+    }
+  },
 
   name: "Profile",
   
   created() {
-    let userID = this.$route.params.userId
+    this.userId = this.$cookie.get("userId");
+
+    this.anotherId = this.$route.params.userId
     this.userImg = this.$route.params.userImg
-    if (this.$route.params.followerFollowing == 'true') {
-      this.followerFollowing = true
-    } 
+    this.followerFollowing = this.$route.params.followerFollowing
+    if (this.followerFollowing === 'true') {
+      this.followerFollowing = 'true'
+    }else if(this.followerFollowing === 'doing'){
+      this.followerFollowing = 'doing'  
+    }else{
+      this.followerFollowing = 'false'
+    }
 
     axios
       .get(
-        `${SERVER_URL}/userpage/getuser?userId=`+userID
+        `${SERVER_URL}/userpage/getuser?userId=`+this.anotherId
       )
       .then((response) => {
         this.followerCount =  response.data.followerCount

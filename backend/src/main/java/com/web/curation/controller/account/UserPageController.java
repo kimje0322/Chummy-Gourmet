@@ -303,23 +303,25 @@ public class UserPageController {
 			@RequestParam(required = true) final String userPwd,
 			@RequestParam(required = true) final String userComment) {
 		
-		User originUser = null;
+		Optional<User> originUser = null;
 		final BasicResponse result = new BasicResponse();
 		boolean isExistNickname = false;
       
 		// 닉네임 중복 검사
 		originUser = userdao.getUserByUserNickname(userNickname);
 		System.out.println(originUser);
-		if (originUser != null && originUser.getUserId() != userId)
-			isExistNickname = true;
-
+		// 유저가 존재하면 닉네임 중복이다
+		if(originUser.isPresent()) {
+			// 그러나 불러온 유저 아이디가 현재 내 아이디면 패스
+			if(!originUser.get().getUserId().equals(userId)) 
+				isExistNickname = true;
+		}
 		// 기존에 가입한 동일 닉네임이 있다면
 		if (isExistNickname) {
 			result.status = false;
 			result.data = "isExistNickname";
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		}
-      
 		// 기존 유저가 없다면
 		else {
 			User user = new User();
@@ -406,6 +408,21 @@ public class UserPageController {
 			map.put("followingRequestPhone", user.getUserPhone());
 			map.put("followingRequestComment", user.getUserComment());
 			map.put("followingRequestUserImg", user.getUserImg());
+			// 내가 팔로잉 중이냐
+			int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, followingrequestuserId);
+			// 내가 요청중이냐
+			int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, followingrequestuserId);
+			// 내가 팔로잉 중임
+			if(ans1 > 0 ) {
+				map.put("followerFollowing", "true");
+			}
+			// 내가 요청중임
+			else if(ans2 > 0) {
+				map.put("followerFollowing", "doing");
+			}
+			else {
+				map.put("followerFollowing", "false");
+			}	
 			userList.add(map);
 		}
 		

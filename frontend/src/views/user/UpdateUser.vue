@@ -56,8 +56,6 @@
       </v-text-field >
 
       <v-text-field
-        style="border-bottom-width: 15px;
-        margin: 7px 0 10px 0px;"
         color="dark"
         v-model="userNickname"
         label="Nickname"
@@ -124,19 +122,6 @@
       </v-btn>
     </v-content>
     </v-layout>
-    <!-- <v-layout>
-      <v-list>
-        <v-list-item-title>프로필 정보</v-list-item-title>
-        <v-list-item-content>
-          <v-list-item-subtitle>성함</v-list-item-subtitle>
-          <v-list-item-title>{{user.userName}}</v-list-item-title>
-          <v-list-item-subtitle>이메일 주소</v-list-item-subtitle>
-          <v-list-item-title>{{user.userEmail}}</v-list-item-title>
-          <v-list-item-subtitle>전화번호</v-list-item-subtitle>
-          <v-list-item-title>{{user.userPhone}}</v-list-item-title>
-        </v-list-item-content>
-      </v-list>
-    </v-layout> -->
     </div>
   </v-app>
 </template>
@@ -223,7 +208,9 @@ export default {
       this.updateUser();
     },
     updateUser (){
-      if (this.userPwd.length > 0 && !this.passwordSchema.validate(this.userPwd))
+      if (this.userNickname.length < 1)
+        this.$alert("닉네임을 입력해주세요.");
+      else if (this.userPwd.length > 0 && !this.passwordSchema.validate(this.userPwd))
         this.$alert("영문,숫자 포함 8 자리이상이어야 합니다.");
       else{
         axios
@@ -233,7 +220,6 @@ export default {
         .then((response) => {
           if(response.data.data == "isExistNickname"){
             this.$alert("사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.");
-              
           }
           else{
             // 정상 동작
@@ -286,15 +272,15 @@ export default {
   .fa-chevron-left {
     color: white; 
     margin-left: 7px;
-  }
+   }
   .update-buttons {
     text-align: center;
     margin-bottom: 12px;
-  }
+  } 
   .p-img {
     margin: 1px 0 10px 12px;
   }
   .text-field-css{
     margin: 3px;
-  }
+  } 
 </style>

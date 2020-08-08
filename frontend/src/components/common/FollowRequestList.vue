@@ -108,16 +108,14 @@ export default {
       )
       .then((response) => {
         if(response.data != ""){
-          console.log(this.list);
           for (let i = 0; i < response.data.length; i++) {
             let userImg = response.data[i].followingRequestUserImg;
             let viewImg = SERVER_URL+"/img/user?imgname=" + userImg;
-            console.log(viewImg);
             this.items.push({
               followingRequestId : response.data[i].followingRequestId,
               followingRequestNickname : response.data[i].followingRequestNickname,
               followingRequestUserImg: viewImg
-              })
+            })
           }
         }
       })

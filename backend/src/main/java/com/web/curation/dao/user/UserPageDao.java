@@ -85,6 +85,9 @@ public interface UserPageDao extends JpaRepository<UserPage, String> {
 
     @Query(value = "DELETE FROM follower WHERE user_id = :anotherId and user_follower = :userId", nativeQuery = true)
 	String deleteFollower(String userId, String anotherId);
+
+    @Query(value = "DELETE FROM following_request WHERE user_id = :anotherId and user_following = :userId", nativeQuery = true)
+	String deleteFollowingRequest(String userId, String anotherId);
 }
 
 

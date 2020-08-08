@@ -10,7 +10,7 @@
     <v-layout>
     <v-toolbar dark>
       <v-list-item-avatar>
-        <v-img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcR_doKnSS8nyn0SYPV-J4cQgaE7uHtbsKlB9A&usqp=CAU"></v-img>
+        <v-img :src="this.userImg"></v-img>
       </v-list-item-avatar>
       {{ userNickname }}
       <!-- <v-btn><br>매너온도</v-btn> -->
@@ -32,9 +32,21 @@
 const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 import axios from "axios";
 export default {
+  data() {
+    return {
+      followerFollowing: false,
+      followerCount: null,
+      followingCount: null,
+      userNickname: "",
+      userImg:"",
+    }
+  },
+
   name: "Profile",
+  
   created() {
     let userID = this.$route.params.userId
+    this.userImg = this.$route.params.userImg
     if (this.$route.params.followerFollowing == 'true') {
       this.followerFollowing = true
     } 
@@ -44,7 +56,6 @@ export default {
         `${SERVER_URL}/userpage/getuser?userId=`+userID
       )
       .then((response) => {
-        console.log(response)
         this.followerCount =  response.data.followerCount
         this.followingCount = response.data.followingCount
         this.userNickname = response.data.userNickname
@@ -53,14 +64,7 @@ export default {
         console.log(error.response);
       });
   },
-  data() {
-    return {
-      followerFollowing: false,
-      followerCount: null,
-      followingCount: null,
-      userNickname: "",
-    }
-  }
+  
 }
 
 </script>

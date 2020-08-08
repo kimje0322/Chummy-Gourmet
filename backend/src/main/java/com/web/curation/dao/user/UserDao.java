@@ -25,7 +25,7 @@ public interface UserDao extends JpaRepository<User, String> {
 	
 	User getUserByUserEmail(String email);
 	
-	User getUserByUserNickname(String nickname);
+	Optional<User> getUserByUserNickname(String nickname);
 
 	Optional<User> findUserByUserEmailAndUserPwd(String email, String password);
 	

@@ -31,6 +31,8 @@ public class Meetup {
 	private String content;
 	@Column(name = "meetup_location")
 	private String location;
+	@Column(name = "meetup_address")
+	private String address;
 	@Column(name = "meetup_date")
 	private String date;
 	@Column(name = "meetup_personnel")
@@ -41,20 +43,17 @@ public class Meetup {
 	public Meetup() {
 	}
 
-	public Meetup(String id, String master, String title, String content, String location, String date,
+	public Meetup(String master, String title, String content, String location, String address, String date,
 			String personnel) {
 		super();
-		this.id = id;
 		this.master = master;
 		this.title = title;
 		this.content = content;
 		this.location = location;
+		this.address = address;
 		this.date = date;
 		this.personnel = personnel;
 	}
-
-
-
 
 	public String getId() {
 		return id;
@@ -96,6 +95,14 @@ public class Meetup {
 		this.location = location;
 	}
 
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 	public String getDate() {
 		return date;
 	}
@@ -122,8 +129,9 @@ public class Meetup {
 
 	@Override
 	public String toString() {
-		return "MeetUp [id=" + id + ", master=" + master + ", title=" + title + ", content=" + content + ", location="
-				+ location + ", date=" + date + ", personnel=" + personnel + ", createDate=" + createDate + "]";
+		return "Meetup [id=" + id + ", master=" + master + ", title=" + title + ", content=" + content + ", location="
+				+ location + ", address=" + address + ", date=" + date + ", personnel=" + personnel + ", createDate="
+				+ createDate + "]";
 	}
 
 }

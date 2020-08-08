@@ -43,6 +43,9 @@ public interface UserDao extends JpaRepository<User, String> {
 		@Query(value = "SELECT * FROM user WHERE user_id in " + 
 				"(SELECT meetup_member FROM meetup_member WHERE meetup_id = :id)",nativeQuery = true)
 		List<User> selectUserNickNameByMeetUpId(int id);
+		
+	@Query(value ="update user set user_img = :user_img where user_id = :user_id",nativeQuery = true)
+	void setUserImgByUserId(String user_img,String user_id);
 }
 
 

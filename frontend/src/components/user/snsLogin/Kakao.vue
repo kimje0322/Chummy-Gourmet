@@ -1,7 +1,6 @@
 <template>
     <div id="kakao-login">
-
-        <button>
+        <button @click="onClick">
             <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" viewBox="0 0 55 55">
                 <g id="그룹_247" data-name="그룹 247" transform="translate(-237 -406)">
                     <g id="구성_요소_2" data-name="구성 요소 2" transform="translate(237 406)">
@@ -24,5 +23,74 @@
 </template>
 
 <script>
-    export default {}
+import axios from "axios";
+import router from "@/routes";
+
+
+// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "https://localhost:8080";
+const app_key = "e4cd88afa207146436293dbd18d2b89f";
+const redirect_uri = "https://i3b302.p.ssafy.io";
+//  const redirect_uri = "http://localhost:8080";
+
+export default {
+    data() {
+        return {
+        }
+    },
+    created(){
+       
+    },
+    methods: {
+        onClick(){
+         // console.log(window.Kakao);
+                window.Kakao.Auth.login({
+                    scope : 'account_email, profile',
+                    success: this.join,
+                });
+        },
+        join(){
+            // console.log(authObj);
+            console.log("들어왔나");
+                window.Kakao.API.request({
+                    url:'/v2/user/me',
+                    success : res => {
+                        const kakao_account = res.kakao_account;
+                        const userInfo = {
+                            userNickname : kakao_account.profile.nickname,
+                            userEmail : kakao_account.email,
+                            userPwd : 'kakao',
+                            userComment : '카카오회원입니다 수정해주세요',
+                            userImg : 'profile_default.png'
+                        }
+
+                        // axios.get(`${SERVER_URL}/account/signup/valid?password=${userInfo.userPwd}&email=${userInfo.userEmail}`)
+                         axios.get(`${SERVER_URL}/account/signup/valid?nickname=${userInfo.userNickname}&email=${userInfo.userEmail}`)
+                        .then((response)=>{
+                            console.log(response);
+                            axios.post(`${SERVER_URL}/account/kakaosignup`,userInfo)
+                            .then(res => {
+                              console.log("성공");
+                            })
+                            .catch(err => {
+                                console.log("실패");
+                            })
+
+                        }).catch((e)=>{
+                            console.log("실패 ");
+                        });
+
+                        console.log(userInfo);
+                        // alert("로그인 성공!");
+                        // this.$bvModal.hide("bv-modal-example");
+                    },
+                    fail : error => {
+                        this.$router.push("/errorPage");
+                        console.log(error);
+                    }
+                })
+        }
+    },
+
+}
 </script>

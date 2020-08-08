@@ -15,8 +15,15 @@ public interface PostDao extends JpaRepository<Post, String> {
 	@Query(value = "select user_following from following where user_id = :id", nativeQuery = true)
 	List<Integer> selectFollowingByUserId(int id);
 	
-	@Query(value = "select * from post where post_userid in (:list)", nativeQuery = true)
+	@Query(value = "select post_id,post_userid, post_date, post_content, post_img_url,post_like,post_update_date,user_nickname,user_img "
+			+ "from post a "
+			+ "inner join user b on a.post_userid = b.user_id "
+			+ "where post_userid in (:list)", nativeQuery = true)
 	List<Post> selectAllByUserFollowing(List<Integer> list);
+	
+	//post_id를 입력받아서 댓글의 개수를 가져온다.
+	@Query(value = "select count(*) from post_comment where post_id = :post_id",nativeQuery=true)
+	int selectAllCommentByPostId(String post_id);
 	
 	@Query(value = "insert into post (post_userid,post_content,post_date,post_img_url)"
 			+ "values(:#{#post.postuserid},:#{#post.postcontent},now(),:#{#post.postimgurl})",nativeQuery=true)
@@ -26,6 +33,6 @@ public interface PostDao extends JpaRepository<Post, String> {
 			+ "where post_id = :#{#post.postid}",nativeQuery=true)
 	void update(Post post);
 	
-	@Query(value = "delete from post where post_id = :#{#post.postid}",nativeQuery=true)
-	void delete(Post post);
+	@Query(value = "delete from post where post_id = :postid",nativeQuery=true)
+	void delete(String postid);
 }

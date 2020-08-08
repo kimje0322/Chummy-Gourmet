@@ -44,7 +44,8 @@ public class PostController {
 	PostDao postDao;
 
 	@PostMapping("/post/img")
-	public String test(@RequestParam("file") MultipartFile file) throws Exception {
+	@ApiOperation(value = "[뉴스피드]게시글에 들어가는 이미지 저장")
+	public String imgAdd(@RequestParam("file") MultipartFile file) throws Exception {
 		System.out.println("파일 이름 : " + file.getOriginalFilename());
 	    System.out.println("파일 크기 : " + file.getSize());
 	    StringTokenizer st = new StringTokenizer(file.getOriginalFilename(),".");
@@ -91,9 +92,15 @@ public class PostController {
 		List<Post> post = new ArrayList<Post>();
 		post = postDao.selectAllByUserFollowing(list);
 		
+		List<Integer> commentcount = new ArrayList<Integer>();
+		for(Post p : post) {
+			commentcount.add(postDao.selectAllCommentByPostId(p.getPostid()));
+		}
+		
 		Map<String, Object> data = new HashMap<String, Object>();
 		
 		data.put("data", post);
+		data.put("comment",commentcount);
 		
 		
 		return data;
@@ -113,8 +120,8 @@ public class PostController {
 	
 	@DeleteMapping("/post")
 	@ApiOperation(value = "게시글 삭제")
-	public void delete(@RequestBody Post post) {
-		postDao.delete(post);
+	public void delete(@RequestParam(required = true) final String postid) {
+		postDao.delete(postid);
 	}
 	
 	

@@ -47,6 +47,12 @@
           v-bind:class="{error : error.password||error.email||email.length<=0||password.length<=0}"
         >로그인</v-btn>
 
+        <div style="display:block">
+          <input type ="checkbox" id="checkbox" v-model="checked" class="border-white"
+            style="left:auto">
+          <label for ="checkbox">로그인 유지</label>
+        </div>
+
         <div>
           <router-link to="/user/findpw">
             <p style="text-center">비밀번호를 잊으셨습니까?</p>
@@ -178,7 +184,10 @@ export default {
 
           this.$cookie.set("accesstoken", response.data, 1);
           this.$cookie.set("userId", response.data.object.userId, 1);
-
+          this.$cookie.set("useremail",this.email,1);
+          if(this.checked){
+            this.$cookie.set("loginSave",true,1);
+          }
           this.$router.push("/map");
         })
 
@@ -199,6 +208,7 @@ export default {
       },
       isSubmit: false,
       component: this,
+      checked:false
     };
   },
 };

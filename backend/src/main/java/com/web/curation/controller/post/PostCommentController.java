@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dao.post.PostCommentDao;
@@ -66,8 +67,8 @@ public class PostCommentController {
 	
 	@DeleteMapping("/post/comment")
 	@ApiOperation(value = "댓글 삭제")
-	public void delete(@RequestBody PostComment postcomment) {
-		postCommentDao.delete(postcomment);
+	public void delete(@RequestParam(required = true) final String commentid) {
+		postCommentDao.delete(commentid);
 	}
 	
 	

@@ -1,7 +1,10 @@
 package com.web.curation.controller.account;
 
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -10,6 +13,7 @@ import java.util.StringTokenizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.dao.user.UserDetailDao;
@@ -48,6 +53,61 @@ public class UserPageController {
 	@Autowired
 	UserDetailDao userDetailDao;
 	
+    // 밋업에 대한 참가자들 가져오기
+    @GetMapping("/userpage/getMeetupMember")
+    @ApiOperation(value = "[유저페이지] 밋업 참가자들 데이터 가져오기")
+    public Object getMeetupMember(@RequestParam(required = true) final String meetupId,
+            @RequestParam(required = true) final String meetupMaster) {
+        
+        User masterUser= userdao.getUserByUserId(meetupMaster);
+        
+        ArrayList<String>List = userPageDao.getUsersByMeetupId(meetupId);
+        
+        // 밋업 유저 리스트
+        ArrayList<Map<String, Object>>meeUpUserList = new ArrayList<>();
+        Map<String, Object>map = new HashMap();
+        map.put("masterUserName", masterUser.getUserName());
+        map.put("masterUserNickname", masterUser.getUserNickname());
+        meeUpUserList.add(map);
+        
+        for (String userId : List) {
+            System.out.println(userId);
+            map = new HashMap();
+            
+            User member = userdao.getUserByUserId(userId);
+            map.put("memberUserName", member.getUserName());
+            map.put("memberUserNickname", member.getUserNickname());
+            
+            meeUpUserList.add(map);
+        }
+        return meeUpUserList;
+    }
+        
+    // 사용자의 밋업정보리스트 가져오기
+    @GetMapping("/userpage/getuserMeetup")
+    @ApiOperation(value = "[유저페이지] 사용자의 밋업정보리스트 가져오기")
+    public Object getuserMeetup(@RequestParam(required = true) final String userId) {
+        
+        ArrayList<String>List = userPageDao.getMeetupByUserId(userId);
+        
+        // 팔로잉 유저 리스트
+        ArrayList<Map<String, Object>>meeUpList = new ArrayList<>();
+        for (String str : List) {
+            String[] array = str.split(",");
+            Map<String, Object>map = new HashMap();
+            map.put("meetupId", array[0]);
+            map.put("meetupMaster", array[1]);
+            map.put("meetupTitle", array[2]);
+            map.put("meetupContent", array[3]);
+            map.put("meetupLocation", array[4]);
+            map.put("meetupDate", array[5]);
+            map.put("meetupPersonnel", array[6]);
+            map.put("meetupCreateDate", array[7]);
+            meeUpList.add(map);
+        }
+        return meeUpList;
+    }
+
 	// 사용자가 팔로잉 하는 유저 리스트를 가져온다.
 	@GetMapping("/userpage/getfollowinglist")
 	@ApiOperation(value = "[유저페이지] 내가 팔로잉하는 유저 리스트 가져옴")
@@ -71,6 +131,7 @@ public class UserPageController {
 				map.put("followingNickname", user.getUserNickname());
 				map.put("followingPhone", user.getUserPhone());
 				map.put("followingComment", user.getUserComment());
+				map.put("followingImg", user.getUserImg());
 				userList.add(map);
 			}
 			// 유저 검색을 한 경우
@@ -85,6 +146,8 @@ public class UserPageController {
 					map.put("followingNickname", user.get().getUserNickname());
 					map.put("followingPhone", user.get().getUserPhone());
 					map.put("followingComment", user.get().getUserComment());
+					map.put("followingImg", user.get().getUserImg());
+					
 					userList.add(map);
 				}
 			}
@@ -114,6 +177,7 @@ public class UserPageController {
 				map.put("followerNickname", user.getUserNickname());
 				map.put("followerPhone", user.getUserPhone());
 				map.put("followerComment", user.getUserComment());
+				map.put("followerImg", user.getUserImg());
 				int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, followeruserId);
 				int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, followeruserId);
 				
@@ -141,6 +205,8 @@ public class UserPageController {
 						map.put("followerNickname", user.get().getUserNickname());
 						map.put("followerPhone", user.get().getUserPhone());
 						map.put("followerComment", user.get().getUserComment());
+						map.put("followerImg", user.get().getUserImg());
+						
 						int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, followeruserId);
 						int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, followeruserId);
 						
@@ -202,6 +268,7 @@ public class UserPageController {
 		map.put("userNickname", user.getUserNickname());
 		map.put("userPhone", user.getUserPhone());
 		map.put("userComment", user.getUserComment());
+		map.put("userImg",user.getUserImg());
 		// 팔로잉 수
 		int count = userPageDao.getUserFollowingCount(user.getUserId());
 		map.put("followingCount", count);
@@ -269,6 +336,7 @@ public class UserPageController {
 		final BasicResponse result = new BasicResponse();
 		
 		userPageDao.deleteFollowing(userId, anotherId);
+		userPageDao.deleteFollower(userId, anotherId);
 		
 		result.status = true;
 		result.data = "success";
@@ -309,7 +377,7 @@ public class UserPageController {
 			map.put("followingRequestNickname", user.getUserNickname());
 			map.put("followingRequestPhone", user.getUserPhone());
 			map.put("followingRequestComment", user.getUserComment());
-			
+			map.put("followingRequestUserImg", user.getUserImg());
 			userList.add(map);
 		}
 		
@@ -331,6 +399,8 @@ public class UserPageController {
 			String result1 = userPageDao.insertFollowerUser(userId, followingRequestId);
 			// 요청리스트에서 지우고
 			String result2 = userPageDao.deleteFollowingrequestUser(userId, followingRequestId);
+			// 상대방의 팔로잉 리스트에 들어간다.
+			String result3 = userPageDao.insertFollowingUser(userId,followingRequestId);
 			result.status = true;
 			result.data = "success";
 		}
@@ -359,5 +429,38 @@ public class UserPageController {
 			result.data = "fail";
 		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	// 사용자의 프로필사진 변경
+	@GetMapping("/userpage/updateimg")
+	@ApiOperation(value ="[유저이미지 정보 저장]")
+	public void updateImg(@RequestParam(required = true) final String user_id,@RequestParam(required = true) final String user_img) {
+		System.out.println(user_id +" "+user_img);
+		userdao.setUserImgByUserId(user_img, user_id);
+	}
+	
+	@PostMapping("/userpage/img")
+	@ApiOperation(value ="[유저이미지파일 저장 후 파일 이름 리턴]")
+	public String test(@RequestParam("file") MultipartFile file) throws Exception {
+		System.out.println("파일 이름 : " + file.getOriginalFilename());
+	    System.out.println("파일 크기 : " + file.getSize());
+	    StringTokenizer st = new StringTokenizer(file.getOriginalFilename(),".");
+	    String fileName = st.nextToken();
+	    String extension =st.nextToken();
+	    System.out.println(fileName);
+	    System.out.println(extension);
+	    
+	    Date today = new Date();
+	    SimpleDateFormat date = new SimpleDateFormat("yyyyMMdd");
+	    SimpleDateFormat time = new SimpleDateFormat("hhmmss");
+	    
+	    int r = (int)(Math.random()*1000000);
+	     
+	    String fileFullName = r+"_"+date.format(today)+time.format(today)+"."+extension;
+	    //서버에서 사용할때
+	    FileCopyUtils.copy(file.getBytes(), new File("/home/ubuntu/deploy/img/user/"+fileFullName));
+	    //로컬에서 테스트할때
+//	    FileCopyUtils.copy(file.getBytes(), new File("C:/"+fileFullName));
+	    return fileFullName;
 	}
 }

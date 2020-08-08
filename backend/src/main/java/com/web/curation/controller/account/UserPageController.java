@@ -408,6 +408,21 @@ public class UserPageController {
 			map.put("followingRequestPhone", user.getUserPhone());
 			map.put("followingRequestComment", user.getUserComment());
 			map.put("followingRequestUserImg", user.getUserImg());
+			// 내가 팔로잉 중이냐
+			int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, followingrequestuserId);
+			// 내가 요청중이냐
+			int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, followingrequestuserId);
+			// 내가 팔로잉 중임
+			if(ans1 > 0 ) {
+				map.put("followerFollowing", "true");
+			}
+			// 내가 요청중임
+			else if(ans2 > 0) {
+				map.put("followerFollowing", "doing");
+			}
+			else {
+				map.put("followerFollowing", "false");
+			}	
 			userList.add(map);
 		}
 		

@@ -112,7 +112,7 @@ export default {
 
     axios
       .get(
-        `${SERVER_URL}/userpage/getuser?userId=`+this.userId
+        `${SERVER_URL}/userpage/getuser?userId=`+this.anotherId
       )
       .then((response) => {
         this.followerCount =  response.data.followerCount

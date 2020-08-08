@@ -41,7 +41,7 @@
                 <a class="a-img1 a-img2" href="#" tabindex="0" style="width: 32px; height: 32px;">
                   <img
                     style="height: 100%; width: 100%;"
-                    src="https://scontent-gmp1-1.cdninstagram.com/v/t51.2885-19/s150x150/64568083_346714766240529_8023659861445181440_n.jpg?_nc_ht=scontent-gmp1-1.cdninstagram.com&_nc_ohc=Bxek_7qbsNkAX_0dv-_&oh=a14ba48d56d9821b9ab60764d1f14258&oe=5F515501"
+                    :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+lst.user_img"
                   />
                 </a>
               </div>
@@ -159,7 +159,7 @@
                       @click="onComment(lst.postid, lst.usernickname, lst.postcontent)"
                     >
                       댓글
-                      <span>몇</span>개 모두 보기
+                      <span>{{commentlst[i]}}</span>개 모두 보기
                     </a>
                   </div>
                 </div>
@@ -184,6 +184,7 @@ export default {
   data() {
     return {
       postlst: [],
+      commentlst :[]
     };
   },
 
@@ -193,7 +194,7 @@ export default {
     axios
       .get(`${SERVER_URL}/post?userid=${this.$cookie.get("userId")}`)
       .then((response) => {
-        // console.log(response);
+        console.log(response);
         var posts = response.data.data;
         // alert(this.postlst.length);
         // console.log(posts);
@@ -201,6 +202,8 @@ export default {
          return -1 * (a.postid - b.postid);
         })
         this.postlst = posts;
+        this.commentlst = response.data.comment;
+        console.log("mentlst : "+response.data.comment);
       })
       .catch((error) => {
         console.log(error.response);

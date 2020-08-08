@@ -54,7 +54,7 @@
               :class="{ 'on-hover': hover }"
               @click="moveDetail(restaurant)">
                 <v-img
-                  src="https://img.siksinhot.com/place/1485274468095571.jpg?w=307&h=300&c=Y"
+                  :src="restaurant.img"
                   class="white--text align-end"
                   gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                   height="200px">
@@ -94,8 +94,8 @@ import axios from "axios";
 import router from "@/routes";
 
 
-const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-// const SERVER_URL = "http://localhost:8080";
+// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "https://localhost:8080";
 
 export default {
   data() {
@@ -196,7 +196,7 @@ export default {
       axios
         .get(`${SERVER_URL}/curation?location=${this.keyword}`)
         .then((response) => {
-          
+            console.log(response);
           // 음식점리스트 받기
           var restaurants = response.data.list;
 

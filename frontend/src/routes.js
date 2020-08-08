@@ -31,7 +31,7 @@ import Profile from './views/user/Profile.vue'
 import UpdateUserInfo from './views/user/UpdateUserInfo.vue'
 
 // //사진업로드 테스트용
-// import UploadTest from './views/feed/uploadtest.vue'
+import UploadTest from './views/feed/uploadtest.vue'
 
 //피드 게시글 업로드
 import AddFeed from './views/feed/addFeed.vue'
@@ -49,14 +49,14 @@ export default new VueRouter({
             // }
         },
         //사진업로드 테스트용 추후 삭제.
-        // {
-        //     path: '/uploadtest',
-        //     name: 'UploadTest',
-        //     component: UploadTest,
-        //     meta: {
-        //         navbar: true
-        //     }
-        // },
+        {
+            path: '/uploadtest',
+            name: 'UploadTest',
+            component: UploadTest,
+            meta: {
+                navbar: true
+            }
+        },
         {
 
             path: '/login',

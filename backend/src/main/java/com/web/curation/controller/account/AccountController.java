@@ -157,14 +157,13 @@ public class AccountController {
       return new ResponseEntity<>(result, HttpStatus.OK);
    }
    
-   @PostMapping("/account/kakaosignup")
-   @ApiOperation(value = "카카오가입하기")
+   @PostMapping("/account/apisignup")
+   @ApiOperation(value = "[가입]api가입하기")
    public Object kakaosignup(@Valid @RequestBody User request) {
       final BasicResponse result = new BasicResponse();
       System.out.println(request);
       // user entity db 저장
-//      User newUser = new User(request.getUserPwd(), request.getUserEmail(),
-//            request.getUserNickname(),request.getUserComment());
+
       userDao.save(request);
 
       result.status = true;

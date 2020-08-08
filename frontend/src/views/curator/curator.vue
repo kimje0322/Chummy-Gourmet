@@ -202,6 +202,7 @@ export default {
 
           // 음식점리스트 돌면서 좌표(position), 거리(dist) 구하기
           restaurants.forEach(restaurant => {
+            console.log(restaurant);
 
             // 주소 -> 좌표
             geocoder.addressSearch(restaurant.location, (result, status) => {

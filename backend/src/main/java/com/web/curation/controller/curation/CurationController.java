@@ -20,6 +20,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,7 +52,19 @@ public class CurationController {
 
 	static String clientId = "dapi.kakao.com"; // 애플리케이션 클라이언트 아이디값"
 	static String clientSecret = "KakaoAK e4cd88afa207146436293dbd18d2b89f"; // 애플리케이션 클라이언트 시크릿값"
-
+	
+	@GetMapping("/crawling")
+	public String crawling() throws IOException {
+		StringBuilder sb = new StringBuilder();
+		String URL = "https://place.map.kakao.com/17733090";
+		Document doc = Jsoup.connect(URL).get();
+		Elements contents = doc.select("div");
+		
+		System.out.println(doc);
+//		System.out.println(doc.toString());
+		return doc.toString();
+	}
+	
 	// 장소를 중심으로 검색
 	@GetMapping("/curation")
 	@ApiOperation(value = "장소를 중심으로 검색")

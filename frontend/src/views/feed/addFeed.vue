@@ -82,7 +82,7 @@ export default {
       const file = new FormData();
       file.append("file", this.file);
       axios
-        .post(`${SERVER_URL}/post/test`, file)
+        .post(`${SERVER_URL}/post/img`, file)
 
         .then((response) => {
           this.postimgurl = response.data;

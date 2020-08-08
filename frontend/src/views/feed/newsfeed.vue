@@ -100,7 +100,7 @@
               </span>
               <span style="display: inline-block;">
                 <button
-                  @click="onComment(lst.postid, lst.usernickname)"
+                  @click="onComment(lst.postid, lst.usernickname, lst.postcontent)"
                   style="background: 0 0; border: 0; display: flex; padding: 8px;"
                 >
                   <div>
@@ -156,8 +156,7 @@
                   <div style="marign-bottom: 4px; padding-left: 5px;">
                     <a
                       style="font-size: 14px; font-weight: 400; color: #8e8e8e;"
-                      @click="onComment(lst.postid)"
-                      href="#"
+                      @click="onComment(lst.postid, lst.usernickname, lst.postcontent)"
                     >
                       댓글
                       <span>몇</span>개 모두 보기
@@ -194,23 +193,27 @@ export default {
     axios
       .get(`${SERVER_URL}/post?userid=${this.$cookie.get("userId")}`)
       .then((response) => {
-        console.log(response);
-        this.postlst = response.data.data;
-        alert(this.postlst.length);
-        console.log(this.postlst);
+        // console.log(response);
+        var posts = response.data.data;
+        // alert(this.postlst.length);
+        // console.log(posts);
+        posts.sort((a, b) => {
+         return -1 * (a.postid - b.postid);
+        })
+        this.postlst = posts;
       })
       .catch((error) => {
         console.log(error.response);
       });
   },
   methods: {
-    onComment(pid, pname) {
+    onComment(pid, pname, pcontent) {
       let postinfo = {
         postid: pid,
         postnickname: pname,
-        // postid:
+        postcontent: pcontent,
       };
-      console.log("dfsdafgfgfdfadf");
+      // console.log("dfsdafgfgfdfadf");
       console.log(pid);
       router.push({ name: "Comment", params: postinfo });
     },

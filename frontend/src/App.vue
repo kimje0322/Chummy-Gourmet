@@ -29,7 +29,11 @@
             </v-btn>
 
             <v-btn text color="deep-purple accent-4">
+               <!-- <input ref="imageInput" type="file" hidden @change="onChangeImages"> -->
+              <!-- <v-btn type="button" @click="onClickImageUpload"> -->
+              <!-- </v-btn> -->
               <router-link to="/feed/add">
+
                 <v-icon>fas fa-plus</v-icon>
               </router-link>
             </v-btn>
@@ -89,10 +93,14 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 // const SERVER_URL = "http://localhost:8080";
 import "./components/css/style.scss";
 import axios from "axios";
+import router from "@/routes";
 
 export default {
   name: "app",
   methods: {
+      // onClickImageUpload() {
+      //   this.$refs.imageInput.click();
+  // },
     
   },
   created() {

@@ -1,6 +1,7 @@
 package com.web.curation.dao.post;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -35,4 +36,7 @@ public interface PostDao extends JpaRepository<Post, String> {
 	
 	@Query(value = "delete from post where post_id = :postid",nativeQuery=true)
 	void delete(String postid);
+
+	@Query(value = "select post_id,post_userid, post_date, post_content, post_img_url,post_like,post_update_date from post where post_userid = :userid", nativeQuery = true)
+	List<Map<String, Object>> selectAllByUserid(int userid);
 }

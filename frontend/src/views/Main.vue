@@ -22,7 +22,7 @@
             <!-- dm -->
             <Message v-if="item=='Message'"></Message>
             <!-- history -->
-            <History v-else-if="item=='History'"></History>
+            <History :proptoTopsub="users" v-else-if="item=='History'"></History>
             <!-- profile -->
             <v-card-text v-else>
               <!-- meetupData -->

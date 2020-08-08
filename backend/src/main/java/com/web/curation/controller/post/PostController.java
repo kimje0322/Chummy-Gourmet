@@ -30,6 +30,7 @@ import com.web.curation.model.post.Post;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.models.auth.In;
 
 @ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
 	      @ApiResponse(code = 403, message = "Forbidden", response = BasicResponse.class),
@@ -124,6 +125,24 @@ public class PostController {
 		postDao.delete(postid);
 	}
 	
-	
+	@GetMapping("/post/getuserpost")
+	@ApiOperation(value = "현재 사용자의 게시글 가져오기")
+	public Map<String, Object> getuserpost(@RequestParam(required = true) final String userId){
+		System.out.println(userId);
+		List<Map<String, Object>> post = new ArrayList<>();
+		post = postDao.selectAllByUserid(Integer.parseInt(userId));
+		System.out.println(post);
+		List<Integer> commentcount = new ArrayList<Integer>();
+		for(Map<String, Object> p : post) {
+			commentcount.add(postDao.selectAllCommentByPostId(p.get("post_id").toString()));
+		}
+		
+		Map<String, Object> data = new HashMap<String, Object>();
+		
+		data.put("data", post);
+		data.put("comment",commentcount);
+		
+		return data;
+	}
 	
 }

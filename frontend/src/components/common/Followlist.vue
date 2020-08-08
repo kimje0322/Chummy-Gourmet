@@ -49,8 +49,8 @@
                 <!-- <v-list-item-title v-text="user.followingName"></v-list-item-title> -->
                 </v-list-item-content>
 
-                <v-btn color="info" @click="onFollow(user)" v-if="user.followerFollowing !== 'true'">
-                  팔로잉
+                <v-btn color="primary"  @click="onFollow(user,i)" v-if="user.followerFollowing === 'false'">
+                    팔로우
                 </v-btn>
                 
                 <v-btn depressed  @click="deleteFollowRequest(user,i)" v-else-if="user.followerFollowing === 'doing'">

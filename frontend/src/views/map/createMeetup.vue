@@ -111,8 +111,64 @@
 
         <!-- 파티 날짜 -->
         <v-menu
+          v-model = "menu"
+          :close-on-content-click="false"
+          :return-value.sync="date"
+          transition="scale-transition"
+          offset-y
+          >
+
+          <!-- 월/일 선택 -->
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field
+              solo
+              v-model="meetup.date"
+              placeholder="날짜"
+              :append-icon="isColor1 ? 'mdi-calendar-check orange--text text--lighten-2' : 'mdi-calendar-check'"
+              :return-value.sync="date"
+              @click:append="isColor1 = !isColor1"
+              readonly
+              v-bind="attrs"
+              v-on="on"
+            ></v-text-field>
+          </template>
+            <v-date-picker
+              v-model="date"
+              :min="new Date().toISOString().substr(0, 10)"
+              max="2050-01-01"
+              scrollable
+              full-width
+            >
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
+              <v-menu
+                v-model="menu2"
+                :close-on-content-click="false"
+                :return-value.sync="time"
+                transition="scale-transition"
+                offset-y
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn text color="primary"  v-on="on" v-bind="attrs">OK</v-btn>
+                </template>
+                <v-time-picker
+                  v-model="time"
+                  ampm-in-title
+                  width="260px"
+                >
+                <v-spacer></v-spacer>
+                <v-btn text color="primary" @click="menu2 = false">Cancel</v-btn>
+                <v-btn text color="primary" @click="test">OK</v-btn>
+              </v-time-picker>
+
+            </v-menu>
+          </v-date-picker>
+        </v-menu>
+
+        <!-- 파티 시간
+        <v-menu
           ref="menu"
-          v-model="menu"
+          v-model="menu2"
           :close-on-content-click="false"
           :return-value.sync="date"
           transition="scale-transition"
@@ -122,8 +178,8 @@
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
               solo
-              v-model="meetup.date"
-              placeholder="날짜"
+              v-model="meetup.time"
+              placeholder="시간"
               :append-icon="isColor1 ? 'mdi-calendar-check orange--text text--lighten-2' : 'mdi-calendar-check'"
               @click:append="isColor1 = !isColor1"
               readonly
@@ -131,18 +187,17 @@
               v-on="on"
             ></v-text-field>
           </template>
-          <v-date-picker
-            v-model="meetup.date"
-            :min="new Date().toISOString().substr(0, 10)"
-            max="2050-01-01"
-            no-title
-            scrollable
+            <v-time-picker
+            v-if="menu2"
+            v-model="time"
+            full-width
+            @click:minute="$refs.menu.save(time)"
           >
             <v-spacer></v-spacer>
             <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
             <v-btn text color="primary" @click="$refs.menu.save(meetup.date)">OK</v-btn>
-          </v-date-picker>
-        </v-menu>
+            </v-time-picker>
+        </v-menu> -->
 
         <!-- 파티 인원 -->
         <div id="dropdown-example">
@@ -171,13 +226,11 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 export default {
   data: () => {
     return {
-        time: null,
-        menu2: false,
-
       keyword : '',
-      // date: new Date().toISOString().substr(0, 10),
-      date: null,
+      date: '',
+      time: null,
       menu: false,
+      menu2 : false,
       isColor: false,
       isColor1: false,
       isClick: false,
@@ -205,6 +258,11 @@ export default {
       },
 
       dropdown_font: ["1", "2", "3", "4", "5", "6+"],
+
+      targetLocation : {
+        lat : '',
+        lng : ''
+      }
     }
   },
   watch: {
@@ -237,18 +295,26 @@ export default {
   },
 
   mounted() {
-    if (window.kakao && window.kakao.maps) {
-      this.initMap();
-    } else {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(pos => {
+          this.targetLocation.lat = pos.coords.latitude;
+          this.targetLocation.lng = pos.coords.longitude;
+        });
+      }
+
       const script = document.createElement("script");
       /* global kakao */
-      script.onload = () => kakao.maps.load(this.initMap);
+      script.onload = () => kakao.maps.load();
       script.src =
         "https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=90891b3c4fa765cd378361c6b16e4dd6&libraries=services";
       document.head.appendChild(script);
-    }
   },
   methods: {
+    test() {
+      this.menu = false;
+      this.menu2 = false;
+      this.meetup.date = this.date + " " + this.time;
+    },
     meetUp() {
       if (this.meetup.title.length === 0) {
         alert("제목을 작성해주세요.");
@@ -270,7 +336,6 @@ export default {
         return;
       }
 
-      console.log(this.meetup);
       axios
         .post(`${SERVER_URL}/meetup`, this.meetup)
         .then((response) => {
@@ -317,15 +382,15 @@ export default {
               restaurant.position = coords;
               
               // 현위치에서 음식점까지의 거리(dist) 구하기
-              // if(restaurant.position){
-              //   var polyline = new kakao.maps.Polyline({
-              //     path: [
-              //       new kakao.maps.LatLng(this.targetLocation.lat, this.targetLocation.lng),
-              //       restaurant.position
-              //     ],
-              //   });
-              //   restaurant.dist = polyline.getLength();
-              // }
+              if(restaurant.position){
+                var polyline = new kakao.maps.Polyline({
+                  path: [
+                    new kakao.maps.LatLng(this.targetLocation.lat, this.targetLocation.lng),
+                    restaurant.position
+                  ],
+                });
+                restaurant.dist = polyline.getLength();
+              }
             });
           })
           this.restaurants = restaurants;
@@ -339,16 +404,7 @@ export default {
       this.meetup.address = restaurant.location;
       this.dialog = false;
     },
-    initMap() {
-      var container = document.getElementById("map");
-      var options = {
-        center: new kakao.maps.LatLng(33.450701, 126.570667),
-        level: 3,
-      };
-      var map = new kakao.maps.Map(container, options);
-    },
   },
-  components: {},
 
 };
 </script>

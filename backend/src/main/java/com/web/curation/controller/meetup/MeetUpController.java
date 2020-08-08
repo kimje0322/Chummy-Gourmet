@@ -48,6 +48,18 @@ public class MeetUpController {
 		return data.get();
 	}
 	
+	//밋업 아이디로 밋업 정보 조회
+	@GetMapping("/meetup/searchByMeetupID/{id}")
+	@ApiOperation(value = "밋업 정보 조회")
+	public Meetup searchByMeetupID(@PathVariable int id) {
+		
+		Optional<Meetup> data = meetupDao.getMeetupByMeetupID(id);
+		Meetup meetup = data.get();
+		System.out.println(data.get());
+		
+		return data.get();
+	}
+	
 	//해당 지역의 밋업 정보 조회
 	@GetMapping("/meetup/search/{location}")
 	@ApiOperation(value = "해당 지역의 밋업 정보 조회")

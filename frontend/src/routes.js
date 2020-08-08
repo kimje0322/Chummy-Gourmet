@@ -17,7 +17,8 @@ import FoundPw from './views/user/FoundPw.vue'
 import UserInfo from './views/Main.vue'
 import Pref from './views/user/Preference.vue'
 import Map from './views/map/map.vue'
-import CreateParty from './views/map/createParty.vue'
+import CreateMeetup from './views/map/createMeetup.vue'
+import DetailMeetup from './views/map/detailMeetup.vue'
 import Home from './views/user/Home.vue'
 import FollowList from './components/common/Followlist.vue'
 import NewsFeed from './views/feed/newsfeed.vue'
@@ -119,16 +120,6 @@ export default new VueRouter({
             }
         },
         {
-            path: '/user/findPw',
-            name: 'FindPw',
-            component: FindPw
-        },
-        {
-            path: '/user/foundPw',
-            name: 'FoundPw',
-            component: FoundPw
-        },
-        {
             path: '/user/finishjoin',
             name: 'FinshJoin',
             component: FinishJoin
@@ -154,9 +145,14 @@ export default new VueRouter({
             component: Map
         },
         {
-            path: '/map/createParty',
-            name: 'CreateParty',
-            component: CreateParty
+            path: '/map/createMeetup',
+            name: 'CreateMeetup',
+            component: CreateMeetup
+        },
+        {
+            path: '/map/detailMeetup',
+            name: 'DetailMeetup',
+            component: DetailMeetup
         },
         {
             path: '/feed/main',

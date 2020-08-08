@@ -100,7 +100,7 @@
               </span>
               <span style="display: inline-block;">
                 <button
-                  @click="onComment(lst.postid, lst.usernickname, lst.postcontent)"
+                  @click="onComment(lst.postid, lst.usernickname, lst.postcontent,lst.user_img)"
                   style="background: 0 0; border: 0; display: flex; padding: 8px;"
                 >
                   <div>
@@ -156,10 +156,10 @@
                   <div style="marign-bottom: 4px; padding-left: 5px;">
                     <a
                       style="font-size: 14px; font-weight: 400; color: #8e8e8e;"
-                      @click="onComment(lst.postid, lst.usernickname, lst.postcontent)"
+                      @click="onComment(lst.postid, lst.usernickname, lst.postcontent, lst.user_img)"
                     >
                       댓글
-                      <span>{{commentlst[i]}}</span>개 모두 보기
+                      <span>{{commentlst[i][0]}}</span>개 모두 보기
                     </a>
                   </div>
                 </div>
@@ -177,8 +177,8 @@
 import axios from "axios";
 import router from "@/routes";
 
-const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-// const SERVER_URL = "http://localhost:8080";
+// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "https://localhost:8080";
 
 export default {
   data() {
@@ -196,10 +196,14 @@ export default {
       .then((response) => {
         console.log(response);
         var posts = response.data.data;
+        var comments = response.data.comment;
         // alert(this.postlst.length);
         // console.log(posts);
         posts.sort((a, b) => {
          return -1 * (a.postid - b.postid);
+        })
+        comments.sort((a,b)=>{
+          return -1 * (a[1]-b[1]);
         })
         this.postlst = posts;
         this.commentlst = response.data.comment;
@@ -210,11 +214,12 @@ export default {
       });
   },
   methods: {
-    onComment(pid, pname, pcontent) {
+    onComment(pid, pname, pcontent, puserimg) {
       let postinfo = {
         postid: pid,
         postnickname: pname,
         postcontent: pcontent,
+        postuserimg: puserimg
       };
       // console.log("dfsdafgfgfdfadf");
       console.log(pid);

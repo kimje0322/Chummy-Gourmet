@@ -67,16 +67,27 @@ export default {
                         // axios.get(`${SERVER_URL}/account/signup/valid?password=${userInfo.userPwd}&email=${userInfo.userEmail}`)
                          axios.get(`${SERVER_URL}/account/signup/valid?nickname=${userInfo.userNickname}&email=${userInfo.userEmail}`)
                         .then((response)=>{
+                            //이메일 닉네임 유효성 검사 성공
+                            console.log("여기인가요?");
                             console.log(response);
-                            axios.post(`${SERVER_URL}/account/kakaosignup`,userInfo)
-                            .then(res => {
-                              console.log("성공");
-                            })
-                            .catch(err => {
-                                console.log("실패");
-                            })
+                            if(response.data.status){
+                                //카카오 계정으로 등록
+                                axios.post(`${SERVER_URL}/account/kakaosignup`,userInfo)
+                                .then(res => {
+                                  console.log("성공");
+                                })
+                                .catch(err => {
+                                    console.log("실패");
+                                })
+                            }
+                            else{
+                                console.log("로그인하기");
+                                this.login(userInfo);
+                            }
 
                         }).catch((e)=>{
+                            //이메일 닉네임이 이미 있을경우
+                            //로그인 작업을 처리한 후 쿠키에 넣어준다
                             console.log("실패 ");
                         });
 
@@ -89,6 +100,29 @@ export default {
                         console.log(error);
                     }
                 })
+        },
+        
+        login(userInfo){
+            console.log("여기까지?");
+            axios
+        .get(
+          `${SERVER_URL}/account/login?email=${userInfo.userEmail}&password=kakao`
+        )
+
+        .then((response) => {
+          console.log("로그인페이지");
+          console.log(response.data);
+
+          this.$cookie.set("accesstoken", response.data, 1);
+          this.$cookie.set("userId", response.data.object.userId, 1);
+          this.$cookie.set("useremail",userInfo.userEmail,1);
+          this.$router.push("/map");
+        })
+
+        .catch((error) => {
+          console.log(error.response);
+          alert("로그인 실패");
+        });
         }
     },
 

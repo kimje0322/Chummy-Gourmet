@@ -59,10 +59,11 @@ public class CurationController {
 		String URL = "https://place.map.kakao.com/17733090";
 		Document doc = Jsoup.connect(URL).get();
 		Elements contents = doc.select("div");
-		
-		System.out.println(doc);
+		sb.append("<!-- ");
+		sb.append(doc);
+		sb.append(" -->");
 //		System.out.println(doc.toString());
-		return doc.toString();
+		return sb.toString();
 	}
 	
 	// 장소를 중심으로 검색

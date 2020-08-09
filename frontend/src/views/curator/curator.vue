@@ -52,35 +52,39 @@
             <v-hover v-slot:default="{ hover }">
               <v-card  :elevation="hover ? 12 : 2"
               :class="{ 'on-hover': hover }"
-              @click="moveDetail(restaurant)">
+              >
                 <v-img
                   :src="restaurant.img"
                   class="white--text align-end"
                   gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                  height="200px">
+                  height="200px"
+                  @click="moveDetail(restaurant)"
+                  >
                 </v-img>
 
                 <v-card-actions>
-                  <div>
-                    <v-card-title v-text="restaurant.name"></v-card-title>
-                    <v-card-subtitle v-text="restaurant.location"></v-card-subtitle>
+                  <div style="width:55%;">
+                    <v-card-title @click="moveDetail(restaurant)">{{restaurant.name}}</v-card-title>
+                    <v-card-subtitle v-text="restaurant.location" @click="moveDetail(restaurant)"></v-card-subtitle>
                   </div>
                   <v-spacer></v-spacer>
-
-                  <v-btn icon>
-                    <v-icon>mdi-heart-outline</v-icon>
+                  <v-spacer></v-spacer>
+                  <v-spacer></v-spacer>
+                  <v-btn icon small :color="like ? 'pink' : ''" @click="like = !like">
+                    <v-icon v-text="like ? 'mdi-heart' : 'mdi-heart-outline' "></v-icon>
                   </v-btn>
-                  <span v-text="restaurant.restLike"></span>
+                  <span style="margin:0 5px 0 -1px;">{{restaurant.like}}</span>
 
-                  <v-btn icon>
-                    <v-icon>mdi-bookmark-check-outline</v-icon>
+                  <v-btn icon small :color="scrap ? 'blue' : ''" @click="scrap = !scrap">
+                    <v-icon v-text="scrap ? 'mdi-bookmark-check' : 'mdi-bookmark-check-outline' "></v-icon>
                   </v-btn>
-                  <span v-text="restaurant.restReview"></span>
+                  <span style="margin:0 5px 0 -2px;">{{restaurant.scrap}}</span>
 
-                  <v-btn icon>
+                  <v-btn icon small>
                     <v-icon>mdi-comment-edit-outline</v-icon>
                   </v-btn>
-                  <span v-text="restaurant.restScrap"></span>
+                  <span style="margin:0 5px 0 0;">{{restaurant.review}}</span>
+                  <v-spacer></v-spacer>
                 </v-card-actions>
               </v-card>
             </v-hover>
@@ -94,12 +98,15 @@ import axios from "axios";
 import router from "@/routes";
 
 
-const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-// const SERVER_URL = "https://localhost:8080";
+// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "https://localhost:8080";
 
 export default {
   data() {
     return {
+      like : false,
+      scrap : false,
+      review : false,
       on : '',
       fav: true,
       menu: false,
@@ -196,13 +203,12 @@ export default {
       axios
         .get(`${SERVER_URL}/curation?location=${this.keyword}`)
         .then((response) => {
-            console.log(response);
+          console.log(response);
           // 음식점리스트 받기
           var restaurants = response.data.list;
 
           // 음식점리스트 돌면서 좌표(position), 거리(dist) 구하기
           restaurants.forEach(restaurant => {
-            console.log(restaurant);
 
             // 주소 -> 좌표
             geocoder.addressSearch(restaurant.location, (result, status) => {
@@ -227,7 +233,6 @@ export default {
         })
         .catch((error) => {
           console.log(error.response);
-          alert("로그인 실패");
         });
     },
     moveDetail(restaurant) {

@@ -129,15 +129,13 @@ export default {
     };
   },
   created() {
-    // console.log(this.restaurant)
     axios
         .get(`${SERVER_URL}/review/search?id=${this.restaurant.id}`)
-
         .then((response) => {
-          console.log("넘어온 식당정보");
-          console.log(this.restaurant);
-          console.log("받아온 데이터");
-          console.log(response.data);
+          // console.log("넘어온 식당정보");
+          // console.log(this.restaurant);
+          // console.log("받아온 데이터");
+          // console.log(response.data);
           this.reviews = response.data.review;
           this.members = response.data.member[0];
           
@@ -145,7 +143,6 @@ export default {
 
         .catch((error) => {
           console.log(error.response);
-          alert("로그인 실패");
         });
   },
   methods : {

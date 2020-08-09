@@ -59,6 +59,30 @@ public class UserPageController {
 	@Autowired
 	RestaurantDao restDao;
 	
+	//userid로 좋아요한 식당 번호 가져오기 
+	@GetMapping("/userpage/getGoodId")
+	@ApiOperation(value = "[유저페이지] 좋아요한 식당 번호 가져오기")
+	public List<Integer> getGoodId(@RequestParam(required = true) final String userid){
+		
+		List<Integer> list = new ArrayList<Integer>();
+		
+		list = userPageDao.selectRestGoodIdByUserId(userid);
+		
+		return list;
+	}
+	
+	//userid로 scarp한 식당 번호 가져오기 
+	@GetMapping("/userpage/getScrapId")
+		@ApiOperation(value = "[유저페이지] 스크랩한 식당 번호 가져오기")
+		public List<Integer> getScrapId(@RequestParam(required = true) final String userid){
+			
+			List<Integer> list = new ArrayList<Integer>();
+			
+			list = userPageDao.selectRestScrapIdbyUserId(userid);
+			
+			return list;
+		}
+	
 	//userid로 scarp한 식당 모두 가져오기
 	@GetMapping("/userpage/getRest")
 	@ApiOperation(value = "[유저페이지] 스크랩한 식당 데이터 가져오기")

@@ -50,6 +50,8 @@ public class CurationController {
 	static String clientId = "dapi.kakao.com"; // 애플리케이션 클라이언트 아이디값"
 	static String clientSecret = "KakaoAK e4cd88afa207146436293dbd18d2b89f"; // 애플리케이션 클라이언트 시크릿값"
 
+	
+	
 	// 장소를 중심으로 검색
 	@GetMapping("/curation")
 	@ApiOperation(value = "장소를 중심으로 검색")

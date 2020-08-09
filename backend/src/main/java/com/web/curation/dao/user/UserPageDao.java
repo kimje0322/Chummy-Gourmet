@@ -2,6 +2,7 @@ package com.web.curation.dao.user;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -88,6 +89,14 @@ public interface UserPageDao extends JpaRepository<UserPage, String> {
 
     @Query(value = "DELETE FROM following_request WHERE user_id = :anotherId and user_following = :userId", nativeQuery = true)
 	String deleteFollowingRequest(String userId, String anotherId);
+    
+  //userid로 좋아요한 가게 id 모두 가져옴
+  	@Query(value = "SELECT rest_id from restaurant_good where user_id= :userid", nativeQuery = true)
+  	List<Integer> selectRestGoodIdByUserId(String userid);
+
+  	//userid로 스크랩한 가게 id 모두 가져옴
+  	@Query(value = "SELECT rest_id from scrap where user_id= :userid", nativeQuery = true)
+	List<Integer> selectRestScrapIdbyUserId(String userid);
 }
 
 

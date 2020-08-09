@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.StringTokenizer;
@@ -24,10 +25,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.web.curation.dao.review.RestaurantDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.dao.user.UserDetailDao;
 import com.web.curation.dao.user.UserPageDao;
 import com.web.curation.model.BasicResponse;
+import com.web.curation.model.review.Restaurant;
 import com.web.curation.model.user.User;
 import com.web.curation.model.user.UserDetail;
 
@@ -52,6 +55,21 @@ public class UserPageController {
 	
 	@Autowired
 	UserDetailDao userDetailDao;
+	
+	@Autowired
+	RestaurantDao restDao;
+	
+	//userid로 scarp한 식당 모두 가져오기
+	@GetMapping("/userpage/getRest")
+	@ApiOperation(value = "[유저페이지] 스크랩한 식당 데이터 가져오기")
+	public List<Restaurant> getScrap(@RequestParam(required = true) final String userid){
+		
+		List<Restaurant> list = new ArrayList<Restaurant>();
+		
+		list = restDao.selectAllRestByUserId(userid);
+		
+		return list;
+	}
 	
     // 밋업에 대한 참가자들 가져오기
     @GetMapping("/userpage/getMeetupMember")

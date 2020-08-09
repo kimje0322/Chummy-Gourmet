@@ -37,6 +37,10 @@ public interface PostDao extends JpaRepository<Post, String> {
 	@Query(value = "delete from post where post_id = :postid",nativeQuery=true)
 	void delete(String postid);
 
-	@Query(value = "select post_id,post_userid, post_date, post_content, post_img_url,post_like,post_update_date from post where post_userid = :userid", nativeQuery = true)
+	@Query(value = "select post_id,post_userid, post_date, post_content, post_img_url,post_like,post_update_date,user_nickname,user_img "
+			+ "from post a "
+			+ "inner join user b on a.post_userid = b.user_id "
+			+ "where post_userid = :userid "
+			+ "order by post_date desc", nativeQuery = true)
 	List<Map<String, Object>> selectAllByUserid(int userid);
 }

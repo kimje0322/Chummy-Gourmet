@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.web.curation.dao.post.PostDao;
 import com.web.curation.dao.review.RestaurantDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.dao.user.UserDetailDao;
@@ -58,6 +59,9 @@ public class UserPageController {
 	
 	@Autowired
 	RestaurantDao restDao;
+	
+	@Autowired
+	PostDao postDao;
 	
 	//userid로 scarp한 식당 모두 가져오기
 	@GetMapping("/userpage/getRest")
@@ -523,5 +527,24 @@ public class UserPageController {
 	    //로컬에서 테스트할때
 //	    FileCopyUtils.copy(file.getBytes(), new File("C:/"+fileFullName));
 	    return fileFullName;
+	}
+	
+	@GetMapping("/userpage/getuserpost")
+	@ApiOperation(value = "현재 사용자의 게시글 가져오기")
+	public Map<String, Object> getuserpost(@RequestParam(required = true) final String userId){
+		List<Map<String, Object>> post = new ArrayList<>();
+		post = postDao.selectAllByUserid(Integer.parseInt(userId));
+		System.out.println(post);
+		List<Integer> commentcount = new ArrayList<Integer>();
+		for(Map<String, Object> p : post) {
+			commentcount.add(postDao.selectAllCommentByPostId(p.get("post_id").toString()));
+		}
+		
+		Map<String, Object> data = new HashMap<String, Object>();
+		
+		data.put("data", post);
+		data.put("comment",commentcount);
+		
+		return data;
 	}
 }

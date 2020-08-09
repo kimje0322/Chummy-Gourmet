@@ -11,8 +11,8 @@
       <v-tabs dark v-model="currentItem" fixed-tabs slider-color="grey">
         <v-tab v-for="item in items" :key="item" :href="'#tab-' + item">
           <v-icon v-if="item=='Profile'">mdi-account-box</v-icon>
-          <v-icon v-if="item=='History'">mdi-heart</v-icon>
-          <v-icon v-if="item=='Message'">far fa-paper-plane</v-icon>
+          <v-icon v-if="item=='History'">fas fa-list</v-icon>
+          <v-icon v-if="item=='Message'">mdi-folder</v-icon>
         </v-tab>
       </v-tabs>
 

@@ -27,4 +27,9 @@ public interface RestaurantDao extends JpaRepository<Restaurant, String> {
 	// name으로 가게가 있는지 없는지 검색 - review 등록용도
 	@Query(value = "SELECT * from restaurant where rest_name in (:name)", nativeQuery = true)
 	List<Restaurant> seletRestNameBySearchName(List<String> name);
+	
+	// userid로 scrap 한 가게 데이터 모두 가져옴
+	@Query(value = "SELECT * from restaurant where rest_id in (select rest_id from scrap where user_id= :userid)", nativeQuery = true)
+	List<Restaurant> selectAllRestByUserId(String userid);
+	
 }

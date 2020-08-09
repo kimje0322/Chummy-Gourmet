@@ -23,7 +23,7 @@
                 <span class="prf" style="margin-left: 0px; ">
                   <img
                     style="height: 32px; width: 32px; border-radius: 50%;"
-                    src="https://scontent-gmp1-1.cdninstagram.com/v/t51.2885-19/s150x150/64568083_346714766240529_8023659861445181440_n.jpg?_nc_ht=scontent-gmp1-1.cdninstagram.com&_nc_ohc=Bxek_7qbsNkAX_0dv-_&oh=a14ba48d56d9821b9ab60764d1f14258&oe=5F515501"
+                    :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+ userimg"
                   />
                 </span>
               </div>
@@ -57,6 +57,8 @@ export default {
       postcontent: "",
       postimgurl: "",
       postuserid: this.$cookie.get("userId"),
+      username : "",
+      userimg : ""
     };
   },
   created() {
@@ -69,6 +71,7 @@ export default {
         // console.log("alfkjsdsi");
         console.log(response);
         this.username = response.data.userNickname;
+        this.userimg = response.data.userImg;
         console.log(this.username)
       })
       .catch((error) => {
@@ -82,7 +85,7 @@ export default {
       const file = new FormData();
       file.append("file", this.file);
       axios
-        .post(`${SERVER_URL}/post/test`, file)
+        .post(`${SERVER_URL}/post/img`, file)
 
         .then((response) => {
           this.postimgurl = response.data;

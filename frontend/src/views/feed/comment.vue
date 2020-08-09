@@ -29,7 +29,7 @@
             <span class="prf">
               <img
                 style="height: 100%; width: 100%; -webkit-user-drag: none;"
-                src="https://scontent-gmp1-1.cdninstagram.com/v/t51.2885-19/s150x150/64568083_346714766240529_8023659861445181440_n.jpg?_nc_ht=scontent-gmp1-1.cdninstagram.com&_nc_ohc=Bxek_7qbsNkAX_0dv-_&oh=a14ba48d56d9821b9ab60764d1f14258&oe=5F515501"
+                :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+this.myimg"
               />
             </span>
             <form style="height: 42px;" class="text-box">
@@ -62,7 +62,7 @@
                       <span class="prf" style="margin-left: 0px;">
                         <img
                           style="height: 100%; width: 100%; -webkit-user-drag: none;"
-                          src="https://scontent-gmp1-1.cdninstagram.com/v/t51.2885-19/s150x150/64568083_346714766240529_8023659861445181440_n.jpg?_nc_ht=scontent-gmp1-1.cdninstagram.com&_nc_ohc=Bxek_7qbsNkAX_0dv-_&oh=a14ba48d56d9821b9ab60764d1f14258&oe=5F515501"
+                          :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+postuserimg"
                         />
                       </span>
                     </div>
@@ -103,7 +103,7 @@
                         <span class="prf" style="margin-left: 0px;">
                           <img
                             style="height: 100%; width: 100%; -webkit-user-drag: none;"
-                            src="https://scontent-gmp1-1.cdninstagram.com/v/t51.2885-19/s150x150/64568083_346714766240529_8023659861445181440_n.jpg?_nc_ht=scontent-gmp1-1.cdninstagram.com&_nc_ohc=Bxek_7qbsNkAX_0dv-_&oh=a14ba48d56d9821b9ab60764d1f14258&oe=5F515501"
+                            :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+lst.userimg"
                           />
                         </span>
                       </div>
@@ -175,6 +175,12 @@ export default {
     return {
       commentText: "",
       commentlst: [],
+      myimg:'',
+      postid:'',
+      postnickname:'',
+      postuserimg:'',
+      postcontent:'',
+      postname:''
     };
   },
   watch: {
@@ -185,8 +191,20 @@ export default {
   mounted() {},
   created() {
     console.log(this.$route.params);
-    console.log("aaaaaaaaaaaaaaaa");
     // console.log(this.$cookie.get("userId"));
+    axios
+      .get(
+        `${SERVER_URL}/userpage/getuser?userId=${this.$cookie.get("userId")}`
+      )
+      .then((response) => {
+        // console.log("alfkjsdsi");
+        console.log(response);
+        this.username = response.data.userNickname;
+        this.myimg = response.data.userImg;
+      })
+      .catch((error) => {
+        console.log(error.response)
+      });
 
     axios
       .get(`${SERVER_URL}/post/comment?commentid=${this.$route.params.postid}`)
@@ -195,6 +213,7 @@ export default {
         this.commentlst = response.data.data;
         this.postname = this.$route.params.postnickname;
         this.postcontent = this.$route.params.postcontent;
+        this.postuserimg = this.$route.params.postuserimg;
       })
       .catch((error) => {
         console.log(error.response);

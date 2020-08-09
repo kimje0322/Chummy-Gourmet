@@ -57,6 +57,8 @@ public class CurationController {
 	public Map<String, Object> curation(@RequestParam(required = true) final String location) {
 
 		String text = new String();
+		//img url 찾기위한 api
+		KakaoApi kakao = new KakaoApi();
 
 		try {
 			text = URLEncoder.encode(location, "UTF-8");
@@ -114,6 +116,7 @@ public class CurationController {
 						rest.setLike("0");
 						rest.setReview("0");
 						rest.setScrap("0");
+						rest.setImg(kakao.searchImg((String)temp.get("place_name")));
 						list.add(rest);
 					}
 

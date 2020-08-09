@@ -93,9 +93,9 @@ public class PostController {
 		List<Post> post = new ArrayList<Post>();
 		post = postDao.selectAllByUserFollowing(list);
 		
-		List<Integer> commentcount = new ArrayList<Integer>();
+		List<int[]> commentcount = new ArrayList<int[]>();
 		for(Post p : post) {
-			commentcount.add(postDao.selectAllCommentByPostId(p.getPostid()));
+			commentcount.add(new int[] {postDao.selectAllCommentByPostId(p.getPostid()),Integer.parseInt(p.getPostid())});
 		}
 		
 		Map<String, Object> data = new HashMap<String, Object>();

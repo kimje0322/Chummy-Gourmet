@@ -41,7 +41,7 @@
                 <a class="a-img1 a-img2" href="#" tabindex="0" style="width: 32px; height: 32px;">
                   <img
                     style="height: 100%; width: 100%;"
-                    src="https://scontent-gmp1-1.cdninstagram.com/v/t51.2885-19/s150x150/64568083_346714766240529_8023659861445181440_n.jpg?_nc_ht=scontent-gmp1-1.cdninstagram.com&_nc_ohc=Bxek_7qbsNkAX_0dv-_&oh=a14ba48d56d9821b9ab60764d1f14258&oe=5F515501"
+                    :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+lst.user_img"
                   />
                 </a>
               </div>
@@ -100,7 +100,7 @@
               </span>
               <span style="display: inline-block;">
                 <button
-                  @click="onComment(lst.postid, lst.usernickname, lst.postcontent)"
+                  @click="onComment(lst.postid, lst.usernickname, lst.postcontent,lst.user_img)"
                   style="background: 0 0; border: 0; display: flex; padding: 8px;"
                 >
                   <div>
@@ -156,10 +156,10 @@
                   <div style="marign-bottom: 4px; padding-left: 5px;">
                     <a
                       style="font-size: 14px; font-weight: 400; color: #8e8e8e;"
-                      @click="onComment(lst.postid, lst.usernickname, lst.postcontent)"
+                      @click="onComment(lst.postid, lst.usernickname, lst.postcontent, lst.user_img)"
                     >
                       댓글
-                      <span>몇</span>개 모두 보기
+                      <span>{{commentlst[i][0]}}</span>개 모두 보기
                     </a>
                   </div>
                 </div>
@@ -178,12 +178,13 @@ import axios from "axios";
 import router from "@/routes";
 
 const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-// const SERVER_URL = "http://localhost:8080";
+// const SERVER_URL = "https://localhost:8080";
 
 export default {
   data() {
     return {
       postlst: [],
+      commentlst :[]
     };
   },
 
@@ -193,25 +194,32 @@ export default {
     axios
       .get(`${SERVER_URL}/post?userid=${this.$cookie.get("userId")}`)
       .then((response) => {
-        // console.log(response);
+        console.log(response);
         var posts = response.data.data;
+        var comments = response.data.comment;
         // alert(this.postlst.length);
         // console.log(posts);
         posts.sort((a, b) => {
          return -1 * (a.postid - b.postid);
         })
+        comments.sort((a,b)=>{
+          return -1 * (a[1]-b[1]);
+        })
         this.postlst = posts;
+        this.commentlst = response.data.comment;
+        console.log("mentlst : "+response.data.comment);
       })
       .catch((error) => {
         console.log(error.response);
       });
   },
   methods: {
-    onComment(pid, pname, pcontent) {
+    onComment(pid, pname, pcontent, puserimg) {
       let postinfo = {
         postid: pid,
         postnickname: pname,
         postcontent: pcontent,
+        postuserimg: puserimg
       };
       // console.log("dfsdafgfgfdfadf");
       console.log(pid);

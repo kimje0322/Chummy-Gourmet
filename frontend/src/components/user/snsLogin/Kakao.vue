@@ -27,8 +27,8 @@ import axios from "axios";
 import router from "@/routes";
 
 
-// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-const SERVER_URL = "https://localhost:8080";
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "https://localhost:8080";
 const app_key = "e4cd88afa207146436293dbd18d2b89f";
 const redirect_uri = "https://i3b302.p.ssafy.io";
 //  const redirect_uri = "http://localhost:8080";
@@ -51,7 +51,6 @@ export default {
         },
         join(){
             // console.log(authObj);
-            console.log("들어왔나");
                 window.Kakao.API.request({
                     url:'/v2/user/me',
                     success : res => {
@@ -72,9 +71,10 @@ export default {
                             console.log(response);
                             if(response.data.status){
                                 //카카오 계정으로 등록
-                                axios.post(`${SERVER_URL}/account/kakaosignup`,userInfo)
+                                axios.post(`${SERVER_URL}/account/apisignup`,userInfo)
                                 .then(res => {
                                   console.log("성공");
+                                  alert("가입되었습니다. 다시로그인해주세요");
                                 })
                                 .catch(err => {
                                     console.log("실패");

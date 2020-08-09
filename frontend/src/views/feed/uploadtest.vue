@@ -11,6 +11,7 @@
       type="text"
       style="width : 100%; border : 1px solid"
     />
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
     <v-img src="http://i3b302.p.ssafy.io:8080/post/img?imgname=logo.png"></v-img>
     <v-img src="http://i3b302.p.ssafy.io:8080/post/img?imgname=logo_ex.png"></v-img>
     <v-img src="http://i3b302.p.ssafy.io:8080/post/img?imgname=map.png"></v-img>
@@ -46,6 +47,7 @@ data() {
     },
     methods: {
         onClickImageUpload() {
+          console.log(this.$refs.imageInput);
             this.$refs.imageInput.click();
         },
         onChangeImages(e) {

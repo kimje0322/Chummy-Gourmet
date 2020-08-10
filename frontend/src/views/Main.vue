@@ -13,6 +13,7 @@
           <v-icon v-if="item=='Profile'">mdi-account-box</v-icon>
           <v-icon v-if="item=='History'">fas fa-list</v-icon>
           <v-icon v-if="item=='Message'">mdi-folder</v-icon>
+          
         </v-tab>
       </v-tabs>
 
@@ -20,9 +21,9 @@
         <v-tab-item v-for="item in items" :key="item" :value="'tab-' + item">
           <v-card flat>
             <!-- dm -->
-            <Message v-if="item=='Message'"></Message>
+            <Message v-if="item=='Message'" v-bind:userId="userId"></Message>
             <!-- history -->
-            <History v-else-if="item=='History'"></History>
+            <History :proptoTopsub="users" v-else-if="item=='History'"></History>
             <!-- profile -->
             <v-card-text v-else>
               <!-- meetupData -->
@@ -94,9 +95,9 @@ export default {
       )
       .then((response) => {
         // console.log(response.data);
-        console.log("밋업 data 성공");
+        // console.log("밋업 data 성공");
         this.mData = response.data
-        console.log(this.mData)
+        // console.log(this.mData)
         for (var i=0; i<this.mData.length; i++) {
           this.meetupDate.push(this.mData[i].meetupPersonnel.slice(0, 11));
         }
@@ -105,7 +106,7 @@ export default {
           this.dateData.mumonth.push(this.meetupDate[j].slice(5, 7));
           this.dateData.muday.push(this.meetupDate[j].slice(8, 10));
         }
-        console.log(this.dateData)
+        // console.log(this.dateData)
       })
       .catch((error) => {
         console.log(error.response);
@@ -171,7 +172,7 @@ export default {
     dateFunctionEvents(date) {
 
       const [, , day] = date.split("-");
-      console.log(this.dateData.muday);
+      // console.log(this.dateData.muday);
       if (this.dateData.muday.map(parseInt).includes(parseInt(day, 10))) return true;
       // if ([2, 17, 28].includes(parseInt(day, 10))) return true;
       // if ([1, 19, 22].includes(parseInt(day, 10))) return ['red', '#00f']

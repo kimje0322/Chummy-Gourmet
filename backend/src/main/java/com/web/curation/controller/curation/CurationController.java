@@ -80,8 +80,8 @@ public class CurationController {
 			String responseBody = get(apiURL, requestHeaders);
 
 			// 정보를 담을 리스트 생성
-			System.out.println("responseBody");
-			System.out.println(responseBody);
+//			System.out.println("responseBody");
+//			System.out.println(responseBody);
 			// json으로 받아온 값을 식당이름/분류로 나눔
 			try {
 				JSONParser jsonParse = new JSONParser();
@@ -117,7 +117,7 @@ public class CurationController {
 						rest.setLike("0");
 						rest.setReview("0");
 						rest.setScrap("0");
-						rest.setImg(kakao.searchImg((String)temp.get("place_name")));
+						rest.setImg(kakao.searchImg((String)temp.get("place_name")).toString());
 						list.add(rest);
 					}
 
@@ -127,9 +127,6 @@ public class CurationController {
 			}
 		}
 
-//		for (Restaurant ad : list) {
-//			System.out.println(ad);
-//		}
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("list", list);
 		return map;

@@ -53,7 +53,7 @@
               :class="{ 'on-hover': hover }"
               >
                 <v-img
-                  :src="restaurant.img"
+                  :src="restaurant.imgs[0]"
                   class="white--text align-end"
                   gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                   height="200px"
@@ -69,13 +69,13 @@
                   <v-spacer></v-spacer>
                   <v-spacer></v-spacer>
                   <v-spacer></v-spacer>
-                  <v-btn icon small :color="likes.indexOf(restaurant.id) != -1 ? 'pink' : ''" @click="doLike(restaurant.id)">
-                    <v-icon v-text="likes.indexOf(restaurant.id) != -1 ? 'mdi-heart' : 'mdi-heart-outline' "></v-icon>
+                  <v-btn icon small :color="likes.indexOf(restaurant.id*1) != -1 ? 'pink' : ''" @click="doLike(restaurant.id)">
+                    <v-icon v-text="likes.indexOf(restaurant.id*1) != -1 ? 'mdi-heart' : 'mdi-heart-outline' "></v-icon>
                   </v-btn>
                   <span style="margin:0 5px 0 -1px;">{{restaurant.like}}</span>
 
-                  <v-btn icon small :color="scraps.indexOf(restaurant.id) != -1 ? 'blue' : ''" @click="doScrap(restaurant.id)">
-                    <v-icon v-text="scraps.indexOf(restaurant.id) != -1 ? 'mdi-bookmark-check' : 'mdi-bookmark-check-outline' "></v-icon>
+                  <v-btn icon small :color="scraps.indexOf(restaurant.id*1) != -1 ? 'blue' : ''" @click="doScrap(restaurant.id)">
+                    <v-icon v-text="scraps.indexOf(restaurant.id*1) != -1 ? 'mdi-bookmark-check' : 'mdi-bookmark-check-outline' "></v-icon>
                   </v-btn>
                   <span style="margin:0 3px 0 -2px;">{{restaurant.scrap}}</span>
 
@@ -97,8 +97,8 @@ import axios from "axios";
 import router from "@/routes";
 
 
-const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-// const SERVER_URL = "https://localhost:8080";
+// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "https://localhost:8080";
 
 export default {
   data() {
@@ -221,13 +221,16 @@ export default {
       axios
         .get(`${SERVER_URL}/curation?location=${this.keyword}`)
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           // 음식점리스트 받기
           var restaurants = response.data.list;
 
           // 음식점리스트 돌면서 좌표(position), 거리(dist) 구하기
           restaurants.forEach(restaurant => {
-            console.log(restaurant);
+            let imgSrcs = restaurant.img;
+            imgSrcs = imgSrcs.substr(1, imgSrcs.length - 2);
+            imgSrcs = imgSrcs.split(", ");
+            restaurant.imgs = imgSrcs;
 
             // 주소 -> 좌표
             geocoder.addressSearch(restaurant.location, (result, status) => {
@@ -259,22 +262,22 @@ export default {
     },
     doLike(restId){
       // 좋아요한 게시물이 아니라면 좋아요에 추가
-      if(this.likes.indexOf(restId) == -1){
-        this.likes.push(restId);
+      if(this.likes.indexOf(restId*1) == -1){
+        this.likes.push(restId*1);
       }
       // 좋아요한 게시물이라면 좋아요에서 삭제
       else{
-        this.likes.splice(this.likes.indexOf(restId), 1);
+        this.likes.splice(this.likes.indexOf(restId*1), 1);
       }
     },
     doScrap(restId){
       // 스크랩한 게시물이 아니라면 스크랩에 추가
-      if(this.scraps.indexOf(restId) == -1){
-        this.scraps.push(restId);
+      if(this.scraps.indexOf(restId*1) == -1){
+        this.scraps.push(restId*1);
       }
       // 스크랩한 게시물이라면 스크랩에서 삭제
       else{
-        this.scraps.splice(this.scraps.indexOf(restId), 1);
+        this.scraps.splice(this.scraps.indexOf(restId*1), 1);
       }
     }
   },

@@ -337,9 +337,11 @@ h2 {
 #password{
   background-color: transparent !important;
   border-color: black !important;
-
 }
-/* #password .error{
-  border: solid black !important; 
-} */
+[type=checkbox]:checked + span:before, 
+[type=radio]:checked + span:before {
+  background: orange;
+  border: 1px solid orange;
+}
+
 </style>

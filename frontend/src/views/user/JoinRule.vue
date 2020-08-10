@@ -1,6 +1,13 @@
 <template>
   <div>
-    <br><h2>돈독한 미식가 이용약관</h2><br><br>
+    <v-toolbar dark>
+      <!-- 중앙정렬 하기 위해 2개씀 -->
+      <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
+      <!-- <v-spacer></v-spacer> -->
+      <p class="my-auto">이용약관</p>
+      <v-spacer></v-spacer>
+    </v-toolbar>
+    <div class="entire">
     <p>
       제 1 조 (목적) <br>
 
@@ -42,6 +49,7 @@
 
       ⑥본 약관의 일부가 집행 불능으로 판단되더라도 나머지 부분은 계속해서 효력을 갖습니다.
     </p>
+    </div>
   </div>
 </template>
 

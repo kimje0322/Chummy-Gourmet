@@ -1,9 +1,14 @@
 <template>
   <div>
-    <h2>비밀번호 찾기</h2>
-    <hr />
-
+    <v-toolbar dark>
+      <!-- 중앙정렬 하기 위해 2개씀 -->
+      <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
+      <!-- <v-spacer></v-spacer> -->
+      <p class="my-auto">비밀번호 찾기</p>
+      <v-spacer></v-spacer>
+    </v-toolbar>
     <!-- 이름 -->
+    <div class="entire"><br>
     <div class="input-with-label">
       <input v-model="name" id="name" placeholder="이름을 입력하세요." type="text" />
       <label for="name">이름</label>
@@ -30,6 +35,7 @@
     <!-- 버튼 -->
     <v-btn @click="checkFormAndFindpw" color="warning find-btn">확인</v-btn>
     <!-- <v-btn class="cell-auth" color="error">인증</v-btn> -->
+  </div>
   </div>
 </template>
 

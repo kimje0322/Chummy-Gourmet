@@ -20,9 +20,9 @@
         <v-tab-item v-for="item in items" :key="item" :value="'tab-' + item">
           <v-card flat>
             <!-- dm -->
-            <Message v-if="item=='Message'" v-bind:userId="userId"></Message>
+            <Message v-if="item=='Message'"></Message>
             <!-- history -->
-            <History v-else-if="item=='History'" v-bind:userId="userId" ></History>
+            <History v-else-if="item=='History'"></History>
             <!-- profile -->
             <v-card-text v-else>
               <!-- meetupData -->
@@ -56,6 +56,7 @@
   </v-app>
 </template>
 
+
 <script>
 import Top from "../components/common/Top";
 import Topsub from "../components/common/Topsub";
@@ -78,7 +79,7 @@ export default {
     // alert(this.$cookie.get("userId"));
     this.userId = this.$cookie.get("userId");
     axios
-      .get(`${SERVER_URL}/userpage/getuser?userId=` + this.userId)
+      .get(`${SERVER_URL}/userpage/getuser?userId=`+ this.userId)
       .then((response) => {
         // console.log(response.data);
         this.users = response.data;
@@ -168,7 +169,7 @@ export default {
   },
   methods: {
     dateFunctionEvents(date) {
-      
+
       const [, , day] = date.split("-");
       console.log(this.dateData.muday);
       if (this.dateData.muday.map(parseInt).includes(parseInt(day, 10))) return true;
@@ -186,6 +187,7 @@ export default {
   },
 };
 </script>
+
 
 <style>
 .container nothome {

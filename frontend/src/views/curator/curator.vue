@@ -117,12 +117,17 @@ export default {
     };
   },
   mounted() {
-    const script = document.createElement("script");
-    /* global kakao */
-    script.onload = () => kakao.maps.load(this.initMap);
-    script.src =
-      "https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=90891b3c4fa765cd378361c6b16e4dd6&libraries=services";
-    document.head.appendChild(script);
+      if (window.kakao && window.kakao.maps) {
+      this.initMap();
+    }else{
+
+      const script = document.createElement("script");
+      /* global kakao */
+      script.onload = () => kakao.maps.load(this.initMap);
+      script.src =
+        "https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=90891b3c4fa765cd378361c6b16e4dd6&libraries=services";
+      document.head.appendChild(script);
+    }
 
 
       if (navigator.geolocation) {

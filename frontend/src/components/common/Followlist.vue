@@ -35,34 +35,33 @@
             </v-col>
           </v-row>
 
-          <v-list-item-group class="followlist" v-model="followerList">
-            <v-list-item v-for="(user, i) in followerList" :key="i">
-                <!-- <v-list-item-avatar>
-                <v-img :src="item.avatar"></v-img>
-                </v-list-item-avatar> -->
-                
+            <v-list-item class="followlist" v-for="(user, i) in followerList" :key="i">
                 <!-- 사진 표기 -->
-                <v-list-item-avatar>
+                <v-list-item-avatar @click="gotoProfile(user)">
                   <v-img
                     :src="user.followerImg">
                   </v-img>
                 </v-list-item-avatar>
-
+                
                 <v-list-item-content>
                 <v-list-item-title @click="gotoProfile(user)" v-text="user.followerNickname"></v-list-item-title>
                 <!-- 이름 표기 -->
                 <!-- <v-list-item-title v-text="user.followingName"></v-list-item-title> -->
                 </v-list-item-content>
 
-                <v-btn color="info" @click="onFollow(user)" v-if="user.followerFollowing !== 'true'">
-                  팔로잉
+                <v-btn color="primary"  @click="onFollow(user,i)" v-if="user.followerFollowing === 'false'">
+                    팔로우
                 </v-btn>
-                <v-btn @click="unFollow(user)" v-else>
-                    언팔로우
+                
+                <v-btn depressed  @click="deleteFollowRequest(user,i)" v-else-if="user.followerFollowing === 'doing'">
+                    요청중
+                </v-btn>
+
+                <v-btn depressed @click="unFollow(user,i,'followerlist')" v-else>
+                    팔로잉
                 </v-btn>
 
             </v-list-item>
-          </v-list-item-group>
         </v-list>
         
         <!-- 팔로잉 -->
@@ -80,24 +79,24 @@
               ></v-text-field>             
             </v-col>
           </v-row>
-            <v-list-item-group class="followlist" v-model="followingList">
-                <v-list-item v-for="(user, i) in followingList" :key="i">
 
-                    <!-- 사진 표기 -->
-                    <v-list-item-avatar>
-                      <v-img
-                        :src="user.followingImg">
-                      </v-img>
-                    </v-list-item-avatar>
+        <v-list-item class="followlist" v-for="(user, i) in followingList" :key="i">
+            <!-- 사진 표기 -->
+            <v-list-item-avatar @click="gotoProfile(user)">
+              <v-img
+                :src="user.followingImg">
+              </v-img>
+            </v-list-item-avatar>
 
-                    <v-list-item-content>
-                    <v-list-item-title @click="gotoProfile(user)" v-text="user.followingNickname"></v-list-item-title>
-                    </v-list-item-content>
-                    <v-btn @click="unFollow(user)">
-                      언팔로우
-                    </v-btn>
-                </v-list-item>
-            </v-list-item-group>
+            <v-list-item-content>
+            <v-list-item-title @click="gotoProfile(user)" v-text="user.followingNickname"></v-list-item-title>
+            </v-list-item-content>
+
+            <v-btn depressed @click="unFollow(user,i,'followinglist')">
+                팔로잉
+            </v-btn>
+
+        </v-list-item>
           </v-list>
         </v-card>
       </v-tab-item>
@@ -134,12 +133,12 @@ export default {
         followingList:[],
         followerList:[],
         methods: {
-            checkfollow(flag){
-                if(flag=="true")
-                    return true;
-                else
-                    return false;
-            }
+          checkfollow(flag){
+              if(flag=="true")
+                  return true;
+              else
+                  return false;
+          }
         },
     };
   },
@@ -148,9 +147,11 @@ export default {
   },
   methods: {
     whenCreated() {
+      this.followingList = []
+      this.followerList = []
       if (this.$route.params.info == 'follow') {
       this.currentItem = 'tab-following'
-    }
+      }
 
      this.userId = this.$cookie.get("userId");
      axios
@@ -161,11 +162,11 @@ export default {
         for (let i = 0; i <  response.data.length; i++) {
           let userImg = response.data[i].followingImg;
           let viewImg = SERVER_URL+"/img/user?imgname=" + userImg;
-          console.log(viewImg);
           this.followingList.push({
               followingId : response.data[i].followingId,
               followingNickname : response.data[i].followingNickname,
-              followingImg: viewImg
+              followingImg: viewImg,
+              followerFollowing :  "true"
           })
         }
       })
@@ -180,11 +181,11 @@ export default {
         for (let i = 0; i <  response.data.length; i++) {
           let userImg = response.data[i].followerImg;
           let viewImg = SERVER_URL+"/img/user?imgname=" + userImg;
-          console.log(viewImg);
           this.followerList.push({
               followerId : response.data[i].followerId,
               followerNickname : response.data[i].followerNickname,
-              followerImg: viewImg
+              followerImg: viewImg,
+              followerFollowing :  response.data[i].followerFollowing
           })
         }
       })
@@ -193,25 +194,21 @@ export default {
       });    
     },
     gotoProfile(user) {
-      // console.log(user.followingId)
       if (user.followerId) {
         let profileInfo = {
-        userId: user.followerId,
-        followerFollowing: user.followerFollowing
+          userId: user.followerId,
+          userImg : user.followerImg,
+          followerFollowing: user.followerFollowing
         };
-        // console.log('user.followerId,')
         this.$router.push({name :'Profile', params: profileInfo});
       } else { 
         let profileInfo = {
         userId: user.followingId,
-        followerFollowing: "true",
+        userImg : user.followingImg,
+        followerFollowing: user.followerFollowing
         };
         this.$router.push({name :'Profile', params: profileInfo});
       }
-      // axios
-      // .get(
-      //   `${SERVER_URL}/userpage/getuser?userId=`+user.userId
-      // )
     },
     onSearchFollower () {
       axios
@@ -223,11 +220,11 @@ export default {
         for (let i = 0; i <  response.data.length; i++) {
           let userImg = response.data[i].followerImg;
           let viewImg = SERVER_URL+"/img/user?imgname=" + userImg;
-          console.log(viewImg);
           this.followerList.push({
               followerId : response.data[i].followerId,
               followerNickname : response.data[i].followerNickname,
-              followerImg: viewImg
+              followerImg: viewImg,
+              followerFollowing :  response.data[i].followerFollowing
           })
         }
       })
@@ -246,11 +243,11 @@ export default {
         for (let i = 0; i <  response.data.length; i++) {
             let userImg = response.data[i].followingImg;
             let viewImg = SERVER_URL+"/img/user?imgname=" + userImg;
-            console.log(viewImg);
             this.followingList.push({
                 followingId : response.data[i].followingId,
                 followingNickname : response.data[i].followingNickname,
-                followingImg: viewImg
+                followingImg: viewImg,
+                followerFollowing :  "true"
             })
           }
       })
@@ -258,38 +255,105 @@ export default {
         console.log(error.response);
       });
     },
-    onFollow(user) {
+
+    deleteFollowRequest(user,idx){
+      this.$set(this.followerList[idx], 'followerFollowing', 'false');
+        //언팔로우 요청
+        if (user.followerId) {
+          this.anotherId = user.followerId
+        } else {
+          this.anotherId = user.followingId
+        }
+        axios
+          .delete(
+            `${SERVER_URL}/userpage/deletefollowingRequest?anotherId=`+this.anotherId+`&userId=`+this.userId
+          )
+          .then((response) => {
+            console.log('팔로우취소완료')
+          })
+          .catch((error) => {
+            console.log(error.response);
+          });
+    },
+    onFollow(user,idx) {
+      this.$set(this.followerList[idx], 'followerFollowing', 'doing');
       axios
       .post(
         `${SERVER_URL}/userpage/insertfollowingRequest?followerId=`+user.followerId+`&userId=`+this.userId
       )
       .then((response) => {
-        console.log('팔로우')
+        console.log('팔로우성공')
       })
       .catch((error) => {
-        console.log(error.response);
+          console.log(error.response);
       });
     },
-    unFollow(user) {
+    unFollow(user,idx,str) {
+      if(str == 'followerlist'){
+        this.$set(this.followerList[idx], 'followerFollowing', 'false');
+      }
+      else{
+        this.$delete(this.followingList, idx);
+      }
       //언팔로우 요청
       if (user.followerId) {
         this.anotherId = user.followerId
       } else {
         this.anotherId = user.followingId
       }
-        axios
-      .delete(
-        `${SERVER_URL}/userpage/deletefollowing?anotherId=`+this.anotherId+`&userId=`+this.userId
-      )
-      .then((response) => {
-        if(response.data.data == "success"){
-          this.whenCreated();
+      axios
+        .delete(
+          `${SERVER_URL}/userpage/deletefollowing?anotherId=`+this.anotherId+`&userId=`+this.userId
+        )
+        .then((response) => {
+          if(str == 'followerlist'){
+            this.followingList = []
+            axios
+              .get(
+                `${SERVER_URL}/userpage/getfollowinglist?userId=`+this.userId+`&searchName=`+this.searchFollowing
+              )
+              .then((response) => {
+                for (let i = 0; i <  response.data.length; i++) {
+                  let userImg = response.data[i].followingImg;
+                  let viewImg = SERVER_URL+"/img/user?imgname=" + userImg;
+                  this.followingList.push({
+                      followingId : response.data[i].followingId,
+                      followingNickname : response.data[i].followingNickname,
+                      followingImg: viewImg,
+                      followerFollowing :  "true"
+                  })
+                }
+              })
+              .catch((error) => {
+                console.log(error.response);
+              });
+          }
+          else{
+            this.followerList = []
+            axios
+            .get(
+              `${SERVER_URL}/userpage/getfollowerlist?userId=`+this.userId+`&searchName=`+this.searchFollower
+            )
+            .then((response) => {
+              for (let i = 0; i <  response.data.length; i++) {
+                let userImg = response.data[i].followerImg;
+                let viewImg = SERVER_URL+"/img/user?imgname=" + userImg;
+                this.followerList.push({
+                    followerId : response.data[i].followerId,
+                    followerNickname : response.data[i].followerNickname,
+                    followerImg: viewImg,
+                    followerFollowing :  response.data[i].followerFollowing
+                })
+              }
+            })
+            .catch((error) => {
+              console.log(error.response);
+            });  
         }
-      })
-      .catch((error) => {
-        console.log(error.response);
-      });
-      this.whenCreated();
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
     }
     
   }

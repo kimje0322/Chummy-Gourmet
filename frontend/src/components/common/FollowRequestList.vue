@@ -13,16 +13,16 @@
     <v-list subheader>
       <v-list-item
         v-for="item in items"
-        :key="item.userId"
+        :key="item.followingRequestId"
       >
-        <v-list-item-avatar @click="showUser">
+        <v-list-item-avatar @click="showUser(item)">
           <v-img
             :src="item.followingRequestUserImg">
           </v-img>
 
         </v-list-item-avatar>
 
-        <v-list-item-content @click="showUser">
+        <v-list-item-content @click="showUser(item)">
           <v-list-item-title>{{item.followingRequestNickname}}</v-list-item-title>
         </v-list-item-content>
 
@@ -61,9 +61,13 @@ export default {
     };
   },
   methods :{
-    showUser(){
-      alert("유저 보여줄려고 클릭함")
-
+    showUser(user){
+      let profileInfo = {
+        userId: user.followingRequestId,
+        userImg : user.followingRequestUserImg,
+        followerFollowing: user.followerFollowing
+      };
+      this.$router.push({name :'Profile', params: profileInfo});
     },
     acceptFollowing(followingRequestId){
       axios
@@ -108,16 +112,15 @@ export default {
       )
       .then((response) => {
         if(response.data != ""){
-          console.log(this.list);
           for (let i = 0; i < response.data.length; i++) {
             let userImg = response.data[i].followingRequestUserImg;
             let viewImg = SERVER_URL+"/img/user?imgname=" + userImg;
-            console.log(viewImg);
             this.items.push({
               followingRequestId : response.data[i].followingRequestId,
               followingRequestNickname : response.data[i].followingRequestNickname,
-              followingRequestUserImg: viewImg
-              })
+              followingRequestUserImg: viewImg,
+              followerFollowing : response.data[i].followerFollowing
+            })
           }
         }
       })

@@ -17,24 +17,27 @@ import FoundPw from './views/user/FoundPw.vue'
 import UserInfo from './views/Main.vue'
 import Pref from './views/user/Preference.vue'
 import Map from './views/map/map.vue'
-import CreateParty from './views/map/createParty.vue'
+import CreateMeetup from './views/map/createMeetup.vue'
+import DetailMeetup from './views/map/detailMeetup.vue'
 import Home from './views/user/Home.vue'
 import FollowList from './components/common/Followlist.vue'
 import NewsFeed from './views/feed/newsfeed.vue'
 import FollowRequestList from './components/common/FollowRequestList.vue'
 import Feedcomment from './views/feed/comment.vue'
-
-//추가
 import UpdateUser from './views/user/UpdateUser.vue'
 import Profile from './views/user/Profile.vue'
+//추가
+import PostDetail from './views/user/PostDetail.vue'
+import SearchUser from './components/common/SearchUser.vue'
 
 import UpdateUserInfo from './views/user/UpdateUserInfo.vue'
 
 // //사진업로드 테스트용
-// import UploadTest from './views/feed/uploadtest.vue'
+import UploadTest from './views/feed/uploadtest.vue'
 
 //피드 게시글 업로드
 import AddFeed from './views/feed/addFeed.vue'
+
 
 Vue.use(VueRouter);
 export default new VueRouter({
@@ -49,14 +52,14 @@ export default new VueRouter({
             // }
         },
         //사진업로드 테스트용 추후 삭제.
-        // {
-        //     path: '/uploadtest',
-        //     name: 'UploadTest',
-        //     component: UploadTest,
-        //     meta: {
-        //         navbar: true
-        //     }
-        // },
+        {
+            path: '/uploadtest',
+            name: 'UploadTest',
+            component: UploadTest,
+            meta: {
+                navbar: true
+            }
+        },
         {
 
             path: '/login',
@@ -66,8 +69,17 @@ export default new VueRouter({
                 navbar: true
             }
         },
-
         //승범 추가
+        {
+            path: '/SearchUser',
+            name: 'SearchUser',
+            component: SearchUser,
+        },
+        {
+            path: '/user/PostDetail',
+            name: 'PostDetail',
+            component: PostDetail,
+        },
         {
             path: '/user/FollowRequestList',
             name: 'FollowRequestList',
@@ -119,16 +131,6 @@ export default new VueRouter({
             }
         },
         {
-            path: '/user/findPw',
-            name: 'FindPw',
-            component: FindPw
-        },
-        {
-            path: '/user/foundPw',
-            name: 'FoundPw',
-            component: FoundPw
-        },
-        {
             path: '/user/finishjoin',
             name: 'FinshJoin',
             component: FinishJoin
@@ -136,7 +138,10 @@ export default new VueRouter({
         {
             path: '/user/findPw',
             name: 'FindPw',
-            component: FindPw
+            component: FindPw,
+            meta: {
+                navbar: true
+            }
         },
         {
             path: '/user/foundPw',
@@ -154,9 +159,14 @@ export default new VueRouter({
             component: Map
         },
         {
-            path: '/map/createParty',
-            name: 'CreateParty',
-            component: CreateParty
+            path: '/map/createMeetup',
+            name: 'CreateMeetup',
+            component: CreateMeetup
+        },
+        {
+            path: '/map/detailMeetup',
+            name: 'DetailMeetup',
+            component: DetailMeetup
         },
         {
             path: '/feed/main',

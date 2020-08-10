@@ -8,7 +8,7 @@
           </v-app-bar>-->
           <v-bottom-navigation
             v-if="!$route.meta.navbar"
-            scroll-target="#scroll-area-2"
+            scroll-target="#scroll-area-1"
             hide-on-scroll
             scroll-threshold="500"
             absolute
@@ -105,6 +105,7 @@ export default {
   },
   created() {
     //로그인 유지가 아닐경우
+  
     if (
       this.$cookie.get("loginSave") == "false" ||
       this.$cookie.get("loginSave") == null
@@ -112,6 +113,8 @@ export default {
       //저장되어있는 쿠키를 제거한다.
       this.$cookie.delete("accesstoken");
       this.$cookie.delete("userId");
+      alert("로그인을 해주세요");
+      this.$router.push("/");
     }
     //로그인 유지일 경우
     else {

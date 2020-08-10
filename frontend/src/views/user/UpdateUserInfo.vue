@@ -9,6 +9,7 @@
         <v-spacer></v-spacer>
       </v-toolbar>
     </v-toolbar-title>
+    <div class="entire">
     <!-- 선호 음식 -->
     <div class="label-with-input">
       <label class="userInfo">선호음식</label>
@@ -273,6 +274,7 @@
     </v-btn>
     <!-- </router-link> -->
   </div>
+  </div>
 </template>
 
 <script>
@@ -434,6 +436,9 @@ export default {
 </script>
 
 <style scoped>
+.entire {
+  padding: 18px;
+}
 .title {
   text-align: center;
 }
@@ -544,7 +549,7 @@ img {
 
 .select-many label {
   width: 100%;
-  padding: 5px 12px 5px 12px;
+  padding: 5px 8px 5px 8px;
   border: 1.5px solid gray;
   border-radius: 15px;
   cursor: pointer;
@@ -553,7 +558,7 @@ img {
 
 .select-many-interest label {
   width: 100%;
-  padding: 5px 12px 5px 12px;
+  padding: 5px 8px 5px 8px;
   border: 1.5px solid gray;
   border-radius: 15px;
   cursor: pointer;

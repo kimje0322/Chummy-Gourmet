@@ -11,8 +11,9 @@
       <v-tabs dark v-model="currentItem" fixed-tabs slider-color="grey">
         <v-tab v-for="item in items" :key="item" :href="'#tab-' + item">
           <v-icon v-if="item=='Profile'">mdi-account-box</v-icon>
-          <v-icon v-if="item=='History'">mdi-heart</v-icon>
-          <v-icon v-if="item=='Message'">far fa-paper-plane</v-icon>
+          <v-icon v-if="item=='History'">fas fa-list</v-icon>
+          <v-icon v-if="item=='Message'">mdi-folder</v-icon>
+          
         </v-tab>
       </v-tabs>
 
@@ -20,9 +21,9 @@
         <v-tab-item v-for="item in items" :key="item" :value="'tab-' + item">
           <v-card flat>
             <!-- dm -->
-            <Message v-if="item=='Message'"></Message>
+            <Message v-if="item=='Message'" v-bind:userId="userId"></Message>
             <!-- history -->
-            <History v-else-if="item=='History'"></History>
+            <History :proptoTopsub="users" v-else-if="item=='History'"></History>
             <!-- profile -->
             <v-card-text v-else>
               <!-- meetupData -->
@@ -56,6 +57,7 @@
   </v-app>
 </template>
 
+
 <script>
 import Top from "../components/common/Top";
 import Topsub from "../components/common/Topsub";
@@ -78,7 +80,7 @@ export default {
     // alert(this.$cookie.get("userId"));
     this.userId = this.$cookie.get("userId");
     axios
-      .get(`${SERVER_URL}/userpage/getuser?userId=` + this.userId)
+      .get(`${SERVER_URL}/userpage/getuser?userId=`+ this.userId)
       .then((response) => {
         // console.log(response.data);
         this.users = response.data;
@@ -93,18 +95,18 @@ export default {
       )
       .then((response) => {
         // console.log(response.data);
-        this.meetupData = response.data;
-        console.log("밋업 data 성공");
-        console.log(this.meetupData[0].meetupPersonnel);
-        // for (var i=0; i<this.meetupData.length; i++) {
-        //   this.meetupdate = this.meetupData[i].meetupPersonnel.slice(0, 11);
-        //   this.muyear.push(this.meetupdate[i].meetupPersonnel.slice(0, 4));
-        //   this.mumonth.push(this.meetupdate[i].meetupPersonnel.slice(5, 7));
-        //   this.muday.push(this.meetupdate[i].meetupPersonnel.slice(8, 10));
-        // }
-        // this.meetupData[i].meetupContent
-        // for (var i=0; i<this.meetupData.length; i++) {
-        // }
+        // console.log("밋업 data 성공");
+        this.mData = response.data
+        // console.log(this.mData)
+        for (var i=0; i<this.mData.length; i++) {
+          this.meetupDate.push(this.mData[i].meetupPersonnel.slice(0, 11));
+        }
+        for (var j=0; j<this.meetupDate.length; j++) {
+          this.dateData.muyear.push(this.meetupDate[j].slice(0, 4));
+          this.dateData.mumonth.push(this.meetupDate[j].slice(5, 7));
+          this.dateData.muday.push(this.meetupDate[j].slice(8, 10));
+        }
+        // console.log(this.dateData)
       })
       .catch((error) => {
         console.log(error.response);
@@ -114,6 +116,7 @@ export default {
   },
   data: () => {
     return {
+      // 밋업 날짜만 분리한 데이터
       dateData: {
         muyear: [],
         mumonth: [],
@@ -122,7 +125,10 @@ export default {
       picker: new Date().toISOString().substr(0, 10),
       enableEvents: true,
       showCurrent: true,
-      meetupData: {},
+      // 밋업 전체 데이터
+      mData: {}, 
+      // 밋업 날짜만 담긴 list
+      meetupDate: [],
       month: false,
       multiple: false,
       users: {},
@@ -164,23 +170,11 @@ export default {
   },
   methods: {
     dateFunctionEvents(date) {
-      // this.meetupdate = this.meetupData.date.slice(0, 11);
-      // var muyear = this.meetupdate.slice(0, 4);
-      // var mumonth = this.meetupdate.slice(5, 7);
-      // if (this.meetupdate[8] == '0') {
-      //   let muday = this.meetupdate[9];
-      // } else {
-        // let muday = this.meetupdate.slice(8, 10);
-      // }
-      
-      // console.log(this.meetupdate);
-      // console.log(mumonth);
-      // console.log(muday);
-      // console.log(muyear);
-      
+
       const [, , day] = date.split("-");
-      console.log();
-      if ([2, 17, 28].includes(parseInt(day, 10))) return true;
+      // console.log(this.dateData.muday);
+      if (this.dateData.muday.map(parseInt).includes(parseInt(day, 10))) return true;
+      // if ([2, 17, 28].includes(parseInt(day, 10))) return true;
       // if ([1, 19, 22].includes(parseInt(day, 10))) return ['red', '#00f']
       return false;
     },
@@ -194,6 +188,7 @@ export default {
   },
 };
 </script>
+
 
 <style>
 .container nothome {

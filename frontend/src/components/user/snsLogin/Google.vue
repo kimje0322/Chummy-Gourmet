@@ -1,5 +1,5 @@
 <template>
-    <div class="google-login">
+    <div id="google-signin-button" class="google-login" @click="onClick">
         <button >
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="55" height="55" viewBox="0 0 55 55">
                 <defs>
@@ -34,5 +34,124 @@
 </template>
 
 <script>
-    export default {}
+import axios from "axios";
+import router from "@/routes";
+
+
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "https://localhost:8080";
+    export default {
+        data(){
+            return {
+            }
+        },
+        created(){
+          
+
+
+        },
+        methods:{
+
+            onClick(){
+
+                 var user ={
+                        name : '',
+                        email : '',
+                        }
+                var router= this.$router;
+                var cookie = this.$cookie;
+             window.gapi.load('auth2', () =>  {
+                    var gauth = window.gapi.auth2.init({
+                            client_id: '358141877415-v04s2e2im90i6cpacn828shokn0qe5bh.apps.googleusercontent.com',
+                            scope: 'profile'
+                        });
+                        
+                        gauth.then(function(response){
+                            console.log('init success');
+                            var gauth = window.gapi.auth2.getAuthInstance();
+                            gauth.signIn().then(function(){
+
+                                var userData = gauth.currentUser.get().getBasicProfile();
+                             
+                                //닉네임이 겹치지않기 위해 시간을 넣는다.      
+                               let today = new Date();   
+                                let hours = today.getHours(); // 시
+                                let minutes = today.getMinutes();  // 분
+                                let seconds = today.getSeconds();  // 초
+                                let milliseconds = today.getMilliseconds(); // 밀리초
+
+                               const userInfo = {
+                                   userName : userData.getName(),
+                               userNickname : '구글'+hours+''+minutes+''+seconds+''+milliseconds,
+                               userEmail : userData.getEmail(),
+                               userPwd : 'google',
+                               userComment : '구글회원입니다 수정해주세요',
+                                userImg : 'profile_default.png'
+                               }
+
+                                //이메일 닉네임 유효성 검사
+                                axios.get(`${SERVER_URL}/account/signup/valid?nickname=${userInfo.userNickname}&email=${userInfo.userEmail}`)
+                                .then((response)=>{
+                                    //이메일 닉네임 유효성 검사 성공
+                                    console.log(response);
+                                    if(response.data.status){
+                                        //구글 계정으로 등록
+                                        axios.post(`${SERVER_URL}/account/apisignup`,userInfo)
+                                        .then(res => {
+                                        console.log("성공");
+                                        alert("가입되었습니다. 다시로그인해주세요");
+                                        })
+                                        .catch(err => {
+                                            console.log("실패");
+                                        })
+                                    }
+                                    else{
+                                            axios
+                                        .get(
+                                        `${SERVER_URL}/account/login?email=${userInfo.userEmail}&password=google`
+                                        )
+
+                                        .then((response) => {
+                                        console.log(response.data);
+
+                                        cookie.set("accesstoken", response.data, 1);
+                                        cookie.set("userId", response.data.object.userId, 1);
+                                        cookie.set("useremail",userInfo.userEmail,1);
+                                        router.push("/map");
+                                        })
+
+                                        .catch((error) => {
+                                        console.log(error.response);
+                                        alert("로그인 실패");
+                                        });
+                                    }
+
+                                }).catch((e)=>{
+                                    //이메일 닉네임이 이미 있을경우
+                                    //로그인 작업을 처리한 후 쿠키에 넣어준다
+                                    console.log(e);
+                                });
+                        
+                            });
+                        }, function(){
+                            console.error('init fail');
+                        })
+                })
+
+            },
+            login(){
+                console.log("되라좀");
+            }
+
+           
+            
+        }
+    }
 </script>
+
+<style scoped>
+span {
+    /* all: unset !important; */
+    all: unset;
+}
+</style>

@@ -15,7 +15,7 @@ public interface RestaurantDao extends JpaRepository<Restaurant, String> {
 	@Query(value = "SELECT * from restaurant where rest_name = :name", nativeQuery = true)
 	Optional<Restaurant> selectRestNameByName(String name);
 
-	// 가게가 없을경우 가게 등록
+	// 리뷰를 작성할 때 가게가 없을경우 가게 등록
 	@Query(value = "Insert into restaurant (rest_name,rest_category,rest_review)"
 			+ "values (:name,:category,1)", nativeQuery = true)
 	void insertRestaurant(String name, String category);
@@ -27,4 +27,17 @@ public interface RestaurantDao extends JpaRepository<Restaurant, String> {
 	// name으로 가게가 있는지 없는지 검색 - review 등록용도
 	@Query(value = "SELECT * from restaurant where rest_name in (:name)", nativeQuery = true)
 	List<Restaurant> seletRestNameBySearchName(List<String> name);
+	
+	// userid로 scrap 한 가게 데이터 모두 가져옴
+	@Query(value = "SELECT * from restaurant where rest_id in (select rest_id from scrap where user_id= :userid)", nativeQuery = true)
+	List<Restaurant> selectAllRestByUserId(String userid);
+
+	//식당 테이블에 등록
+	Restaurant save(Restaurant restaurant);
+	
+	
+	//식당 주소로 식당id를 찾아온다
+	@Query(value="select rest_id from restaurant where rest_location=:location",nativeQuery = true)
+	int selectRestIdByRestLocation(String location);
+	
 }

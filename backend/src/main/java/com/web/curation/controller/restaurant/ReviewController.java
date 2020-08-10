@@ -1,4 +1,4 @@
-package com.web.curation.controller.review;
+package com.web.curation.controller.restaurant;
 
 import java.util.ArrayList;
 import java.util.HashMap;

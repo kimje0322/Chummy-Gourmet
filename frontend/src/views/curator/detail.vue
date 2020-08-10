@@ -85,17 +85,15 @@
           <v-list-item v-else :key="review.title" @click="moveReviewDetail(review)">
 
             <v-list-item-avatar>
-              <v-img src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"></v-img>
+              <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg"></v-img>
             </v-list-item-avatar>
 
             <v-list-item-content>
-              <!-- <v-list-item-title v-html="review.title"></v-list-item-title> -->
-              <!-- <v-list-item-subtitle v-html="review.subtitle"></v-list-item-subtitle> -->
               <v-list-item-title>
-                고기 맛있게 먹었습니다.
+                {{review.title}}
               </v-list-item-title>
               <v-list-item-subtitle>
-                <span class="text--primary" v-for="(member, index) in members" :key="index">
+                <span class="text--primary" v-for="(member, index) in members[index]" :key="index">
                   <span class="blue--text" v-if="index == 0">@{{member}} </span>
                   <span v-else>@{{member}} </span>
                 </span>
@@ -132,22 +130,18 @@ export default {
     axios
         .get(`${SERVER_URL}/review/search?id=${this.restaurant.id}`)
         .then((response) => {
-          // console.log("넘어온 식당정보");
-          // console.log(this.restaurant);
-          // console.log("받아온 데이터");
-          // console.log(response.data);
+          console.log(response.data);
           this.reviews = response.data.review;
-          this.members = response.data.member[0];
+          this.members = response.data.member;
           
         })
-
         .catch((error) => {
           console.log(error.response);
         });
   },
   methods : {
-    moveReviewDetail(review) {
-      router.push({name : "ReviewDetail", params : { review : review, members : this.members }});
+    moveReviewDetail(review, member) {
+      router.push({name : "ReviewDetail", params : { review : review, members : member }});
     }
   }
 };

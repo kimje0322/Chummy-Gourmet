@@ -56,10 +56,10 @@
 
           <v-list-item>
             <v-list-item-icon>
-              <v-icon>mdi-folder</v-icon>
+              <v-icon>far fa-paper-plane</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>스크랩</v-list-item-title>
+              <v-list-item-title>Message</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 

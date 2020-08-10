@@ -98,8 +98,8 @@ import axios from "axios";
 import router from "@/routes";
 
 
-// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-const SERVER_URL = "https://localhost:8080";
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "https://localhost:8080";
 
 export default {
   data() {
@@ -117,53 +117,47 @@ export default {
         lng : '',
       },
 
-
-      keyword: "",
+      geocoder : '',
+      keyword: '',
       restaurants : []
     };
   },
-  create() {
-
-  },
   mounted() {
-      if (window.kakao && window.kakao.maps) {
-      this.initMap();
-    }else{
+    
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(pos => {
+        this.targetLocation.lat = pos.coords.latitude;
+        this.targetLocation.lng = pos.coords.longitude;
+      });
+    }
 
+    if (window.kakao && window.kakao.maps) {
+      // this.initMap();
+    }else{
       const script = document.createElement("script");
       /* global kakao */
-      script.onload = () => kakao.maps.load(this.initMap);
+      // script.onload = () => kakao.maps.load(this.initMap);
       script.src =
         "https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=90891b3c4fa765cd378361c6b16e4dd6&libraries=services";
       document.head.appendChild(script);
     }
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(pos => {
-        // console.log(pos);
-        this.targetLocation.lat = pos.coords.latitude;
-        this.targetLocation.lng = pos.coords.longitude;
-        // console.log(this.targetLocation.lat + "," + this.targetLocation.lng);
-      });
-    }
-
-
     // 페이지 로딩 시 로그인한 유저의 좋아요/스크랩 정보를 가져옴
-    axios
-      // .get(`${SERVER_URL}/userpage/getLikeById$userid=${this.$cookie.get('userId')}`)
-      .get(`${SERVER_URL}/userpage/getLikeById?userid=70`)
-      .then((response) => {
-        this.likes = response.data;
-        console.log(this.likes);
-    });
+    // axios
+    //   // .get(`${SERVER_URL}/userpage/getLikeById$userid=${this.$cookie.get('userId')}`)
+    //   .get(`${SERVER_URL}/userpage/getLikeById?userid=70`)
+    //   .then((response) => {
+    //     this.likes = response.data;
+    //     console.log(this.likes);
+    // });
 
-    axios
-      .get(`${SERVER_URL}/userpage/getScrapById?userid=70`)
-      .then((response) => {
-        this.scraps = response.data;
-        console.log(this.scraps);
+    // axios
+    //   .get(`${SERVER_URL}/userpage/getScrapById?userid=70`)
+    //   .then((response) => {
+    //     this.scraps = response.data;
+    //     console.log(this.scraps);
 
-    });
+    // });
 
   },
   methods: {
@@ -233,7 +227,7 @@ export default {
     },
     doSearch() {
       // 주소-좌표 변환 객체를 생성합니다
-      var geocoder = new kakao.maps.services.Geocoder();
+      this.geocoder = new kakao.maps.services.Geocoder();
       axios
         .get(`${SERVER_URL}/curation?location=${this.keyword}`)
         .then((response) => {
@@ -252,7 +246,7 @@ export default {
             restaurant.imgs = imgSrcs;
 
             // 주소 -> 좌표
-            geocoder.addressSearch(restaurant.location, (result, status) => {
+            this.geocoder.addressSearch(restaurant.location, (result, status) => {
               if (status === kakao.maps.services.Status.OK) {
                 var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
               }

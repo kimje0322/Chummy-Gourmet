@@ -535,4 +535,75 @@ public class UserPageController {
 
 		return data;
 	}
+	
+	@GetMapping("/userpage/getalluser")
+	@ApiOperation(value = "모든 사용자 정보 가져오기")
+	public Object getalluser(@RequestParam(required = true) final String userId,
+			@RequestParam(required = true) final String searchName){
+		// 팔로워유저 Id리스트
+		ArrayList<String> List = userPageDao.getAllUser(userId);
+		// user리스트
+		ArrayList<Map<String, Object>> userList = new ArrayList<>();
+
+		for (String anotherId : List) {
+			if (searchName == "") {
+				User user;
+				user = userdao.getUserByUserId(anotherId);
+				Map<String, Object> map = new HashMap();
+				map.put("UserId", user.getUserId());
+				map.put("UserName", user.getUserName());
+				map.put("UserEmail", user.getUserEmail());
+				map.put("UserNickname", user.getUserNickname());
+				map.put("UserPhone", user.getUserPhone());
+				map.put("UserComment", user.getUserComment());
+				map.put("UserImg", user.getUserImg());
+				// 내가 팔로잉 중이냐
+				int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, anotherId);
+				// 내가 요청중이냐
+				int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, anotherId);
+				// 내가 팔로잉 중임
+				if (ans1 > 0) {
+					map.put("followerFollowing", "true");
+				}
+				// 내가 요청중임
+				else if (ans2 > 0) {
+					map.put("followerFollowing", "doing");
+				} else {
+					map.put("followerFollowing", "false");
+				}
+				userList.add(map);
+			}
+			// 유저 검색을 한 경우
+			else {
+				Optional<User> user;
+				user = userdao.getUserByUserId(anotherId, searchName);
+				if (user.isPresent()) {
+					Map<String, Object> map = new HashMap();
+					map.put("UserId", user.get().getUserId());
+					map.put("UserName", user.get().getUserName());
+					map.put("UserEmail", user.get().getUserEmail());
+					map.put("UserNickname", user.get().getUserNickname());
+					map.put("UserPhone", user.get().getUserPhone());
+					map.put("UserComment", user.get().getUserComment());
+					map.put("UserImg", user.get().getUserImg());
+					// 내가 팔로잉 중이냐
+					int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, anotherId);
+					// 내가 요청중이냐
+					int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, anotherId);
+					// 내가 팔로잉 중임
+					if (ans1 > 0) {
+						map.put("followerFollowing", "true");
+					}
+					// 내가 요청중임
+					else if (ans2 > 0) {
+						map.put("followerFollowing", "doing");
+					} else {
+						map.put("followerFollowing", "false");
+					}
+					userList.add(map);
+				}
+			}
+		}
+		return userList;
+	}
 }

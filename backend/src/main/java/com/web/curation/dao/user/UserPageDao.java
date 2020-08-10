@@ -76,4 +76,7 @@ public interface UserPageDao extends JpaRepository<UserPage, String> {
 	String deleteFollowingRequest(String userId, String anotherId);
 
 
+	@Query(value = "SELECT * from user where user_id != :userid", nativeQuery = true)
+  	ArrayList<String> getAllUser(String userid);
+
 }

@@ -26,9 +26,9 @@ import FollowRequestList from './components/common/FollowRequestList.vue'
 import Feedcomment from './views/feed/comment.vue'
 import UpdateUser from './views/user/UpdateUser.vue'
 import Profile from './views/user/Profile.vue'
-
 //추가
 import PostDetail from './views/user/PostDetail.vue'
+import SearchUser from './components/common/SearchUser.vue'
 
 import UpdateUserInfo from './views/user/UpdateUserInfo.vue'
 
@@ -69,8 +69,12 @@ export default new VueRouter({
                 navbar: true
             }
         },
-
         //승범 추가
+        {
+            path: '/SearchUser',
+            name: 'SearchUser',
+            component: SearchUser,
+        },
         {
             path: '/user/PostDetail',
             name: 'PostDetail',

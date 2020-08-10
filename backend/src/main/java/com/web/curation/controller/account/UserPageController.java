@@ -61,11 +61,13 @@ public class UserPageController {
 
 	@Autowired
 	PostDao postDao;
+
 	@GetMapping("/userpage/restlike")
 	@ApiOperation(value = "[유저페이지] 식당 좋아요 하기")
 	public void insertRestLike(@RequestParam(required = true) final String userid,
-			@RequestBody(required = true) final String restid) {
+			@RequestParam(required = true) final String restid) {
 		userPageDao.insertRestLike(userid, restid);
+		userPageDao.updateRestLike(restid);
 	}
 
 	@DeleteMapping("/userpage/restlike")
@@ -73,6 +75,7 @@ public class UserPageController {
 	public void deleteRestLike(@RequestParam(required = true) final String userid,
 			@RequestParam(required = true) final String restid) {
 		userPageDao.deleteRestLike(userid, restid);
+		userPageDao.updateRestLikeM(restid);
 	}
 
 	@GetMapping("/userpage/restscrap")
@@ -80,6 +83,7 @@ public class UserPageController {
 	public void insertScrap(@RequestParam(required = true) final String userid,
 			@RequestParam(required = true) final String restid) {
 		userPageDao.insertRestScrap(userid, restid);
+		userPageDao.updateRestScrap(restid);
 	}
 
 	@DeleteMapping("/userpage/restscrap")
@@ -87,6 +91,7 @@ public class UserPageController {
 	public void deleteScrap(@RequestParam(required = true) final String userid,
 			@RequestParam(required = true) final String restid) {
 		userPageDao.deleteRestScrap(userid, restid);
+		userPageDao.updateRestScrapM(restid);
 	}
 
 	@GetMapping("/userpage/like")
@@ -576,23 +581,23 @@ public class UserPageController {
 //	    FileCopyUtils.copy(file.getBytes(), new File("C:/"+fileFullName));
 		return fileFullName;
 	}
-	
+
 	@GetMapping("/userpage/getuserpost")
 	@ApiOperation(value = "현재 사용자의 게시글 가져오기")
-	public Map<String, Object> getuserpost(@RequestParam(required = true) final String userId){
+	public Map<String, Object> getuserpost(@RequestParam(required = true) final String userId) {
 		List<Map<String, Object>> post = new ArrayList<>();
 		post = postDao.selectAllByUserid(Integer.parseInt(userId));
 		System.out.println(post);
 		List<Integer> commentcount = new ArrayList<Integer>();
-		for(Map<String, Object> p : post) {
+		for (Map<String, Object> p : post) {
 			commentcount.add(postDao.selectAllCommentByPostId(p.get("post_id").toString()));
 		}
-		
+
 		Map<String, Object> data = new HashMap<String, Object>();
-		
+
 		data.put("data", post);
-		data.put("comment",commentcount);
-		
+		data.put("comment", commentcount);
+
 		return data;
 	}
 }

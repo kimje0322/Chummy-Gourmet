@@ -3,14 +3,18 @@
     <v-app>
       <v-toolbar-title>
         <v-toolbar dark>
-          <a @click="$router.go(-1)">
+          <!-- <a @click="$router.go(-1)">
             <i class="fas fa-chevron-left back"></i>
-          </a>
+          </a> -->
           <v-spacer></v-spacer>
           <v-spacer></v-spacer>
           <p class="my-auto">게시물</p>
           <v-spacer></v-spacer>
           <v-spacer></v-spacer>
+
+          <a @click="$router.go(-1)">
+            <i class="fas fa-chevron-left back"></i>
+          </a>
         </v-toolbar>
       </v-toolbar-title>
           <!-- <p>{{ lst.postid }}</p> -->
@@ -42,11 +46,26 @@
                       style="color: black; font-weight: 600;"
                     >{{this.postlst.user_nickname}}</a>
                     <div style="float: right; margin-left:190px; ">
-                      <button>
+                      <button @click.stop="dialog = true">
                         <div style="padding: 2px; width: 24px; height: 24px;">
                           <i class="fas fa-ellipsis-v"></i>
                         </div>
                       </button>
+                      <v-dialog
+                        dark
+                        v-model="dialog"
+                        max-width="190"
+                        >
+                            <v-list> 
+                            <v-list-item
+                            v-for="(item, index) in items"
+                            :key="index"
+                            @click="doit(item)"
+                            >
+                            <v-list-item-title>{{ item.title }}</v-list-item-title>
+                            </v-list-item>
+                        </v-list>
+                        </v-dialog>
                     </div>
                   </div>
                 </div>
@@ -129,7 +148,7 @@
                   <div style="marign-bottom: 4px; padding-left: 5px;">
                     <a
                       style="font-size: 14px; font-weight: 400; color: #8e8e8e;"
-                      @click="onComment(this.postlst.post_id, this.postlst.user_nickname, this.postlst.post_content, this.postlst.user_img)"
+                      @click="onComment()"
                     >
                       댓글
                       <span>{{this.commentlst}}</span>개 모두 보기
@@ -138,7 +157,6 @@
                 </div>
               </div>
             </div>
-            <!-- <p>{{ lst.postcontent }}</p> -->
           </div>
     </v-app>
   </section>
@@ -148,28 +166,56 @@
 import axios from "axios";
 import router from "@/routes";
 
-// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-const SERVER_URL = "https://localhost:8080";
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "https://localhost:8080";
 
 export default {
   data() {
     return {
       postlst: [],
-      commentlst :[]
+      commentlst :[],
+      items: [
+        { title: '수정' },
+        { title: '삭제' },
+      ],
+       dialog: false,
+       data : {},
     };
   },
   created() {
+      this.data = this.$route.params.users
+    console.log("hi")
+    console.log(this.data)
+
       this.postlst = this.$route.params.post
       this.commentlst = this.$route.params.comment
+      
   },
-
   methods: {
-    onComment(pid, pname, pcontent, puserimg) {
+    doit(item){
+        if(item.title == '삭제'){
+            axios
+            .delete(`${SERVER_URL}/post?postid=`+this.postlst.post_id)
+            .then((response) => {
+                this.dialog = false
+                router.go(-1)
+            })        
+        }
+        else{
+            alert("수정할꺼임")
+            this.dialog = false
+        }
+        
+    },
+    onComment() {
+
       let postinfo = {
-        postid: pid,
-        postnickname: pname,
-        postcontent: pcontent,
-        postuserimg: puserimg
+        postid: this.postlst.post_id,
+        postnickname: this.postlst.user_nickname,
+        postcontent: this.postlst.post_content,
+        postuserimg: this.postlst.user_img,
+        post: this.postlst,
+        comment : this.commentlst
       };
       // console.log("dfsdafgfgfdfadf");
       router.push({ name: "Comment", params: postinfo });

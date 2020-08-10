@@ -51,6 +51,7 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
         let item = {
         post: post,
         comment : comment,
+        users : this.proptoTopsub
         };
         this.$router.push({name :'PostDetail', params: item});
       },

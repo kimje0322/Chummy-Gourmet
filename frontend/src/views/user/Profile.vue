@@ -29,12 +29,36 @@
       <v-spacer></v-spacer>
     </v-toolbar>
   </v-layout>
-
-
+  <v-layout class="entireClass">
+      <v-row>
+        
+      <v-col v-for="(lst,i) in postlst" :key="i" class="d-flex child-flex" cols="4">
+          <v-card flat tile class="d-flex">
+              {{lst.postimgurl}}
+              <v-img @click="detailInfo(lst,commentlst[i])"
+                :src="`https://i3b302.p.ssafy.io:8080/img/post?imgname=`+lst.post_img_url"
+                aspect-ratio="1" 
+                class="grey lighten-2"
+              >
+              <template v-slot:placeholder>
+              <v-row
+                  class="fill-height ma-0"
+                  align="center"
+                  justify="center"
+              >
+                  <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+              </v-row>
+              </template>
+              </v-img>
+          </v-card>
+      </v-col>
+      </v-row>
+  </v-layout>
   </div>
 </template>
 
 <script>
+
 const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 // const SERVER_URL = "https://localhost:8080";
 
@@ -49,9 +73,19 @@ export default {
       followingCount: null,
       userNickname: "",
       userImg:"",
+      postlst: [],
+      commentlst :[],
     }
   },
   methods :{
+    detailInfo(post,comment) {
+      let item = {
+      post: post,
+      comment : comment,
+      users: this.$route.params
+      };
+      this.$router.push({name :'PostDetail', params: item});
+    },
     deleteFollowRequest(){
       this.followerFollowing = 'false'
         //언팔로우 요청
@@ -97,6 +131,7 @@ export default {
   name: "Profile",
   
   created() {
+
     this.userId = this.$cookie.get("userId");
 
     this.anotherId = this.$route.params.userId
@@ -122,6 +157,14 @@ export default {
       .catch((error) => {
         console.log(error.response);
       });
+
+      axios
+        .get(`${SERVER_URL}/userpage/getuserpost?userId=`+this.anotherId)
+        .then((response) => {
+            this.postlst = response.data.data
+            this.commentlst = response.data.comment;
+            console.log(this.postlst)
+        })  
   },
   
 }

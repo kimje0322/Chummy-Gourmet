@@ -8,7 +8,7 @@
           </v-app-bar>-->
           <v-bottom-navigation
             v-if="!$route.meta.navbar"
-            scroll-target="#scroll-area-2"
+            scroll-target="#scroll-area-1"
             hide-on-scroll
             scroll-threshold="500"
             absolute

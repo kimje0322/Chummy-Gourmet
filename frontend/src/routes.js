@@ -24,10 +24,11 @@ import FollowList from './components/common/Followlist.vue'
 import NewsFeed from './views/feed/newsfeed.vue'
 import FollowRequestList from './components/common/FollowRequestList.vue'
 import Feedcomment from './views/feed/comment.vue'
-
-//추가
 import UpdateUser from './views/user/UpdateUser.vue'
 import Profile from './views/user/Profile.vue'
+
+//추가
+import PostDetail from './views/user/PostDetail.vue'
 
 import UpdateUserInfo from './views/user/UpdateUserInfo.vue'
 
@@ -36,6 +37,7 @@ import UploadTest from './views/feed/uploadtest.vue'
 
 //피드 게시글 업로드
 import AddFeed from './views/feed/addFeed.vue'
+
 
 Vue.use(VueRouter);
 export default new VueRouter({
@@ -69,6 +71,11 @@ export default new VueRouter({
         },
 
         //승범 추가
+        {
+            path: '/user/PostDetail',
+            name: 'PostDetail',
+            component: PostDetail,
+        },
         {
             path: '/user/FollowRequestList',
             name: 'FollowRequestList',
@@ -127,7 +134,10 @@ export default new VueRouter({
         {
             path: '/user/findPw',
             name: 'FindPw',
-            component: FindPw
+            component: FindPw,
+            meta: {
+                navbar: true
+            }
         },
         {
             path: '/user/foundPw',

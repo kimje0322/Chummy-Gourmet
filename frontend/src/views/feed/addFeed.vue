@@ -35,7 +35,7 @@
 
           <v-textarea v-model="postcontent" placeholder="내용입력"></v-textarea>
         </div>
-        <input ref="imageInput" type="file" hidden @change="onChangeImages" />
+        <!-- <input ref="imageInput" type="file" hidden @change="onChangeImages" /> -->
         <v-btn type="button" @click="onClickImageUpload">이미지 업로드</v-btn>
         <v-img v-if="postimgurl" :src="postimgurl"></v-img>
         <v-btn @click="addImg">입력</v-btn>

@@ -30,6 +30,7 @@ import com.web.curation.model.post.Post;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.models.auth.In;
 
 @ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
 	      @ApiResponse(code = 403, message = "Forbidden", response = BasicResponse.class),
@@ -123,7 +124,6 @@ public class PostController {
 	public void delete(@RequestParam(required = true) final String postid) {
 		postDao.delete(postid);
 	}
-	
 	
 	
 }

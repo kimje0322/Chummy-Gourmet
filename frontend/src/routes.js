@@ -127,7 +127,10 @@ export default new VueRouter({
         {
             path: '/user/findPw',
             name: 'FindPw',
-            component: FindPw
+            component: FindPw,
+            meta: {
+                navbar: true
+            }
         },
         {
             path: '/user/foundPw',

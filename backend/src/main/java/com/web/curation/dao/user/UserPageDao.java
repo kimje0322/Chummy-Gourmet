@@ -75,44 +75,5 @@ public interface UserPageDao extends JpaRepository<UserPage, String> {
 	@Query(value = "DELETE FROM following_request WHERE user_id = :anotherId and user_following = :userId", nativeQuery = true)
 	String deleteFollowingRequest(String userId, String anotherId);
 
-	// userid로 좋아요한 가게 id 모두 가져옴
-	@Query(value = "SELECT rest_id from restaurant_like where user_id= :userid", nativeQuery = true)
-	List<Integer> selectRestLikeIdByUserId(String userid);
-
-	// userid로 스크랩한 가게 id 모두 가져옴
-	@Query(value = "SELECT rest_id from scrap where user_id= :userid", nativeQuery = true)
-	List<Integer> selectRestScrapIdbyUserId(String userid);
-
-	// 좋아요 입력
-	@Query(value = "insert into restaurant_like value(:userid,:restid)", nativeQuery = true)
-	void insertRestLike(String userid, String restid);
-
-	// 좋아요 취소
-	@Query(value = "delete from restaurant_like where user_id= :userid AND rest_id = :restid", nativeQuery = true)
-	void deleteRestLike(String userid, String restid);
-
-	// 좋아요 증가
-	@Query(value = "update restaurant set rest_like = rest_like+1 where rest_id = :restid", nativeQuery = true)
-	void updateRestLike(String restid);
-
-	// 좋아요 감소
-	@Query(value = "update restaurant set rest_like = rest_like-1 where rest_id = :restid", nativeQuery = true)
-	void updateRestLikeM(String restid);
-
-	// 스크랩 입력
-	@Query(value = "insert into scrap value(:userid,:restid)", nativeQuery = true)
-	void insertRestScrap(String userid, String restid);
-
-	// 스크랩 취소
-	@Query(value = "delete from scrap where user_id= :userid AND rest_id = :restid", nativeQuery = true)
-	void deleteRestScrap(String userid, String restid);
-
-	// 스크랩 증가
-	@Query(value = "update restaurant set rest_scrap = rest_scrap+1 where rest_id = :restid", nativeQuery = true)
-	void updateRestScrap(String restid);
-
-	// 스크랩 감소
-	@Query(value = "update restaurant set rest_scrap = rest_scrap-1 where rest_id = :restid", nativeQuery = true)
-	void updateRestScrapM(String restid);
 
 }

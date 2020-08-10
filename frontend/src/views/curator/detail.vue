@@ -8,7 +8,7 @@
       hide-delimiter-background
       height="300"
     >
-      <v-carousel-item v-for="(img, index) in restaurant.imgs" :key="index">
+      <v-carousel-item v-for="(img, index) in restaurant.img" :key="index">
         <v-img
           :src="img"
           class="white--text align-end"

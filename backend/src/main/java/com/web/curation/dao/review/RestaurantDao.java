@@ -31,5 +31,7 @@ public interface RestaurantDao extends JpaRepository<Restaurant, String> {
 	// userid로 scrap 한 가게 데이터 모두 가져옴
 	@Query(value = "SELECT * from restaurant where rest_id in (select rest_id from scrap where user_id= :userid)", nativeQuery = true)
 	List<Restaurant> selectAllRestByUserId(String userid);
+
+	
 	
 }

@@ -87,6 +87,7 @@ public interface UserPageDao extends JpaRepository<UserPage, String> {
 	@Query(value = "insert into restaurant_like value(:userid,:restid)", nativeQuery = true)
 	void insertRestLike(String userid, String restid);
 
+
 	// 좋아요 취소
 	@Query(value = "delete from restaurant_like where user_id= :userid AND rest_id = :restid", nativeQuery = true)
 	void deleteRestLike(String userid, String restid);

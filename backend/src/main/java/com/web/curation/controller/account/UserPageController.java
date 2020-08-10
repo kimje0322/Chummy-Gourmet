@@ -59,6 +59,8 @@ public class UserPageController {
 	@Autowired
 	RestaurantDao restDao;
 
+	@Autowired
+	PostDao postDao;
 	@GetMapping("/userpage/restlike")
 	@ApiOperation(value = "[유저페이지] 식당 좋아요 하기")
 	public void insertRestLike(@RequestParam(required = true) final String userid,

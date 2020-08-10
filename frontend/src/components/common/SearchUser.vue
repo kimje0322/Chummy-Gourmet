@@ -10,9 +10,15 @@
       </v-toolbar>
     </v-toolbar-title>
     
-    <!-- 팔로워 -->
-        <v-list nav dense>
+    <v-progress-circular
+      indeterminate
+      color="primary"
+      v-show="show"
+    ></v-progress-circular>
 
+    <!-- 팔로워 -->
+        <v-list nav dense v-show="!show">
+        
           <!-- 팔로워 검색바 -->
           <v-row>
             <v-col class="search-bar">
@@ -31,7 +37,7 @@
                 <!-- 사진 표기 -->
                 <v-list-item-avatar @click="gotoProfile(user)">
                   <v-img
-                    :src="user.followerImg">
+                    :src="user.UserImg">
                   </v-img>
                 </v-list-item-avatar>
                 
@@ -74,6 +80,7 @@ export default {
       viewImg:"",
       userImg:"",
       searchUser:"",
+      show:true,
     };
   },
   methods :{
@@ -94,7 +101,7 @@ export default {
         this.items = []
         for (let i = 0; i <  response.data.length; i++) {
           let userImg = response.data[i].UserImg;
-          let viewImg = SERVER_URL+"/img/user?imgname=" + userImg;
+          let viewImg = "https://i3b302.p.ssafy.io:8080/img/user?imgname=" + userImg;
           this.items.push({
               UserId : response.data[i].UserId,
               UserNickname : response.data[i].UserNickname,
@@ -115,7 +122,6 @@ export default {
             `${SERVER_URL}/userpage/deletefollowingRequest?anotherId=`+user.UserId+`&userId=`+this.userId
           )
           .then((response) => {
-            console.log('팔로우취소완료')
           })
           .catch((error) => {
             console.log(error.response);
@@ -128,7 +134,6 @@ export default {
         `${SERVER_URL}/userpage/insertfollowingRequest?followerId=`+user.UserId+`&userId=`+this.userId
       )
       .then((response) => {
-        console.log('팔로우성공')
       })
       .catch((error) => {
           console.log(error.response);
@@ -158,7 +163,7 @@ export default {
         if(response.data != ""){
           for (let i = 0; i < response.data.length; i++) {
             let userImg = response.data[i].UserImg;
-            let viewImg = SERVER_URL+"/img/user?imgname=" + userImg;
+            let viewImg = "https://i3b302.p.ssafy.io:8080"+"/img/user?imgname=" + userImg;
             this.items.push({
               UserId : response.data[i].UserId,
               UserNickname : response.data[i].UserNickname,
@@ -166,7 +171,9 @@ export default {
               followerFollowing : response.data[i].followerFollowing
             })
           }
+          
         }
+        this.show = false;
       })
       .catch((error) => {
         console.log(error.response);

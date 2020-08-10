@@ -46,7 +46,7 @@
                       style="color: black; font-weight: 600;"
                     >{{this.postlst.user_nickname}}</a>
                     <div style="float: right; margin-left:190px; ">
-                      <button @click.stop="dialog = true">
+                      <button @click.stop="dialog = true" v-show="show">
                         <div style="padding: 2px; width: 24px; height: 24px;">
                           <i class="fas fa-ellipsis-v"></i>
                         </div>
@@ -180,16 +180,16 @@ export default {
       ],
        dialog: false,
        data : {},
+       show:false,
     };
   },
   created() {
       this.data = this.$route.params.users
-    console.log("hi")
-    console.log(this.data)
-
       this.postlst = this.$route.params.post
       this.commentlst = this.$route.params.comment
-      
+      if(this.data.userId == this.$cookie.get("userId")){
+          this.show = true;
+      }
   },
   methods: {
     doit(item){

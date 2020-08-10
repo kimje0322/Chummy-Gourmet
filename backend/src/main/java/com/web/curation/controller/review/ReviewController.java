@@ -18,7 +18,7 @@ import com.web.curation.dao.review.ReviewCommentDao;
 import com.web.curation.dao.review.ReviewDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
-import com.web.curation.model.meetup.MeetUp;
+import com.web.curation.model.meetup.Meetup;
 import com.web.curation.model.review.Restaurant;
 import com.web.curation.model.review.Review;
 import com.web.curation.model.review.ReviewComment;
@@ -86,13 +86,15 @@ public class ReviewController {
 		//1. 음식점 id를 가져온다
 		//2. 음식점 id로 리뷰 검색
 		//3. 리뷰의 밋업 id로 팀원 닉네임 검색
+		
+		System.out.println(id);
 		List<Review> list = reviewDao.selectReviewById(id);
 		
 		List<String>[] nickname = new ArrayList[list.size()];
 		int index = 0;
 		for(Review a : list) {
 			nickname[index] = new ArrayList<String>();
-			List<User> temp = userDao.selectUserNickNameByMeetUpId(Integer.parseInt(a.getId()));
+			List<User> temp = userDao.selectUserNickNameByMeetUpId(Integer.parseInt(a.getMeetupid()));
 			for(User b : temp) {
 				nickname[index].add(b.getUserNickname());
 			}
@@ -100,7 +102,7 @@ public class ReviewController {
 		}
 		
 		Map<String, Object> map = new HashMap<String, Object>();
-		
+		System.out.println("닉네임 " + nickname);
 		map.put("review", list);
 		map.put("member", nickname);
 		
@@ -117,9 +119,11 @@ public class ReviewController {
 		//3. 리뷰 아이디로 밋업 객체 가져오기
 		//4. 리뷰아이디로 파티원 객체 가져오기 //없어도됨
 		//5. 리뷰 아이디로 파티원 코멘트 가져오기
-		Optional<MeetUp> meetUp = meetUpDao.selectMeetUpById(id);
-		List<ReviewComment> comment = reviewCommentDao.selectReviewCommentByReviewId(id);
 		
+		System.out.println("들어왓니?");
+		Optional<Meetup> meetUp = meetUpDao.selectMeetUpById(id);
+		List<ReviewComment> comment = reviewCommentDao.selectReviewCommentByReviewId(id);
+		System.out.println(meetUp.get());
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("meetup", meetUp);
 		map.put("comment", comment);

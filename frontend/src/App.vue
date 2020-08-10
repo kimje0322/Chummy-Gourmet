@@ -17,19 +17,31 @@
           >
             <v-btn class="nav-btn" text color="deep-purple accent-4">
               <router-link to="/map">
-                <v-icon>fas fa-search</v-icon>
+                <!-- <v-icon>fas fa-search</v-icon> -->
+                <v-icon>mdi-map-marker-radius</v-icon>
               </router-link>
             </v-btn>
 
             <v-btn text color="deep-purple accent-4">
-              <router-link to="/party">
+              <router-link to=/newsfeed>
+                <v-icon>mdi-history</v-icon>
+              </router-link>
+            </v-btn>
+
+            <v-btn text color="deep-purple accent-4">
+               <!-- <input ref="imageInput" type="file" hidden @change="onChangeImages"> -->
+              <!-- <v-btn type="button" @click="onClickImageUpload"> -->
+              <!-- </v-btn> -->
+              <router-link to="/feed/add">
+
                 <v-icon>fas fa-plus</v-icon>
               </router-link>
             </v-btn>
 
             <v-btn text color="deep-purple accent-4">
               <router-link to="/curator">
-                <v-icon>fas fa-list</v-icon>
+                <!-- <v-icon>fas fa-list</v-icon> -->
+                <v-icon>mdi-magnify</v-icon>
               </router-link>
             </v-btn>
 
@@ -39,22 +51,7 @@
               </router-link>
             </v-btn>
           </v-bottom-navigation>
-          <v-sheet
-            v-if="$route.name === 'Login'"
-            id="scroll-area-1"
-            class="overflow-y-auto"
-            max-height="667"
-          >
-            <v-container class="home-padding" style="height: 100%;">
-              <router-view></router-view>
-            </v-container>
-          </v-sheet>
-          <!-- home.vue 이외 -->
-          <v-sheet v-if="$route.name !== 'Home'"  id="scroll-area-1" class="overflow-y-auto" max-height="610">
-            <v-container class="nothome" style="height: 100%;">
-              <router-view></router-view>
-            </v-container>
-          </v-sheet>
+
           <!-- home -->
           <v-sheet
             v-if="$route.name === 'Home'"
@@ -66,25 +63,49 @@
               <router-view></router-view>
             </v-container>
           </v-sheet>
+
           <!-- Login -->
+          <v-sheet
+            v-if="$route.name === 'Login'"
+            id="scroll-area-1"
+            class="overflow-y-auto"
+            max-height="667"
+          >
+            <v-container class="home-padding" style="height: 100%;">
+              <router-view></router-view>
+            </v-container>
+          </v-sheet>
+          
+          <!-- home, login 이외 -->
+          <v-sheet v-if="$route.name !== 'Home'"  id="scroll-area-1" class="overflow-y-auto" max-height="610">
+            <v-container class="nothome" style="height: 100%;">
+              <router-view></router-view>
+            </v-container>
+          </v-sheet>
+          
         </v-card>
       </v-main>
     </v-app>
   </div>
 </template>
 <script>
-const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 // const SERVER_URL = "http://localhost:8080";
 import "./components/css/style.scss";
 import axios from "axios";
+import router from "@/routes";
 
 export default {
   name: "app",
   methods: {
+      // onClickImageUpload() {
+      //   this.$refs.imageInput.click();
+  // },
     
   },
   created() {
     //로그인 유지가 아닐경우
+  
     if (
       this.$cookie.get("loginSave") == "false" ||
       this.$cookie.get("loginSave") == null
@@ -92,6 +113,8 @@ export default {
       //저장되어있는 쿠키를 제거한다.
       this.$cookie.delete("accesstoken");
       this.$cookie.delete("userId");
+      alert("로그인을 해주세요");
+      this.$router.push("/");
     }
     //로그인 유지일 경우
     else {

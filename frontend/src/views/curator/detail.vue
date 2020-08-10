@@ -115,7 +115,7 @@ import axios from "axios";
 import router from "@/routes";
 
 
-const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 // const SERVER_URL = "http://localhost:8080";
 
 export default {
@@ -134,10 +134,13 @@ export default {
         .get(`${SERVER_URL}/review/search?id=${this.restaurant.id}`)
 
         .then((response) => {
+          console.log("넘어온 식당정보");
+          console.log(this.restaurant);
+          console.log("받아온 데이터");
           console.log(response.data);
           this.reviews = response.data.review;
           this.members = response.data.member[0];
-
+          
         })
 
         .catch((error) => {

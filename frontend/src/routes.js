@@ -17,17 +17,49 @@ import FoundPw from './views/user/FoundPw.vue'
 import UserInfo from './views/Main.vue'
 import Pref from './views/user/Preference.vue'
 import Map from './views/map/map.vue'
-import MapParty from './views/map/party.vue'
+import CreateMeetup from './views/map/createMeetup.vue'
+import DetailMeetup from './views/map/detailMeetup.vue'
 import Home from './views/user/Home.vue'
 import FollowList from './components/common/Followlist.vue'
-
+import NewsFeed from './views/feed/newsfeed.vue'
+import FollowRequestList from './components/common/FollowRequestList.vue'
+import Feedcomment from './views/feed/comment.vue'
 
 //추가
 import UpdateUser from './views/user/UpdateUser.vue'
+import Profile from './views/user/Profile.vue'
+
+import UpdateUserInfo from './views/user/UpdateUserInfo.vue'
+
+// //사진업로드 테스트용
+import UploadTest from './views/feed/uploadtest.vue'
+
+//피드 게시글 업로드
+import AddFeed from './views/feed/addFeed.vue'
 
 Vue.use(VueRouter);
 export default new VueRouter({
-    routes: [{
+    routes: [
+        //피드 게시글 업로드
+        {
+            path: '/feed/add',
+            name: 'AddFeed',
+            component: AddFeed,
+            // meta: {
+            //     navbar: true
+            // }
+        },
+        //사진업로드 테스트용 추후 삭제.
+        {
+            path: '/uploadtest',
+            name: 'UploadTest',
+            component: UploadTest,
+            meta: {
+                navbar: true
+            }
+        },
+        {
+
             path: '/login',
             name: 'Login',
             component: Login,
@@ -35,41 +67,57 @@ export default new VueRouter({
                 navbar: true
             }
         },
-        //추가
+
+        //승범 추가
+        {
+            path: '/user/FollowRequestList',
+            name: 'FollowRequestList',
+            component: FollowRequestList,
+        },
+        {
+            path: '/user/profile',
+            name: 'Profile',
+            component: Profile,
+        },
         {
             path: '/user/updateUser',
             name: 'UpdateUser',
             component: UpdateUser,
         },
         {
+            path: '/user/updateUserInfo',
+            name: 'UpdateUserInfo',
+            component: UpdateUserInfo,
+        },
+        // 여기까지
+        {
             path: '/user/join',
             name: 'Join',
-            component: Join
+            component: Join,
+            meta: {
+                navbar: true
+            }
         },
         {
             path: '/user/info',
             name: 'UserInfo',
-            component: UserInfo
+            component: UserInfo,
         },
         {
             path: '/user/joinrule',
             name: 'Joinrule',
-            component: JoinRule
+            component: JoinRule,
+            meta: {
+                navbar: true
+            }
         },
         {
             path: '/user/joininfo',
             name: 'JoinInfo',
-            component: JoinInfo
-        },
-        {
-            path: '/user/findPw',
-            name: 'FindPw',
-            component: FindPw
-        },
-        {
-            path: '/user/foundPw',
-            name: 'FoundPw',
-            component: FoundPw
+            component: JoinInfo,
+            meta: {
+                navbar: true
+            }
         },
         {
             path: '/user/finishjoin',
@@ -86,20 +134,25 @@ export default new VueRouter({
             name: 'FoundPw',
             component: FoundPw
         },
-        {
-            path: '/user/pref',
-            name: 'Pref',
-            component: Pref
-        },
+        // {
+        //     path: '/user/pref',
+        //     name: 'Pref',
+        //     component: Pref
+        // },
         {
             path: '/map',
             name: 'Map',
             component: Map
         },
         {
-            path: '/map/party',
-            name: 'MapParty',
-            component: MapParty
+            path: '/map/createMeetup',
+            name: 'CreateMeetup',
+            component: CreateMeetup
+        },
+        {
+            path: '/map/detailMeetup',
+            name: 'DetailMeetup',
+            component: DetailMeetup
         },
         {
             path: '/feed/main',
@@ -148,6 +201,16 @@ export default new VueRouter({
             component: FollowList,
             meta: { transitionName: 'slide' },
         },
+        {
+            path: '/newsfeed',
+            name: 'NewsFeed',
+            component: NewsFeed,
+        },
+        {
+            path: '/newsfeed/comment',
+            name: 'Comment',
+            component: Feedcomment,
+        }
 
     ]
 });

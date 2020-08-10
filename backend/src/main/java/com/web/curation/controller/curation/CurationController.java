@@ -50,13 +50,17 @@ public class CurationController {
 	static String clientId = "dapi.kakao.com"; // 애플리케이션 클라이언트 아이디값"
 	static String clientSecret = "KakaoAK e4cd88afa207146436293dbd18d2b89f"; // 애플리케이션 클라이언트 시크릿값"
 
+	
+	
 	// 장소를 중심으로 검색
 	@GetMapping("/curation")
 	@ApiOperation(value = "장소를 중심으로 검색")
 //	public List<Restaurant> curation(@RequestParam(required = true) final String location) {
-	public Map<String,Object> curation(@RequestParam(required = true) final String location) {
+	public Map<String, Object> curation(@RequestParam(required = true) final String location) {
 
 		String text = new String();
+		//img url 찾기위한 api
+		KakaoApi kakao = new KakaoApi();
 
 		try {
 			text = URLEncoder.encode(location, "UTF-8");
@@ -110,7 +114,11 @@ public class CurationController {
 						rest.setTelphone((String) temp.get("phone"));
 						rest.setLocation((String) temp.get("address_name"));
 						rest.setUrl((String) temp.get("place_url"));
-						rest.setCategory(st.nextToken());
+						rest.setCategory(st.nextToken().trim());
+						rest.setLike("0");
+						rest.setReview("0");
+						rest.setScrap("0");
+						rest.setImg(kakao.searchImg((String)temp.get("place_name")));
 						list.add(rest);
 					}
 

@@ -9,6 +9,7 @@ import VueCookie from 'vue-cookie'
 
 import VueSimpleAlert from "vue-simple-alert";
 Vue.config.productionTip = false
+window.Kakao.init("6192aa4fccde619ea3ac09491e57abd0");
 
 // Vue.use(VueRouter)
 

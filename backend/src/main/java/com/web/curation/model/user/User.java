@@ -29,7 +29,7 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String userId;
 
-	@JsonIgnore
+//	@JsonIgnore
 	@Column(name = "user_pwd")
 	private String userPwd;
 	@Column(name = "user_email")
@@ -47,6 +47,16 @@ public class User {
 	private String userPhone;
 	@Column(name = "user_comment")
 	private String userComment;
+	@Column(name = "user_img")
+	private String userImg;
+
+	public String getUserImg() {
+		return userImg;
+	}
+
+	public void setUserImg(String userImg) {
+		this.userImg = userImg;
+	}
 
 	public User() {
 		super();
@@ -60,6 +70,15 @@ public class User {
 		this.userName = userName;
 		this.userNickname = userNickname;
 		this.userPhone = userPhone;
+		this.userComment = userComment;
+	}
+	
+	@Builder
+	public User(String userPwd, String userEmail,String userNickname,String userComment) {
+		super();
+		this.userPwd = userPwd;
+		this.userEmail = userEmail;
+		this.userNickname = userNickname;
 		this.userComment = userComment;
 	}
 

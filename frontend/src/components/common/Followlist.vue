@@ -9,81 +9,121 @@
       <!-- tab view -->
       <v-tabs dark v-model="currentItem" fixed-tabs slider-color="grey">
       <v-tab class="follow-list" v-for="item in items" :key="item" :href="'#tab-' + item">
-        <v-icon v-if="item=='follower'">팔로워</v-icon>
-        <v-icon v-if="item=='following'">팔로잉</v-icon>
+        <v-icon class="followListBtn" v-if="item=='follower'">팔로워</v-icon>
+        <v-icon class="followListBtn" v-if="item=='following'">팔로잉</v-icon>
       </v-tab>
     </v-tabs>
 
     <v-tabs-items v-model="currentItem">
       <v-tab-item v-for="item in items" :key="item" :value="'tab-' + item">
         <v-card flat>
-          <!-- 팔로워 -->
-          <v-list nav dense  v-if="item=='follower'">
-                <v-list-item-group v-model="followerList">
-                    <v-list-item v-for="(user, i) in followerList" :key="i">
-                        <!-- <v-list-item-avatar>
-                        <v-img :src="item.avatar"></v-img>
-                        </v-list-item-avatar> -->
+          
+        <!-- 팔로워 -->
+        <v-list nav dense  v-if="item=='follower'">
 
-                        <v-list-item-content>
-                        <v-list-item-title v-text="user.followerName"></v-list-item-title>
-                        <!-- 이름 표기 -->
-                        <!-- <v-list-item-title v-text="user.followingNinkname"></v-list-item-title> -->
-                        </v-list-item-content>
+          <!-- 팔로워 검색바 -->
+          <v-row>
+            <v-col class="search-bar">
+            <v-text-field 
+              @keyup="onSearchFollower"
+              v-model="searchFollower"
+              label="검색"
+              :append-icon="'mdi-account-search-outline'"
+              hide-details
+              solo
+            ></v-text-field>             
+            </v-col>
+          </v-row>
 
-                        <v-btn v-if="user.followerFollowing !== 'true'">
-                            팔로잉
-                        </v-btn>
-                        <v-btn disabled v-else >
-                            팔로잉
-                        </v-btn>
+            <v-list-item class="followlist" v-for="(user, i) in followerList" :key="i">
+                <!-- 사진 표기 -->
+                <v-list-item-avatar @click="gotoProfile(user)">
+                  <v-img
+                    :src="user.followerImg">
+                  </v-img>
+                </v-list-item-avatar>
+                
+                <v-list-item-content>
+                <v-list-item-title @click="gotoProfile(user)" v-text="user.followerNickname"></v-list-item-title>
+                <!-- 이름 표기 -->
+                <!-- <v-list-item-title v-text="user.followingName"></v-list-item-title> -->
+                </v-list-item-content>
 
-                    </v-list-item>
-                </v-list-item-group>
-            </v-list>
+                <v-btn color="primary"  @click="onFollow(user,i)" v-if="user.followerFollowing === 'false'">
+                    팔로우
+                </v-btn>
+                
+                <v-btn depressed  @click="deleteFollowRequest(user,i)" v-else-if="user.followerFollowing === 'doing'">
+                    요청중
+                </v-btn>
 
-            <!-- 팔로잉 -->
-            <v-list nav dense v-else>
-                <v-list-item-group v-model="followingList">
-                    <v-list-item v-for="(user, i) in followingList" :key="i">
-                        <!-- <v-list-item-avatar>
-                        <v-img :src="item.avatar"></v-img>
-                        </v-list-item-avatar> -->
+                <v-btn depressed @click="unFollow(user,i,'followerlist')" v-else>
+                    팔로잉
+                </v-btn>
 
-                        <v-list-item-content>
-                        
-                        <v-list-item-title v-text="user.followingName"></v-list-item-title>
-                        </v-list-item-content>
+            </v-list-item>
+        </v-list>
+        
+        <!-- 팔로잉 -->
+        <v-list nav dense v-else>
+          <!-- 팔로잉 검색바 -->
+          <v-row>
+            <v-col class="search-bar">
+              <v-text-field 
+                @keyup="onSearchFollowing"
+                v-model="searchFollowing"
+                label="검색"
+                :append-icon="'mdi-account-search-outline'"
+                hide-details
+                solo
+              ></v-text-field>             
+            </v-col>
+          </v-row>
 
-                        <v-btn disabled>
-                            팔로잉
-                        </v-btn>
-                    </v-list-item>
-                </v-list-item-group>
-            </v-list>
+        <v-list-item class="followlist" v-for="(user, i) in followingList" :key="i">
+            <!-- 사진 표기 -->
+            <v-list-item-avatar @click="gotoProfile(user)">
+              <v-img
+                :src="user.followingImg">
+              </v-img>
+            </v-list-item-avatar>
+
+            <v-list-item-content>
+            <v-list-item-title @click="gotoProfile(user)" v-text="user.followingNickname"></v-list-item-title>
+            </v-list-item-content>
+
+            <v-btn depressed @click="unFollow(user,i,'followinglist')">
+                팔로잉
+            </v-btn>
+
+        </v-list-item>
+          </v-list>
         </v-card>
       </v-tab-item>
     </v-tabs-items>
+
     </div>
   </v-app>
 </template>
 
 <script>
 import Top from "../common/Top";
-// import Footer from "../components/common/Footer";
 
 import axios from "axios";
-const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
-
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "https://localhost:8080";
 export default {
   name: "components",
   components: {
      Top,
-    // Footer,
   },
  
   data: () => {
     return {
+        anotherId:"",
+        nicknameForProfile: "",
+        searchFollower: "",
+        searchFollowing:"",
         userId: "",
         currentItem: 'tab-Web',
         items: [
@@ -93,46 +133,230 @@ export default {
         followingList:[],
         followerList:[],
         methods: {
-            checkfollow(flag){
-                if(flag=="true")
-                    return true;
-                else
-                    return false;
-            }
+          checkfollow(flag){
+              if(flag=="true")
+                  return true;
+              else
+                  return false;
+          }
         },
     };
   },
-   created(){
+  created(){
+    this.whenCreated(); 
+  },
+  methods: {
+    whenCreated() {
+      this.followingList = []
+      this.followerList = []
+      if (this.$route.params.info == 'follow') {
+      this.currentItem = 'tab-following'
+      }
+
      this.userId = this.$cookie.get("userId");
      axios
       .get(
-        `${SERVER_URL}/userpage/getfollowinglist?userId=`+this.userId
+        `${SERVER_URL}/userpage/getfollowinglist?userId=`+this.userId+`&searchName=`+this.searchFollowing
       )
       .then((response) => {
-        this.followingList = response.data;
-        console.log(this.followingList);
-        console.log('팔로잉 리스트')
+        for (let i = 0; i <  response.data.length; i++) {
+          let userImg = response.data[i].followingImg;
+          let viewImg = SERVER_URL+"/img/user?imgname=" + userImg;
+          this.followingList.push({
+              followingId : response.data[i].followingId,
+              followingNickname : response.data[i].followingNickname,
+              followingImg: viewImg,
+              followerFollowing :  "true"
+          })
+        }
       })
       .catch((error) => {
         console.log(error.response);
       });
       axios
       .get(
-        `${SERVER_URL}/userpage/getfollowerlist?userId=`+this.userId
+        `${SERVER_URL}/userpage/getfollowerlist?userId=`+this.userId+`&searchName=`+this.searchFollower
       )
       .then((response) => {
-        this.followerList = response.data;
-        console.log(this.followerList);
-        console.log('팔로워 리스트')
-        // for (var i=0; i<this.followerList.length; i++) {
-        //   if (this.followerList[i].followerFollowing)
-
-        // }
+        for (let i = 0; i <  response.data.length; i++) {
+          let userImg = response.data[i].followerImg;
+          let viewImg = SERVER_URL+"/img/user?imgname=" + userImg;
+          this.followerList.push({
+              followerId : response.data[i].followerId,
+              followerNickname : response.data[i].followerNickname,
+              followerImg: viewImg,
+              followerFollowing :  response.data[i].followerFollowing
+          })
+        }
       })
       .catch((error) => {
         console.log(error.response);
-      });     
-  },
+      });    
+    },
+    gotoProfile(user) {
+      if (user.followerId) {
+        let profileInfo = {
+          userId: user.followerId,
+          userImg : user.followerImg,
+          followerFollowing: user.followerFollowing
+        };
+        this.$router.push({name :'Profile', params: profileInfo});
+      } else { 
+        let profileInfo = {
+        userId: user.followingId,
+        userImg : user.followingImg,
+        followerFollowing: user.followerFollowing
+        };
+        this.$router.push({name :'Profile', params: profileInfo});
+      }
+    },
+    onSearchFollower () {
+      axios
+      .get(
+        `${SERVER_URL}/userpage/getfollowerlist?userId=`+this.userId+`&searchName=`+this.searchFollower
+      )
+      .then((response) => {
+        this.followerList = []
+        for (let i = 0; i <  response.data.length; i++) {
+          let userImg = response.data[i].followerImg;
+          let viewImg = SERVER_URL+"/img/user?imgname=" + userImg;
+          this.followerList.push({
+              followerId : response.data[i].followerId,
+              followerNickname : response.data[i].followerNickname,
+              followerImg: viewImg,
+              followerFollowing :  response.data[i].followerFollowing
+          })
+        }
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+    },
+
+    onSearchFollowing () {
+      axios
+      .get(
+        `${SERVER_URL}/userpage/getfollowinglist?userId=`+this.userId+`&searchName=`+this.searchFollowing
+      )
+      .then((response) => {
+        this.followingList = []
+        for (let i = 0; i <  response.data.length; i++) {
+            let userImg = response.data[i].followingImg;
+            let viewImg = SERVER_URL+"/img/user?imgname=" + userImg;
+            this.followingList.push({
+                followingId : response.data[i].followingId,
+                followingNickname : response.data[i].followingNickname,
+                followingImg: viewImg,
+                followerFollowing :  "true"
+            })
+          }
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+    },
+
+    deleteFollowRequest(user,idx){
+      this.$set(this.followerList[idx], 'followerFollowing', 'false');
+        //언팔로우 요청
+        if (user.followerId) {
+          this.anotherId = user.followerId
+        } else {
+          this.anotherId = user.followingId
+        }
+        axios
+          .delete(
+            `${SERVER_URL}/userpage/deletefollowingRequest?anotherId=`+this.anotherId+`&userId=`+this.userId
+          )
+          .then((response) => {
+            console.log('팔로우취소완료')
+          })
+          .catch((error) => {
+            console.log(error.response);
+          });
+    },
+    onFollow(user,idx) {
+      this.$set(this.followerList[idx], 'followerFollowing', 'doing');
+      axios
+      .post(
+        `${SERVER_URL}/userpage/insertfollowingRequest?followerId=`+user.followerId+`&userId=`+this.userId
+      )
+      .then((response) => {
+        console.log('팔로우성공')
+      })
+      .catch((error) => {
+          console.log(error.response);
+      });
+    },
+    unFollow(user,idx,str) {
+      if(str == 'followerlist'){
+        this.$set(this.followerList[idx], 'followerFollowing', 'false');
+      }
+      else{
+        this.$delete(this.followingList, idx);
+      }
+      //언팔로우 요청
+      if (user.followerId) {
+        this.anotherId = user.followerId
+      } else {
+        this.anotherId = user.followingId
+      }
+      axios
+        .delete(
+          `${SERVER_URL}/userpage/deletefollowing?anotherId=`+this.anotherId+`&userId=`+this.userId
+        )
+        .then((response) => {
+          if(str == 'followerlist'){
+            this.followingList = []
+            axios
+              .get(
+                `${SERVER_URL}/userpage/getfollowinglist?userId=`+this.userId+`&searchName=`+this.searchFollowing
+              )
+              .then((response) => {
+                for (let i = 0; i <  response.data.length; i++) {
+                  let userImg = response.data[i].followingImg;
+                  let viewImg = SERVER_URL+"/img/user?imgname=" + userImg;
+                  this.followingList.push({
+                      followingId : response.data[i].followingId,
+                      followingNickname : response.data[i].followingNickname,
+                      followingImg: viewImg,
+                      followerFollowing :  "true"
+                  })
+                }
+              })
+              .catch((error) => {
+                console.log(error.response);
+              });
+          }
+          else{
+            this.followerList = []
+            axios
+            .get(
+              `${SERVER_URL}/userpage/getfollowerlist?userId=`+this.userId+`&searchName=`+this.searchFollower
+            )
+            .then((response) => {
+              for (let i = 0; i <  response.data.length; i++) {
+                let userImg = response.data[i].followerImg;
+                let viewImg = SERVER_URL+"/img/user?imgname=" + userImg;
+                this.followerList.push({
+                    followerId : response.data[i].followerId,
+                    followerNickname : response.data[i].followerNickname,
+                    followerImg: viewImg,
+                    followerFollowing :  response.data[i].followerFollowing
+                })
+              }
+            })
+            .catch((error) => {
+              console.log(error.response);
+            });  
+        }
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
+    }
+    
+  }
 };
 </script>
 
@@ -140,4 +364,24 @@ export default {
   .follow-lsit {
     width: 100px
   }
+
+  .search-bar {
+    padding: 0 12px 0 12px;
+    margin: 10px 18px 10px 18px;
+  }
+
+
+  .followListBtn {
+    font-style: normal;
+    font-size: 15px !important;
+    font-family: 'Jua', sans-serif;  
+  }
+
+  .followlist{
+    margin: 18px;
+  }
+  .v-list-item__content {
+    width: 12px;
+  }
+
 </style>

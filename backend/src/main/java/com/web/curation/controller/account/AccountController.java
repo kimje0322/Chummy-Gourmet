@@ -98,8 +98,10 @@ public class AccountController {
 
    @GetMapping("/account/signup/valid")
    @ApiOperation(value = "닉네임, 이메일 중복체크")
-   public Object nicknameAndEmailVaildCheck(String nickname, String email) {
+   public Object nicknameAndEmailVaildCheck(@RequestParam(required = true) final String nickname,@RequestParam(required = true) final String email) {
       User originUser = null;
+      Optional<User> originUserEmailCheck = null;
+      
       final BasicResponse result = new BasicResponse();
       boolean isExistNickname = false;
       boolean isExistEmail = false;
@@ -110,8 +112,10 @@ public class AccountController {
          isExistEmail = true;
 
       // 닉네임 중복 검사
-      originUser = userDao.getUserByUserNickname(nickname);
-      if (originUser != null)
+      // dao에서 optional로 바꿔서 다른변수 만들어줌 이부분
+      originUserEmailCheck = userDao.getUserByUserNickname(nickname);
+      // ispresent하면 null인지 아닌지 확인가능
+      if (!originUserEmailCheck.isPresent())
          isExistNickname = true;
 
       // 기존에 가입한 동일 닉네임이 있다면
@@ -150,6 +154,21 @@ public class AccountController {
             request.getUserInterest().toString());
       System.out.println(newUserDetail);
       userDetailDao.save(newUserDetail);
+
+      result.status = true;
+      result.data = "success";
+      
+      return new ResponseEntity<>(result, HttpStatus.OK);
+   }
+   
+   @PostMapping("/account/apisignup")
+   @ApiOperation(value = "[가입]api가입하기")
+   public Object kakaosignup(@Valid @RequestBody User request) {
+      final BasicResponse result = new BasicResponse();
+      System.out.println(request);
+      // user entity db 저장
+
+      userDao.save(request);
 
       result.status = true;
       result.data = "success";

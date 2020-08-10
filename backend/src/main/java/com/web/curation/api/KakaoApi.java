@@ -59,12 +59,10 @@ public class KakaoApi {
 			try {
 				JSONParser jsonParse = new JSONParser();
 				JSONObject jsonObj = (JSONObject) jsonParse.parse(responseBody);
-
 				JSONArray store = (JSONArray) jsonObj.get("documents");
-//				System.out.println(store);
+				
 //				JsonObject로 변환
-				JSONObject temp = (JSONObject) store.get(0);
-//				System.out.println((String) temp.get("image_url"));
+				JSONObject temp = (JSONObject) store.get(i);
 				imgSrc = (String) temp.get("image_url");
 				imgSrcs.add(imgSrc);
 			} catch (ParseException e) {
@@ -72,7 +70,6 @@ public class KakaoApi {
 				e.printStackTrace();
 			}
 		}
-		System.out.println(imgSrcs);
 		return imgSrcs;
 	}
 

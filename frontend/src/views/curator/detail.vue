@@ -8,9 +8,9 @@
       hide-delimiter-background
       height="300"
     >
-      <v-carousel-item v-for="i of 5" :key="i">
+      <v-carousel-item v-for="(img, index) in restaurant.imgs" :key="index">
         <v-img
-          src="https://img.siksinhot.com/place/1485274468095571.jpg?w=307&h=300&c=Y"
+          :src="img"
           class="white--text align-end"
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
           height="100%"
@@ -127,6 +127,7 @@ export default {
     };
   },
   created() {
+    console.log(this.restaurant);
     axios
         .get(`${SERVER_URL}/review/search?id=${this.restaurant.id}`)
         .then((response) => {

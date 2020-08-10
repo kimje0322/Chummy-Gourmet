@@ -3,7 +3,6 @@
     <v-toolbar dark>
       <!-- 중앙정렬 하기 위해 2개씀 -->
       <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
-      <!-- <v-spacer></v-spacer> -->
       <p class="my-auto">추가정보 입력</p>
       <v-spacer></v-spacer>
     </v-toolbar>
@@ -26,7 +25,6 @@
       </ul>
     </div>
     <!-- 나이 -->
-
     <div class="label-with-input">
       <label class="userInfo">나이</label>
       <ul class="select-gender">

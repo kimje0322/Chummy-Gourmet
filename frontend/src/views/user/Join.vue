@@ -209,7 +209,6 @@ export default {
         .then(response => {
           // data : success / isExistEmail / isExistNickname
           var data = response.data.data;
-          console.log(data)
 
           // 이메일과 닉네임이 중복이 아니라면,
           if (data == "success") {
@@ -307,9 +306,7 @@ export default {
 .my-auto {
   font-size: 20px;
 }
-/* h1 {
-    margin: 0 0 10px 0;
-  } */
+
 h2 {
   text-align: center;
 }
@@ -338,7 +335,6 @@ h2 {
 #password{
   background-color: transparent !important;
   border: 1px solid black !important;
-  /* border-color: black solid !important; */
 }
 [type=checkbox]:checked + span:before, 
 [type=radio]:checked + span:before {

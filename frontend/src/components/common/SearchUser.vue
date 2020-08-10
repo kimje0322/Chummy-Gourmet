@@ -10,14 +10,8 @@
       </v-toolbar>
     </v-toolbar-title>
     
-    <v-progress-circular
-      indeterminate
-      color="primary"
-      v-show="show"
-    ></v-progress-circular>
-
     <!-- 팔로워 -->
-        <v-list nav dense v-show="!show">
+        <v-list nav dense >
         
           <!-- 팔로워 검색바 -->
           <v-row>
@@ -32,8 +26,13 @@
             ></v-text-field>             
             </v-col>
           </v-row>
-
-            <v-list-item class="followlist" v-for="(user, i) in items" :key="i">
+            <v-skeleton-loader
+                ref="skeleton"
+                type="list-item-avatar"
+                class="mx-auto"
+                v-show="show"
+            ></v-skeleton-loader>
+            <v-list-item v-show="!show" class="followlist" v-for="(user, i) in items" :key="i">
                 <!-- 사진 표기 -->
                 <v-list-item-avatar @click="gotoProfile(user)">
                   <v-img

@@ -113,8 +113,9 @@ public interface UserPageDao extends JpaRepository<UserPage, String> {
 	//스크랩 취소
 	@Query(value = "delete from scrap where user_id= :userid AND rest_id = :restid",nativeQuery=true)
 	void deleteRestScrap(String userid,String restid);
-
 	
+	@Query(value = "SELECT * from user where user_id != :userid", nativeQuery = true)
+  	ArrayList<String> getAllUser(String userid);
 
 }
 

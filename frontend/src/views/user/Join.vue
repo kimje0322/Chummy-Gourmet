@@ -333,4 +333,13 @@ h2 {
 .input-with-label {
   margin: 0 0 15px 0;
 }
+
+#password{
+  background-color: transparent !important;
+  border-color: black !important;
+
+}
+/* #password .error{
+  border: solid black !important; 
+} */
 </style>

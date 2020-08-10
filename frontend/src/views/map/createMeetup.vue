@@ -262,7 +262,8 @@ export default {
       targetLocation : {
         lat : '',
         lng : ''
-      }
+      },
+      geocoder : '',
     }
   },
   watch: {
@@ -302,18 +303,28 @@ export default {
         });
       }
 
-      const script = document.createElement("script");
-      /* global kakao */
-      script.onload = () => kakao.maps.load();
-      script.src =
-        "https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=90891b3c4fa765cd378361c6b16e4dd6&libraries=services";
-      document.head.appendChild(script);
+      if (window.kakao && window.kakao.maps) {
+        console.log("이미 로딩됨");
+        this.initMap();
+      } else {
+        console.log("카카오맵 로딩");
+        const script = document.createElement("script");
+        /* global kakao */
+        script.onload = () => kakao.maps.load(this.initMap);
+        script.src =
+          "https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=90891b3c4fa765cd378361c6b16e4dd6&libraries=services";
+        document.head.appendChild(script);
+      }
   },
   methods: {
     test() {
       this.menu = false;
       this.menu2 = false;
       this.meetup.date = this.date + " " + this.time;
+    },
+    initMap() {
+        // 좌표->주소
+        this.geocoder = new kakao.maps.services.Geocoder();
     },
     meetUp() {
       if (this.meetup.title.length === 0) {
@@ -363,7 +374,7 @@ export default {
     },
     search(){
       // 주소-좌표 변환 객체를 생성합니다
-      var geocoder = new kakao.maps.services.Geocoder();
+      // var geocoder = new kakao.maps.services.Geocoder();
       axios
         .get(`${SERVER_URL}/curation?location=${this.keyword}`)
         .then((response) => {
@@ -375,7 +386,7 @@ export default {
           restaurants.forEach(restaurant => {
 
             // 주소 -> 좌표
-            geocoder.addressSearch(restaurant.location, (result, status) => {
+            this.geocoder.addressSearch(restaurant.location, (result, status) => {
               if (status === kakao.maps.services.Status.OK) {
                 var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
               }

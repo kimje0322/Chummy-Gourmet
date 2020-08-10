@@ -116,4 +116,7 @@ public interface UserPageDao extends JpaRepository<UserPage, String> {
 	@Query(value = "update restaurant set rest_scrap = rest_scrap-1 where rest_id = :restid", nativeQuery = true)
 	void updateRestScrapM(String restid);
 
+	@Query(value = "SELECT * from user where user_id != :userid", nativeQuery = true)
+  	ArrayList<String> getAllUser(String userid);
+
 }

@@ -3,7 +3,7 @@
       <v-row>
       <v-col v-for="item in items" :key="item.title" class="d-flex child-flex" cols="4">
           <v-card flat tile class="d-flex">
-              <v-img @click.stop="dialog = true" :src="item.img" aspect-ratio="1" class="grey lighten-2">
+              <v-img @click.stop="show(item)" :src="item.img" aspect-ratio="1" class="grey lighten-2">
               <template v-slot:placeholder>
               <v-row
                   class="fill-height ma-0"
@@ -59,6 +59,7 @@ export default {
       ],
        dialog: false,
        data : [],
+       list : [],
       }
     },
     created(){
@@ -75,16 +76,20 @@ export default {
         });
     },
     methods: {
+      show(item){
+        this.dialog = true;
+        this.list = item;
+      },
       doit(iitem){
         if(iitem.title == '삭제') {
-          axios.delete(`${SERVER_URL}/userpage/restsacrp?userid=${this.userId}&restid=`)
+          console.log(this.list);
+          axios.delete(`${SERVER_URL}/userpage/restscrap?userid=${this.userId}&restid=${this.list.id}`)
           .then((response) => {
               this.dialog = false
               router.go(-1)
           })
-          .catch((error) => {
-              console.log(error.response);
-          });
+        } else {
+          router.push({name: "detail", params: this.list.id})
         }
       }
     }

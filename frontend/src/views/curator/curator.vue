@@ -65,6 +65,7 @@
                   <div style="width:55%;">
                     <v-card-title @click="moveDetail(restaurant)">{{restaurant.name}}</v-card-title>
                     <v-card-subtitle v-text="restaurant.location" @click="moveDetail(restaurant)"></v-card-subtitle>
+                    <v-card-subtitle class="caption grey--text" v-html="restaurant.distUnit" @click="moveDetail(restaurant)"></v-card-subtitle>
                   </div>
                   <v-spacer></v-spacer>
                   <v-spacer></v-spacer>
@@ -215,6 +216,16 @@ export default {
           })
         })
     },
+    distUnitConversion(distance){
+      var result = '';
+      var tempDist = Math.round(distance);
+      var km = Math.floor(tempDist / 1000);
+      var m = tempDist % 1000;
+      if(km > 0)
+        result = result.concat(km, "km ");
+      result = result.concat(m, "m");
+      return result;
+    },
     doSearch() {
       // 주소-좌표 변환 객체를 생성합니다
       var geocoder = new kakao.maps.services.Geocoder();
@@ -227,8 +238,11 @@ export default {
 
           // 음식점리스트 돌면서 좌표(position), 거리(dist) 구하기
           restaurants.forEach(restaurant => {
+
+            // String 형태의 img src 5개를 파싱해서 배열로 만듬
             let imgSrcs = restaurant.img;
-            imgSrcs = imgSrcs.substr(1, imgSrcs.length - 2);
+            imgSrcs = imgSrcs.replace('[', '');
+            imgSrcs = imgSrcs.replace(']', '');
             imgSrcs = imgSrcs.split(", ");
             restaurant.imgs = imgSrcs;
 
@@ -248,6 +262,7 @@ export default {
                   ],
                 });
                 restaurant.dist = polyline.getLength();
+                restaurant.distUnit = this.distUnitConversion(polyline.getLength());
               }
             });
           })

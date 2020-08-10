@@ -3,7 +3,7 @@
     <v-system-bar lights-out></v-system-bar>
 
     <v-carousel :continuous="false" show-arrows hide-delimiter-background height="300">
-      <v-carousel-item v-for="i of 5" :key="i">
+      <v-carousel-item v-for="index of 5" :key="index">
         <v-img
           src="https://img.siksinhot.com/place/1485274468095571.jpg?w=307&h=300&c=Y"
           class="white--text align-end"
@@ -111,7 +111,7 @@
               <v-divider :key="index"></v-divider>
               <v-subheader v-if="comment.header" :key="comment.header" v-text="comment.header"></v-subheader>
               <v-divider v-else-if="comment.divider" :key="index" :inset="comment.inset"></v-divider>
-              <v-list-item v-else :key="comment">
+              <v-list-item v-else :key="index">
                 <v-list-item-avatar>
                   <v-img :src="imgs[index]" />
                 </v-list-item-avatar>

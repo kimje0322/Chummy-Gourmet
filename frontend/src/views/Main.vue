@@ -93,18 +93,18 @@ export default {
       )
       .then((response) => {
         // console.log(response.data);
-        this.meetupData = response.data;
         console.log("밋업 data 성공");
-        console.log(this.meetupData[0].meetupPersonnel);
-        // for (var i=0; i<this.meetupData.length; i++) {
-        //   this.meetupdate = this.meetupData[i].meetupPersonnel.slice(0, 11);
-        //   this.muyear.push(this.meetupdate[i].meetupPersonnel.slice(0, 4));
-        //   this.mumonth.push(this.meetupdate[i].meetupPersonnel.slice(5, 7));
-        //   this.muday.push(this.meetupdate[i].meetupPersonnel.slice(8, 10));
-        // }
-        // this.meetupData[i].meetupContent
-        // for (var i=0; i<this.meetupData.length; i++) {
-        // }
+        this.mData = response.data
+        console.log(this.mData)
+        for (var i=0; i<this.mData.length; i++) {
+          this.meetupDate.push(this.mData[i].meetupPersonnel.slice(0, 11));
+        }
+        for (var j=0; j<this.meetupDate.length; j++) {
+          this.dateData.muyear.push(this.meetupDate[j].slice(0, 4));
+          this.dateData.mumonth.push(this.meetupDate[j].slice(5, 7));
+          this.dateData.muday.push(this.meetupDate[j].slice(8, 10));
+        }
+        console.log(this.dateData)
       })
       .catch((error) => {
         console.log(error.response);
@@ -114,6 +114,7 @@ export default {
   },
   data: () => {
     return {
+      // 밋업 날짜만 분리한 데이터
       dateData: {
         muyear: [],
         mumonth: [],
@@ -122,7 +123,10 @@ export default {
       picker: new Date().toISOString().substr(0, 10),
       enableEvents: true,
       showCurrent: true,
-      meetupData: {},
+      // 밋업 전체 데이터
+      mData: {}, 
+      // 밋업 날짜만 담긴 list
+      meetupDate: [],
       month: false,
       multiple: false,
       users: {},
@@ -164,23 +168,11 @@ export default {
   },
   methods: {
     dateFunctionEvents(date) {
-      // this.meetupdate = this.meetupData.date.slice(0, 11);
-      // var muyear = this.meetupdate.slice(0, 4);
-      // var mumonth = this.meetupdate.slice(5, 7);
-      // if (this.meetupdate[8] == '0') {
-      //   let muday = this.meetupdate[9];
-      // } else {
-        // let muday = this.meetupdate.slice(8, 10);
-      // }
-      
-      // console.log(this.meetupdate);
-      // console.log(mumonth);
-      // console.log(muday);
-      // console.log(muyear);
       
       const [, , day] = date.split("-");
-      console.log();
-      if ([2, 17, 28].includes(parseInt(day, 10))) return true;
+      console.log(this.dateData.muday);
+      if (this.dateData.muday.map(parseInt).includes(parseInt(day, 10))) return true;
+      // if ([2, 17, 28].includes(parseInt(day, 10))) return true;
       // if ([1, 19, 22].includes(parseInt(day, 10))) return ['red', '#00f']
       return false;
     },

@@ -547,10 +547,11 @@ img {
   cursor: pointer;
   z-index: 90;
 }
-
+/* 선호음식, 성격 */
 .select-many label {
-  width: 100%;
-  padding: 5px 12px 5px 12px;
+  /* width: 100%; */
+  display: block;
+  padding: 5px 8px 5px 8px;
   border: 1.5px solid gray;
   border-radius: 15px;
   cursor: pointer;
@@ -559,7 +560,7 @@ img {
 
 .select-many-interest label {
   width: 100%;
-  padding: 5px 12px 5px 12px;
+  padding: 5px 8px 5px 8px;
   border: 1.5px solid gray;
   border-radius: 15px;
   cursor: pointer;

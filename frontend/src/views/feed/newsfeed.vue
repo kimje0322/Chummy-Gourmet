@@ -54,10 +54,17 @@
                       tabindex="0"
                       style="color: black; font-weight: 600;"
                     >{{lst.usernickname}}</a>
-                    <div style="float: right; margin-left:190px; ">
-                      <button>
+                    <div style="float: right; margin-right: 0px; ">
+                      <button @click="onRevise(lst)">
                         <div style="padding: 2px; width: 24px; height: 24px;">
                           <i class="fas fa-ellipsis-v"></i>
+                        </div>
+                      </button>
+                    </div>
+                    <div style="float: right; margin-left: 160px; ">
+                      <button @click="onDelete(lst)">
+                        <div style="padding: 2px; width: 24px; height: 24px;">
+                          <i class="far fa-trash-alt"></i>
                         </div>
                       </button>
                     </div>
@@ -87,7 +94,7 @@
           <div class="fb">
             <section class="func">
               <span class="heart">
-                <button class="heart-btn">
+                <button @click="onLike(lst.postlike)" class="heart-btn">
                   <div style="border: 0" class="heart-div">
                     <span style="margin: 0; height: 24px; width: 24px;">
                       <i
@@ -132,6 +139,7 @@
 
               </span>-->
             </section>
+            
             <section style="height: 17.6px; margin-bottom: 8px;">
               <div style="flex: 1 1 auto;">
                 <p style="font-weight: 600;">
@@ -214,7 +222,21 @@ export default {
       });
   },
   methods: {
+<<<<<<< HEAD
+    onDelete(lst) {
+      console.log(lst)
+      axios
+        .delete(`${SERVER_URL}/post?postid=${lst.postid}`)
+        .then((response) => {
+          // this.lst.$set()
+        })
+        .catch((error) => {});
+
+    },
+    onComment(pid, pname, pcontent) {
+=======
     onComment(pid, pname, pcontent, puserimg) {
+>>>>>>> a0b948faf14602147ec0c8cf7bb5115ed0973ffc
       let postinfo = {
         postid: pid,
         postnickname: pname,
@@ -225,6 +247,19 @@ export default {
       console.log(pid);
       router.push({ name: "Comment", params: postinfo });
     },
+    onLike(plike) {
+      // axios
+      //   .
+    },
+    onRevise(lst) {
+      let repost = {
+        postid : lst.postid,
+        postnickname: lst.postnickname,
+        postcontent: lst.postcontent,
+        postimage : lst.postimgurl
+      };
+      router.push({ name: "AddFeed", params: repost});
+    }
   },
 };
 </script>

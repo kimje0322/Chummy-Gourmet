@@ -98,8 +98,8 @@ import axios from "axios";
 import router from "@/routes";
 
 
-// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-const SERVER_URL = "https://localhost:8080";
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "https://localhost:8080";
 
 export default {
   data() {
@@ -144,15 +144,14 @@ export default {
 
     // 페이지 로딩 시 로그인한 유저의 좋아요/스크랩 정보를 가져옴
     axios
-      // .get(`${SERVER_URL}/userpage/getLikeById$userid=${this.$cookie.get('userId')}`)
-      .get(`${SERVER_URL}/rest/like/70`)
+      .get(`${SERVER_URL}/rest/like/${this.$cookie.get('userId')}`)
       .then((response) => {
         this.likes = response.data;
         console.log(this.likes);
     });
 
     axios
-      .get(`${SERVER_URL}/rest/scrap/70`)
+      .get(`${SERVER_URL}/rest/scrap/${this.$cookie.get('userId')}`)
       .then((response) => {
         this.scraps = response.data;
         console.log(this.scraps);
@@ -181,8 +180,7 @@ export default {
     sortByProperties(){
       console.log("선호음식");
       axios
-        // .get(`${SERVER_URL}/userpage/getuserInfo?userId=${this.$cookie.get('userId')}`)
-        .get(`${SERVER_URL}/userpage/getuserInfo?userId=62`)
+        .get(`${SERVER_URL}/userpage/getuserInfo?userId=${this.$cookie.get('userId')}`)
         .then((response) => {
           var userInfo = response.data;
           var userFavoriteID = userInfo.userFavorite;
@@ -315,7 +313,7 @@ export default {
         if(this.likes.indexOf(restaurant.id*1) == -1){
           this.likes.push(restaurant.id*1);
           axios
-          .put(`${SERVER_URL}/rest/like?userid=70&restid=${restaurant.id}`)
+          .put(`${SERVER_URL}/rest/like?userid=${this.$cookie.get('userId')}&restid=${restaurant.id}`)
           .then((response) => {
             // reponse : 해당 음식점의 좋아요 갯수
             restaurant.like = response.data;
@@ -326,7 +324,7 @@ export default {
         else{
           this.likes.splice(this.likes.indexOf(restaurant.id), 1);
           axios
-          .delete(`${SERVER_URL}/rest/like?userid=70&restid=${restaurant.id}`)
+          .delete(`${SERVER_URL}/rest/like?userid=${this.$cookie.get('userId')}&restid=${restaurant.id}`)
           .then((response) => {
             // reponse : 해당 음식점의 좋아요 갯수
             restaurant.like = response.data;
@@ -375,7 +373,7 @@ export default {
         if(this.scraps.indexOf(restaurant.id*1) == -1){
           this.scraps.push(restaurant.id*1);
           axios
-          .put(`${SERVER_URL}/rest/scrap?userid=70&restid=${restaurant.id}`)
+          .put(`${SERVER_URL}/rest/scrap?userid=${this.$cookie.get('userId')}&restid=${restaurant.id}`)
           .then((response) => {
             // reponse : 해당 음식점의 좋아요 갯수
             restaurant.scrap = response.data;
@@ -385,7 +383,7 @@ export default {
         else{
           this.scraps.splice(this.scraps.indexOf(restaurant.id), 1);
           axios
-          .delete(`${SERVER_URL}/rest/scrap?userid=70&restid=${restaurant.id}`)
+          .delete(`${SERVER_URL}/rest/scrap?userid=${this.$cookie.get('userId')}&restid=${restaurant.id}`)
           .then((response) => {
             // reponse : 해당 음식점의 좋아요 갯수
             restaurant.scrap = response.data;

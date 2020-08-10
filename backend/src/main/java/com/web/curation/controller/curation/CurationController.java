@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.api.KakaoApi;
-import com.web.curation.dao.review.RestaurantDao;
+import com.web.curation.dao.restaurant.RestaurantDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.review.Restaurant;
 

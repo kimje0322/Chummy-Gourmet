@@ -70,8 +70,8 @@
                   <v-spacer></v-spacer>
                   <v-spacer></v-spacer>
                   <v-spacer></v-spacer>
-                  <v-btn icon small :color="likes.indexOf(restaurant.id*1) != -1 ? 'pink' : ''" @click="doLike(restaurant.id)">
-                    <v-icon v-text="likes.indexOf(restaurant.id*1) != -1 ? 'mdi-heart' : 'mdi-heart-outline' "></v-icon>
+                  <v-btn icon small :color="likes.indexOf(restaurant.id) != -1 ? 'pink' : ''" @click="doLike(restaurant.id)">
+                    <v-icon v-text="likes.indexOf(restaurant.id) != -1 ? 'mdi-heart' : 'mdi-heart-outline' "></v-icon>
                   </v-btn>
                   <span style="margin:0 5px 0 -1px;">{{restaurant.like}}</span>
 
@@ -277,13 +277,14 @@ export default {
     },
     doLike(restId){
       // 좋아요한 게시물이 아니라면 좋아요에 추가
-      if(this.likes.indexOf(restId*1) == -1){
-        this.likes.push(restId*1);
+      if(this.likes.indexOf(restId) == -1){
+        this.likes.push(restId);
       }
       // 좋아요한 게시물이라면 좋아요에서 삭제
       else{
-        this.likes.splice(this.likes.indexOf(restId*1), 1);
+        this.likes.splice(this.likes.indexOf(restId), 1);
       }
+      console.log(this.likes);
     },
     doScrap(restId){
       // 스크랩한 게시물이 아니라면 스크랩에 추가

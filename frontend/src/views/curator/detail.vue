@@ -51,29 +51,20 @@
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title  v-if="restaurant.telphone" v-text="restaurant.telphone"></v-list-item-title>
-              <!-- <v-list-item-subtitle>Mobile</v-list-item-subtitle> -->
+              <v-list-item-title  v-else>등록된 연락처가 없습니다.</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
           <v-list-item>
             <v-list-item-icon>
-              <v-icon color="indigo">mdi-clock-outline</v-icon>
+              <v-icon color="indigo">mdi-link-variant</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>10:00 - 22:00</v-list-item-title>
-              <!-- <v-list-item-subtitle>Mobile</v-list-item-subtitle> -->
+              <v-list-item-title v-if="restaurant.url"><a :href="restaurant.url">{{restaurant.url}}</a></v-list-item-title>
+              <v-list-item-title v-else>등록된 URL이 없습니다.</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
-          <v-list-item>
-            <v-list-item-icon>
-              <v-icon color="indigo">mdi-parking</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>주차가능</v-list-item-title>
-              <!-- <v-list-item-subtitle>Mobile</v-list-item-subtitle> -->
-            </v-list-item-content>
-          </v-list-item>
         </div>
       </v-expand-transition>
 

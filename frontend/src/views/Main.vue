@@ -152,6 +152,20 @@ export default {
       });
   },
   methods: {
+    doit(iitem){
+      if(iitem.title == '참여취소') {
+        alert("취소하기 백엔드완성되면 이어붙일 예정")
+        // axios.delete(`${SERVER_URL}/userpage/restsacrp?userid=${this.userId}&restid=`)
+        // .then((response) => {
+        //     this.dialog = false
+        // })
+        // .catch((error) => {
+        //     console.log(error.response);
+        // });
+      }else{
+        this.$router.push('/map/detailMeetup?meetupId='+this.list.meetupId);
+      }
+    },
     MeetupDetail(item){
       this.dialog = true;
       this.list = item;

@@ -67,7 +67,9 @@ export default {
         userImg : user.followingRequestUserImg,
         followerFollowing: user.followerFollowing
       };
-      this.$router.push({name :'Profile', params: profileInfo});
+      this.$router.push('/user/profile?userId='+user.followingRequestId
+        +'&followerFollowing='+user.followerFollowing
+        +'&userImg='+user.followingRequestUserImg);
     },
     acceptFollowing(followingRequestId){
       axios

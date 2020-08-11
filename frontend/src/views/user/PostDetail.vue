@@ -45,7 +45,7 @@
                         v-model="dialog"
                         max-width="190"
                         >
-                            <v-list> 
+                        <v-list> 
                             <v-list-item
                             v-for="(item, index) in items"
                             :key="index"
@@ -58,20 +58,14 @@
                     </div>
                   </div>
                 </div>
-                <div></div>
               </div>
             </div>
           </div>
-          <div class="fc">
-            <div class="fc-frame" tabindex="0">
-              <div class="fc-fr">
-                <img
-                  :src="`https://i3b302.p.ssafy.io:8080/img/post?imgname=`+this.postlst.post_img_url"
-                  class="fc-img"
-                />
-              </div>
-            </div>
-          </div>
+        <img 
+        style="height: 350px;"
+        :src="`https://i3b302.p.ssafy.io:8080/img/post?imgname=`+this.postlst.post_img_url"
+        class="fc-img"
+        />
           <div class="fb">
             <section class="func">
               <span class="heart">

@@ -82,7 +82,6 @@ export default {
       let item = {
       post: post,
       comment : comment,
-      users: this.$route.params
       };
       this.$router.push({name :'PostDetail', params: item});
     },
@@ -133,10 +132,9 @@ export default {
   created() {
 
     this.userId = this.$cookie.get("userId");
-
-    this.anotherId = this.$route.params.userId
-    this.userImg = this.$route.params.userImg
-    this.followerFollowing = this.$route.params.followerFollowing
+    this.anotherId = this.$route.query.userId
+    this.userImg = this.$route.query.userImg
+    this.followerFollowing = this.$route.query.followerFollowing
     if (this.followerFollowing === 'true') {
       this.followerFollowing = 'true'
     }else if(this.followerFollowing === 'doing'){
@@ -163,7 +161,7 @@ export default {
         .then((response) => {
             this.postlst = response.data.data
             this.commentlst = response.data.comment;
-            console.log(this.postlst)
+            // console.log(this.postlst)
         })  
   },
   

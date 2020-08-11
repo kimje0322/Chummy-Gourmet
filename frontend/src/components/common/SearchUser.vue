@@ -89,7 +89,11 @@ export default {
             userImg : user.UserImg,
             followerFollowing: user.followerFollowing
         };
-        this.$router.push({name :'Profile', params: profileInfo});
+        // this.$router.push('/map/detailMeetup?meetupId='+this.list.meetupId);
+        this.$router.push('/user/profile?userId='+user.UserId
+        +'&followerFollowing='+user.followerFollowing
+        +'&userImg='+user.UserImg);
+        // this.$router.push({name :'Profile', params: profileInfo});
     },
     onSearchUser() {
       axios

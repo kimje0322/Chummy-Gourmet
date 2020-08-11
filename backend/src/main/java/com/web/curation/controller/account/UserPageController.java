@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.web.curation.dao.post.PostDao;
-import com.web.curation.dao.restaurant.RestaurantDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.dao.user.UserDetailDao;
 import com.web.curation.dao.user.UserPageDao;
@@ -56,8 +55,6 @@ public class UserPageController {
 	@Autowired
 	UserDetailDao userDetailDao;
 
-	@Autowired
-	RestaurantDao restDao;
 
 	@Autowired
 	PostDao postDao;

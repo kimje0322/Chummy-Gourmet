@@ -43,7 +43,20 @@
                 placeholder="write here!"
                 v-model="commentText"
               ></textarea>
-              <button @click="onCreate(commentText)" class="upload">게시</button>
+              <button @click="onCreate()" class="upload">게시</button>
+            </form>
+          </div>
+          <div v-if="recomment" class="top">
+            <span class="prf">
+              <img
+                style="height: 100%; width: 100%; -webkit-user-drag: none;"
+                :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+this.myimg"
+              />
+            </span>
+            <form style="height: 42px;" class="text-box">
+              <!-- v-model="recommentText" -->
+              <v-textarea style="height: 18px;" class="text" v-model="commentcontent"></v-textarea>
+              <button @click="onRewrite()" class="upload">수정</button>
             </form>
           </div>
         </section>
@@ -133,7 +146,7 @@
                         <div style="color: #8e8e8e; margin-top: 12px; margin-bottom: 4px;">
                           <a href="#" style="margin-right: 12px; color: #8e8e8e;">X시간</a>
                           <!-- v-if="lst.commentid === userId" -->
-                          <button>수정하기</button>
+                          <button @click="rewrite(lst)">수정하기</button>
                         </div>
                       </div>
                     </div>
@@ -175,12 +188,14 @@ export default {
     return {
       commentText: "",
       commentlst: [],
-      myimg:'',
-      postid:'',
-      postnickname:'',
-      postuserimg:'',
-      postcontent:'',
-      postname:''
+      myimg: "",
+      postid: "",
+      postnickname: "",
+      postuserimg: "",
+      postcontent: "",
+      postname: "",
+      recomment: false,
+      cid : "",
     };
   },
   watch: {
@@ -191,6 +206,7 @@ export default {
   mounted() {},
   created() {
     console.log(this.$route.params);
+    console.log("aaaaaaaaaaaaaaaa");
     // console.log(this.$cookie.get("userId"));
     axios
       .get(
@@ -203,7 +219,7 @@ export default {
         this.myimg = response.data.userImg;
       })
       .catch((error) => {
-        console.log(error.response)
+        console.log(error.response);
       });
 
     axios
@@ -225,20 +241,101 @@ export default {
       axios
         .delete(`${SERVER_URL}/post/comment?commentid=${lst.commentid}`)
         .then((response) => {
-          // console.log(response)
+          axios
+            .get(
+              `${SERVER_URL}/post/comment?commentid=${this.$route.params.postid}`
+            )
+            .then((response) => {
+              console.log(response);
+              this.commentlst = response.data.data;
+              this.postname = this.$route.params.postnickname;
+              this.postcontent = this.$route.params.postcontent;
+              this.postuserimg = this.$route.params.postuserimg;
+            })
+            .catch((error) => {
+              console.log(error.response);
+            });
         })
         .catch((error) => {});
     },
-    onCreate(text) {
+    onCreate() {
       var commentxt = {
         commentuserid: this.$cookie.get("userId"),
-        postcomment: text,
+        postcomment: this.commentText,
         postid: this.$route.params.postid,
       };
+      this.commentText = "";
+
       console.log(commentxt);
       axios
         .post(`${SERVER_URL}/post/comment`, commentxt)
-        .then((respose) => {})
+        .then((respose) => {
+          axios
+            .get(
+              `${SERVER_URL}/post/comment?commentid=${this.$route.params.postid}`
+            )
+            .then((response) => {
+              console.log(response);
+              this.commentlst = response.data.data;
+              this.postname = this.$route.params.postnickname;
+              this.postcontent = this.$route.params.postcontent;
+              this.postuserimg = this.$route.params.postuserimg;
+            })
+            .catch((error) => {
+              console.log(error.response);
+            });
+        })
+        .catch((error) => {});
+    },
+    rewrite(comment) {
+      this.recomment = true
+        // var commmenttxt = {
+        //   commentuserid : this.$cookie.get("userId"),
+        //   commentcontent: comment.postcomment,
+        //   postid: this.$route.params.postid,
+        // 148 /
+        // 5;
+      this.cid = comment.commentid
+      
+      this.commentcontent = comment.postcomment;
+      console.log("여기여기");
+      console.log(this.commentcontent);
+      // axios
+      //   .post(`${SERVER_URL}/post/comment`, commmenttxt)
+      //   .then((response) => {
+      //     alert("수정 완료");
+      //   })
+    },
+    onRewrite() {
+      var commentxt = {
+        // commentuserid: this.$cookie.get("userId"),
+        postcomment: this.commentcontent,
+        commentid: this.cid
+
+        // postid: this.$route.params.postid,
+      };
+      
+      axios
+        .put(`${SERVER_URL}/post/comment`, commentxt)
+        .then((response) => {
+          this.recomment = false
+          console.log(commentxt)
+          alert("성공!");
+          axios
+            .get(
+              `${SERVER_URL}/post/comment?commentid=${this.$route.params.postid}`
+            )
+            .then((response) => {
+              console.log(response);
+              this.commentlst = response.data.data;
+              this.postname = this.$route.params.postnickname;
+              this.postcontent = this.$route.params.postcontent;
+              this.postuserimg = this.$route.params.postuserimg;
+            })
+            .catch((error) => {
+              console.log(error.response);
+            });
+        })
         .catch((error) => {});
     },
     // Text() {

@@ -3,7 +3,7 @@
       <v-row>
       <v-col v-for="item in items" :key="item.title" class="d-flex child-flex" cols="4">
           <v-card flat tile class="d-flex">
-              <v-img @click.stop="dialog = true" :src="item.img" aspect-ratio="1" class="grey lighten-2">
+              <v-img @click.stop="show(item)" :src="item.img[0]" aspect-ratio="1" class="grey lighten-2">
               <template v-slot:placeholder>
               <v-row
                   class="fill-height ma-0"
@@ -14,8 +14,9 @@
               </v-row>
               </template>
               </v-img>
-          </v-card> 
-      </v-col>
+          </v-card>
+      </v-col>    
+      
       
       <!-- dialog -->
       <v-dialog
@@ -33,6 +34,8 @@
           </v-list-item>
       </v-list>
       </v-dialog>
+
+      
       </v-row>
   </v-layout>
 </template>
@@ -52,6 +55,8 @@ export default {
 
     data () {
       return {
+        restaurant: [],
+        restid:[],
         items:[],
         iitems:[
         { title: '상세보기' },
@@ -59,32 +64,57 @@ export default {
       ],
        dialog: false,
        data : [],
+       list : [],
       }
     },
     created(){
-      // console.log("생성");
-      // console.log(this.userId);
-       axios
-        .get(`${SERVER_URL}/userpage/getRest?userid=${this.userId}`)
+      this.whenCreated();
+    },
+    methods: {
+      whenCreated() {
+        axios
+        .get(`${SERVER_URL}/rest/scrap/${this.userId}`)
         .then((response) => {
-          // console.log(response);
-          this.items = response.data;
+          this.restid = response.data; // [11,12,13]
+          for (var i=0; i<this.restid.length; i++) {
+            axios
+              .get(`${SERVER_URL}/rest/${this.restid[i]}`)
+              .then((response) => {
+                var restaurant = response.data;
+                this.restaurant = restaurant
+                // String 형태의 img src 5개를 파싱해서 배열로 만듬
+                let imgSrcs = restaurant.img;
+                imgSrcs = imgSrcs.replace('[', '');
+                imgSrcs = imgSrcs.replace(']', '');
+                imgSrcs = imgSrcs.replace(/(\s*)/g, ''); // 모든공백제거
+                imgSrcs = imgSrcs.split(",");
+                restaurant.img = imgSrcs;               
+                this.items.push(restaurant); 
+              })
+              .catch((error) => {
+              console.log(error.response);
+              });
+            }
         })
         .catch((error) => {
           console.log(error.response);
         });
-    },
-    methods: {
+      },
+      show(item){
+        this.dialog = true;
+        this.list = item;
+      },
       doit(iitem){
         if(iitem.title == '삭제') {
-          axios.delete(`${SERVER_URL}/userpage/restsacrp?userid=${this.userId}&restid=`)
+          console.log(this.list);
+          axios.delete(`${SERVER_URL}/rest/scrap?restid=${this.list.id}&userid=${this.userId}`)
           .then((response) => {
               this.dialog = false
-              router.go(-1)
+              this.items = []
+              this.whenCreated();
           })
-          .catch((error) => {
-              console.log(error.response);
-          });
+        } else {
+          router.push({name: "Detail", params: this.list});
         }
       }
     }

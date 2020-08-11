@@ -26,34 +26,53 @@
             <History :proptoTopsub="users" v-else-if="item=='History'"></History>
             <!-- profile -->
             <v-card-text v-else>
-              <!-- meetupData -->
-              <!-- <h2>Meet Up</h2><br>
-            <div v-if="meetupData" class="meetupData">
-              <h3 v-for="(meetup, i) in meetupData" :key="i">{{ meetup.meetupTitle }}</h3>-->
-              <!-- <span class="meetup-title">{{ meetupData.title }}</span>
-              <span class="ml-2"><i class="fas fa-crown"></i><span class="mr-2"></span>{{ meetupData.master }}</span>-->
-              <!-- <v-row>
-            </v-row>
-          </div>
-
-          <div v-else class="meetupData">
-            <h3 class="text-meetup">예정된 meetup이 없습니다.</h3>
-              </div>-->
-
-              <v-row justify="space-around">
-                <v-date-picker
-                  full-width
-                  v-model="date1"
-                  :show-current="showCurrent"
-                  :multiple="multiple"
-                  :events = "dateFunctionEvents"
-                ></v-date-picker>
+              <v-row dense>
+                <v-col
+                  v-for="(item, i) in mData"
+                  :key="i"
+                  cols="12"
+                >
+                  <v-card @click="MeetupDetail(item)">
+                    <div class="d-flex">
+                      <v-avatar
+                      class="ma-3"
+                      size="85"
+                      tile
+                      >
+                        <v-img :src="item.meetupImg"></v-img>
+                      </v-avatar>
+                      <div>
+                        <v-card-title
+                        class="headline"
+                        v-text="item.meetupTitle"
+                        ></v-card-title>
+                        <v-card-subtitle v-html="item.meetupLocation+'<br>'+item.meetupPersonnel.slice(0, 16)" ></v-card-subtitle>
+                      </div>
+                    </div>
+                  </v-card>
+                </v-col>
               </v-row>
             </v-card-text>
           </v-card>
         </v-tab-item>
       </v-tabs-items>
     </div>
+    <!-- dialog -->
+      <v-dialog
+        dark
+        v-model="dialog"
+        max-width="190"
+        >
+         <v-list> 
+          <v-list-item
+          v-for="(iitem, index) in iitems"
+          :key="index"
+          @click="doit(iitem)"
+          >
+          <v-list-item-title>{{ iitem.title }}</v-list-item-title>
+          </v-list-item>
+      </v-list>
+      </v-dialog>
   </v-app>
 </template>
 
@@ -79,21 +98,14 @@ export default {
   
   data: () => {
     return {
-      // 밋업 날짜만 분리한 데이터
-      dateData: {
-        muyear: [],
-        mumonth: [],
-        muday: [],
-      },
-      date1: new Date().toISOString().substr(0, 10),
-      enableEvents: true,
-      showCurrent: true,
+      iitems:[
+        { title: '밋업상세보기' },
+        { title: '참여취소' },
+      ],
+      list:[],
+      dialog:false,
       // 밋업 전체 데이터
       mData: {}, 
-      // 밋업 날짜만 담긴 list
-      meetupDate: [],
-      month: false,
-      multiple: false,
       users: {},
       userId: "",
       contents: "",
@@ -112,16 +124,6 @@ export default {
           onClick: () => {
             console.log("클릭");
           },
-        },
-      ],
-      options: [
-        {
-          value: "option1",
-          title: "옵션1",
-        },
-        {
-          value: "option2",
-          title: "옵션2",
         },
       ],
     };
@@ -143,14 +145,6 @@ export default {
       )
       .then((response) => {
         this.mData = response.data
-        for (var i=0; i<this.mData.length; i++) {
-          this.meetupDate.push(this.mData[i].meetupPersonnel.slice(0, 11));
-        }
-        for (var j=0; j<this.meetupDate.length; j++) {
-          this.dateData.muyear.push(this.meetupDate[j].slice(0, 4));
-          this.dateData.mumonth.push(this.meetupDate[j].slice(5, 7));
-          this.dateData.muday.push(this.meetupDate[j].slice(8, 10));
-        }
       })
       .catch((error) => {
         console.log(error.response);
@@ -158,17 +152,9 @@ export default {
       });
   },
   methods: {
-    // 이번달 달력에서 
-    dateFunctionEvents(date) {
-      const [year, month, day] = date.split("-");
-      for (let i = 0; i < this.dateData.muyear.length; i++) {
-         if (this.dateData.muyear[i] == year
-            &&this.dateData.mumonth[i] == month
-            &&this.dateData.muday[i] == day){
-              return true
-          }
-      }
-      return false;
+    MeetupDetail(item){
+      this.dialog = true;
+      this.list = item;
     },
   },
 };

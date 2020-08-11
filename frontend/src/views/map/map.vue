@@ -1,19 +1,168 @@
 
 <template>
   <div class="map_wrap_1">
-          <v-btn
-            fab
-            small
-            color="blue accent-2"
-            bottom
-            right
-            absolute
-            style="top:470px;"
-          >
-            <router-link to="/map/createMeetup">
-              <v-icon color="white">mdi-plus</v-icon>
-            </router-link>
+        
+        <v-speed-dial
+          style="top:470px; height:10px;"
+          v-model="fab"
+          absolute bottom right
+          direction="top"
+          transition="slide-y-reverse-transition"
+          retain-focus-on-click="true"
+        >
+          <template v-slot:activator>
+            <v-btn
+              v-model="fab"
+              color="blue darken-2"
+              dark small fab
+            >
+              <v-icon v-if="fab">mdi-close</v-icon>
+              <v-icon v-else>mdi-dots-vertical</v-icon>
+            </v-btn>
+          </template>
+
+          <v-btn fab dark small color="pink" @click="moveCurPosition">
+            <v-icon color="white">mdi-map-marker</v-icon>
           </v-btn>
+
+          <v-btn fab dark small color="green">
+            <router-link to="/map/createMeetup">
+              <v-icon color="white">mdi-pencil</v-icon>
+            </router-link>    
+          </v-btn>
+
+          <v-btn
+            fab small dark
+            color="indigo"
+            @click="menu=true"
+          >
+            <v-icon color="white">mdi-tune-variant</v-icon>
+          </v-btn>
+          
+        </v-speed-dial>
+
+        <!-- 필터창  -->
+          <div class="text-center">
+            <v-menu
+               v-model="menu"
+              :close-on-click="false"
+              :close-on-content-click="false"
+              :nudge-width="375"
+              :position-y="500"
+              offset-overflow
+              offset-y
+            >
+
+              <v-card>
+                <v-list>
+
+                  <v-list-item>
+                    <v-select
+                      ref="select1"
+                      v-model="selectedFoods"
+                      :items="foods"
+                      label="선호음식을 선택해주세요"
+                      multiple small-chips deletable-chips
+                      prepend-icon="mdi-food"
+                      auto
+                    >
+
+                      <template v-slot:append-item>
+                        <v-divider class="mb-2"></v-divider>
+                        <v-list-item>
+                            <v-btn block @click="$refs.select1.blur()">
+                              확인
+                            </v-btn>
+                        </v-list-item>
+                      </template>
+
+
+                    </v-select>
+                  </v-list-item>
+
+                  <v-list-item>
+                    <v-select
+                      ref="select2"
+                      v-model="selectedProps"
+                      :items="properties"
+                      label="성향을 선택해주세요"
+                      multiple small-chips deletable-chips
+                      prepend-icon="mdi-heart"
+                      auto
+                    >
+                    
+                    <template v-slot:append-item>
+                        <v-divider class="mb-2"></v-divider>
+                        <v-list-item>
+                            <v-btn block @click="$refs.select2.blur()">
+                              확인
+                            </v-btn>
+                        </v-list-item>
+                      </template>
+                    
+                    
+                    </v-select>
+                  </v-list-item>
+                  
+                  <v-list-item>
+
+                    <v-dialog
+                      ref="dialog" v-model="modalCalendar"
+                      :return-value.sync="dates"
+                      persistent width="290px"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                          prepend-icon="mdi-calendar-month-outline"
+                          v-model="dateRangeText"
+                          label="기간을 선택해주세요"
+                          readonly
+                          v-bind="attrs"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+
+                      <v-date-picker v-model="dates" range scrollable show-current
+                        :min="new Date().toISOString().substr(0, 10)"
+                        max="2050-01-01"
+                      >
+                        <v-spacer></v-spacer>
+                        <v-btn text color="primary" @click="modalCalendar = false">Cancel</v-btn>
+                        <v-btn text color="primary" @click="$refs.dialog.save(dates)">OK</v-btn>
+                      </v-date-picker>
+                    </v-dialog>
+
+                  </v-list-item>
+
+                  <v-list-item>
+
+                    <v-range-slider
+                      v-model="personnel"
+                      prepend-icon="mdi-account-group"
+                      :tick-labels="['2','3','4','5','6','7','8']"
+                      min="2" max="8"
+                      ticks="always" tick-size="2"
+                    >
+                    </v-range-slider>
+
+                  </v-list-item>
+
+                </v-list>
+
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+
+                  <v-btn text @click="menu = false">닫기</v-btn>
+                  <v-btn color="primary" text @click.stop="doFilter" @click="menu=false">적용</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-menu>
+          </div>
+
+
+
+
+
     <div id="map1" style="position:unset;">map</div>
     <div id="menu_wrap" class="bg_white">
         <div class="option">
@@ -29,9 +178,6 @@
               <button @click="search"><v-icon size="20">mdi-magnify</v-icon></button> 
             </div>
         </div>
-        <!-- <hr>
-        <ul id="placesList"></ul>
-        <div id="pagination"></div> -->
     </div>
     <div class="custom_zoomcontrol radius_border">
       <span @click="zoomIn">
@@ -50,8 +196,8 @@ import axios from "axios";
 import router from "@/routes";
 
 const CURLAT = 36.3587222, CURLNG = 127.3439205;
-const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-// const SERVER_URL = "https://localhost:8080";
+// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "https://localhost:8080";
 
 export default {
   data: () => {
@@ -62,7 +208,36 @@ export default {
         lng : '',
       },
       keyword : '',
+
+
+      modalFoods : false,
+      foods: ['한식', '중식', '양식', '일식', '분식', '뷔페'],
+      selectedFoods : [],
+
+      modalProps : false,
+      properties : [
+        "낙천적", "부정적", "내향적", "외향적", "충동적", "사교적",
+        "대담함", "성실함", "냉정함", "온화함", "신중함", "게으름"
+      ],
+      selectedProps : [],
+      
+      
+      modalCalendar: false,
+      dates: [new Date().toISOString().substr(0, 10),new Date().toISOString().substr(0, 10)],
+
+      personnel : [2,8],
+
+      menu: false,
+      fab : false,
     };
+  },
+  computed: {
+    dateRangeText () {
+      if(this.dates[0] > this.dates[1]){
+        this.swap(this.dates);
+      }
+      return this.dates.join(' ~ ')
+    }
   },
   mounted() {
     // 현재 위치 확인
@@ -78,7 +253,6 @@ export default {
     //   console.log("이미 로딩됨");
     //   this.initMap();
     // } else {
-    //   console.log("카카오맵 로딩");
       const script = document.createElement("script");
       /* global kakao */
       script.onload = () => kakao.maps.load(this.initMap);
@@ -88,6 +262,25 @@ export default {
     // }
   },
   methods: {
+    doFilter(){
+      console.log(this.selectedFoods);
+      console.log(this.selectedProps);
+      console.log(this.dates);
+      console.log(this.personnel);
+    },
+    moveCurPosition(){
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(pos => {
+          var coords = new kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+          this.map.setCenter(coords);
+        });
+     }
+    },
+    swap(dates) {
+        let temp = this.dates[0];
+        this.dates[0] = this.dates[1];
+        this.dates[1] = temp;
+    },
     initMap() {
       // map 초기설정
       var container = document.getElementById("map1");
@@ -143,7 +336,7 @@ export default {
                                       </div>
                                       <div class="_body">
                                           <div class="img">
-                                              <img src="https://img.siksinhot.com/place/1485274468095571.jpg?w=307&h=300&c=Y" width="73" height="70"/>
+                                              <img src="${meetup.img}" width="73" height="70"/>
                                           </div>
                                           <div class="_desc">
                                               <div class="ellipsis"><label>일시 : </label> ${meetup.date}</div>
@@ -154,17 +347,6 @@ export default {
                                   </div> 
                               </div>
                             `
-                            // `
-                            //   <div class="overlay__info">
-                            //     <a class="name" href="https://place.map.kakao.com/17600274" target="_blank"><span class="">월정리 해수욕장</span></a>
-                            //     <div class="_desc">
-                            //         <img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/place_thumb.png" alt="">
-                            //         <div class="">${meetup.date}</div>
-                            //         <div class="">${meetup.location}</div>
-                            //     </div>
-                            //   </div>
-                            
-                            // `
                         });
                         overlays.push(overlay);
                         kakao.maps.event.addListener(marker, "click", this.toggleInfoWindow(this.map, marker, overlay, overlays));
@@ -228,7 +410,6 @@ export default {
 
 
 <style>
-
 #map1 {
   width: 100%;
   height: 610px;
@@ -297,18 +478,5 @@ export default {
 ._info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
 ._info .link {color: #5085BB;}
 
-
-/* .overlay__info {border-radius: 6px; margin: -175px 0 12px 0; float:left;position: relative; border: 1px solid #ccc; border-bottom: 2px solid #ddd;background-color:#fff;}
-.overlay__info:nth-of-type(n) {border:0; box-shadow: 0px 1px 2px #888;}
-.overlay__info .name {display: block; background: #d95050; background: #d95050 url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center; text-decoration: none; color: #fff; padding:12px 36px 12px 14px; font-size: 14px; border-radius: 6px 6px 0 0}
-.overlay__info a span {background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/place_icon.png) no-repeat; padding-left: 27px;}
-.overlay__info ._desc {padding:14px;position: relative; min-width: 230px;}
-.overlay__info img {vertical-align: top;}
-.overlay__info ._address {font-size: 12px; color: #333; position: absolute; left: 80px; right: 14px; top: 24px; white-space: normal}
-.overlay__info:after {content:'';position: absolute; margin-left: -11px; left: 50%; bottom: -12px; width: 22px; height: 12px; background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png) no-repeat 0 bottom;} */
-
-
-    
 </style>
-
 

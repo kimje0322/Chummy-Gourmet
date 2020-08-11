@@ -165,40 +165,6 @@
           </v-date-picker>
         </v-menu>
 
-        <!-- 파티 시간
-        <v-menu
-          ref="menu"
-          v-model="menu2"
-          :close-on-content-click="false"
-          :return-value.sync="date"
-          transition="scale-transition"
-          offset-y
-          min-width="300px"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-              solo
-              v-model="meetup.time"
-              placeholder="시간"
-              :append-icon="isColor1 ? 'mdi-calendar-check orange--text text--lighten-2' : 'mdi-calendar-check'"
-              @click:append="isColor1 = !isColor1"
-              readonly
-              v-bind="attrs"
-              v-on="on"
-            ></v-text-field>
-          </template>
-            <v-time-picker
-            v-if="menu2"
-            v-model="time"
-            full-width
-            @click:minute="$refs.menu.save(time)"
-          >
-            <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
-            <v-btn text color="primary" @click="$refs.menu.save(meetup.date)">OK</v-btn>
-            </v-time-picker>
-        </v-menu> -->
-
         <!-- 파티 인원 -->
         <div id="dropdown-example">
           <v-overflow-btn
@@ -212,6 +178,52 @@
           ></v-overflow-btn>
         </div>
 
+        <!-- 성향 -->
+        <div class="text-center">
+          <v-dialog
+            v-model="dialog2"
+            width="500"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field  solo v-model="selected"
+                v-on="on" v-bind="attrs"
+                placeholder="성향">
+              </v-text-field>
+            </template>
+
+              <v-card
+                class="mx-auto"
+                max-width="400"
+              >
+                <v-toolbar
+                  flat
+                  dark
+                >
+                  <v-btn icon>
+                    <v-icon @click="dialog2 = false">mdi-close</v-icon>
+                  </v-btn>
+                  <v-toolbar-title>밋업 성향 선택</v-toolbar-title>
+                </v-toolbar>
+
+                <v-card-text>
+                  <h2 class="subtitle mb-1">원하는 성향을 선택하세요</h2>
+                  <v-chip-group
+                    active-class="deep-purple--text text--accent-4"
+                    column
+                    multiple
+                  >
+                    <v-chip outlined v-for="(property,index) in properties" :key="index"
+                      @click="selected.indexOf(property) != -1 ? selected.splice(selected.indexOf(property), 1) : selected.push(property)"
+                    >
+                    {{property}}                        
+                    </v-chip>
+                  </v-chip-group>
+                </v-card-text>
+              </v-card>
+          </v-dialog>
+        </div>
+
+
       </div>
     <!-- </v-app> -->
   </div>
@@ -220,8 +232,8 @@
 <script>
 import axios from "axios";
 
-const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-// const SERVER_URL = "https://localhost:8080";
+// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "https://localhost:8080";
 
 export default {
   data: () => {
@@ -235,6 +247,7 @@ export default {
       isColor1: false,
       isClick: false,
       dialog: false,
+      dialog2: false,
 
       restaurants : [],
 
@@ -245,7 +258,8 @@ export default {
         address : '',
         date : '',
         personnel : '',
-        master : 70
+        master : 70,
+        img : '',
       },
 
       error: {
@@ -257,7 +271,14 @@ export default {
         master : false,
       },
 
-      dropdown_font: ["1", "2", "3", "4", "5", "6+"],
+      dropdown_font: ["1", "2", "3", "4", "5", "6", "7", "8"],
+
+      properties : [
+        "낙천적", "부정적", "내향적", "외향적", "충동적", "사교적",
+        "대담함", "성실함", "냉정함", "온화함", "신중함", "게으름"
+      ],
+      
+      selected : [],
 
       targetLocation : {
         lat : '',
@@ -346,7 +367,7 @@ export default {
         alert("인원을 선택해주세요.");
         return;
       }
-
+      console.log(this.meetup)
       axios
         .post(`${SERVER_URL}/meetup`, this.meetup)
         .then((response) => {
@@ -373,8 +394,6 @@ export default {
       return;}
     },
     search(){
-      // 주소-좌표 변환 객체를 생성합니다
-      // var geocoder = new kakao.maps.services.Geocoder();
       axios
         .get(`${SERVER_URL}/curation?location=${this.keyword}`)
         .then((response) => {
@@ -384,6 +403,14 @@ export default {
 
           // 음식점리스트 돌면서 좌표(position), 거리(dist) 구하기
           restaurants.forEach(restaurant => {
+
+            // String 형태의 img src 5개를 파싱해서 배열로 만듬
+            let imgSrcs = restaurant.img;
+            imgSrcs = imgSrcs.replace('[', '');
+            imgSrcs = imgSrcs.replace(']', '');
+            imgSrcs = imgSrcs.replace(/(\s*)/g, ''); // 모든공백제거
+            imgSrcs = imgSrcs.split(",");
+            restaurant.img = imgSrcs;
 
             // 주소 -> 좌표
             this.geocoder.addressSearch(restaurant.location, (result, status) => {
@@ -411,8 +438,10 @@ export default {
         })
     },
     select(restaurant){
+      console.log(restaurant);
       this.meetup.location = restaurant.name;
       this.meetup.address = restaurant.location;
+      this.meetup.img = restaurant.img[0];
       this.dialog = false;
     },
   },

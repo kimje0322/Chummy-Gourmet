@@ -15,7 +15,8 @@
               </template>
               </v-img>
           </v-card>
-      </v-col>
+      </v-col>    
+      
       
       <!-- dialog -->
       <v-dialog

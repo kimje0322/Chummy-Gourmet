@@ -30,7 +30,7 @@ public interface PostDao extends JpaRepository<Post, String> {
 			+ "values(:#{#post.postuserid},:#{#post.postcontent},now(),:#{#post.postimgurl})",nativeQuery=true)
 	void insert(Post post);
 
-	@Query(value = "update post set post_content = :#{#post.postcontent}, post_date = now() "
+	@Query(value = "update post set post_content = :#{#post.postcontent}, post_date = now(), post_img_url = :#{#post.postimgurl} "
 			+ "where post_id = :#{#post.postid}",nativeQuery=true)
 	void update(Post post);
 	

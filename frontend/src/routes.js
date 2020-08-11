@@ -33,8 +33,9 @@ import PostUpdate from './views/user/PostUpdate.vue'
 
 import UpdateUserInfo from './views/user/UpdateUserInfo.vue'
 
-// //사진업로드 테스트용
+// //테스트용
 import UploadTest from './views/feed/uploadtest.vue'
+import Chat from './views/feed/chat.vue'
 
 //피드 게시글 업로드
 import AddFeed from './views/feed/addFeed.vue'
@@ -52,14 +53,29 @@ export default new VueRouter({
             //     navbar: true
             // }
         },
+        //채팅 테스트용 추후 삭제
+        {
+            path: '/chattest',
+            name: 'Chat',
+            component: Chat,
+            meta: {
+                navbar: true
+            },
+            props:true
+        },
         //사진업로드 테스트용 추후 삭제.
         {
             path: '/uploadtest',
             name: 'UploadTest',
             component: UploadTest,
-            meta: {
-                navbar: true
-            }
+            props:true,
+            beforeEnter: (to, from, next) => {
+                if (to.params.name) {
+                  next();
+                } else {
+                  next({name: 'Chat'})
+                }
+              }
         },
         {
 

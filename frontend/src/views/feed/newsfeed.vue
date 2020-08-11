@@ -93,8 +93,20 @@
           </div>
           <div class="fb">
             <section class="func">
-              <span class="heart">
-                <button @click="onLike(lst.postlike)" class="heart-btn">
+              <span v-if="!like" @click="onLike(lst.postlike)" class="heart">
+                <button class="heart-btn">
+                  <div style="border: 0" class="heart-div">
+                    <span style="margin: 0; height: 24px; width: 24px;">
+                      <i
+                        style="display: block; position: relative; height: 24px; width: 24px;"
+                        class="far fa-heart"
+                      ></i>
+                    </span>
+                  </div>
+                </button>
+              </span>
+              <span v-else @click="onLike(lst.postlike)" class="heart">
+                <button class="heart-btn">
                   <div style="border: 0" class="heart-div">
                     <span style="margin: 0; height: 24px; width: 24px;">
                       <i
@@ -192,7 +204,8 @@ export default {
   data() {
     return {
       postlst: [],
-      commentlst :[]
+      commentlst :[],
+      like: false,
     };
   },
 
@@ -222,7 +235,6 @@ export default {
       });
   },
   methods: {
-<<<<<<< HEAD
     onDelete(lst) {
       console.log(lst)
       axios
@@ -233,23 +245,21 @@ export default {
         .catch((error) => {});
 
     },
-    onComment(pid, pname, pcontent) {
-=======
     onComment(pid, pname, pcontent, puserimg) {
->>>>>>> a0b948faf14602147ec0c8cf7bb5115ed0973ffc
       let postinfo = {
         postid: pid,
         postnickname: pname,
         postcontent: pcontent,
-        postuserimg: puserimg
+        postuserimg: puserimg,
       };
       // console.log("dfsdafgfgfdfadf");
       console.log(pid);
       router.push({ name: "Comment", params: postinfo });
     },
     onLike(plike) {
-      // axios
-      //   .
+      this.like = !this.like
+      axios
+        .post(`${SERVER_URL}/post`)
     },
     onRevise(lst) {
       let repost = {

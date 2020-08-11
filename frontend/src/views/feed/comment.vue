@@ -133,7 +133,7 @@
                         <div style="color: #8e8e8e; margin-top: 12px; margin-bottom: 4px;">
                           <a href="#" style="margin-right: 12px; color: #8e8e8e;">X시간</a>
                           <!-- v-if="lst.commentid === userId" -->
-                          <button>수정하기</button>
+                          <button @click="rewrite(lst)">수정하기</button>
                         </div>
                       </div>
                     </div>
@@ -241,6 +241,19 @@ export default {
         .then((respose) => {})
         .catch((error) => {});
     },
+    rewrite(comment) {
+      var commmenttxt = {
+        commentuserid : this.$cookie.get("userId"),
+        commentcontent: comment.postcomment,
+        postid: this.$route.params.postid,
+      };
+      axios
+        .post(`${SERVER_URL}/post/comment`, commmenttxt)
+        .then((response) => {
+          alert("수정 완료");
+        })
+
+    }
     // Text() {
     //     $('.upload').css('color', 'blue')
     // }

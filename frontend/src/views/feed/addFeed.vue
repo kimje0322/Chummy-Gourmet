@@ -52,7 +52,6 @@
 
           <v-textarea v-if="!revise" v-model="postcontent" placeholder="내용입력" style="margin-top: 0;"></v-textarea>
         </div>
-<<<<<<< HEAD
 
         <!-- <div style="padding: 12px; 0;">
           <div style="margin: 0 12px; border: solid 1px var(--divider); border-radius: 8px;">
@@ -62,12 +61,6 @@
         <input ref="imageInput" type="file" hidden @change="onChangeImages" />
         <!-- <v-btn type="button" @click="onClickImageUpload">이미지 업로드</v-btn> -->
         <!-- <v-btn @click="addImg">입력</v-btn> -->
-=======
-        <!-- <input ref="imageInput" type="file" hidden @change="onChangeImages" /> -->
-        <v-btn type="button" @click="onClickImageUpload">이미지 업로드</v-btn>
-        <v-img v-if="postimgurl" :src="postimgurl"></v-img>
-        <v-btn @click="addImg">입력</v-btn>
->>>>>>> a0b948faf14602147ec0c8cf7bb5115ed0973ffc
       </div>
     </v-app>
   </section>
@@ -86,14 +79,9 @@ export default {
       postcontent: "",
       postimgurl: "",
       postuserid: this.$cookie.get("userId"),
-<<<<<<< HEAD
       username: "",
       userimg: "",
       revise: false,
-=======
-      username : "",
-      userimg : ""
->>>>>>> a0b948faf14602147ec0c8cf7bb5115ed0973ffc
     };
   },
   created() {
@@ -118,11 +106,7 @@ export default {
         console.log(response);
         this.username = response.data.userNickname;
         this.userimg = response.data.userImg;
-<<<<<<< HEAD
         console.log(this.username);
-=======
-        console.log(this.username)
->>>>>>> a0b948faf14602147ec0c8cf7bb5115ed0973ffc
       })
       .catch((error) => {
         console.log(error.response);
@@ -147,25 +131,22 @@ export default {
           console.log(error.response);
           alert("이미지 전송 실패");
         });
+
     },
-<<<<<<< HEAD
-    // reviseImg() {
-    //   axios
-    //     .post(`${SERVER_URL}/post/img`, file)
+    reviseImg() {
+      // axios
+      //   .post(`${SERVER_URL}/post/img`, file)
 
-    //     .then((response) => {
-    //       this.postimgurl = response.data;
-    //       console.log(this.postimgurl);
-    //     })
+      //   .then((response) => {
+      //     this.postimgurl = response.data;
+      //     console.log(this.postimgurl);
+      //   })
 
-    //     .catch((error) => {
-    //       console.log(error.response);
-    //       alert("이미지 전송 실패");
-    //     });
-
-    // },
-=======
->>>>>>> a0b948faf14602147ec0c8cf7bb5115ed0973ffc
+      //   .catch((error) => {
+      //     console.log(error.response);
+      //     alert("이미지 전송 실패");
+      //   });
+    },
     //게시물을 DB에 저장하는 부분
     addPost() {
       var newpost = {

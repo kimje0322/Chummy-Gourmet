@@ -48,8 +48,9 @@
             <div class="fc-frame" tabindex="0">
               <div class="fc-fr">
                 <img
-                  :src="`https://i3b302.p.ssafy.io:8080/img/post?imgname=`+this.postimgurl"
-                  class="fc-img"
+                style="height: 350px;"
+                :src="`https://i3b302.p.ssafy.io:8080/img/post?imgname=`+this.postimgurl"
+                class="fc-img"
                 />
               </div>
             </div>

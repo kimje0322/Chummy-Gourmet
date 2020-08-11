@@ -1,5 +1,5 @@
 <template>
-  <div id="joininfo">
+  <v-app>
     <v-toolbar-title >
       <v-toolbar dark>
         <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
@@ -7,6 +7,9 @@
         <p class="my-auto">Profile 수정</p>
         <v-spacer></v-spacer>
         <v-spacer></v-spacer>
+        <a @click="update">
+           <i class="fas fa-check"></i>
+        </a>
       </v-toolbar>
     </v-toolbar-title>
     <div class="entire">
@@ -189,7 +192,7 @@
     </div>
 
     <!-- interest -->
-    <div class="label-with-input">
+    <div class="label-with-input" style="margin-bottom:100px;">
       <label class="userInfo">관심사</label>
       <ul class="select-many-interest">
         <li>
@@ -267,14 +270,8 @@
         <div class="error-text" v-if="error.interests">{{error.interests}}</div>
       </ul>
     </div>
-    <!-- <span class="selectInfo">게임</span> -->
-    <!-- <router-link to="/user/finishjoin"> -->
-    <v-btn color="warning" class="next-btn" @click="update">
-      <h4>수정</h4>
-    </v-btn>
-    <!-- </router-link> -->
   </div>
-  </div>
+  </v-app>
 </template>
 
 <script>

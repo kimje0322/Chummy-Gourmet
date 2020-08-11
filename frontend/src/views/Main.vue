@@ -42,11 +42,11 @@
 
               <v-row justify="space-around">
                 <v-date-picker
-                  v-model="picker"
+                  full-width
+                  v-model="date1"
                   :show-current="showCurrent"
-                  :type="month ? 'month' : 'date'"
                   :multiple="multiple"
-                  :events="enableEvents ? functionEvents : null"
+                  :events = "dateFunctionEvents"
                 ></v-date-picker>
               </v-row>
             </v-card-text>
@@ -76,44 +76,7 @@ export default {
     Message,
     History,
   },
-  created() {
-    // alert(this.$cookie.get("userId"));
-    this.userId = this.$cookie.get("userId");
-    axios
-      .get(`${SERVER_URL}/userpage/getuser?userId=`+ this.userId)
-      .then((response) => {
-        // console.log(response.data);
-        this.users = response.data;
-      })
-      .catch((error) => {
-        console.log(error.response);
-      });
-    //  meetup 정보 받아오기
-    axios
-      .get(
-        `${SERVER_URL}/userpage/getuserMeetup?userId=${this.userId}`
-      )
-      .then((response) => {
-        // console.log(response.data);
-        // console.log("밋업 data 성공");
-        this.mData = response.data
-        // console.log(this.mData)
-        for (var i=0; i<this.mData.length; i++) {
-          this.meetupDate.push(this.mData[i].meetupPersonnel.slice(0, 11));
-        }
-        for (var j=0; j<this.meetupDate.length; j++) {
-          this.dateData.muyear.push(this.meetupDate[j].slice(0, 4));
-          this.dateData.mumonth.push(this.meetupDate[j].slice(5, 7));
-          this.dateData.muday.push(this.meetupDate[j].slice(8, 10));
-        }
-        // console.log(this.dateData)
-      })
-      .catch((error) => {
-        console.log(error.response);
-        this.meetupData = false;
-        console.log("밋업 실패");
-      });
-  },
+  
   data: () => {
     return {
       // 밋업 날짜만 분리한 데이터
@@ -122,7 +85,7 @@ export default {
         mumonth: [],
         muday: [],
       },
-      picker: new Date().toISOString().substr(0, 10),
+      date1: new Date().toISOString().substr(0, 10),
       enableEvents: true,
       showCurrent: true,
       // 밋업 전체 데이터
@@ -163,26 +126,48 @@ export default {
       ],
     };
   },
-  computed: {
-    functionEvents() {
-      return this.month ? this.monthFunctionEvents : this.dateFunctionEvents;
-    },
+  created() {
+    this.userId = this.$cookie.get("userId");
+    axios
+      .get(`${SERVER_URL}/userpage/getuser?userId=`+ this.userId)
+      .then((response) => {
+        this.users = response.data;
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+    //  meetup 정보 받아오기
+    axios
+      .get(
+        `${SERVER_URL}/userpage/getuserMeetup?userId=${this.userId}`
+      )
+      .then((response) => {
+        this.mData = response.data
+        for (var i=0; i<this.mData.length; i++) {
+          this.meetupDate.push(this.mData[i].meetupPersonnel.slice(0, 11));
+        }
+        for (var j=0; j<this.meetupDate.length; j++) {
+          this.dateData.muyear.push(this.meetupDate[j].slice(0, 4));
+          this.dateData.mumonth.push(this.meetupDate[j].slice(5, 7));
+          this.dateData.muday.push(this.meetupDate[j].slice(8, 10));
+        }
+      })
+      .catch((error) => {
+        console.log(error.response);
+        this.meetupData = false;
+      });
   },
   methods: {
+    // 이번달 달력에서 
     dateFunctionEvents(date) {
-
-      const [, , day] = date.split("-");
-      // console.log(this.dateData.muday);
-      if (this.dateData.muday.map(parseInt).includes(parseInt(day, 10))) return true;
-      // if ([2, 17, 28].includes(parseInt(day, 10))) return true;
-      // if ([1, 19, 22].includes(parseInt(day, 10))) return ['red', '#00f']
-      return false;
-    },
-    monthFunctionEvents(date) {
-      const month = parseInt(date.split("-")[1], 10);
-      if ([1, 3, 7].includes(month)) return true;
-      if ([2, 5, 12].includes(month))
-        return ["error", "purple", "rgba(0, 128, 0, 0.5)"];
+      const [year, month, day] = date.split("-");
+      for (let i = 0; i < this.dateData.muyear.length; i++) {
+         if (this.dateData.muyear[i] == year
+            &&this.dateData.mumonth[i] == month
+            &&this.dateData.muday[i] == day){
+              return true
+          }
+      }
       return false;
     },
   },

@@ -7,6 +7,7 @@
             <v-toolbar-title style="margin:auto;">돈독한 미식가</v-toolbar-title>
           </v-app-bar>-->
           <v-bottom-navigation
+            class="navbar-fixed-bottom"
             v-if="!$route.meta.navbar"
             scroll-target="#scroll-area-1"
             hide-on-scroll
@@ -151,4 +152,8 @@ export default {
 .home-padding {
   padding: 0px !important;
 }
+/* 
+.navbar {
+  position: fixed;
+} */
 </style>

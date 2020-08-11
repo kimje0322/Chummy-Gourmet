@@ -79,7 +79,7 @@
                   <i class="fas fa-ellipsis-v"></i>
                 </div>
               </button>
-            </div> -->
+            </div>-->
           </div>
           <div class="fc">
             <div class="fc-frame" tabindex="0">
@@ -98,7 +98,7 @@
                   <div style="border: 0" class="heart-div">
                     <span style="margin: 0; height: 24px; width: 24px;">
                       <i
-                        style="display: block; position: relative; height: 24px; width: 24px;"
+                        style="display: block; position: relative; height: 24px; width: 24px; color: red;"
                         class="far fa-heart"
                       ></i>
                     </span>
@@ -109,6 +109,7 @@
                 <button class="heart-btn">
                   <div style="border: 0" class="heart-div">
                     <span style="margin: 0; height: 24px; width: 24px;">
+                      dfdfad
                       <i
                         style="display: block; position: relative; height: 24px; width: 24px;"
                         class="far fa-heart"
@@ -151,7 +152,7 @@
 
               </span>-->
             </section>
-            
+
             <section style="height: 17.6px; margin-bottom: 8px;">
               <div style="flex: 1 1 auto;">
                 <p style="font-weight: 600;">
@@ -183,6 +184,13 @@
                     </a>
                   </div>
                 </div>
+                <div>
+                  {{ lst.postdate }}
+                  <br />
+                  {{ lst.postdate | moment("from", "now") }}
+                  <br />
+                  {{ timestamp }}
+                </div>
               </div>
             </div>
             <!-- <p>{{ lst.postcontent }}</p> -->
@@ -196,6 +204,10 @@
 <script>
 import axios from "axios";
 import router from "@/routes";
+import Vue from "vue";
+import vueMoment from "vue-moment";
+
+Vue.use(vueMoment);
 
 const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 // const SERVER_URL = "https://localhost:8080";
@@ -204,13 +216,15 @@ export default {
   data() {
     return {
       postlst: [],
-      commentlst :[],
+      commentlst: [],
       like: false,
+      timestamp : "",
     };
   },
 
   mounted() {},
   created() {
+    this.timestamp = new Date();
     console.log(this.$cookie.get("userId"));
     axios
       .get(`${SERVER_URL}/post?userid=${this.$cookie.get("userId")}`)
@@ -221,29 +235,48 @@ export default {
         // alert(this.postlst.length);
         // console.log(posts);
         posts.sort((a, b) => {
-         return -1 * (a.postid - b.postid);
-        })
-        comments.sort((a,b)=>{
-          return -1 * (a[1]-b[1]);
-        })
+          return -1 * (a.postid - b.postid);
+        });
+        comments.sort((a, b) => {
+          return -1 * (a[1] - b[1]);
+        });
         this.postlst = posts;
         this.commentlst = response.data.comment;
-        console.log("mentlst : "+response.data.comment);
+        console.log("mentlst : " + response.data.comment);
       })
       .catch((error) => {
         console.log(error.response);
       });
   },
   methods: {
-     onDelete(lst) {
-      console.log(lst)
+    onDelete(lst) {
+      console.log(lst);
       axios
         .delete(`${SERVER_URL}/post?postid=${lst.postid}`)
         .then((response) => {
-          // this.lst.$set()
+          axios
+            .get(`${SERVER_URL}/post?userid=${this.$cookie.get("userId")}`)
+            .then((response) => {
+              console.log(response);
+              var posts = response.data.data;
+              var comments = response.data.comment;
+              // alert(this.postlst.length);
+              // console.log(posts);
+              posts.sort((a, b) => {
+                return -1 * (a.postid - b.postid);
+              });
+              comments.sort((a, b) => {
+                return -1 * (a[1] - b[1]);
+              });
+              this.postlst = posts;
+              this.commentlst = response.data.comment;
+              console.log("mentlst : " + response.data.comment);
+            })
+            .catch((error) => {
+              console.log(error.response);
+            });
         })
         .catch((error) => {});
-
     },
     onComment(pid, pname, pcontent, puserimg) {
       let postinfo = {
@@ -257,19 +290,20 @@ export default {
       router.push({ name: "Comment", params: postinfo });
     },
     onLike(plike) {
-      this.like = !this.like
-      axios
-        .post(`${SERVER_URL}/post`)
+      this.like = !this.like;
+      console.log(this.like);
+      // axios
+      //   .post(`${SERVER_URL}/post`)
     },
     onRevise(lst) {
       let repost = {
-        postid : lst.postid,
+        postid: lst.postid,
         postnickname: lst.postnickname,
         postcontent: lst.postcontent,
-        postimage : lst.postimgurl
+        postimage: lst.postimgurl,
       };
-      router.push({ name: "AddFeed", params: repost});
-    }
+      router.push({ name: "AddFeed", params: repost });
+    },
   },
 };
 </script>
@@ -321,19 +355,19 @@ export default {
 
 .func {
   margin-top: 4px;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  flex-direction: row;
-  -webkit-box-align: stretch;
-  align-items: stretch;
+  /* -webkit-box-orient: horizontal; */
+  /* -webkit-box-direction: normal; */
+  /* flex-direction: row; */
+  /* -webkit-box-align: stretch; */
+  /* align-items: stretch; */
   border: 0 solid black;
+  /* display: flex; */
+  /* box-sizing: border-box; */
   display: flex;
-  box-sizing: border-box;
-  display: flex;
-  flex-shrink: 0;
+  /* flex-shrink: 0; */
   margin: 0;
   padding: 0;
-  position: relative;
+  /* position: relative; */
 }
 
 .fb {
@@ -342,25 +376,25 @@ export default {
   align-items: stretch;
   border: 0 solid black;
   box-sizing: border-box;
-  display: flex;
+  /* display: flex; */
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   flex-direction: column;
-  flex-shrink: 0;
+  /* flex-shrink: 0; */
   margin: 0;
   position: relative;
 }
 
 .fc {
-  -webkit-box-align: stretch;
-  align-items: stretch;
+  /* -webkit-box-align: stretch; */
+  /* align-items: stretch; */
   display: flex;
   border: 0 solid black;
-  box-sizing: border-box;
+  /* box-sizing: border-box; */
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   flex-direction: column;
-  flex-shrink: 0;
+  /* flex-shrink: 0; */
   margin: 0;
   padding: 0;
   position: relative;
@@ -423,14 +457,14 @@ export default {
 }
 
 .pf-n {
-  -webkit-box-align: center;
-  align-items: center;
-  -webkit-box-orient: horizontal;
+  /* -webkit-box-align: center; */
+  /* align-items: center; */
+  /* -webkit-box-orient: horizontal; */
   -webkit-box-direction: normal;
-  flex-direction: row;
-  -webkit-box-flex: 1;
-  flex-grow: 1;
-  flex-shrink: 1;
+  /* flex-direction: row; */
+  /* -webkit-box-flex: 1; */
+  /* flex-grow: 1; */
+  /* flex-shrink: 1; */
   max-width: 100%;
   overflow: hidden;
   padding: 2px;

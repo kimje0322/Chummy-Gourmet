@@ -41,16 +41,26 @@
                   </div>
                 </div>
               </div>
-              <div ></div>
             </div>
           </div>
-          <img v-if="revise" :src="`https://i3b302.p.ssafy.io:8080/img/post?imgname=`+postimg" >
+          <img
+            id="imageview"
+            style="width: 100%"
+            v-if="revise && revise3"
+            :src="`https://i3b302.p.ssafy.io:8080/img/post?imgname=`+postimg"
+          />
+          <img id="imageview" style="width: 100%" v-if="revise1" :src="postimg" />
+          <!-- <input ref="imageInput" type="file" hidden @change="onChangeImages" /> -->
           <!-- <v-img v-if="postimgurl" :src="postimgurl"></v-img> -->
           <v-img v-else :src="postimgurl"></v-img>
-          <v-textarea v-if="revise" style="margin-top: 0;" :value="content"></v-textarea>
-    
+          <v-textarea v-if="revise" style="margin-top: 0;" v-model="content"></v-textarea>
 
-          <v-textarea v-if="!revise" v-model="postcontent" placeholder="내용입력" style="margin-top: 0;"></v-textarea>
+          <v-textarea
+            v-if="!revise"
+            v-model="postcontent"
+            placeholder="내용입력"
+            style="margin-top: 0;"
+          ></v-textarea>
         </div>
 
         <!-- <div style="padding: 12px; 0;">
@@ -82,12 +92,14 @@ export default {
       username: "",
       userimg: "",
       revise: false,
+      revise1: false,
+      revise3: true,
     };
   },
   created() {
     console.log(this.$cookie.get("userId"));
-    
-    if(this.$route.params.postid >= 0) {
+
+    if (this.$route.params.postid >= 0) {
       console.log("여기");
       console.log(this.$route.params);
       this.revise = true;
@@ -118,11 +130,13 @@ export default {
       //이미지 서버에 전송해서 저장하는부분
       const file = new FormData();
       file.append("file", this.file);
+      console.log(file);
       axios
         .post(`${SERVER_URL}/post/img`, file)
 
         .then((response) => {
           this.postimgurl = response.data;
+          console.log("여기");
           console.log(this.postimgurl);
           this.addPost();
         })
@@ -131,41 +145,88 @@ export default {
           console.log(error.response);
           alert("이미지 전송 실패");
         });
-
     },
+
     reviseImg() {
-      // axios
-      //   .post(`${SERVER_URL}/post/img`, file)
-
-      //   .then((response) => {
-      //     this.postimgurl = response.data;
-      //     console.log(this.postimgurl);
-      //   })
-
-      //   .catch((error) => {
-      //     console.log(error.response);
-      //     alert("이미지 전송 실패");
-      //   });
-    },
-    //게시물을 DB에 저장하는 부분
-    addPost() {
-      var newpost = {
-        postcontent: this.postcontent,
-        postimgurl: this.postimgurl,
-        postuserid: this.postuserid,
-      };
+      const file = new FormData();
+      file.append("file", this.file);
+      console.log(file);
       axios
-        .post(`${SERVER_URL}/post`, newpost)
+        .post(`${SERVER_URL}/post/img`, file)
 
         .then((response) => {
-          alert("성공");
-          this.$router.push("/newsfeed");
+          this.postimgurl = response.data;
+          console.log("여기");
+          console.log(this.postimgurl);
+          var repost = {
+            postcontent: this.content,
+            postid: this.$route.params.postid,
+            postimgurl: this.postimgurl
+          };
+          console.log(this.postimgurl);
+          console.log("여기여기");
+          console.log(repost);
+          axios
+            .put(`${SERVER_URL}/post`, repost)
+
+            .then((response) => {
+              // this.postimgurl = response.data;
+              // console.log(this.postimgurl);
+              console.log("여기여기여기역이겨이겨")
+              router.push({ name: "NewsFeed" });
+            })
+
+            .catch((error) => {
+              console.log(error.response);
+              alert("이미지 전송 실패");
+            });
         })
 
         .catch((error) => {
           console.log(error.response);
-          alert("데이터 전송 실패");
+          alert("이미지 전송 실패");
         });
+    },
+    //게시물을 DB에 저장하는 부분
+    addPost() {
+      if (this.revise1) {
+        var repost = {
+          postcontent: this.postcontent,
+          postimgurl: this.postimg,
+          postuserid: this.postuserid,
+        };
+        console.log(repost);
+        axios
+          .post(`${SERVER_URL}/post`, repost)
+
+          .then((response) => {
+            alert("성공");
+            this.$router.push("/newsfeed");
+          })
+
+          .catch((error) => {
+            console.log(error.response);
+            alert("데이터 전송 실패");
+          });
+      } else {
+        var newpost = {
+          postcontent: this.postcontent,
+          postimgurl: this.postimgurl,
+          postuserid: this.postuserid,
+        };
+        axios
+          .post(`${SERVER_URL}/post`, newpost)
+
+          .then((response) => {
+            alert("성공");
+            this.$router.push("/newsfeed");
+          })
+
+          .catch((error) => {
+            console.log(error.response);
+            alert("데이터 전송 실패");
+          });
+      }
     },
 
     onClickImageUpload() {
@@ -173,11 +234,19 @@ export default {
     },
 
     onChangeImages(e) {
+      if (this.$route.params.postid >= 0) {
+        this.file = e.target.files[0];
+        this.postimg = URL.createObjectURL(this.file);
+        this.revise1 = true;
+        this.revise3 = false;
+      } else {
+        this.file = e.target.files[0];
+        this.postimgurl = URL.createObjectURL(this.file);
+      }
       console.log(e.target.files);
-      this.file = e.target.files[0];
-      this.postimgurl = URL.createObjectURL(this.file);
+      console.log(this.postimg);
     },
-    
+
     insert() {},
   },
 };

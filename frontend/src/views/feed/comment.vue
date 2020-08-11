@@ -191,6 +191,7 @@ export default {
   mounted() {},
   created() {
     console.log(this.$route.params);
+    console.log("aaaaaaaaaaaaaaaa");
     // console.log(this.$cookie.get("userId"));
     axios
       .get(
@@ -224,6 +225,7 @@ export default {
       console.log(lst);
       axios
         .delete(`${SERVER_URL}/post/comment?commentid=${lst.commentid}`)
+        .then((response) => {})
         .then((response) => {
           // console.log(response)
         })

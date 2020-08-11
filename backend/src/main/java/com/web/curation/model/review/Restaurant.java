@@ -105,7 +105,7 @@ public class Restaurant {
 	public String toString() {
 		return "Restaurant [id=" + id + ", name=" + name + ", category=" + category + ", like=" + like + ", review="
 				+ review + ", scrap=" + scrap + ", telphone=" + telphone + ", location=" + location + ", url=" + url
-				+ "]";
+				+ ", img=" + img + "]";
 	}
 
 	

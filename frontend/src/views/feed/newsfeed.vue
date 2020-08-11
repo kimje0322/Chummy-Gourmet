@@ -235,7 +235,7 @@ export default {
       });
   },
   methods: {
-    onDelete(lst) {
+     onDelete(lst) {
       console.log(lst)
       axios
         .delete(`${SERVER_URL}/post?postid=${lst.postid}`)

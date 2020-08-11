@@ -53,7 +53,7 @@
               :class="{ 'on-hover': hover }"
               >
                 <v-img
-                  :src="restaurant.imgs[0]"
+                  :src="restaurant.img[0]"
                   class="white--text align-end"
                   gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                   height="200px"
@@ -70,12 +70,12 @@
                   <v-spacer></v-spacer>
                   <v-spacer></v-spacer>
                   <v-spacer></v-spacer>
-                  <v-btn icon small :color="likes.indexOf(restaurant.id) != -1 ? 'pink' : ''" @click="doLike(restaurant.id)">
-                    <v-icon v-text="likes.indexOf(restaurant.id) != -1 ? 'mdi-heart' : 'mdi-heart-outline' "></v-icon>
+                  <v-btn icon small :color="likes.indexOf(restaurant.id*1) != -1 ? 'pink' : ''" @click="doLike(restaurant)">
+                    <v-icon v-text="likes.indexOf(restaurant.id*1) != -1 ? 'mdi-heart' : 'mdi-heart-outline' "></v-icon>
                   </v-btn>
                   <span style="margin:0 5px 0 -1px;">{{restaurant.like}}</span>
 
-                  <v-btn icon small :color="scraps.indexOf(restaurant.id*1) != -1 ? 'blue' : ''" @click="doScrap(restaurant.id)">
+                  <v-btn icon small :color="scraps.indexOf(restaurant.id*1) != -1 ? 'blue' : ''" @click="doScrap(restaurant)">
                     <v-icon v-text="scraps.indexOf(restaurant.id*1) != -1 ? 'mdi-bookmark-check' : 'mdi-bookmark-check-outline' "></v-icon>
                   </v-btn>
                   <span style="margin:0 3px 0 -2px;">{{restaurant.scrap}}</span>
@@ -136,28 +136,26 @@ export default {
     }else{
       const script = document.createElement("script");
       /* global kakao */
-      // script.onload = () => kakao.maps.load(this.initMap);
+      script.onload = () => kakao.maps.load(this.initMap);
       script.src =
         "https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=90891b3c4fa765cd378361c6b16e4dd6&libraries=services";
       document.head.appendChild(script);
     }
 
     // 페이지 로딩 시 로그인한 유저의 좋아요/스크랩 정보를 가져옴
-    // axios
-    //   // .get(`${SERVER_URL}/userpage/getLikeById$userid=${this.$cookie.get('userId')}`)
-    //   .get(`${SERVER_URL}/userpage/getLikeById?userid=70`)
-    //   .then((response) => {
-    //     this.likes = response.data;
-    //     console.log(this.likes);
-    // });
+    axios
+      .get(`${SERVER_URL}/rest/like/${this.$cookie.get('userId')}`)
+      .then((response) => {
+        this.likes = response.data;
+        console.log(this.likes);
+    });
 
-    // axios
-    //   .get(`${SERVER_URL}/userpage/getScrapById?userid=70`)
-    //   .then((response) => {
-    //     this.scraps = response.data;
-    //     console.log(this.scraps);
-
-    // });
+    axios
+      .get(`${SERVER_URL}/rest/scrap/${this.$cookie.get('userId')}`)
+      .then((response) => {
+        this.scraps = response.data;
+        console.log(this.scraps);
+    });
 
   },
   methods: {
@@ -182,8 +180,7 @@ export default {
     sortByProperties(){
       console.log("선호음식");
       axios
-        // .get(`${SERVER_URL}/userpage/getuserInfo?userId=${this.$cookie.get('userId')}`)
-        .get(`${SERVER_URL}/userpage/getuserInfo?userId=62`)
+        .get(`${SERVER_URL}/userpage/getuserInfo?userId=${this.$cookie.get('userId')}`)
         .then((response) => {
           var userInfo = response.data;
           var userFavoriteID = userInfo.userFavorite;
@@ -231,7 +228,6 @@ export default {
       axios
         .get(`${SERVER_URL}/curation?location=${this.keyword}`)
         .then((response) => {
-          // console.log(response);
           // 음식점리스트 받기
           var restaurants = response.data.list;
 
@@ -242,8 +238,9 @@ export default {
             let imgSrcs = restaurant.img;
             imgSrcs = imgSrcs.replace('[', '');
             imgSrcs = imgSrcs.replace(']', '');
-            imgSrcs = imgSrcs.split(", ");
-            restaurant.imgs = imgSrcs;
+            imgSrcs = imgSrcs.replace(/(\s*)/g, ''); // 모든공백제거
+            imgSrcs = imgSrcs.split(",");
+            restaurant.img = imgSrcs;
 
             // 주소 -> 좌표
             this.geocoder.addressSearch(restaurant.location, (result, status) => {
@@ -274,27 +271,125 @@ export default {
     moveDetail(restaurant) {
       router.push({name : "Detail", params : restaurant});
     },
-    doLike(restId){
-      // 좋아요한 게시물이 아니라면 좋아요에 추가
-      if(this.likes.indexOf(restId) == -1){
-        this.likes.push(restId);
+    doLike(restaurant){
+      // DB에 존재하지 않는 음식점이라면
+      if(restaurant.id == null){
+
+        // img src 배열을 String으로 변환 "[src1,src2,...,src5]"
+        var imgSrcs = restaurant.img.toString();
+        imgSrcs = `[${imgSrcs}]`;
+
+        // 새로운 음식점 객체 생성
+        var newRest = {
+          category : restaurant.category,
+          img : imgSrcs,
+          like : restaurant.like,
+          location : restaurant.location,
+          name : restaurant.name,
+          review : restaurant.review,
+          scrap : restaurant.scrap,
+          telphone : restaurant.telphone,
+          url : restaurant.url,
+          dist  : restaurant.dist
+        };
+
+        // DB에 음식점 정보 등록 후 restId 반환
+        axios
+        .post(`${SERVER_URL}/rest`, newRest)
+        .then((response) => {
+            var newRestId = response.data;
+            restaurant.id = newRestId;
+            console.log(restaurant.id);
+            this.toggleLike(restaurant);
+        });
       }
-      // 좋아요한 게시물이라면 좋아요에서 삭제
+      // DB에 존재하는 음식점이라면
       else{
-        this.likes.splice(this.likes.indexOf(restId), 1);
+        this.toggleLike(restaurant);
       }
-      console.log(this.likes);
     },
-    doScrap(restId){
-      // 스크랩한 게시물이 아니라면 스크랩에 추가
-      if(this.scraps.indexOf(restId*1) == -1){
-        this.scraps.push(restId*1);
+    toggleLike(restaurant){
+        // 내가 좋아요한 음식점이 아니라면
+        if(this.likes.indexOf(restaurant.id*1) == -1){
+          this.likes.push(restaurant.id*1);
+          axios
+          .put(`${SERVER_URL}/rest/like?userid=${this.$cookie.get('userId')}&restid=${restaurant.id}`)
+          .then((response) => {
+            // reponse : 해당 음식점의 좋아요 갯수
+            restaurant.like = response.data;
+            
+          })       
+        }
+        // 내가 좋아요한 음식점이라면
+        else{
+          this.likes.splice(this.likes.indexOf(restaurant.id), 1);
+          axios
+          .delete(`${SERVER_URL}/rest/like?userid=${this.$cookie.get('userId')}&restid=${restaurant.id}`)
+          .then((response) => {
+            // reponse : 해당 음식점의 좋아요 갯수
+            restaurant.like = response.data;
+          })  
+        }
+    },
+    doScrap(restaurant){
+      // DB에 존재하지 않는 음식점이라면
+      if(restaurant.id == null){
+
+        // img src 배열을 String으로 변환 "[src1,src2,...,src5]"
+        var imgSrcs = restaurant.img.toString();
+        imgSrcs = `[${imgSrcs}]`;
+
+        // 새로운 음식점 객체 생성
+        var newRest = {
+          category : restaurant.category,
+          img : imgSrcs,
+          like : restaurant.like,
+          location : restaurant.location,
+          name : restaurant.name,
+          review : restaurant.review,
+          scrap : restaurant.scrap,
+          telphone : restaurant.telphone,
+          url : restaurant.url,
+          dist  : restaurant.dist
+        };
+
+        // DB에 음식점 정보 등록 후 restId 반환
+        axios
+        .post(`${SERVER_URL}/rest`, newRest)
+        .then((response) => {
+            var newRestId = response.data;
+            restaurant.id = newRestId;
+            console.log(restaurant.id);
+            this.toggleScrap(restaurant);
+        });
       }
-      // 스크랩한 게시물이라면 스크랩에서 삭제
+      // DB에 존재하는 음식점이라면
       else{
-        this.scraps.splice(this.scraps.indexOf(restId*1), 1);
+        this.toggleScrap(restaurant);
       }
-    }
+    },
+    toggleScrap(restaurant){
+        // 내가 좋아요한 음식점이 아니라면
+        if(this.scraps.indexOf(restaurant.id*1) == -1){
+          this.scraps.push(restaurant.id*1);
+          axios
+          .put(`${SERVER_URL}/rest/scrap?userid=${this.$cookie.get('userId')}&restid=${restaurant.id}`)
+          .then((response) => {
+            // reponse : 해당 음식점의 좋아요 갯수
+            restaurant.scrap = response.data;
+          })       
+        }
+        // 내가 좋아요한 음식점이라면
+        else{
+          this.scraps.splice(this.scraps.indexOf(restaurant.id), 1);
+          axios
+          .delete(`${SERVER_URL}/rest/scrap?userid=${this.$cookie.get('userId')}&restid=${restaurant.id}`)
+          .then((response) => {
+            // reponse : 해당 음식점의 좋아요 갯수
+            restaurant.scrap = response.data;
+          })  
+        }
+    },
   },
   components: {},
 };

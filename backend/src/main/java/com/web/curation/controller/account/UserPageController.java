@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.web.curation.dao.post.PostDao;
-import com.web.curation.dao.review.RestaurantDao;
+import com.web.curation.dao.restaurant.RestaurantDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.dao.user.UserDetailDao;
 import com.web.curation.dao.user.UserPageDao;
@@ -62,72 +62,7 @@ public class UserPageController {
 	@Autowired
 	PostDao postDao;
 
-	@GetMapping("/userpage/restlike")
-	@ApiOperation(value = "[유저페이지] 식당 좋아요 하기")
-	public void insertRestLike(@RequestParam(required = true) final String userid,
-			@RequestParam(required = true) final String restid) {
-		userPageDao.insertRestLike(userid, restid);
-		userPageDao.updateRestLike(restid);
-	}
-
-	@DeleteMapping("/userpage/restlike")
-	@ApiOperation(value = "[유저페이지] 식당 좋아요 취소")
-	public void deleteRestLike(@RequestParam(required = true) final String userid,
-			@RequestParam(required = true) final String restid) {
-		userPageDao.deleteRestLike(userid, restid);
-		userPageDao.updateRestLikeM(restid);
-	}
-
-	@GetMapping("/userpage/restscrap")
-	@ApiOperation(value = "[유저페이지] 식당 스크랩 하기")
-	public void insertScrap(@RequestParam(required = true) final String userid,
-			@RequestParam(required = true) final String restid) {
-		userPageDao.insertRestScrap(userid, restid);
-		userPageDao.updateRestScrap(restid);
-	}
-
-	@DeleteMapping("/userpage/restscrap")
-	@ApiOperation(value = "[유저페이지] 식당 스크랩 취소")
-	public void deleteScrap(@RequestParam(required = true) final String userid,
-			@RequestParam(required = true) final String restid) {
-		userPageDao.deleteRestScrap(userid, restid);
-		userPageDao.updateRestScrapM(restid);
-	}
-
-	@GetMapping("/userpage/like")
-	@ApiOperation(value = "[유저페이지] 좋아요한 식당 번호 가져오기")
-	public List<Integer> getGoodId(@RequestParam(required = true) final String userid) {
-
-		List<Integer> list = new ArrayList<Integer>();
-
-		list = userPageDao.selectRestLikeIdByUserId(userid);
-
-		return list;
-	}
-
-	// userid로 scarp한 식당 번호 가져오기
-	@GetMapping("/userpage/scrap")
-	@ApiOperation(value = "[유저페이지] 스크랩한 식당 번호 가져오기")
-	public List<Integer> getScrapId(@RequestParam(required = true) final String userid) {
-
-		List<Integer> list = new ArrayList<Integer>();
-
-		list = userPageDao.selectRestScrapIdbyUserId(userid);
-
-		return list;
-	}
-
-	// userid로 scarp한 식당 모두 가져오기
-	@GetMapping("/userpage/getRest")
-	@ApiOperation(value = "[유저페이지] 스크랩한 식당 데이터 가져오기")
-	public List<Restaurant> getScrap(@RequestParam(required = true) final String userid) {
-
-		List<Restaurant> list = new ArrayList<Restaurant>();
-
-		list = restDao.selectAllRestByUserId(userid);
-
-		return list;
-	}
+	
 
 	// 밋업에 대한 참가자들 가져오기
 	@GetMapping("/userpage/getMeetupMember")

@@ -272,6 +272,11 @@ export default {
       router.push({name : "Detail", params : restaurant});
     },
     doLike(restaurant){
+      if(this.$cookie.get('userId') == null){
+        alert("로그인 해주세요");
+        return;
+      }
+
       // DB에 존재하지 않는 음식점이라면
       if(restaurant.id == null){
 
@@ -332,6 +337,11 @@ export default {
         }
     },
     doScrap(restaurant){
+      if(this.$cookie.get('userId') == null){
+        alert("로그인 해주세요");
+        return;
+      }
+
       // DB에 존재하지 않는 음식점이라면
       if(restaurant.id == null){
 

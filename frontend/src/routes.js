@@ -26,9 +26,10 @@ import FollowRequestList from './components/common/FollowRequestList.vue'
 import Feedcomment from './views/feed/comment.vue'
 import UpdateUser from './views/user/UpdateUser.vue'
 import Profile from './views/user/Profile.vue'
-//추가
 import PostDetail from './views/user/PostDetail.vue'
 import SearchUser from './components/common/SearchUser.vue'
+//추가
+import PostUpdate from './views/user/PostUpdate.vue'
 
 import UpdateUserInfo from './views/user/UpdateUserInfo.vue'
 
@@ -70,6 +71,11 @@ export default new VueRouter({
             }
         },
         //승범 추가
+        {
+            path: '/PostUpdate',
+            name: 'PostUpdate',
+            component: PostUpdate,
+        },
         {
             path: '/SearchUser',
             name: 'SearchUser',

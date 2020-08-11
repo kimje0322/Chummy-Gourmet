@@ -78,7 +78,7 @@ export default {
     //   console.log("이미 로딩됨");
     //   this.initMap();
     // } else {
-      console.log("카카오맵 로딩");
+    //   console.log("카카오맵 로딩");
       const script = document.createElement("script");
       /* global kakao */
       script.onload = () => kakao.maps.load(this.initMap);

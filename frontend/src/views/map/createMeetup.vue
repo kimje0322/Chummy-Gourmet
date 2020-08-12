@@ -50,7 +50,8 @@
         </div>
         
         <!-- 파티 장소 -->
-          <v-layout class="cssBox" justify-center>
+          <div class="cssBox">
+          <v-layout justify-center>
             <v-dialog v-model="dialog" scrollable max-width="300px">
               <template v-slot:activator="{on}">
                 <v-text-field
@@ -114,7 +115,8 @@
               </v-card>
             </v-dialog>
           </v-layout>
-        <div class="error-text" v-if="error.location">{{ error.location }} </div>
+         <div class="error-text mt-2" v-if="error.location">{{ error.location }} </div>
+         </div>
 
         <!-- 파티 날짜 -->
         <div class="cssBox">
@@ -173,8 +175,8 @@
             </v-menu>
           </v-date-picker>
         </v-menu>
+        <div class="error-text mt-2" v-if="error.date">{{ error.date }} </div>
         </div>
-      <div class="error-text" v-if="error.date">{{ error.date }} </div>
       
 
 
@@ -190,8 +192,8 @@
             style="margin:0px;"
             target="#dropdown-example"
           ></v-overflow-btn>
-        </div>
         <div class="error-text" v-if="error.personnel">{{ error.personnel }} </div>
+        </div>
 
         <!-- 성향 -->
         <div class="text-center">
@@ -238,9 +240,6 @@
           </v-dialog>
         </div>
         
-
-
-
       </div>
     <!-- </v-app> -->
   </div>

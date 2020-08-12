@@ -9,7 +9,9 @@
           <v-bottom-navigation
             class="navbar-fixed-bottom"
             v-if="!$route.meta.navbar"
-            scroll-target="#scroll-area-1"
+            scroll-target="#scroll-area-2"
+            hide-on-scroll
+            scroll-threshold="500"
             absolute
             color="white"
             horizontal

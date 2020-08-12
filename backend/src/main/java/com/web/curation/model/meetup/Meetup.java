@@ -39,12 +39,14 @@ public class Meetup {
 	private String personnel;
 	@Column(name = "meetup_create_date")
 	private String createDate;
+	@Column(name = "meetup_img")
+	private String img;
 
 	public Meetup() {
 	}
 
 	public Meetup(String master, String title, String content, String location, String address, String date,
-			String personnel) {
+			String personnel, String img) {
 		super();
 		this.master = master;
 		this.title = title;
@@ -53,6 +55,7 @@ public class Meetup {
 		this.address = address;
 		this.date = date;
 		this.personnel = personnel;
+		this.img = img;
 	}
 
 	public String getId() {
@@ -127,11 +130,19 @@ public class Meetup {
 		this.createDate = createDate;
 	}
 
+	public String getImg() {
+		return img;
+	}
+
+	public void setImg(String img) {
+		this.img = img;
+	}
+
 	@Override
 	public String toString() {
 		return "Meetup [id=" + id + ", master=" + master + ", title=" + title + ", content=" + content + ", location="
 				+ location + ", address=" + address + ", date=" + date + ", personnel=" + personnel + ", createDate="
-				+ createDate + "]";
+				+ createDate + ", img=" + img + "]";
 	}
 
 }

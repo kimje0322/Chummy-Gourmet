@@ -1,14 +1,23 @@
 <template>
+  <div>
+    <v-toolbar dark>
+      <!-- 중앙정렬 하기 위해 2개씀 -->
+      <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
+      <p class="my-auto">음식점 검색</p>
+      <v-spacer></v-spacer>
+    </v-toolbar>
+  
+  <div class="entire">
   <div style="padding : 0">
     <input
       v-model="keyword"
       @keyup.enter="doSearch"
       type="text"
       placeholder="원하는 지역 검색"
-      style="width : 100%; border : 1px solid"
+      style="width : 80%; border : 1px solid"
     />
 
-    <v-btn width="100%" @click="doSearch">검색</v-btn>
+    <v-btn height="48px" width="8%" style="float: right;" @click="doSearch">검색</v-btn>
     <p>{{keyword}}에 대한 결과</p>
 
 <!--  pop over  -->
@@ -92,6 +101,8 @@
         </v-row>
     </v-card>
   </div>
+  </div>
+  </div>
 </template>
 <script>
 import axios from "axios";
@@ -104,6 +115,7 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 export default {
   data() {
     return {
+      restaurantsLength : "",
       likes : [],
       scraps : [],
       reviews : [],
@@ -229,8 +241,7 @@ export default {
         .get(`${SERVER_URL}/curation?location=${this.keyword}`)
         .then((response) => {
           // 음식점리스트 받기
-          var restaurants = response.data.list;
-
+          var restaurants = response.data.list;       
           // 음식점리스트 돌면서 좌표(position), 거리(dist) 구하기
           restaurants.forEach(restaurant => {
 

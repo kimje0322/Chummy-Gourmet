@@ -44,7 +44,7 @@
         <!-- 파티 내용 -->
         <div class="cssBox">
         <div class="input-group mb-3">
-          <v-textarea hide-details v-model="meetup.content" solo placeholder="일정 내용을 입력하세요."></v-textarea>
+          <v-textarea hide-details v-model="meetup.content" solo placeholder="내용을 입력하세요."></v-textarea>
         </div>
         <div class="error-text" v-if="error.content">{{ error.content }} </div>
         </div>
@@ -169,7 +169,7 @@
                 >
                 <v-spacer></v-spacer>
                 <v-btn text color="primary" @click="menu2 = false">Cancel</v-btn>
-                <v-btn text color="primary" @click="test">OK</v-btn>
+                <v-btn text color="primary" @click="setDate">OK</v-btn>
               </v-time-picker>
 
             </v-menu>
@@ -184,7 +184,7 @@
         <div id="dropdown-example" class="cssBox">
           <v-overflow-btn
             hide-details
-            v-model="meetup.personnel"
+            v-model="meetup.maxPersonnel"
             solo
             class="my-2"
             :items="dropdown_font"
@@ -203,41 +203,43 @@
             width="500"
           >
             <template v-slot:activator="{ on, attrs }">
-              <v-text-field hide-details solo v-model="selected"
+              <v-combobox 
+                hide-details
+                v-model="meetup.personalities" 
+                solo multiple chips deletable-chips
                 v-on="on" v-bind="attrs"
-                placeholder="성향">
-              </v-text-field>
+                label="성향"
+              >
+              </v-combobox>
             </template>
 
-              <v-card
-                class="mx-auto"
-                max-width="400"
+            <v-card
+              class="mx-auto"
+              max-width="400"
+            >
+              <v-toolbar
+                flat dark
               >
-                <v-toolbar
-                  flat
-                  dark
-                >
-                  <v-btn icon>
-                    <v-icon @click="dialog2 = false">mdi-close</v-icon>
-                  </v-btn>
-                  <v-toolbar-title>밋업 성향 선택</v-toolbar-title>
-                </v-toolbar>
+              <v-btn icon>
+                  <v-icon @click="dialog2 = false">mdi-close</v-icon>
+                </v-btn>
+                <v-toolbar-title>밋업 성향 선택</v-toolbar-title>
+              </v-toolbar>
 
-                <v-card-text>
-                  <h2 class="subtitle mb-1">원하는 성향을 선택하세요</h2>
-                  <v-chip-group
-                    active-class="deep-purple--text text--accent-4"
-                    column
-                    multiple
-                  >
-                    <v-chip outlined v-for="(property,index) in properties" :key="index"
-                      @click="selected.indexOf(property) != -1 ? selected.splice(selected.indexOf(property), 1) : selected.push(property)"
-                    >
-                    {{property}}                        
-                    </v-chip>
-                  </v-chip-group>
-                </v-card-text>
-              </v-card>
+              <v-card-text>
+                <h2 class="subtitle mb-1">원하는 성향을 선택하세요</h2>
+                <v-chip-group
+                  v-model="meetup.personalities"
+                  active-class="deep-purple--text text--accent-4"
+                  column
+                  multiple
+                >
+                  <v-chip outlined v-for="personality in personalities" :value="personality" :key="personality">
+                  {{personality}}                        
+                  </v-chip>
+                </v-chip-group>
+              </v-card-text>
+            </v-card>
           </v-dialog>
         </div>
           <div class="error-text mt-2" v-if="error.personality">{{ error.personality }} </div>
@@ -276,9 +278,10 @@ export default {
         location : '',
         address : '',
         date : '',
-        personnel : '',
+        maxPersonnel : '',
         master : 70,
         img : '',
+        personalities : [],
       },
 
       error: {
@@ -293,12 +296,10 @@ export default {
 
       dropdown_font: ["1", "2", "3", "4", "5", "6", "7", "8"],
 
-      properties : [
+      personalities : [
         "낙천적", "부정적", "내향적", "외향적", "충동적", "사교적",
         "대담함", "성실함", "냉정함", "온화함", "신중함", "게으름"
       ],
-      
-      selected : [],
 
       targetLocation : {
         lat : '',
@@ -358,7 +359,7 @@ export default {
       }
   },
   methods: {
-    test() {
+    setDate() {
       this.menu = false;
       this.menu2 = false;
       this.meetup.date = this.date + " " + this.time;
@@ -394,37 +395,47 @@ export default {
       }
       else this.error.date = false;
 
-      if (!this.meetup.personnel) {
+      if (!this.meetup.maxPersonnel) {
         this.error.personnel = "인원을 선택해주세요.";
         return false;
       }
       else this.error.personnel = false;
 
-      if (!this.meetup.personality) {
-        this.error.personality = "성향을 선택해주세요.";
+
+      if (!this.meetup.personalities) {
+        this.error.personalities = "성향을 선택해주세요.";
         return false;
       }
       else this.error.personnel = false;
+
+
       
-      if (this.isValidForm())
+      if (this.isValidForm()){
+        var personalities = this.meetup.personalities.toString();
+        personalities = `[${personalities}]`;
 
-      // if (this.meetup.personnel.length === 0) {
-      //   alert("인원을 선택해주세요.");
-      //   return;
-      // }
+        var newMeetup = {
+          title :this.meetup.title,
+          content :this.meetup.content,
+          location :this.meetup.location,
+          address :this.meetup.address,
+          date :this.meetup.date,
+          maxPersonnel :this.meetup.maxPersonnel,
+          master :this.meetup.master,
+          img :this.meetup.img,
+          personalities : personalities
+        }
 
-      // console.log(this.meetup)
-      axios
-        .post(`${SERVER_URL}/meetup`, this.meetup)
-        .then((response) => {
-          // console.log(response);
-          alert("밋업 등록이 완료됐습니다.");
-          this.$router.push("/map")
-        })
-        .catch((error) => {
-          console.log('error보기')
-          console.log(error)
-        })
+        axios
+          .post(`${SERVER_URL}/meetup`, newMeetup)
+          .then((response) => {
+            alert("밋업 등록이 완료됐습니다.");
+            this.$router.push("/map")
+          })
+          .catch((error) => {
+            console.log('error보기')
+          })
+      }
     },
     
     checkForm() {
@@ -440,10 +451,10 @@ export default {
       if (this.meetup.date.length < 1) this.error.date = "날짜를 입력해주세요.";
       else {this.error.date = false;
       return;}
-      if (this.meetup.personnel.length < 1) this.error.personnel = "인원을 입력해주세요.";
+      if (this.meetup.maxPersonnel.length < 1) this.error.personnel = "인원을 입력해주세요.";
       else {this.error.personnel = false;
       return;}
-      if (this.meetup.personality.length < 1) this.error.personality = "성향을 입력해주세요.";
+      if (this.meetup.personalities.length < 1) this.error.personality = "성향을 입력해주세요.";
       else {this.error.personality = false;
       return;}
     },

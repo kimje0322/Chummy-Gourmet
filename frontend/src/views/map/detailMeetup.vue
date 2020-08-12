@@ -62,11 +62,15 @@
         ></v-text-field>
 
         <!-- 파티 인원 -->
-        <v-text-field
-        v-model="meetup.personnel"
-        solo
-        readonly
-        ></v-text-field>
+        <v-text-field solo readonly :value="meetup.curPersonnel + ' / ' + meetup.maxPersonnel ">
+        </v-text-field>
+
+        <!-- 파티 성향 -->
+        <v-combobox 
+          v-model="meetup.personalities" 
+          solo multiple chips readonly
+        >
+        </v-combobox>
 
       </div>
     <!-- </v-app> -->
@@ -90,10 +94,21 @@ export default {
     axios
     .get(`${SERVER_URL}/meetup/searchByMeetupID/${meetupId}`)
     .then((response) => {
-        this.meetup = response.data;
+        let meetup = response.data;
+        meetup.personalities = this.stringToArray(meetup.personalities);
+        this.meetup = meetup;
+        
+        console.log(this.meetup)
     })  
   },
   methods: {
+    stringToArray(strings){
+        strings = strings.replace('[', '');
+        strings = strings.replace(']', '');
+        strings = strings.replace(/(\s*)/g, ''); // 모든공백제거
+        strings = strings.split(",");
+        return strings;
+    }
     
   },
 

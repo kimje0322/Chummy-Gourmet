@@ -196,8 +196,8 @@ import axios from "axios";
 import router from "@/routes";
 
 const CURLAT = 36.3587222, CURLNG = 127.3439205;
-const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-// const SERVER_URL = "https://localhost:8080";
+// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "https://localhost:8080";
 
 export default {
   data: () => {
@@ -312,6 +312,7 @@ export default {
               var overlays = [];
               var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
               meetups.forEach(meetup => {
+                console.log(meetup)
                 geocoder.addressSearch(meetup.address, (result, status) => {
                     if (status === kakao.maps.services.Status.OK) {
                         var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
@@ -341,7 +342,7 @@ export default {
                                           <div class="_desc">
                                               <div class="ellipsis"><label>일시 : </label> ${meetup.date}</div>
                                               <div class="ellipsis"><label>위치 : </label> ${meetup.location}</div>
-                                              <div><label>현재원 : </label> ${meetup.personnel}</div>
+                                              <div><label>인원 : </label> ${meetup.curPersonnel} / ${meetup.maxPersonnel}</div>
                                           </div>
                                       </div>
                                   </div> 

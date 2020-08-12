@@ -158,7 +158,7 @@
                 >
                 <v-spacer></v-spacer>
                 <v-btn text color="primary" @click="menu2 = false">Cancel</v-btn>
-                <v-btn text color="primary" @click="test">OK</v-btn>
+                <v-btn text color="primary" @click="setDate">OK</v-btn>
               </v-time-picker>
 
             </v-menu>
@@ -168,7 +168,7 @@
         <!-- 파티 인원 -->
         <div id="dropdown-example">
           <v-overflow-btn
-            v-model="meetup.personnel"
+            v-model="meetup.maxPersonnel"
             solo
             class="my-2"
             :items="dropdown_font"
@@ -185,41 +185,46 @@
             width="500"
           >
             <template v-slot:activator="{ on, attrs }">
-              <v-text-field  solo v-model="selected"
+              <!-- <v-text-field  solo v-model="selectedProps"
                 v-on="on" v-bind="attrs"
                 placeholder="성향">
-              </v-text-field>
+              </v-text-field> -->
+              <v-combobox 
+                v-model="meetup.properties" 
+                solo multiple chips deletable-chips
+                v-on="on" v-bind="attrs"
+                label="성향"
+              >
+              </v-combobox>
             </template>
 
-              <v-card
-                class="mx-auto"
-                max-width="400"
+            <v-card
+              class="mx-auto"
+              max-width="400"
+            >
+              <v-toolbar
+                flat dark
               >
-                <v-toolbar
-                  flat
-                  dark
-                >
-                  <v-btn icon>
-                    <v-icon @click="dialog2 = false">mdi-close</v-icon>
-                  </v-btn>
-                  <v-toolbar-title>밋업 성향 선택</v-toolbar-title>
-                </v-toolbar>
+              <v-btn icon>
+                  <v-icon @click="dialog2 = false">mdi-close</v-icon>
+                </v-btn>
+                <v-toolbar-title>밋업 성향 선택</v-toolbar-title>
+              </v-toolbar>
 
-                <v-card-text>
-                  <h2 class="subtitle mb-1">원하는 성향을 선택하세요</h2>
-                  <v-chip-group
-                    active-class="deep-purple--text text--accent-4"
-                    column
-                    multiple
-                  >
-                    <v-chip outlined v-for="(property,index) in properties" :key="index"
-                      @click="selected.indexOf(property) != -1 ? selected.splice(selected.indexOf(property), 1) : selected.push(property)"
-                    >
-                    {{property}}                        
-                    </v-chip>
-                  </v-chip-group>
-                </v-card-text>
-              </v-card>
+              <v-card-text>
+                <h2 class="subtitle mb-1">원하는 성향을 선택하세요</h2>
+                <v-chip-group
+                  v-model="meetup.properties"
+                  active-class="deep-purple--text text--accent-4"
+                  column
+                  multiple
+                >
+                  <v-chip outlined v-for="property in properties" :value="property" :key="property">
+                  {{property}}                        
+                  </v-chip>
+                </v-chip-group>
+              </v-card-text>
+            </v-card>
           </v-dialog>
         </div>
 
@@ -232,8 +237,8 @@
 <script>
 import axios from "axios";
 
-const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-// const SERVER_URL = "https://localhost:8080";
+// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "https://localhost:8080";
 
 export default {
   data: () => {
@@ -257,9 +262,10 @@ export default {
         location : '',
         address : '',
         date : '',
-        personnel : '',
+        maxPersonnel : '',
         master : 70,
         img : '',
+        properties : [],
       },
 
       error: {
@@ -277,8 +283,6 @@ export default {
         "낙천적", "부정적", "내향적", "외향적", "충동적", "사교적",
         "대담함", "성실함", "냉정함", "온화함", "신중함", "게으름"
       ],
-      
-      selected : [],
 
       targetLocation : {
         lat : '',
@@ -338,7 +342,7 @@ export default {
       }
   },
   methods: {
-    test() {
+    setDate() {
       this.menu = false;
       this.menu2 = false;
       this.meetup.date = this.date + " " + this.time;
@@ -363,18 +367,36 @@ export default {
         return;
       }
 
-      if (this.meetup.personnel.length === 0) {
+      if (this.meetup.maxPersonnel.length === 0) {
         alert("인원을 선택해주세요.");
         return;
       }
-      console.log(this.meetup)
+      
+
+      var properties = this.meetup.properties.toString();
+      properties = `[${properties}]`;
+
+      var newMeetup = {
+        title :this.meetup.title,
+        content :this.meetup.content,
+        location :this.meetup.location,
+        address :this.meetup.address,
+        date :this.meetup.date,
+        maxPersonnel :this.meetup.maxPersonnel,
+        master :this.meetup.master,
+        img :this.meetup.img,
+        properties : properties
+      }
+
+      console.log(newMeetup)
+      
       axios
-        .post(`${SERVER_URL}/meetup`, this.meetup)
+        .post(`${SERVER_URL}/meetup`, newMeetup)
         .then((response) => {
           // console.log(response);
           alert("밋업 등록이 완료됐습니다.");
           this.$router.push("/map")
-        })
+      })
     },
     checkForm() {
       if (this.meetup.title.length < 1) this.error.title = "제목을 입력해주세요.";
@@ -389,7 +411,7 @@ export default {
       if (this.meetup.date.length < 1) this.error.date = "날짜를 입력해주세요.";
       else {this.error.date = false;
       return;}
-      if (this.meetup.personnel.length < 1) this.error.personnel = "인원을 입력해주세요.";
+      if (this.meetup.maxPersonnel.length < 1) this.error.personnel = "인원을 입력해주세요.";
       else {this.error.personnel = false;
       return;}
     },

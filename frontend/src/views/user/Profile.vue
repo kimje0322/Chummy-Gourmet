@@ -79,11 +79,14 @@ export default {
   },
   methods :{
     detailInfo(post,comment) {
-      let item = {
-      post: post,
-      comment : comment,
+      let users = {
+      userId: this.anotherId,
       };
-      this.$router.push({name :'PostDetail', params: item});
+       this.$router.push({name :'PostDetail', query: {post_content: post.post_content
+        ,post_id : post.post_id, post_img_url : post.post_img_url,
+        post_like : post.post_like, post_userid : post.post_userid, user_img:post.user_img,
+        user_nickname : post.user_nickname, comment:comment , userId : this.anotherId}});
+      // this.$router.push({name :'PostDetail',query: {post: post, comment : comment, users : users}});
     },
     deleteFollowRequest(){
       this.followerFollowing = 'false'

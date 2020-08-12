@@ -34,21 +34,27 @@
       <div class="party wrapC">
 
         <!-- 파티 타이틀 -->
+        <div class="cssBox">
+          <div class="input-group mb-3">
+            <v-text-field hide-details v-model="meetup.title" solo placeholder="제목">
+            </v-text-field>
+          </div>
+          <div class="error-text" v-if="error.title">{{ error.title }} </div>
+        </div>
+        <!-- 파티 내용 -->
+        <div class="cssBox">
         <div class="input-group mb-3">
-          <v-text-field v-model="meetup.title" solo placeholder="제목">
-          </v-text-field>
+          <v-textarea hide-details v-model="meetup.content" solo placeholder="일정 내용을 입력하세요."></v-textarea>
+        </div>
+        <div class="error-text" v-if="error.content">{{ error.content }} </div>
         </div>
         
-        <!-- 파티 내용 -->
-        <div class="input-group mb-3">
-          <v-textarea v-model="meetup.content" solo placeholder="일정 내용을 입력하세요."></v-textarea>
-        </div>
-
         <!-- 파티 장소 -->
-          <v-layout justify-center>
+          <v-layout class="cssBox" justify-center>
             <v-dialog v-model="dialog" scrollable max-width="300px">
               <template v-slot:activator="{on}">
                 <v-text-field
+                  hide-details
                   slot="activator"
                   v-on="on"
                   v-model="meetup.location"
@@ -108,8 +114,10 @@
               </v-card>
             </v-dialog>
           </v-layout>
+        <div class="error-text" v-if="error.location">{{ error.location }} </div>
 
         <!-- 파티 날짜 -->
+        <div class="cssBox">
         <v-menu
           v-model = "menu"
           :close-on-content-click="false"
@@ -121,6 +129,7 @@
           <!-- 월/일 선택 -->
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
+              hide-details
               solo
               v-model="meetup.date"
               placeholder="날짜"
@@ -164,10 +173,15 @@
             </v-menu>
           </v-date-picker>
         </v-menu>
+        </div>
+      <div class="error-text" v-if="error.date">{{ error.date }} </div>
+      
+
 
         <!-- 파티 인원 -->
-        <div id="dropdown-example">
+        <div id="dropdown-example" class="cssBox">
           <v-overflow-btn
+            hide-details
             v-model="meetup.personnel"
             solo
             class="my-2"
@@ -177,6 +191,7 @@
             target="#dropdown-example"
           ></v-overflow-btn>
         </div>
+        <div class="error-text" v-if="error.personnel">{{ error.personnel }} </div>
 
         <!-- 성향 -->
         <div class="text-center">
@@ -185,7 +200,7 @@
             width="500"
           >
             <template v-slot:activator="{ on, attrs }">
-              <v-text-field  solo v-model="selected"
+              <v-text-field hide-details solo v-model="selected"
                 v-on="on" v-bind="attrs"
                 placeholder="성향">
               </v-text-field>
@@ -222,6 +237,8 @@
               </v-card>
           </v-dialog>
         </div>
+        
+
 
 
       </div>
@@ -288,28 +305,28 @@ export default {
     }
   },
   watch: {
-    title : function() {
+    'meetup.title' : function() {
       if (this.meetup.title.length < 1) this.error.title = "제목을 입력해주세요.";
       else this.error.title = false;
       return;
     },
-    content : function() {
-      if ( this.meetup.content.length > 0 ) this.error.content = "내용을 입력해주세요.";
+    'meetup.content' : function() {
+      if ( this.meetup.content.length < 1 ) this.error.content = "내용을 입력해주세요.";
       else this.error.content = false;
       return;
     },
-    location : function() {
-      if (this.meetup.location.length < 1)
+    'meetup.location' : function() {
+      if (!this.meetup.location)
         this.error.location = "음식점을 입력해주세요.";
       else this.error.location = false;
       return;
     },
-    date : function() {
+    'meetup.date' : function() {
       if (this.meetup.date.length < 1) this.error.date = "날짜를 입력해주세요.";
       else this.error.date = false;
       return;
     },
-    personnel : function() {
+    'meetup.personnel' : function() {
       if (this.meetup.personnel.length < 1) this.error.personnel = "인원을 입력해주세요.";
       else this.error.personnel = false;
       return;
@@ -349,25 +366,45 @@ export default {
     },
     meetUp() {
       if (this.meetup.title.length === 0) {
-        alert("제목을 작성해주세요.");
-        return;
+        this.error.title = "제목을 입력해주세요.";
+        // alert("제목을 작성해주세요.");
+        return false;
       }
+      else this.error.title = false;
 
       if (this.meetup.content.length === 0) {
-        alert("내용을 작성해주세요.");
-        return;
+        // alert("내용을 작성해주세요.");
+        this.error.content = "내용을 입력해주세요.";
+        return false;
       }
+      else this.error.content = false;
 
-      if (this.meetup.date.length === 0) {
-        alert("날짜를 선택해주세요.");
-        return;
+      if (!this.meetup.location) {
+        this.error.location = "장소를 선택해주세요.";
+        return false;
       }
+      else this.error.location = false;
+      
+      if (!this.meetup.date) {
+        this.error.date = "날짜를 선택해주세요.";
+        return false;
+      }
+      else this.error.date = false;
 
-      if (this.meetup.personnel.length === 0) {
-        alert("인원을 선택해주세요.");
-        return;
+      if (!this.meetup.personnel) {
+        this.error.personnel = "인원을 선택해주세요.";
+        return false;
       }
-      console.log(this.meetup)
+      else this.error.personnel = false;
+      
+      if (this.isValidForm())
+
+      // if (this.meetup.personnel.length === 0) {
+      //   alert("인원을 선택해주세요.");
+      //   return;
+      // }
+
+      // console.log(this.meetup)
       axios
         .post(`${SERVER_URL}/meetup`, this.meetup)
         .then((response) => {
@@ -375,11 +412,16 @@ export default {
           alert("밋업 등록이 완료됐습니다.");
           this.$router.push("/map")
         })
+        .catch((error) => {
+          console.log('error보기')
+          console.log(error)
+        })
     },
+    
     checkForm() {
       if (this.meetup.title.length < 1) this.error.title = "제목을 입력해주세요.";
       else { this.error.title = false; return; }
-      if ( this.meetup.content.length > 0 ) this.error.content = "내용을 입력해주세요.";
+      if ( this.meetup.content.length < 1 ) this.error.content = "내용을 입력해주세요.";
       else {this.error.content = false;
       return;}
       if (this.meetup.location.length < 1)
@@ -392,6 +434,13 @@ export default {
       if (this.meetup.personnel.length < 1) this.error.personnel = "인원을 입력해주세요.";
       else {this.error.personnel = false;
       return;}
+    },
+     // 입력 정보가 다 유효하면 true, 아니면 false
+    isValidForm() {
+      for (let key in this.error) {
+        if (this.error[key]) return false;
+      }
+      return true;
     },
     search(){
       axios
@@ -479,4 +528,11 @@ div {
 /* .btn-person{
   margin: 0px;
 } */
+.error-text {
+  margin: 0 0 8px 8px;
+}
+.cssBox {
+  margin: 0 0 18px 0;
+}
+
 </style>

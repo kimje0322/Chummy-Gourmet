@@ -29,11 +29,34 @@
             <span class="prf">
               <img
                 style="height: 100%; width: 100%; -webkit-user-drag: none;"
-                src="https://scontent-gmp1-1.cdninstagram.com/v/t51.2885-19/s150x150/64568083_346714766240529_8023659861445181440_n.jpg?_nc_ht=scontent-gmp1-1.cdninstagram.com&_nc_ohc=Bxek_7qbsNkAX_0dv-_&oh=a14ba48d56d9821b9ab60764d1f14258&oe=5F515501"
+                :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+this.myimg"
               />
             </span>
-            <form style="height: 42px;" class="text-box" method="POST">
-              <textarea style="height: 18px;" class="text" placeholder="write here!"></textarea>
+            <form style="height: 42px;" class="text-box">
+              <textarea
+                aria-label="here"
+                autocomplete="off"
+                autocorrect="off"
+                data-focus-visible-added
+                style="height: 18px;"
+                class="text"
+                placeholder="write here!"
+                v-model="commentText"
+              ></textarea>
+              <button @click="onCreate()" class="upload">게시</button>
+            </form>
+          </div>
+          <div v-if="recomment" class="top">
+            <span class="prf">
+              <img
+                style="height: 100%; width: 100%; -webkit-user-drag: none;"
+                :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+this.myimg"
+              />
+            </span>
+            <form style="height: 42px;" class="text-box">
+              <!-- v-model="recommentText" -->
+              <v-textarea style="height: 18px;" class="text" v-model="commentcontent"></v-textarea>
+              <button @click="onRewrite()" class="upload">수정</button>
             </form>
           </div>
         </section>
@@ -52,7 +75,7 @@
                       <span class="prf" style="margin-left: 0px;">
                         <img
                           style="height: 100%; width: 100%; -webkit-user-drag: none;"
-                          src="https://scontent-gmp1-1.cdninstagram.com/v/t51.2885-19/s150x150/64568083_346714766240529_8023659861445181440_n.jpg?_nc_ht=scontent-gmp1-1.cdninstagram.com&_nc_ohc=Bxek_7qbsNkAX_0dv-_&oh=a14ba48d56d9821b9ab60764d1f14258&oe=5F515501"
+                          :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+postuserimg"
                         />
                       </span>
                     </div>
@@ -60,19 +83,16 @@
                       style="float: left; width: 285px; flex-direction: column; position: relative;"
                     >
                       <!-- <div style="display: inline-flex;"> -->
-                        <h2
-                          style="font-size: 14px; font-weight: 600; align-items: center; display: inline-flex; margin-right: 4px;"
-                        >
-                          <div style="display: flex; flex-direction: column;">
-                            <a class="prf-link" href="#">dlwlrma</a>
-                          </div>
-                        </h2>
+                      <h2
+                        style="font-size: 14px; font-weight: 600; align-items: center; display: inline-flex; margin-right: 4px;"
+                      >
+                        <div style="display: flex; flex-direction: column;">
+                          <a class="prf-link" href="#">{{postname}}</a>
+                        </div>
+                      </h2>
                       <!-- </div> -->
                       <span>
-                        게시글 내용 나오는 부분입니다.
-                        <br />게시글 내용 나오는 부분입니다.
-                        <br />게시글 내용 나오는 부분입니다.
-                        <br />게시글 내용 나오는 부분입니다.
+                        {{ postcontent }}
                         <br />
                       </span>
                     </div>
@@ -82,8 +102,12 @@
             </div>
             <ul style="margin-bottom: 16px; padding-top: 0 !important;">
               <div>
-                <li v-for="(lst, i) in commentlst" :key="i">
-                  <div style="flex-direction: column;">
+                <li
+                  style="display: list-item; width: 335px; padding-bottom: 0;"
+                  v-for="(lst, i) in commentlst"
+                  :key="i"
+                >
+                  <div style="position: relative;">
                     <div style="width: 307px;">
                       <div
                         class="lst-prf"
@@ -92,33 +116,56 @@
                         <span class="prf" style="margin-left: 0px;">
                           <img
                             style="height: 100%; width: 100%; -webkit-user-drag: none;"
-                            src="https://scontent-gmp1-1.cdninstagram.com/v/t51.2885-19/s150x150/64568083_346714766240529_8023659861445181440_n.jpg?_nc_ht=scontent-gmp1-1.cdninstagram.com&_nc_ohc=Bxek_7qbsNkAX_0dv-_&oh=a14ba48d56d9821b9ab60764d1f14258&oe=5F515501"
+                            :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+lst.userimg"
                           />
                         </span>
                       </div>
                       <div style="float: left;">
                         <!-- <h3 style="display: inline-flex;"></h3> -->
-                        <h3
-                          style="align-items: center; display: inline-flex; margin-right: 4px; display: flex;"
+                        <h2
+                          style="font-size: 14px; font-weight: 600; align-items: center; display: inline-flex; margin-right: 4px;"
+                        >
+                          <div style="display: flex; flex-direction: column;">
+                            <a class="prf-link" href="#">{{ lst.usernickname }}</a>
+                          </div>
+                        </h2>
+                        <!-- <h3
+                          style="font-size: 14px; font-weight: 600; align-items: center; display: inline-flex; margin: 0; display: flex;"
                         >
                           <div style="display: flex; flex-direction: column;">
                             <a class="prf-link" href="#">dlwlrma</a>
                           </div>
-                        </h3>
+                        </h3>-->
                         <span>
                           <!-- {{lst}} -->
-                          {{ lst.usernickname }}
+                          {{lst.postcomment}}
                           <br />
                           {{ lst.commentdate }}
-                          <br />게시글 내용 나오는 부분입니다.
-                          <br />게시글 내용 나오는 부분입니다.
-                          <br />
+                          <!-- {{ }} -->
                         </span>
+                        <div style="color: #8e8e8e; margin-top: 12px; margin-bottom: 4px;">
+                          <a href="#" style="margin-right: 12px; color: #8e8e8e;">X시간</a>
+                          <!-- v-if="lst.commentid === userId" -->
+                          <button @click="rewrite(lst)">수정하기</button>
+                        </div>
                       </div>
-                      <div></div>
                     </div>
-                    <span></span>
                   </div>
+                  <!-- v-if="commentid === user" -->
+                  <span style="margin-top: 9px;">
+                    <div style="float: right;">
+                      <button @click="onDelete(lst)">
+                        <div>
+                          <span>
+                            <i
+                              style="display: block; position: relative; height: 14px; width: 14px;"
+                              class="far fa-trash-alt"
+                            ></i>
+                          </span>
+                        </div>
+                      </button>
+                    </div>
+                  </span>
                 </li>
               </div>
             </ul>
@@ -131,6 +178,7 @@
 
 <script>
 import axios from "axios";
+import $ from "jquery";
 
 const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 // const SERVER_URL = "http://localhost:8080";
@@ -138,27 +186,169 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 export default {
   data() {
     return {
+      commentText: "",
       commentlst: [],
+      myimg: "",
+      postid: "",
+      postnickname: "",
+      postuserimg: "",
+      postcontent: "",
+      postname: "",
+      recomment: false,
+      cid : "",
     };
+  },
+  watch: {
+    //   commentText: function (v) {
+    //   this.Text();
+    //   }
   },
   mounted() {},
   created() {
     console.log(this.$route.params);
+    console.log("aaaaaaaaaaaaaaaa");
+    // console.log(this.$cookie.get("userId"));
+    axios
+      .get(
+        `${SERVER_URL}/userpage/getuser?userId=${this.$cookie.get("userId")}`
+      )
+      .then((response) => {
+        // console.log("alfkjsdsi");
+        console.log(response);
+        this.username = response.data.userNickname;
+        this.myimg = response.data.userImg;
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+
     axios
       .get(`${SERVER_URL}/post/comment?commentid=${this.$route.params.postid}`)
       .then((response) => {
         console.log(response);
         this.commentlst = response.data.data;
+        this.postname = this.$route.params.postnickname;
+        this.postcontent = this.$route.params.postcontent;
+        this.postuserimg = this.$route.params.postuserimg;
       })
       .catch((error) => {
         console.log(error.response);
       });
   },
-  methods: {},
+  methods: {
+    onDelete(lst) {
+      console.log(lst);
+      axios
+        .delete(`${SERVER_URL}/post/comment?commentid=${lst.commentid}`)
+        .then((response) => {
+          axios
+            .get(
+              `${SERVER_URL}/post/comment?commentid=${this.$route.params.postid}`
+            )
+            .then((response) => {
+              console.log(response);
+              this.commentlst = response.data.data;
+              this.postname = this.$route.params.postnickname;
+              this.postcontent = this.$route.params.postcontent;
+              this.postuserimg = this.$route.params.postuserimg;
+            })
+            .catch((error) => {
+              console.log(error.response);
+            });
+        })
+        .catch((error) => {});
+    },
+    onCreate() {
+      var commentxt = {
+        commentuserid: this.$cookie.get("userId"),
+        postcomment: this.commentText,
+        postid: this.$route.params.postid,
+      };
+      this.commentText = "";
+
+      console.log(commentxt);
+      axios
+        .post(`${SERVER_URL}/post/comment`, commentxt)
+        .then((respose) => {
+          axios
+            .get(
+              `${SERVER_URL}/post/comment?commentid=${this.$route.params.postid}`
+            )
+            .then((response) => {
+              console.log(response);
+              this.commentlst = response.data.data;
+              this.postname = this.$route.params.postnickname;
+              this.postcontent = this.$route.params.postcontent;
+              this.postuserimg = this.$route.params.postuserimg;
+            })
+            .catch((error) => {
+              console.log(error.response);
+            });
+        })
+        .catch((error) => {});
+    },
+    rewrite(comment) {
+      this.recomment = true
+        // var commmenttxt = {
+        //   commentuserid : this.$cookie.get("userId"),
+        //   commentcontent: comment.postcomment,
+        //   postid: this.$route.params.postid,
+        // 148 /
+        // 5;
+      this.cid = comment.commentid
+      
+      this.commentcontent = comment.postcomment;
+      console.log("여기여기");
+      console.log(this.commentcontent);
+      // axios
+      //   .post(`${SERVER_URL}/post/comment`, commmenttxt)
+      //   .then((response) => {
+      //     alert("수정 완료");
+      //   })
+    },
+    onRewrite() {
+      var commentxt = {
+        // commentuserid: this.$cookie.get("userId"),
+        postcomment: this.commentcontent,
+        commentid: this.cid
+
+        // postid: this.$route.params.postid,
+      };
+      
+      axios
+        .put(`${SERVER_URL}/post/comment`, commentxt)
+        .then((response) => {
+          this.recomment = false
+          console.log(commentxt)
+          alert("성공!");
+          axios
+            .get(
+              `${SERVER_URL}/post/comment?commentid=${this.$route.params.postid}`
+            )
+            .then((response) => {
+              console.log(response);
+              this.commentlst = response.data.data;
+              this.postname = this.$route.params.postnickname;
+              this.postcontent = this.$route.params.postcontent;
+              this.postuserimg = this.$route.params.postuserimg;
+            })
+            .catch((error) => {
+              console.log(error.response);
+            });
+        })
+        .catch((error) => {});
+    },
+    // Text() {
+    //     $('.upload').css('color', 'blue')
+    // }
+  },
 };
 </script>
 
-<style>
+<style scoped>
+.upload[disabled] {
+  opacity: 0.3;
+}
 .prf-link {
   color: black !important;
   border: 0;

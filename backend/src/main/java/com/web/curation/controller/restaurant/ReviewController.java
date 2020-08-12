@@ -1,4 +1,4 @@
-package com.web.curation.controller.review;
+package com.web.curation.controller.restaurant;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dao.meetup.MeetUpDao;
-import com.web.curation.dao.review.RestaurantDao;
-import com.web.curation.dao.review.ReviewCommentDao;
-import com.web.curation.dao.review.ReviewDao;
+import com.web.curation.dao.restaurant.RestaurantDao;
+import com.web.curation.dao.restaurant.ReviewCommentDao;
+import com.web.curation.dao.restaurant.ReviewDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.meetup.Meetup;

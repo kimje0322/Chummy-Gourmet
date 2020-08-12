@@ -1,5 +1,5 @@
 <template>
-  <div id="joininfo">
+  <v-app>
     <v-toolbar-title >
       <v-toolbar dark>
         <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
@@ -7,8 +7,12 @@
         <p class="my-auto">Profile 수정</p>
         <v-spacer></v-spacer>
         <v-spacer></v-spacer>
+        <a @click="update">
+           <i class="fas fa-check"></i>
+        </a>
       </v-toolbar>
     </v-toolbar-title>
+    <div class="entire">
     <!-- 선호 음식 -->
     <div class="label-with-input">
       <label class="userInfo">선호음식</label>
@@ -188,7 +192,7 @@
     </div>
 
     <!-- interest -->
-    <div class="label-with-input">
+    <div class="label-with-input" style="margin-bottom:100px;">
       <label class="userInfo">관심사</label>
       <ul class="select-many-interest">
         <li>
@@ -266,13 +270,8 @@
         <div class="error-text" v-if="error.interests">{{error.interests}}</div>
       </ul>
     </div>
-    <!-- <span class="selectInfo">게임</span> -->
-    <!-- <router-link to="/user/finishjoin"> -->
-    <v-btn color="warning" class="next-btn" @click="update">
-      <h4>수정</h4>
-    </v-btn>
-    <!-- </router-link> -->
   </div>
+  </v-app>
 </template>
 
 <script>
@@ -434,6 +433,9 @@ export default {
 </script>
 
 <style scoped>
+.entire {
+  padding: 18px;
+}
 .title {
   text-align: center;
 }
@@ -544,7 +546,7 @@ img {
 
 .select-many label {
   width: 100%;
-  padding: 5px 12px 5px 12px;
+  padding: 5px 8px 5px 8px;
   border: 1.5px solid gray;
   border-radius: 15px;
   cursor: pointer;
@@ -553,7 +555,7 @@ img {
 
 .select-many-interest label {
   width: 100%;
-  padding: 5px 12px 5px 12px;
+  padding: 5px 8px 5px 8px;
   border: 1.5px solid gray;
   border-radius: 15px;
   cursor: pointer;

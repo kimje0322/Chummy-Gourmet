@@ -19,6 +19,12 @@ public interface MeetUpDao extends JpaRepository<Meetup, String> {
             "where a.meetup_id = (select meetup_id from review where review_id = :id)", nativeQuery = true)
 	Optional<Meetup> selectMeetUpById(int id);
 	
+	// 밋업 아이디로 밋업 객체 가져오기
+	@Query(value = "SELECT meetup_id, meetup_master, meetup_title, meetup_content,meetup_location,meetup_address,meetup_date,meetup_create_date, meetup_personnel " + 
+			"FROM meetup " +
+			"WHERE meetup_id = :id", nativeQuery = true)
+	Optional<Meetup> getMeetupByMeetupID(int id);
+	
 	// 해당 지역(구)에 있는 밋업 정보 가져오기
 	@Query(value =
 				"SELECT * " + 
@@ -32,10 +38,12 @@ public interface MeetUpDao extends JpaRepository<Meetup, String> {
 	@Query(value = "INSERT INTO meetup "
 			+ "(meetup_master, meetup_title, meetup_content, "
 			+ "meetup_location, meetup_address,meetup_date, "
-			+ "meetup_personnel) "
+			+ "meetup_personnel, meetup_img) "
 			+ "VALUES "
-			+ "(:#{#meetup.master}, :#{#meetup.title}, :#{#meetup.content}, :#{#meetup.location}, :#{#meetup.address},:#{#meetup.date}, :#{#meetup.personnel})", nativeQuery = true)
+			+ "(:#{#meetup.master}, :#{#meetup.title}, :#{#meetup.content}, :#{#meetup.location}, :#{#meetup.address},:#{#meetup.date}, :#{#meetup.personnel}, :#{#meetup.img})", nativeQuery = true)
 	Meetup save(Meetup meetup);
+
+
 
 
 }

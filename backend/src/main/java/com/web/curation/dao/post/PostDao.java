@@ -1,6 +1,7 @@
 package com.web.curation.dao.post;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,10 +30,17 @@ public interface PostDao extends JpaRepository<Post, String> {
 			+ "values(:#{#post.postuserid},:#{#post.postcontent},now(),:#{#post.postimgurl})",nativeQuery=true)
 	void insert(Post post);
 
-	@Query(value = "update post set post_content = :#{#post.postcontent}, post_date = now() "
+	@Query(value = "update post set post_content = :#{#post.postcontent}, post_date = now(), post_img_url = :#{#post.postimgurl} "
 			+ "where post_id = :#{#post.postid}",nativeQuery=true)
 	void update(Post post);
 	
 	@Query(value = "delete from post where post_id = :postid",nativeQuery=true)
 	void delete(String postid);
+
+	@Query(value = "select post_id,post_userid, post_date, post_content, post_img_url,post_like,post_update_date,user_nickname,user_img "
+			+ "from post a "
+			+ "inner join user b on a.post_userid = b.user_id "
+			+ "where post_userid = :userid "
+			+ "order by post_date desc", nativeQuery = true)
+	List<Map<String, Object>> selectAllByUserid(int userid);
 }

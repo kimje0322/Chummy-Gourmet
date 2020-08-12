@@ -29,7 +29,7 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String userId;
 
-	@JsonIgnore
+//	@JsonIgnore
 	@Column(name = "user_pwd")
 	private String userPwd;
 	@Column(name = "user_email")
@@ -70,6 +70,15 @@ public class User {
 		this.userName = userName;
 		this.userNickname = userNickname;
 		this.userPhone = userPhone;
+		this.userComment = userComment;
+	}
+	
+	@Builder
+	public User(String userPwd, String userEmail,String userNickname,String userComment) {
+		super();
+		this.userPwd = userPwd;
+		this.userEmail = userEmail;
+		this.userNickname = userNickname;
 		this.userComment = userComment;
 	}
 

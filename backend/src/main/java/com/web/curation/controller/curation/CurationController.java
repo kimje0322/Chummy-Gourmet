@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.api.KakaoApi;
-import com.web.curation.dao.review.RestaurantDao;
+import com.web.curation.dao.restaurant.RestaurantDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.review.Restaurant;
 
@@ -49,14 +49,17 @@ public class CurationController {
 
 	static String clientId = "dapi.kakao.com"; // 애플리케이션 클라이언트 아이디값"
 	static String clientSecret = "KakaoAK e4cd88afa207146436293dbd18d2b89f"; // 애플리케이션 클라이언트 시크릿값"
-
+	
+	
 	// 장소를 중심으로 검색
 	@GetMapping("/curation")
 	@ApiOperation(value = "장소를 중심으로 검색")
 //	public List<Restaurant> curation(@RequestParam(required = true) final String location) {
-	public Map<String, Object> curation(@RequestParam(required = true) final String location) {
+	public Map<String, Object> curation(@RequestParam(required = true) final String location) throws IOException {
 
 		String text = new String();
+		//img url 찾기위한 api
+		KakaoApi kakao = new KakaoApi();
 
 		try {
 			text = URLEncoder.encode(location, "UTF-8");
@@ -77,8 +80,8 @@ public class CurationController {
 			String responseBody = get(apiURL, requestHeaders);
 
 			// 정보를 담을 리스트 생성
-			System.out.println("responseBody");
-			System.out.println(responseBody);
+//			System.out.println("responseBody");
+//			System.out.println(responseBody);
 			// json으로 받아온 값을 식당이름/분류로 나눔
 			try {
 				JSONParser jsonParse = new JSONParser();
@@ -114,6 +117,7 @@ public class CurationController {
 						rest.setLike("0");
 						rest.setReview("0");
 						rest.setScrap("0");
+						rest.setImg(kakao.searchImg((String)temp.get("place_name")).toString());
 						list.add(rest);
 					}
 
@@ -123,9 +127,6 @@ public class CurationController {
 			}
 		}
 
-//		for (Restaurant ad : list) {
-//			System.out.println(ad);
-//		}
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("list", list);
 		return map;

@@ -1,4 +1,4 @@
-package com.web.curation.dao.review;
+package com.web.curation.dao.restaurant;
 
 import java.util.List;
 

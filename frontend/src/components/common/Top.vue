@@ -32,21 +32,12 @@
 
       <v-list nav dense>
         <v-list-item-group>
-          <v-list-item>
+          <v-list-item @click="SearchUser">
             <v-list-item-icon>
-              <v-icon>mdi-account-multiple</v-icon>
+              <v-icon>mdi-account-search-outline</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>Meet Up</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-list-item>
-            <v-list-item-icon>
-              <v-icon>mdi-star</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>favorite</v-list-item-title>
+              <v-list-item-title>유저검색</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -65,10 +56,10 @@
 
           <v-list-item>
             <v-list-item-icon>
-              <v-icon>mdi-folder</v-icon>
+              <v-icon>far fa-paper-plane</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>스크랩</v-list-item-title>
+              <v-list-item-title>Message</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -99,8 +90,8 @@
 <script>
 import axios from "axios";
 
-const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
-// const SERVER_URL = "http://localhost:8080";
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "https://localhost:8080";
 export default {
   data () {
     return {
@@ -114,6 +105,9 @@ export default {
   computed: {
   },
   methods:{
+    SearchUser(){
+      this.$router.push('/SearchUser');  
+    },
     followRequestList(){
       this.$router.push('/user/FollowRequestList');
     },

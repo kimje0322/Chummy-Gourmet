@@ -38,7 +38,15 @@ public class Restaurant {
 	private String location;
 	@Column(name = "rest_url")
 	private String url;
+	@Column(name = "rest_img")
+	private String img;
 	
+	public String getImg() {
+		return img;
+	}
+	public void setImg(String img) {
+		this.img = img;
+	}
 	public String getScrap() {
 		return scrap;
 	}
@@ -97,7 +105,7 @@ public class Restaurant {
 	public String toString() {
 		return "Restaurant [id=" + id + ", name=" + name + ", category=" + category + ", like=" + like + ", review="
 				+ review + ", scrap=" + scrap + ", telphone=" + telphone + ", location=" + location + ", url=" + url
-				+ "]";
+				+ ", img=" + img + "]";
 	}
 
 	

@@ -9,33 +9,31 @@
         <v-spacer></v-spacer>
       </v-toolbar>
     </v-toolbar-title>
-    <!-- 가운데 부분 -->
-    <!-- 팔로워 -->
     
     <v-list subheader>
       <v-list-item
-        v-for="item in list"
-        :key="item.userId"
+        v-for="item in items"
+        :key="item.followingRequestId"
       >
-        <v-list-item-avatar @click="showUser">
-          <v-img :src="items[0].avatar"></v-img>
+        <v-list-item-avatar @click="showUser(item)">
+          <v-img
+            :src="item.followingRequestUserImg">
+          </v-img>
+
         </v-list-item-avatar>
 
-         
-        <v-list-item-content @click="showUser">
+        <v-list-item-content @click="showUser(item)">
           <v-list-item-title>{{item.followingRequestNickname}}</v-list-item-title>
         </v-list-item-content>
 
-        
         <v-list-item-icon @click="acceptFollowing(item.followingRequestId)">
-          <v-btn color="blue">
+          <v-btn color="info">
             수락
           </v-btn>
-          <!-- <v-icon>mdi-account-plus</v-icon> -->
         </v-list-item-icon>
 
         <v-list-item-icon @click="deleteFollowing(item.followingRequestId)">
-          <v-btn color="red">
+          <v-btn color="error">
             거절
           </v-btn>
         </v-list-item-icon>
@@ -49,24 +47,29 @@
 <script>
 
 import axios from "axios";
-const SERVER_URL = "http://i3b302.p.ssafy.io:8080";
-// const SERVER_URL = "http://localhost:8080";
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "https://localhost:8080";
 export default {
   name: "components",
  
   data: () => {
     return {
       userId :"",
-      items: [
-        { active: true, title: 'Jason Oner', avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg' },
-      ],
-      list:[],
+      items: [],
+      viewImg:"",
+      userImg:"",
     };
   },
   methods :{
-    showUser(){
-      alert("유저 보여줄려고 클릭함")
-
+    showUser(user){
+      let profileInfo = {
+        userId: user.followingRequestId,
+        userImg : user.followingRequestUserImg,
+        followerFollowing: user.followerFollowing
+      };
+      this.$router.push('/user/profile?userId='+user.followingRequestId
+        +'&followerFollowing='+user.followerFollowing
+        +'&userImg='+user.followingRequestUserImg);
     },
     acceptFollowing(followingRequestId){
       axios
@@ -103,14 +106,24 @@ export default {
       });
     },
     created(){
-     this.userId = this.$cookie.get("userId");
+      this.userId = this.$cookie.get("userId");
+      this.items =[]
     axios
       .get(
         `${SERVER_URL}/userpage/getfollowingrequest?userId=${this.userId}`
       )
       .then((response) => {
         if(response.data != ""){
-          this.list = response.data;
+          for (let i = 0; i < response.data.length; i++) {
+            let userImg = response.data[i].followingRequestUserImg;
+            let viewImg = SERVER_URL+"/img/user?imgname=" + userImg;
+            this.items.push({
+              followingRequestId : response.data[i].followingRequestId,
+              followingRequestNickname : response.data[i].followingRequestNickname,
+              followingRequestUserImg: viewImg,
+              followerFollowing : response.data[i].followerFollowing
+            })
+          }
         }
       })
       .catch((error) => {

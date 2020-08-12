@@ -7,8 +7,9 @@
             <v-toolbar-title style="margin:auto;">돈독한 미식가</v-toolbar-title>
           </v-app-bar>-->
           <v-bottom-navigation
+            class="navbar-fixed-bottom"
             v-if="!$route.meta.navbar"
-            scroll-target="#scroll-area-2"
+            scroll-target="#scroll-area-1"
             hide-on-scroll
             scroll-threshold="500"
             absolute
@@ -29,7 +30,11 @@
             </v-btn>
 
             <v-btn text color="deep-purple accent-4">
+               <!-- <input ref="imageInput" type="file" hidden @change="onChangeImages"> -->
+              <!-- <v-btn type="button" @click="onClickImageUpload"> -->
+              <!-- </v-btn> -->
               <router-link to="/feed/add">
+
                 <v-icon>fas fa-plus</v-icon>
               </router-link>
             </v-btn>
@@ -73,7 +78,7 @@
           </v-sheet>
           
           <!-- home, login 이외 -->
-          <v-sheet v-if="$route.name !== 'Home'"  id="scroll-area-1" class="overflow-y-auto" max-height="610">
+          <v-sheet v-if="$route.name !== 'Home'"  id="scroll-area-1" class="overflow-y-auto" max-height="100%">
             <v-container class="nothome" style="height: 100%;">
               <router-view></router-view>
             </v-container>
@@ -89,14 +94,19 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 // const SERVER_URL = "http://localhost:8080";
 import "./components/css/style.scss";
 import axios from "axios";
+import router from "@/routes";
 
 export default {
   name: "app",
   methods: {
+      // onClickImageUpload() {
+      //   this.$refs.imageInput.click();
+  // },
     
   },
   created() {
     //로그인 유지가 아닐경우
+  
     if (
       this.$cookie.get("loginSave") == "false" ||
       this.$cookie.get("loginSave") == null
@@ -104,6 +114,8 @@ export default {
       //저장되어있는 쿠키를 제거한다.
       this.$cookie.delete("accesstoken");
       this.$cookie.delete("userId");
+      alert("로그인을 해주세요");
+      this.$router.push("/");
     }
     //로그인 유지일 경우
     else {
@@ -140,4 +152,8 @@ export default {
 .home-padding {
   padding: 0px !important;
 }
+/* 
+.navbar {
+  position: fixed;
+} */
 </style>

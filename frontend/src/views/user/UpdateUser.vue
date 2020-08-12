@@ -4,20 +4,21 @@
       <v-toolbar dark>
         <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
         <v-spacer></v-spacer>
-        <p class="my-auto">Profile 수정</p>
+        <p class="my-auto">프로필 수정</p>
         <v-spacer></v-spacer>
         <v-spacer></v-spacer>
       </v-toolbar>
     </v-toolbar-title>
     
+    <div class="entireClass">
     <v-layout row>
       <v-flex xs4 order-md2 order-xs1>
       </v-flex>
       <v-flex xs4 order-md3 order-xs2>
-        <v-avatar size="100" >
-        <v-img
-           v-if="viewImg" :src="viewImg">
-           </v-img>
+        <v-avatar class="p-img" size="100" >
+          <v-img 
+            v-if="viewImg" :src="viewImg">
+          </v-img>
         </v-avatar>
         
       </v-flex>
@@ -29,65 +30,99 @@
     <v-layout row>
       <v-flex xs3 order-md2 order-xs1>
       </v-flex>
-      <v-flex xs6 order-md3 order-xs2>
-        <v-btn type="button" @click="onClickImageChange" >수정</v-btn>
+      <v-flex xs6 order-md3 order-xs2 class="update-buttons">
+        <v-btn small type="button" class="mr-2" @click="onClickImageChange" >수정</v-btn>
         <input ref="imageInput" type="file" hidden @change="onChangeImage">
-        <v-btn @click="onClickSubmit">확인</v-btn>
+        <v-btn small @click="onClickSubmit">확인</v-btn>
       </v-flex>
       <v-flex xs3 order-md1 order-xs3>
       </v-flex>
     </v-layout>
-    
+
     <v-layout>
     <v-content>
-      
+
+      <v-text-field
+        style="border-bottom-width: 15px;
+        margin: 7px 0 10px 0px;"
+        color="dark"
+        v-model="user.userName"
+        label="Name"       
+        disabled
+        hide-details
+        readonly
+        outlined
+        >
+      </v-text-field >
+
       <v-text-field
         color="dark"
         v-model="userNickname"
         label="Nickname"
+        hide-details
         outlined
         >
       </v-text-field >
       
       <v-text-field 
         color="dark"
+        style="border-bottom-width: 15px;
+        margin: 7px 0 10px 0px;"
         v-model="userPwd"
         :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" 
         :type="show1 ? 'text' : 'password'"
         @click:append="show1 = !show1"
         label="Password" 
+        hide-details
         outlined
         >
       </v-text-field>
 
+      <v-text-field
+        style="border-bottom-width: 15px;
+        margin: 7px 0 10px 0px;"
+        color="dark"
+        v-model="user.userEmail"
+        label="Email"       
+        disabled
+        hide-details
+        readonly
+        outlined
+        >
+      </v-text-field >
+
+      <v-text-field
+        style="border-bottom-width: 15px;
+        margin: 7px 0 10px 0px;"
+        color="dark"
+        v-model="user.userPhone"
+        label="Phone"       
+        disabled
+        hide-details
+        readonly
+        outlined
+        >
+      </v-text-field >
+
       <v-text-field 
+        style="border-bottom-width: 15px;
+        margin: 7px 0 10px 0px;"
         color="dark"
         v-model="userComment" 
         label="Comment" 
+        hide-details
         outlined>
       </v-text-field>
 
       <v-btn
-        block
+        block dark
         @click="checkForm"
       >
         프로필 수정
       </v-btn>
     </v-content>
     </v-layout>
-    <v-layout>
-      <v-list>
-        <v-list-item-title>프로필 정보</v-list-item-title>
-        <v-list-item-content>
-          <v-list-item-subtitle>성함</v-list-item-subtitle>
-          <v-list-item-title>{{user.userName}}</v-list-item-title>
-          <v-list-item-subtitle>이메일 주소</v-list-item-subtitle>
-          <v-list-item-title>{{user.userEmail}}</v-list-item-title>
-          <v-list-item-subtitle>전화번호</v-list-item-subtitle>
-          <v-list-item-title>{{user.userPhone}}</v-list-item-title>
-        </v-list-item-content>
-      </v-list>
-    </v-layout>
+    </div>
   </v-app>
 </template>
 
@@ -125,49 +160,44 @@ export default {
 
     //이미지 보이는부분 변경
     onChangeImage(e){
-      console.log("들어왓나 ");
-      console.log("this.file : "+e.target.files);
       this.file = e.target.files[0];
       this.viewImg = URL.createObjectURL(this.file);
-      console.log(this.viewImg);
     },
 
     //이미지 입력 버튼을 클릭했을때
     //서버와 통신하여 이미지를 저장하고 url을 반환.
     onClickSubmit(){
-             const file = new FormData();
-             file.append('file',this.file);
-             axios
-              .post(`${SERVER_URL}/userpage/img`,
-                 file
-                )
+      const file = new FormData();
+      file.append('file',this.file);
+      axios
+      .post(`${SERVER_URL}/userpage/img`,file)
 
-              .then((response) => {
-                this.userImg = response.data;
-                console.log(this.userImg);
-                this.addImg();
-              })
+      .then((response) => {
+        this.userImg = response.data;
+        console.log(this.userImg);
+        this.addImg();
+      })
 
-              .catch((error) => {
-                console.log(error.response);
-                alert("이미지 전송 실패");
-              });
+      .catch((error) => {
+        console.log(error.response);
+        alert("이미지 전송 실패");
+      });
     },
 
     addImg(){
-              this.userImgCpy = this.userImg;
-              axios
-              .get(`${SERVER_URL}/userpage/updateimg?user_img=${this.userImgCpy}&user_id=${this.userId}`
-                )
+      this.userImgCpy = this.userImg;
+      axios
+      .get(`${SERVER_URL}/userpage/updateimg?user_img=${this.userImgCpy}&user_id=${this.userId}`
+        )
 
-              .then((response) => {
-                alert("성공");
-              })
+      .then((response) => {
+        alert("성공");
+      })
 
-              .catch((error) => {
-                console.log(error.response);
-                alert("데이터 전송 실패");
-              });
+      .catch((error) => {
+        console.log(error.response);
+        alert("데이터 전송 실패");
+      });
     },
 
     checkpwd() {
@@ -178,7 +208,9 @@ export default {
       this.updateUser();
     },
     updateUser (){
-      if (this.userPwd.length > 0 && !this.passwordSchema.validate(this.userPwd))
+      if (this.userNickname.length < 1)
+        this.$alert("닉네임을 입력해주세요.");
+      else if (this.userPwd.length > 0 && !this.passwordSchema.validate(this.userPwd))
         this.$alert("영문,숫자 포함 8 자리이상이어야 합니다.");
       else{
         axios
@@ -188,7 +220,6 @@ export default {
         .then((response) => {
           if(response.data.data == "isExistNickname"){
             this.$alert("사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.");
-              
           }
           else{
             // 정상 동작
@@ -241,6 +272,15 @@ export default {
   .fa-chevron-left {
     color: white; 
     margin-left: 7px;
+   }
+  .update-buttons {
+    text-align: center;
+    margin-bottom: 12px;
+  } 
+  .p-img {
+    margin: 1px 0 10px 12px;
   }
-  
+  .text-field-css{
+    margin: 3px;
+  } 
 </style>

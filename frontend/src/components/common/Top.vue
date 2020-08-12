@@ -54,7 +54,7 @@
             
           </v-list-item>
 
-          <v-list-item>
+          <v-list-item @click="chatRoom">
             <v-list-item-icon>
               <v-icon>far fa-paper-plane</v-icon>
             </v-list-item-icon>
@@ -105,6 +105,9 @@ export default {
   computed: {
   },
   methods:{
+    chatRoom(){
+      this.$router.push('/chatroom');
+    },
     SearchUser(){
       this.$router.push('/SearchUser');  
     },
@@ -122,6 +125,7 @@ export default {
       //do something...
       this.$cookie.delete('accesstoken');
       this.$cookie.delete('userId');
+      this.$cookie.delete('loginSave');
       this.$router.push('/');
     });
     }

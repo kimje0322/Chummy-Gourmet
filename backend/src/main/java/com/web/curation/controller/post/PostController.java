@@ -16,6 +16,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,6 +44,35 @@ public class PostController {
 	
 	@Autowired
 	PostDao postDao;
+	
+	@GetMapping("/post/like/{userid}")
+	@ApiOperation(value = "[뉴스피드] userid 에 해당하는 유저가 좋아요한 게시글 postid 가져오기")
+	public List<Integer> getLikes(@PathVariable String userid) {
+		List<Integer> list = new ArrayList<Integer>();
+		list = postDao.selectPostLikeIdByUserId(userid);
+		return list;
+	}
+
+	@PutMapping("/post/like")
+	@ApiOperation(value = "[뉴스피드] 게시글 좋아요 한 뒤 해당 게시글의 좋아요 개수 리턴")
+	public int insertRestLike(@RequestParam(required = true) final String userid,
+			@RequestParam(required = true) final String postid) {
+
+		postDao.insertPostLike(userid, postid);
+		postDao.updatePostLike(postid);
+		int restLikeCount = postDao.selectByPostId(postid);
+		return restLikeCount;
+	}
+
+	@DeleteMapping("/post/like")
+	@ApiOperation(value = "[뉴스피드] 게시글 좋아요 취소한 뒤 해당 게시글의 좋아요 개수 리턴")
+	public int deleteRestLike(@RequestParam(required = true) final String userid,
+			@RequestParam(required = true) final String postid) {
+		postDao.deletePostLike(userid, postid);
+		postDao.updatePostLikeM(postid);
+		int restLikeCount = postDao.selectByPostId(postid);
+		return restLikeCount;
+	}
 
 	@PostMapping("/post/img")
 	@ApiOperation(value = "[뉴스피드]게시글에 들어가는 이미지 저장")

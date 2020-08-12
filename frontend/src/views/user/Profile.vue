@@ -75,6 +75,7 @@ export default {
       userImg:"",
       postlst: [],
       commentlst :[],
+      userInfo: "",
     }
   },
   methods :{
@@ -145,7 +146,7 @@ export default {
     }else{
       this.followerFollowing = 'false'
     }
-
+    
     axios
       .get(
         `${SERVER_URL}/userpage/getuser?userId=`+this.anotherId
@@ -165,7 +166,14 @@ export default {
             this.postlst = response.data.data
             this.commentlst = response.data.comment;
             // console.log(this.postlst)
-        })  
+        })
+        
+      axios 
+      .get(`${SERVER_URL}/userpage/getuserInfo?userId=`+this.anotherId)
+         .then((response) => {
+           this.userInfo = response.data
+           console.log(this.userInfo)
+         })
   },
   
 }
@@ -173,5 +181,11 @@ export default {
 </script>
 
 <style>
+  .entire {
+  padding: 18px
+  }
+  .my-auto {
+  font-size: 20px;
+  }
 
 </style>

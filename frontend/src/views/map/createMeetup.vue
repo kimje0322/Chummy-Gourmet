@@ -336,7 +336,7 @@ export default {
     }
   },
   methods: {
-    test() {
+    setDate() {
       this.menu = false;
       this.menu2 = false;
       this.meetup.date = this.date + " " + this.time;
@@ -347,23 +347,71 @@ export default {
     },
     meetUp() {
       if (this.meetup.title.length === 0) {
-        alert("제목을 작성해주세요.");
-        return;
+        this.error.title = "제목을 입력해주세요.";
+        // alert("제목을 작성해주세요.");
+        return false;
       }
+      else this.error.title = false;
 
       if (this.meetup.content.length === 0) {
-        alert("내용을 작성해주세요.");
-        return;
+        // alert("내용을 작성해주세요.");
+        this.error.content = "내용을 입력해주세요.";
+        return false;
       }
+      else this.error.content = false;
 
-      if (this.meetup.date.length === 0) {
-        alert("날짜를 선택해주세요.");
-        return;
+      if (!this.meetup.location) {
+        this.error.location = "장소를 선택해주세요.";
+        return false;
       }
+      else this.error.location = false;
+      
+      if (!this.meetup.date) {
+        this.error.date = "날짜를 선택해주세요.";
+        return false;
+      }
+      else this.error.date = false;
 
-      if (this.meetup.personnel.length === 0) {
-        alert("인원을 선택해주세요.");
-        return;
+      if (!this.meetup.maxPersonnel) {
+        this.error.personnel = "인원을 선택해주세요.";
+        return false;
+      }
+      else this.error.personnel = false;
+
+
+      if (!this.meetup.personalities) {
+        this.error.personalities = "성향을 선택해주세요.";
+        return false;
+      }
+      else this.error.personnel = false;
+
+
+      
+      if (this.isValidForm()){
+        var personalities = this.meetup.personalities.toString();
+        personalities = `[${personalities}]`;
+
+        var newMeetup = {
+          title :this.meetup.title,
+          content :this.meetup.content,
+          location :this.meetup.location,
+          address :this.meetup.address,
+          date :this.meetup.date,
+          maxPersonnel :this.meetup.maxPersonnel,
+          master :this.meetup.master,
+          img :this.meetup.img,
+          personalities : personalities
+        }
+
+        axios
+          .post(`${SERVER_URL}/meetup`, newMeetup)
+          .then((response) => {
+            alert("밋업 등록이 완료됐습니다.");
+            this.$router.push("/map")
+          })
+          .catch((error) => {
+            console.log('error보기')
+          })
       }
       console.log(this.meetup);
       axios.post(`${SERVER_URL}/meetup`, this.meetup).then((response) => {
@@ -372,6 +420,7 @@ export default {
         this.$router.push("/map");
       });
     },
+    
     checkForm() {
       if (this.meetup.title.length < 1)
         this.error.title = "제목을 입력해주세요.";
@@ -493,4 +542,11 @@ div {
 /* .btn-person{
   margin: 0px;
 } */
+.error-text {
+  margin: 0 0 8px 8px;
+}
+.cssBox {
+  margin: 0 0 18px 0;
+}
+
 </style>

@@ -84,7 +84,7 @@
                     <v-select
                       ref="select2"
                       v-model="selectedProps"
-                      :items="properties"
+                      :items="personalities"
                       label="성향을 선택해주세요"
                       multiple small-chips deletable-chips
                       prepend-icon="mdi-heart"
@@ -215,7 +215,7 @@ export default {
       selectedFoods : [],
 
       modalProps : false,
-      properties : [
+      personalities : [
         "낙천적", "부정적", "내향적", "외향적", "충동적", "사교적",
         "대담함", "성실함", "냉정함", "온화함", "신중함", "게으름"
       ],
@@ -272,7 +272,7 @@ export default {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(pos => {
           var coords = new kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
-          this.map.setCenter(coords);
+          this.map.panTo(coords);
         });
      }
     },
@@ -312,6 +312,7 @@ export default {
               var overlays = [];
               var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
               meetups.forEach(meetup => {
+                console.log(meetup)
                 geocoder.addressSearch(meetup.address, (result, status) => {
                     if (status === kakao.maps.services.Status.OK) {
                         var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
@@ -341,7 +342,7 @@ export default {
                                           <div class="_desc">
                                               <div class="ellipsis"><label>일시 : </label> ${meetup.date}</div>
                                               <div class="ellipsis"><label>위치 : </label> ${meetup.location}</div>
-                                              <div><label>현재원 : </label> ${meetup.personnel}</div>
+                                              <div><label>인원 : </label> ${meetup.curPersonnel} / ${meetup.maxPersonnel}</div>
                                           </div>
                                       </div>
                                   </div> 

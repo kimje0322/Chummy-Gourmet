@@ -34,8 +34,7 @@
           </v-list-item>
       </v-list>
       </v-dialog>
-
-      
+ 
       </v-row>
   </v-layout>
 </template>

@@ -23,7 +23,7 @@
 
       <div>
         <!-- <p>{{this.postuserid}}</p> -->
-        <div style="padding: 0 16px;">
+        <div style="padding: 18px 25px;">
           <div>
             <div style="padding: 12px 0;">
               <div style="margin-right: 8px;">

@@ -47,6 +47,9 @@ public interface UserDao extends JpaRepository<User, String> {
 	@Query(value ="update user set user_img = :user_img where user_id = :user_id",nativeQuery = true)
 	void setUserImgByUserId(String user_img,String user_id);
 	
+	@Query(value = "select user_nickname from user where user_id = :object",nativeQuery = true)
+	String selectUserNickNameByUserId(Object object);
+	
 }
 
 

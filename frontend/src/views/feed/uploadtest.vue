@@ -9,14 +9,21 @@
                 </p>
                 <div class="messages" v-chat-scroll="{always: false, smooth: true}">
                     <div v-for="message in messages" :key="message.id">
-                        <span class="text-info">[{{ message.name }}]: </span>
-                        <span>{{message.message}}</span>
-                        <span class="text-secondary time">{{message.timestamp}}</span>
+                        <div v-if="message.id == userid" style="text-align : right">
+                             <span class="text-info">[{{ message.name }}]: </span>
+                            <span>{{message.message}}</span>
+                            <span class="text-secondary time">{{message.timestamp}}</span>
+                        </div>
+                        <div v-else>
+                            <span class="text-info">[{{ message.name }}]: </span>
+                            <span>{{message.message}}</span>
+                            <span class="text-secondary time">{{message.timestamp}}</span>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="card-action">
-                <CreateMessage :name="name"/>
+                <CreateMessage :name="name" :id="userid"/>
             </div>
         </div>
     </div>
@@ -34,20 +41,21 @@ export default {
     },
     data() {
         return {
+            userid : 2,
             messages: []
         }
     },
     created() {
-        let ref = window.db.collection('messages').orderBy('timestamp');
+        let ref = window.db.collection('test').doc('유저이름').collection('채팅방이름').orderBy('id');
         ref.onSnapshot(snapshot => {
             snapshot.docChanges().forEach(change => {
                 if (change.type == 'added') {
                     let doc = change.doc;
                     this.messages.push({
-                        id: doc.id,
-                        name: doc.data().name,
+                        id: doc.data().id,
+                        name: doc.data().nickname,
                         message: doc.data().message,
-                        timestamp: moment(doc.data().timestamp).format('LTS')
+                        timestamp: moment(doc.data().time)
                     });
                 }
             });

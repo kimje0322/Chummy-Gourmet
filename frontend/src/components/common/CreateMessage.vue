@@ -14,7 +14,7 @@
 // import fb from '@/firebase/init';
 export default {
     name: 'CreateMessage',
-    props: ['name'],
+    props: ['id','rid'],
     data() {
         return {
             newMessage: null,
@@ -24,10 +24,10 @@ export default {
     methods: {
         createMessage () {
             if (this.newMessage) {
-                window.db.collection('messages').add({
+                window.db.collection('test').doc(this.rid).collection('messages').add({
+                    from : this.id,
                     message: this.newMessage,
-                    name: this.name,
-                    timestamp: Date.now()
+                    time: Date.now()
                 }).catch(err => {
                     console.log(err);
                 });

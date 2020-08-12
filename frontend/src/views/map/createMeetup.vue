@@ -196,6 +196,7 @@
         </div>
 
         <!-- 성향 -->
+        <div>
         <div class="text-center">
           <v-dialog
             v-model="dialog2"
@@ -238,6 +239,8 @@
                 </v-card-text>
               </v-card>
           </v-dialog>
+        </div>
+          <div class="error-text mt-2" v-if="error.personality">{{ error.personality }} </div>
         </div>
         
       </div>
@@ -285,6 +288,7 @@ export default {
         date: false,
         personnel: false,
         master : false,
+        personality: false,
       },
 
       dropdown_font: ["1", "2", "3", "4", "5", "6", "7", "8"],
@@ -395,6 +399,12 @@ export default {
         return false;
       }
       else this.error.personnel = false;
+
+      if (!this.meetup.personality) {
+        this.error.personality = "성향을 선택해주세요.";
+        return false;
+      }
+      else this.error.personnel = false;
       
       if (this.isValidForm())
 
@@ -432,6 +442,9 @@ export default {
       return;}
       if (this.meetup.personnel.length < 1) this.error.personnel = "인원을 입력해주세요.";
       else {this.error.personnel = false;
+      return;}
+      if (this.meetup.personality.length < 1) this.error.personality = "성향을 입력해주세요.";
+      else {this.error.personality = false;
       return;}
     },
      // 입력 정보가 다 유효하면 true, 아니면 false

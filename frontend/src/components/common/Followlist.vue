@@ -200,14 +200,18 @@ export default {
           userImg : user.followerImg,
           followerFollowing: user.followerFollowing
         };
-        this.$router.push({name :'Profile', params: profileInfo});
+        this.$router.push('/user/profile?userId='+user.followerId
+        +'&followerFollowing='+user.followerFollowing
+        +'&userImg='+user.followerImg);
       } else { 
         let profileInfo = {
         userId: user.followingId,
         userImg : user.followingImg,
         followerFollowing: user.followerFollowing
         };
-        this.$router.push({name :'Profile', params: profileInfo});
+        this.$router.push('/user/profile?userId='+user.followingId
+        +'&followerFollowing='+user.followerFollowing
+        +'&userImg='+user.followingImg);
       }
     },
     onSearchFollower () {

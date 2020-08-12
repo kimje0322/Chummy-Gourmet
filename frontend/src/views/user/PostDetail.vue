@@ -45,7 +45,7 @@
                         v-model="dialog"
                         max-width="190"
                         >
-                            <v-list> 
+                        <v-list> 
                             <v-list-item
                             v-for="(item, index) in items"
                             :key="index"
@@ -58,20 +58,14 @@
                     </div>
                   </div>
                 </div>
-                <div></div>
               </div>
             </div>
           </div>
-          <div class="fc">
-            <div class="fc-frame" tabindex="0">
-              <div class="fc-fr">
-                <img
-                  :src="`https://i3b302.p.ssafy.io:8080/img/post?imgname=`+this.postlst.post_img_url"
-                  class="fc-img"
-                />
-              </div>
-            </div>
-          </div>
+        <img 
+        style="height: 350px;"
+        :src="`https://i3b302.p.ssafy.io:8080/img/post?imgname=`+this.postlst.post_img_url"
+        class="fc-img"
+        />
           <div class="fb">
             <section class="func">
               <span class="heart">
@@ -168,15 +162,24 @@ export default {
         { title: '삭제' },
       ],
        dialog: false,
-       data : {},
+       userId : "",
        show:false,
     };
   },
   created() {
-      this.data = this.$route.params.users
-      this.postlst = this.$route.params.post
-      this.commentlst = this.$route.params.comment
-      if(this.data.userId == this.$cookie.get("userId")){
+    this.postlst ={
+      post_content : this.$route.query.post_content,
+      post_id : this.$route.query.post_id,
+      post_img_url : this.$route.query.post_img_url,
+      post_like : this.$route.query.post_like,
+      post_userid : this.$route.query.post_userid,
+      user_img : this.$route.query.user_img,
+      user_nickname : this.$route.query.user_nickname,
+    }
+      this.userId = this.$route.query.userId
+      // this.postlst = this.$route.query.post
+      this.commentlst = this.$route.query.comment
+      if(this.userId == this.$cookie.get("userId")){
           this.show = true;
       }
   },
@@ -191,22 +194,21 @@ export default {
             })        
         }
         else{
-            this.dialog = false
-            router.push({ name: "PostUpdate", params: this.postlst});
+            // this.dialog = false
+            router.push({ name: "PostUpdate", query: {postlst: this.postlst}});
         }
     },
     onComment() {
-
       let postinfo = {
         postid: this.postlst.post_id,
         postnickname: this.postlst.user_nickname,
         postcontent: this.postlst.post_content,
         postuserimg: this.postlst.user_img,
-        post: this.postlst,
-        comment : this.commentlst
+        // post: this.postlst,
+        // comment : this.commentlst
       };
-      // console.log("dfsdafgfgfdfadf");
       router.push({ name: "Comment", params: postinfo });
+     
     },
   },
 };

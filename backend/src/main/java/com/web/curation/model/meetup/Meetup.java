@@ -43,14 +43,14 @@ public class Meetup {
 	private String createDate;
 	@Column(name = "meetup_img")
 	private String img;
-	@Column(name = "meetup_properties")
-	private String properties;
+	@Column(name = "meetup_personality")
+	private String personalities;
 
 	public Meetup() {
 	}
 
 	public Meetup(String master, String title, String content, String location, String address, String date,
-			String curPersonnel, String maxPersonnel, String img, String properties) {
+			String curPersonnel, String maxPersonnel, String img, String personalities) {
 		super();
 		this.master = master;
 		this.title = title;
@@ -61,7 +61,7 @@ public class Meetup {
 		this.curPersonnel = curPersonnel;
 		this.maxPersonnel = maxPersonnel;
 		this.img = img;
-		this.properties = properties;
+		this.personalities = personalities;
 	}
 
 	public String getId() {
@@ -152,20 +152,20 @@ public class Meetup {
 		this.img = img;
 	}
 
-	public String getProperties() {
-		return properties;
+	public String getPersonalities() {
+		return personalities;
 	}
 
-	public void setProperties(String properties) {
-		this.properties = properties;
+	public void setPersonalities(String personalities) {
+		this.personalities = personalities;
 	}
 
 	@Override
 	public String toString() {
 		return "Meetup [id=" + id + ", master=" + master + ", title=" + title + ", content=" + content + ", location="
 				+ location + ", address=" + address + ", date=" + date + ", curPersonnel=" + curPersonnel
-				+ ", maxPersonnel=" + maxPersonnel + ", createDate=" + createDate + ", img=" + img + ", properties="
-				+ properties + "]";
+				+ ", maxPersonnel=" + maxPersonnel + ", createDate=" + createDate + ", img=" + img + ", personalities="
+				+ personalities + "]";
 	}
 
 }

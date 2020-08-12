@@ -7,6 +7,7 @@
             <v-toolbar-title style="margin:auto;">돈독한 미식가</v-toolbar-title>
           </v-app-bar>-->
           <v-bottom-navigation
+            class="navbar-fixed-bottom"
             v-if="!$route.meta.navbar"
             scroll-target="#scroll-area-1"
             hide-on-scroll
@@ -77,7 +78,7 @@
           </v-sheet>
           
           <!-- home, login 이외 -->
-          <v-sheet v-if="$route.name !== 'Home'"  id="scroll-area-1" class="overflow-y-auto" max-height="610">
+          <v-sheet v-if="$route.name !== 'Home'"  id="scroll-area-1" class="overflow-y-auto" max-height="100%">
             <v-container class="nothome" style="height: 100%;">
               <router-view></router-view>
             </v-container>
@@ -151,4 +152,8 @@ export default {
 .home-padding {
   padding: 0px !important;
 }
+/* 
+.navbar {
+  position: fixed;
+} */
 </style>

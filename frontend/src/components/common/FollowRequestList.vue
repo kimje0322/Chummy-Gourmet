@@ -4,17 +4,23 @@
       <v-toolbar dark>
         <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
         <v-spacer></v-spacer>
-        <p class="my-auto">팔로잉 요청</p>
+        <p class="my-auto">팔로우 요청</p>
         <v-spacer></v-spacer>
         <v-spacer></v-spacer>
       </v-toolbar>
     </v-toolbar-title>
     
+   
+    
+    
+    
+    <div v-if="item">
     <v-list subheader>
       <v-list-item
         v-for="item in items"
         :key="item.followingRequestId"
       >
+      
         <v-list-item-avatar @click="showUser(item)">
           <v-img
             :src="item.followingRequestUserImg">
@@ -40,6 +46,12 @@
 
       </v-list-item>
     </v-list>
+    </div>
+
+    <div v-else>
+      <h3>팔로우 요청이 없습니다.</h3>
+    </div>
+  
 
   </v-app>
 </template>
@@ -67,7 +79,9 @@ export default {
         userImg : user.followingRequestUserImg,
         followerFollowing: user.followerFollowing
       };
-      this.$router.push({name :'Profile', params: profileInfo});
+      this.$router.push('/user/profile?userId='+user.followingRequestId
+        +'&followerFollowing='+user.followerFollowing
+        +'&userImg='+user.followingRequestUserImg);
     },
     acceptFollowing(followingRequestId){
       axios
@@ -138,5 +152,10 @@ export default {
 <style scoped>
   .follow-lsit {
     width: 100px
+  }
+
+  h3 {
+    margin: 60px;
+    text-align: center;
   }
 </style>

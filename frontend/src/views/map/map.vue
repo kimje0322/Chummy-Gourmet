@@ -84,7 +84,7 @@
                     <v-select
                       ref="select2"
                       v-model="selectedProps"
-                      :items="properties"
+                      :items="personalities"
                       label="성향을 선택해주세요"
                       multiple small-chips deletable-chips
                       prepend-icon="mdi-heart"
@@ -196,8 +196,8 @@ import axios from "axios";
 import router from "@/routes";
 
 const CURLAT = 36.3587222, CURLNG = 127.3439205;
-// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-const SERVER_URL = "https://localhost:8080";
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "https://localhost:8080";
 
 export default {
   data: () => {
@@ -215,7 +215,7 @@ export default {
       selectedFoods : [],
 
       modalProps : false,
-      properties : [
+      personalities : [
         "낙천적", "부정적", "내향적", "외향적", "충동적", "사교적",
         "대담함", "성실함", "냉정함", "온화함", "신중함", "게으름"
       ],

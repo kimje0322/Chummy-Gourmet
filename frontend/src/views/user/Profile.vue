@@ -79,12 +79,14 @@ export default {
   },
   methods :{
     detailInfo(post,comment) {
-      let item = {
-      post: post,
-      comment : comment,
-      users: this.$route.params
+      let users = {
+      userId: this.anotherId,
       };
-      this.$router.push({name :'PostDetail', params: item});
+       this.$router.push({name :'PostDetail', query: {post_content: post.post_content
+        ,post_id : post.post_id, post_img_url : post.post_img_url,
+        post_like : post.post_like, post_userid : post.post_userid, user_img:post.user_img,
+        user_nickname : post.user_nickname, comment:comment , userId : this.anotherId}});
+      // this.$router.push({name :'PostDetail',query: {post: post, comment : comment, users : users}});
     },
     deleteFollowRequest(){
       this.followerFollowing = 'false'
@@ -133,10 +135,9 @@ export default {
   created() {
 
     this.userId = this.$cookie.get("userId");
-
-    this.anotherId = this.$route.params.userId
-    this.userImg = this.$route.params.userImg
-    this.followerFollowing = this.$route.params.followerFollowing
+    this.anotherId = this.$route.query.userId
+    this.userImg = this.$route.query.userImg
+    this.followerFollowing = this.$route.query.followerFollowing
     if (this.followerFollowing === 'true') {
       this.followerFollowing = 'true'
     }else if(this.followerFollowing === 'doing'){
@@ -163,7 +164,7 @@ export default {
         .then((response) => {
             this.postlst = response.data.data
             this.commentlst = response.data.comment;
-            console.log(this.postlst)
+            // console.log(this.postlst)
         })  
   },
   
@@ -172,5 +173,11 @@ export default {
 </script>
 
 <style>
+  .entire {
+  padding: 18px
+  }
+  .my-auto {
+  font-size: 20px;
+  }
 
 </style>

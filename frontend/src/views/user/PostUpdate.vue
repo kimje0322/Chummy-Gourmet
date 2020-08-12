@@ -48,8 +48,9 @@
             <div class="fc-frame" tabindex="0">
               <div class="fc-fr">
                 <img
-                  :src="`https://i3b302.p.ssafy.io:8080/img/post?imgname=`+this.postimgurl"
-                  class="fc-img"
+                style="height: 350px;"
+                :src="`https://i3b302.p.ssafy.io:8080/img/post?imgname=`+this.postimgurl"
+                class="fc-img"
                 />
               </div>
             </div>
@@ -97,12 +98,11 @@ export default {
     },
   },
   created() {
-    this.postid = this.$route.params.post_id
-    this.postcontent = this.$route.params.post_content
-    this.postimgurl = this.$route.params.post_img_url
-    this.userimg = this.$route.params.user_img
-    this.usernickname = this.$route.params.user_nickname
-    // this.$refs.text.focus();
+    this.postid = this.$route.query.postlst.post_id
+    this.postcontent = this.$route.query.postlst.post_content
+    this.postimgurl = this.$route.query.postlst.post_img_url
+    this.userimg = this.$route.query.postlst.user_img
+    this.usernickname = this.$route.query.postlst.user_nickname
   },
 };
 </script>

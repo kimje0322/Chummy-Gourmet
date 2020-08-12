@@ -67,7 +67,7 @@
 
         <!-- 파티 성향 -->
         <v-combobox 
-          v-model="meetup.properties" 
+          v-model="meetup.personalities" 
           solo multiple chips readonly
         >
         </v-combobox>
@@ -80,8 +80,8 @@
 <script>
 import axios from "axios";
 
-// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-const SERVER_URL = "https://localhost:8080";
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "https://localhost:8080";
 
 export default {
   data: () => {
@@ -95,7 +95,7 @@ export default {
     .get(`${SERVER_URL}/meetup/searchByMeetupID/${meetupId}`)
     .then((response) => {
         let meetup = response.data;
-        meetup.properties = this.stringToArray(meetup.properties);
+        meetup.personalities = this.stringToArray(meetup.personalities);
         this.meetup = meetup;
         
         console.log(this.meetup)

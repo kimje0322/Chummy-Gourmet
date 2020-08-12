@@ -170,5 +170,11 @@ export default {
 </script>
 
 <style>
+  .entire {
+  padding: 18px
+  }
+  .my-auto {
+  font-size: 20px;
+  }
 
 </style>

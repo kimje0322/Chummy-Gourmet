@@ -272,7 +272,7 @@ export default {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(pos => {
           var coords = new kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
-          this.map.setCenter(coords);
+          this.map.panTo(coords);
         });
      }
     },

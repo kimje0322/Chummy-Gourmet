@@ -33,6 +33,7 @@
 
 <script>
 import CreateMessage from '../../components/common/CreateMessage';
+import moment from 'moment';
 
 export default {
     props: ['room'],
@@ -64,8 +65,8 @@ export default {
                       var ms ={
                         message : doc.data().message,
                         nickname : this.room.nickName[num],
-                        time : doc.data().time,
-                        userid : this.userid
+                        time : moment(doc.data().time).format('LLL'),
+                        userid : doc.data().from
                       }
                       console.log(ms);
 
@@ -83,6 +84,10 @@ export default {
 </script>
 
 <style>
+.card-body{
+    height : 400px;
+}
+
 .chat h2{
     font-size: 2.6em;
     margin-bottom: 0px;
@@ -99,7 +104,8 @@ export default {
     font-size: 0.7em;
 }
 .messages{
-    max-height: 300px;
-    overflow: auto;
+    max-height: 380px;
+    /* height : 400px; */
+    /* overflow: auto; */
 }
 </style>

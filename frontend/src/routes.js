@@ -37,10 +37,6 @@ import UpdateUserInfo from './views/user/UpdateUserInfo.vue'
 import ChatRoom from './views/chat/chatRoom.vue'
 import Chat from './views/chat/chat.vue'
 
-// //테스트용
-import UploadTest from './views/feed/uploadtest.vue'
-// import Chat from './views/feed/chat.vue'
-
 //피드 게시글 업로드
 import AddFeed from './views/feed/addFeed.vue'
 
@@ -62,9 +58,6 @@ export default new VueRouter({
             path: '/chat',
             name: 'Chat',
             component: Chat,
-            meta: {
-                navbar: true
-            },
             props:true
         },
          //채팅목록
@@ -72,24 +65,7 @@ export default new VueRouter({
             path: '/chatroom',
             name: 'ChatRoom',
             component: ChatRoom,
-            meta: {
-                navbar: true
-            },
             props:true
-        },
-        //사진업로드 테스트용 추후 삭제.
-        {
-            path: '/uploadtest',
-            name: 'UploadTest',
-            component: UploadTest,
-            props:true,
-            beforeEnter: (to, from, next) => {
-                if (to.params.name) {
-                  next();
-                } else {
-                  next({name: 'Chat'})
-                }
-              }
         },
         {
 

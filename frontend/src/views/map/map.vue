@@ -269,9 +269,22 @@ export default {
         var isPersonalites = true;
         var isDate = true;
         var isPersonnel = true;
+        var isCategory = true;
 
+        // 카테고리 필터링
+        for(let i = 0; i< this.selectedFoods.length; i++){
+          // 밋업이 필터성향을 하나라도 포함하고 있으면
+          if(meetup.category == this.selectedFoods[i])
+            break;
+          
+          // 밋업이 필터성향을 하나도 포함하고 있지 않으면
+          else{
+            if(i == this.selectedFoods.length - 1)
+              isCategory = false;
+          }
+        }
         // 성향 필터링
-        for(var i = 0; i<this.selectedProps.length; i++){
+        for(let i = 0; i<this.selectedProps.length; i++){
           // 밋업이 필터성향을 하나라도 포함하고 있으면
           if(meetup.personalities.indexOf(this.selectedProps[i]) > -1)
             break;
@@ -291,7 +304,7 @@ export default {
         if(new Date(meetup.date) < new Date(this.dates[0]) || new Date(meetup.date) > new Date(this.dates[1]))
           isDate = false;
         
-        if(isPersonalites && isDate && isPersonnel)
+        if(isPersonalites && isDate && isPersonnel && isCategory)
           this.markers[index].setMap(this.map)
         else
           this.markers[index].setMap(null)

@@ -1,5 +1,5 @@
 <template>
-  <v-layout class="entireClass">
+  <v-layout v-if="items.length > 0" class="entireClass">
       <v-row>
       <v-col v-for="item in items" :key="item.title" class="d-flex child-flex" cols="4">
           <v-card flat tile class="d-flex">
@@ -16,7 +16,6 @@
               </v-img>
           </v-card>
       </v-col>    
-      
       
       <!-- dialog -->
       <v-dialog
@@ -37,6 +36,16 @@
  
       </v-row>
   </v-layout>
+
+  <!-- 스크랩 없을 때 -->
+  <v-layout v-else class="entireClass">
+    <div class="aligncss"> 
+      <i class="fas fa-utensils fa-5x"></i>
+      <h3 class="mt-5">스크랩한 음식점이 없습니다.</h3>
+    </div>
+  </v-layout>
+
+
 </template>
 
 
@@ -123,6 +132,13 @@ export default {
 <style>
   .entireClass{
     padding: 20px;
+  }
+
+  .aligncss {
+    margin: 70px 0 0 0;
+    color: rgba(0,0,0,.6);
+    width: 100%;
+    text-align: center;
   }
 
 

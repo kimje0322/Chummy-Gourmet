@@ -26,10 +26,8 @@
             <History :proptoTopsub="users" v-else-if="item=='History'"></History>
             <!-- profile -->
             <v-card-text v-else>
-
-              <span class="material-icons">
-              account_circle</span>
               
+            <div v-if="mData.length > 1">
               <v-row dense>
                 <v-col
                   v-for="(item, i) in mData"
@@ -56,6 +54,14 @@
                   </v-card>
                 </v-col>
               </v-row>
+            </div>
+            <!-- 밋업 없을 때 -->
+            <div v-else>
+              <div style="margin-top:70px;text-align: center;"> 
+                <i class="fab fa-meetup fa-6x"></i>
+                <h3 class="mt-5">등록된 Meetup이 없습니다.</h3>
+              </div>
+            </div>
             </v-card-text>
           </v-card>
         </v-tab-item>

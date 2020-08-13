@@ -97,7 +97,10 @@
                 <button class="heart-btn">
                   <div style="border: 0">
                     <span style="margin: 0; height: 24px; width: 24px;">
+                      {{likelist}}
+                      뿅
                       <i
+                        v-if="likelist.includes(lst.postid*1)"
                         style="display: block; position: relative; height: 24px; width: 24px; color: red;"
                         class="fas fa-heart"
                       ></i>
@@ -109,7 +112,10 @@
                 <button class="heart-btn">
                   <div style="border: 0">
                     <span style="margin: 0; height: 24px; width: 24px;">
+                      {{likelist}}
+                      하트
                       <i
+                        v-if="!likelist.includes(lst.postid*1)"
                         style="display: block; position: relative; height: 24px; width: 24px; "
                         class="far fa-heart"
                       ></i>
@@ -214,6 +220,7 @@ export default {
       timestamp: "",
       likelist: [],
       likeornot: "",
+      likestate: true,
     };
   },
 
@@ -292,6 +299,7 @@ export default {
       router.push({ name: "Comment", params: postinfo });
     },
     onLike(postlike, idx) {
+      this.likestate = !this.likestate;
       console.log(this.like);
       console.log(this.postlst[idx].postid);
       if (this.postlst[idx].postid in this.likelist) {
@@ -334,6 +342,7 @@ export default {
               .then((response) => {
                 console.log(response);
                 this.likelist = response.data;
+                console.log("바뀐거보자");
                 console.log(this.likelist);
               });
           })
@@ -343,6 +352,7 @@ export default {
       }
     },
     unLike(list, idx) {
+      this.likestate = !this.likestate;
       axios
         .delete(
           `${SERVER_URL}/post/like?postid=${
@@ -380,6 +390,7 @@ export default {
             .then((response) => {
               console.log(response);
               this.likelist = response.data;
+              console.log("바뀐거보자");
               console.log(this.likelist);
             });
         })

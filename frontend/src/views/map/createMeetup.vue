@@ -1,5 +1,5 @@
 <template>
-  <div class="user join">
+  <div class="user join" style="height: 1200px;">
     <!-- <v-app> -->
     <v-bottom-navigation
       scroll-target="#scroll-area-2"
@@ -156,9 +156,23 @@
       </v-menu>
 
       <!-- 파티 시간 -->
-      <vue-timepicker v-model="day.start_time" placeholder="Start Time"></vue-timepicker>
+      <!-- <vue-timepicker v-model="day.start_time" placeholder="Start Time"></vue-timepicker>
       <span>to</span>
-      <vue-timepicker v-model="day.end_time" placeholder="End Time"></vue-timepicker>
+      <vue-timepicker v-model="day.end_time" placeholder="End Time"></vue-timepicker>-->
+      <span>
+        <vue-timepicker v-model="timeinfo1" :minute-interval="10" format="hh:mm A"></vue-timepicker>
+      </span>
+      <span>
+        <vue-timepicker v-model="timeinfo2" :minute-interval="10" format="hh:mm A"></vue-timepicker>
+      </span>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
 
       <!-- 파티 인원 -->
       <div id="dropdown-example">
@@ -209,20 +223,19 @@
 
 <script>
 import axios from "axios";
-import VueTimepicker from 'vue2-timepicker'
+import VueTimepicker from "vue2-timepicker";
+import "vue2-timepicker/dist/VueTimepicker.css";
 
 const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 // const SERVER_URL = "https://localhost:8080";
 
 export default {
   components: {
-    VueTimepicker
+    VueTimepicker,
   },
   data: () => {
     return {
-      day: [
-        { start_time: { HH: "", mm: "" }, end_time: { HH: "", mm: "" } },
-      ],
+      day: [{ start_time: { HH: "", mm: "" }, end_time: { HH: "", mm: "" } }],
       keyword: "",
       date: "",
       time: null,
@@ -245,6 +258,8 @@ export default {
         personnel: "",
         master: 70,
         img: "",
+        timeinfo1:"",
+        timeinfo2:"",
       },
 
       error: {
@@ -346,72 +361,72 @@ export default {
       this.geocoder = new kakao.maps.services.Geocoder();
     },
     meetUp() {
+      console.log(this.meetup.title.length)
+      console.log(this.meetup.content.length)
+      console.log(this.meetup.location)
+      console.log(this.meetup.date)
+      console.log(this.meetup.maxPersonnel)
+      console.log(this.meetup.timeinfo1)
+      console.log(this.meetup.timeinfo2)
+
+
       if (this.meetup.title.length === 0) {
         this.error.title = "제목을 입력해주세요.";
         // alert("제목을 작성해주세요.");
         return false;
-      }
-      else this.error.title = false;
+      } else this.error.title = false;
 
       if (this.meetup.content.length === 0) {
         // alert("내용을 작성해주세요.");
         this.error.content = "내용을 입력해주세요.";
         return false;
-      }
-      else this.error.content = false;
+      } else this.error.content = false;
 
       if (!this.meetup.location) {
         this.error.location = "장소를 선택해주세요.";
         return false;
-      }
-      else this.error.location = false;
-      
+      } else this.error.location = false;
+
       if (!this.meetup.date) {
         this.error.date = "날짜를 선택해주세요.";
         return false;
-      }
-      else this.error.date = false;
+      } else this.error.date = false;
 
       if (!this.meetup.maxPersonnel) {
         this.error.personnel = "인원을 선택해주세요.";
         return false;
-      }
-      else this.error.personnel = false;
-
+      } else this.error.personnel = false;
 
       if (!this.meetup.personalities) {
         this.error.personalities = "성향을 선택해주세요.";
         return false;
-      }
-      else this.error.personnel = false;
+      } else this.error.personnel = false;
 
-
-      
-      if (this.isValidForm()){
+      if (this.isValidForm()) {
         var personalities = this.meetup.personalities.toString();
         personalities = `[${personalities}]`;
 
         var newMeetup = {
-          title :this.meetup.title,
-          content :this.meetup.content,
-          location :this.meetup.location,
-          address :this.meetup.address,
-          date :this.meetup.date,
-          maxPersonnel :this.meetup.maxPersonnel,
-          master :this.meetup.master,
-          img :this.meetup.img,
-          personalities : personalities
-        }
+          title: this.meetup.title,
+          content: this.meetup.content,
+          location: this.meetup.location,
+          address: this.meetup.address,
+          date: this.meetup.date,
+          maxPersonnel: this.meetup.maxPersonnel,
+          master: this.meetup.master,
+          img: this.meetup.img,
+          personalities: personalities,
+        };
 
         axios
           .post(`${SERVER_URL}/meetup`, newMeetup)
           .then((response) => {
             alert("밋업 등록이 완료됐습니다.");
-            this.$router.push("/map")
+            this.$router.push("/map");
           })
           .catch((error) => {
-            console.log('error보기')
-          })
+            console.log("error보기");
+          });
       }
       console.log(this.meetup);
       axios.post(`${SERVER_URL}/meetup`, this.meetup).then((response) => {
@@ -420,7 +435,7 @@ export default {
         this.$router.push("/map");
       });
     },
-    
+
     checkForm() {
       if (this.meetup.title.length < 1)
         this.error.title = "제목을 입력해주세요.";
@@ -548,5 +563,4 @@ div {
 .cssBox {
   margin: 0 0 18px 0;
 }
-
 </style>

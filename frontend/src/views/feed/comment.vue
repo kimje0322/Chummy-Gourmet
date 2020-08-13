@@ -139,12 +139,12 @@
                         <span>
                           <!-- {{lst}} -->
                           {{lst.postcomment}}
-                          <br />
-                          {{ lst.commentdate }}
                           <!-- {{ }} -->
                         </span>
                         <div style="color: #8e8e8e; margin-top: 12px; margin-bottom: 4px;">
-                          <a href="#" style="margin-right: 12px; color: #8e8e8e;">X시간</a>
+                          <a href="#" style="margin-right: 12px; color: #8e8e8e;">
+                            {{ lst.commentdate | moment("from", "now") }}
+                          </a>
                           <!-- v-if="lst.commentid === userId" -->
                           <button @click="rewrite(lst)">수정하기</button>
                         </div>

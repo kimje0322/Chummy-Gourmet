@@ -217,9 +217,7 @@ export default {
               }
             }
             this.checkedInterests.push(s);
-            
-            console.log(this.checkedInterests)
-            console.log(this.checkedInterests.length)
+
             for (var i=0; i<this.checkedInterests.length; i++ ) {
               if (this.checkedInterests[i] === "1") {
               this.realInterests.push("아이돌")

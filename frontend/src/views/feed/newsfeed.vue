@@ -140,16 +140,8 @@
                   </div>
                 </button>
               </span>
-              <span style="display: inline-block;">
-                <button style="background: 0 0; border: 0; display: flex; padding: 8px 6px;">
-                  <div>
-                    <i
-                      style="display: block; position: relative; height: 21px; width: 21px;"
-                      class="far fa-paper-plane"
-                    ></i>
-                  </div>
-                </button>
-              </span>
+              <!-- here messageing -->
+              <CreateChat :postuserid ="lst.postuserid" />
               <!-- <span style="display: inline-block; margin-left: auto; margin-right: -10px;">
                 <button>
 
@@ -205,7 +197,7 @@ import axios from "axios";
 import router from "@/routes";
 import Vue from "vue";
 import vueMoment from "vue-moment";
-// import { mdiHeartOutline } from '@mdi/js';
+import CreateChat from '../../components/common/CreateChat';
 
 Vue.use(vueMoment);
 
@@ -213,6 +205,9 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 // const SERVER_URL = "https://localhost:8080";
 
 export default {
+   components: {
+        CreateChat
+    },
   data() {
     return {
       postlst: [],

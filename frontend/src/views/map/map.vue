@@ -196,19 +196,21 @@ import axios from "axios";
 import router from "@/routes";
 
 const CURLAT = 36.3587222, CURLNG = 127.3439205;
-const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-// const SERVER_URL = "https://localhost:8080";
+// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "https://localhost:8080";
 
 export default {
   data: () => {
     return {
       map: "",
       targetLocation :{
-        lat : '',
-        lng : '',
+        lat : CURLAT,
+        lng : CURLNG,
       },
       keyword : '',
-
+      meetups : '',
+      markers : [],
+      overlays : [],
 
       modalFoods : false,
       foods: ['한식', '중식', '양식', '일식', '분식', '뷔페'],
@@ -241,12 +243,12 @@ export default {
   },
   mounted() {
     // 현재 위치 확인
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(pos => {
-        this.targetLocation.lat = pos.coords.latitude;
-        this.targetLocation.lng = pos.coords.longitude;
-      });
-    }
+    // if (navigator.geolocation) {
+    //   navigator.geolocation.getCurrentPosition(pos => {
+    //     this.targetLocation.lat = pos.coords.latitude;
+    //     this.targetLocation.lng = pos.coords.longitude;
+    //   });
+    // }
 
     // 카카오 맵 로딩
     // if (window.kakao && window.kakao.maps) {
@@ -263,10 +265,40 @@ export default {
   },
   methods: {
     doFilter(){
-      console.log(this.selectedFoods);
-      console.log(this.selectedProps);
-      console.log(this.dates);
-      console.log(this.personnel);
+      this.meetups.forEach((meetup, index) => {
+        var isPersonalites = true;
+        var isDate = true;
+        var isPersonnel = true;
+
+        // 성향 필터링
+        for(var i = 0; i<this.selectedProps.length; i++){
+          // 밋업이 필터성향을 하나라도 포함하고 있으면
+          if(meetup.personalities.indexOf(this.selectedProps[i]) > -1)
+            break;
+          
+          // 밋업이 필터성향을 하나도 포함하고 있지 않으면
+          else{
+            if(i == this.selectedProps.length - 1)
+              isPersonalites = false;
+          }
+        }
+
+        // 인원 필터링
+        if(meetup.curPersonnel < this.personnel[0] || meetup.curPersonnel > this.personnel[1])
+          isPersonnel = false;
+        
+        // 날짜 필터링
+        if(new Date(meetup.date) < new Date(this.dates[0]) || new Date(meetup.date) > new Date(this.dates[1]))
+          isDate = false;
+        
+        if(isPersonalites && isDate && isPersonnel)
+          this.markers[index].setMap(this.map)
+        else
+          this.markers[index].setMap(null)
+
+      });
+
+      
     },
     moveCurPosition(){
       if (navigator.geolocation) {
@@ -306,12 +338,10 @@ export default {
             .get(`${SERVER_URL}/meetup/search/${address.region_1depth_name} ${address.region_2depth_name}`)
             .then((response) => {
               // 밋업 리스트
-              var meetups = response.data.object;
+              this.meetups = response.data.object;
 
-              var markers = [];
-              var overlays = [];
               var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
-              meetups.forEach(meetup => {
+              this.meetups.forEach(meetup => {
                 console.log(meetup)
                 geocoder.addressSearch(meetup.address, (result, status) => {
                     if (status === kakao.maps.services.Status.OK) {
@@ -349,8 +379,9 @@ export default {
                               </div>
                             `
                         });
-                        overlays.push(overlay);
-                        kakao.maps.event.addListener(marker, "click", this.toggleInfoWindow(this.map, marker, overlay, overlays));
+                        this.overlays.push(overlay);
+                        this.markers.push(marker);
+                        kakao.maps.event.addListener(marker, "click", this.toggleInfoWindow(this.map, marker, overlay, this.overlays));
                         marker.setMap(this.map);
                     } 
                 });    

@@ -45,12 +45,14 @@ public class Meetup {
 	private String img;
 	@Column(name = "meetup_personality")
 	private String personalities;
+	@Column(name = "meetup_category")
+	private String category;
 
 	public Meetup() {
 	}
 
 	public Meetup(String master, String title, String content, String location, String address, String date,
-			String curPersonnel, String maxPersonnel, String img, String personalities) {
+			String curPersonnel, String maxPersonnel, String img, String personalities, String category) {
 		super();
 		this.master = master;
 		this.title = title;
@@ -62,6 +64,7 @@ public class Meetup {
 		this.maxPersonnel = maxPersonnel;
 		this.img = img;
 		this.personalities = personalities;
+		this.category = category;
 	}
 
 	public String getId() {
@@ -160,12 +163,20 @@ public class Meetup {
 		this.personalities = personalities;
 	}
 
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
 	@Override
 	public String toString() {
 		return "Meetup [id=" + id + ", master=" + master + ", title=" + title + ", content=" + content + ", location="
 				+ location + ", address=" + address + ", date=" + date + ", curPersonnel=" + curPersonnel
 				+ ", maxPersonnel=" + maxPersonnel + ", createDate=" + createDate + ", img=" + img + ", personalities="
-				+ personalities + "]";
+				+ personalities + ", category=" + category + "]";
 	}
 
 }

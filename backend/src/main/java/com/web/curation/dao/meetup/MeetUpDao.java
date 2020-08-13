@@ -38,9 +38,9 @@ public interface MeetUpDao extends JpaRepository<Meetup, String> {
 	@Query(value = "INSERT INTO meetup "
 			+ "(meetup_master, meetup_title, meetup_content, "
 			+ "meetup_location, meetup_address, meetup_date, "
-			+ "meetup_max_personnel, meetup_img, meetup_personality) "
+			+ "meetup_max_personnel, meetup_img, meetup_personality, meetup_category) "
 			+ "VALUES "
-			+ "(:#{#meetup.master}, :#{#meetup.title}, :#{#meetup.content}, :#{#meetup.location}, :#{#meetup.address},:#{#meetup.date}, :#{#meetup.maxPersonnel}, :#{#meetup.img}, :#{#meetup.personalities})", nativeQuery = true)
+			+ "(:#{#meetup.master}, :#{#meetup.title}, :#{#meetup.content}, :#{#meetup.location}, :#{#meetup.address},:#{#meetup.date}, :#{#meetup.maxPersonnel}, :#{#meetup.img}, :#{#meetup.personalities}, :#{#meetup.category})", nativeQuery = true)
 	Meetup save(Meetup meetup);
 
 

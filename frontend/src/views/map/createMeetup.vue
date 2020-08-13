@@ -149,16 +149,11 @@
             <v-time-picker v-model="time" ampm-in-title width="260px">
               <v-spacer></v-spacer>
               <v-btn text color="primary" @click="menu2 = false">Cancel</v-btn>
-              <v-btn text color="primary" @click="test">OK</v-btn>
+              <v-btn text color="primary" @click="setDate">OK</v-btn>
             </v-time-picker>
           </v-menu>
         </v-date-picker>
       </v-menu>
-
-      <!-- 파티 시간 -->
-      <vue-timepicker v-model="day.start_time" placeholder="Start Time"></vue-timepicker>
-      <span>to</span>
-      <vue-timepicker v-model="day.end_time" placeholder="End Time"></vue-timepicker>
 
       <!-- 파티 인원 -->
       <div id="dropdown-example">
@@ -209,15 +204,11 @@
 
 <script>
 import axios from "axios";
-import VueTimepicker from 'vue2-timepicker'
 
-const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-// const SERVER_URL = "https://localhost:8080";
+// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "https://localhost:8080";
 
 export default {
-  components: {
-    VueTimepicker
-  },
   data: () => {
     return {
       day: [
@@ -245,6 +236,7 @@ export default {
         personnel: "",
         master: 70,
         img: "",
+        category : "",
       },
 
       error: {
@@ -323,10 +315,8 @@ export default {
     }
 
     if (window.kakao && window.kakao.maps) {
-      console.log("이미 로딩됨");
       this.initMap();
     } else {
-      console.log("카카오맵 로딩");
       const script = document.createElement("script");
       /* global kakao */
       script.onload = () => kakao.maps.load(this.initMap);
@@ -348,7 +338,7 @@ export default {
     meetUp() {
       if (this.meetup.title.length === 0) {
         this.error.title = "제목을 입력해주세요.";
-        // alert("제목을 작성해주세요.");
+        alert("제목을 작성해주세요.");
         return false;
       }
       else this.error.title = false;
@@ -400,6 +390,7 @@ export default {
           maxPersonnel :this.meetup.maxPersonnel,
           master :this.meetup.master,
           img :this.meetup.img,
+          category :this.meetup.category,
           personalities : personalities
         }
 
@@ -505,6 +496,7 @@ export default {
       this.meetup.location = restaurant.name;
       this.meetup.address = restaurant.location;
       this.meetup.img = restaurant.img[0];
+      this.meetup.category = restaurant.category;
       this.dialog = false;
     },
   },

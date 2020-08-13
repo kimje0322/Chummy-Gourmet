@@ -159,7 +159,7 @@
       <!-- <vue-timepicker v-model="day.start_time" placeholder="Start Time"></vue-timepicker>
       <span>to</span>
       <vue-timepicker v-model="day.end_time" placeholder="End Time"></vue-timepicker>-->
-      <span>
+      <!-- <span>
         <vue-timepicker v-model="timeinfo1" :minute-interval="10" format="hh:mm A"></vue-timepicker>
       </span>
       <span>
@@ -172,7 +172,38 @@
       <br />
       <br />
       <br />
-      <br />
+      <br />-->
+      <div>
+        <v-menu
+          ref="menu"
+          v-model="menu22"
+          :close-on-content-click="false"
+          :nudge-right="40"
+          :return-value.sync="time1"
+          transition="scale-transition"
+          offset-y
+          max-width="290px"
+          min-width="290px"
+        >
+        <!-- prepend-icon="access_time" -->
+          <template v-slot:activator="{ on, attrs }">
+            <v-text-field
+              solo
+              v-model="time1"
+              label="Picker in menu"
+              readonly
+              v-bind="attrs"
+              v-on="on"
+            ></v-text-field>
+          </template>
+          <v-time-picker
+            v-if="menu22"
+            v-model="time1"
+            full-width
+            @click:minute="$refs.menu.save(time1)"
+          ></v-time-picker>
+        </v-menu>
+      </div>
 
       <!-- 파티 인원 -->
       <div id="dropdown-example">
@@ -231,10 +262,12 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 
 export default {
   components: {
-    VueTimepicker,
+    // VueTimepicker,
   },
   data: () => {
     return {
+      time1: null,
+      menu22: false,
       day: [{ start_time: { HH: "", mm: "" }, end_time: { HH: "", mm: "" } }],
       keyword: "",
       date: "",
@@ -258,8 +291,8 @@ export default {
         personnel: "",
         master: 70,
         img: "",
-        timeinfo1:"",
-        timeinfo2:"",
+        timeinfo1: "",
+        timeinfo2: "",
       },
 
       error: {
@@ -361,14 +394,14 @@ export default {
       this.geocoder = new kakao.maps.services.Geocoder();
     },
     meetUp() {
-      console.log(this.meetup.title.length)
-      console.log(this.meetup.content.length)
-      console.log(this.meetup.location)
-      console.log(this.meetup.date)
-      console.log(this.meetup.maxPersonnel)
-      console.log(this.meetup.timeinfo1)
-      console.log(this.meetup.timeinfo2)
-
+      console.log(this.meetup.title.length);
+      console.log(this.meetup.content.length);
+      console.log(this.meetup.location);
+      console.log(this.meetup.date);
+      console.log(this.meetup.maxPersonnel);
+      // console.log(this.meetup.timeinfo1);
+      // console.log(this.meetup.timeinfo2);
+      console.log(this.time1)
 
       if (this.meetup.title.length === 0) {
         this.error.title = "제목을 입력해주세요.";

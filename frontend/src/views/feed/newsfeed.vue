@@ -54,14 +54,14 @@
                       tabindex="0"
                       style="color: black; font-weight: 600;"
                     >{{lst.usernickname}}</a>
-                    <div style="float: right; margin-right: 0px; ">
+                    <div v-if="lst.postuserid  == userid" style="float: right; margin-right: 0px; ">
                       <button @click="onRevise(lst)">
                         <div style="padding: 2px; width: 24px; height: 24px;">
                           <i class="fas fa-ellipsis-v"></i>
                         </div>
                       </button>
                     </div>
-                    <div style="float: right; margin-left: 160px; ">
+                    <div v-if="lst.postuserid  == userid" style="float: right; margin-left: 160px; ">
                       <button @click="onDelete(lst)">
                         <div style="padding: 2px; width: 24px; height: 24px;">
                           <i class="far fa-trash-alt"></i>
@@ -97,13 +97,13 @@
                 <button class="heart-btn">
                   <div style="border: 0">
                     <span style="margin: 0; height: 24px; width: 24px;">
-                      {{likelist}}
-                      뿅
-                      <i
-                        v-if="likelist.includes(lst.postid*1)"
+                      <!-- {{likelist}}
+                      뿅 -->
+                      <v-icon style="display: block; position: relative; height: 24px; width: 24px; color: red;">mdi-heart</v-icon>
+                      <!-- <i
                         style="display: block; position: relative; height: 24px; width: 24px; color: red;"
                         class="fas fa-heart"
-                      ></i>
+                      ></i> -->
                     </span>
                   </div>
                 </button>
@@ -112,13 +112,13 @@
                 <button class="heart-btn">
                   <div style="border: 0">
                     <span style="margin: 0; height: 24px; width: 24px;">
-                      {{likelist}}
-                      하트
-                      <i
-                        v-if="!likelist.includes(lst.postid*1)"
+                      <!-- {{likelist}}
+                      하트 -->
+                      <v-icon style="display: block; position: relative; height: 24px; width: 24px;">mdi-heart-outline</v-icon>
+                      <!-- <i
                         style="display: block; position: relative; height: 24px; width: 24px; "
                         class="far fa-heart"
-                      ></i>
+                      ></i> -->
                     </span>
                   </div>
                 </button>
@@ -126,13 +126,13 @@
               <span style="display: inline-block;">
                 <button
                   @click="onComment(lst.postid, lst.usernickname, lst.postcontent,lst.user_img)"
-                  style="background: 0 0; border: 0; display: flex; padding: 8px;"
+                  style="background: 0 0; border: 0; display: flex; padding: 8px 6px;"
                 >
                   <div>
                     <!-- <router-link to="/newsfeed/comment"> -->
                     <!-- <div :v-model="pid" @click="onComment"> -->
                     <i
-                      style="display: block; position: relative; height: 24px; width: 24px;"
+                      style="display: block; position: relative; height: 21px; width: 21px;"
                       class="far fa-comment"
                     ></i>
                     <!-- </div> -->
@@ -141,10 +141,10 @@
                 </button>
               </span>
               <span style="display: inline-block;">
-                <button style="background: 0 0; border: 0; display: flex; padding: 8px;">
+                <button style="background: 0 0; border: 0; display: flex; padding: 8px 6px;">
                   <div>
                     <i
-                      style="display: block; position: relative; height: 24px; width: 24px;"
+                      style="display: block; position: relative; height: 21px; width: 21px;"
                       class="far fa-paper-plane"
                     ></i>
                   </div>
@@ -172,9 +172,9 @@
                 <div>
                   <div>
                     <a
-                      style="text-decoration: none; font-weight: 600; font-size: 14px; padding-left: 5px; color: rgba(var(--i1d,38,38,38),1)"
+                      style="text-decoration: none; font-weight: 600; font-size: 14px; padding-left: 5px; padding-right: 5px;color: rgba(var(--i1d,38,38,38),1)"
                       href="#"
-                    >{{lst.usernickname}}</a>&nbsp;
+                    >{{lst.usernickname}}</a>
                     <span>{{ lst.postcontent }}</span>
                   </div>
                 </div>
@@ -205,6 +205,7 @@ import axios from "axios";
 import router from "@/routes";
 import Vue from "vue";
 import vueMoment from "vue-moment";
+// import { mdiHeartOutline } from '@mdi/js';
 
 Vue.use(vueMoment);
 
@@ -228,6 +229,7 @@ export default {
   created() {
     this.timestamp = new Date();
     console.log(this.$cookie.get("userId"));
+    this.userid = this.$cookie.get("userId")
     axios
       .get(`${SERVER_URL}/post?userid=${this.$cookie.get("userId")}`)
       .then((response) => {
@@ -436,15 +438,15 @@ export default {
 } */
 
 .heart-btn {
-  -webkit-box-align: center;
-  align-items: center;
-  background: 0 0;
-  border: 0;
-  cursor: pointer;
-  display: flex;
-  -webkit-box-pack: center;
-  justify-content: center;
-  padding: 8px;
+  /* -webkit-box-align: center; */
+  /* align-items: center; */
+  /* background: 0 0; */
+  /* border: 0; */
+  /* cursor: pointer; */
+  /* display: flex; */
+  /* -webkit-box-pack: center; */
+  /* justify-content: center; */
+  padding: 6px 4px 8px 6px;
 }
 
 .heart {

@@ -9,7 +9,7 @@
     </v-toolbar>
 
    <div class="container chat">
-        <h4 class="text-primary text-center">{{ this.room.nickName }}</h4>
+        <h4 class="text-primary text-center">{{ this.room.name }}</h4>
         <div class="card">
             <div class="card-body">
                 <p class="text-secondary nomessages" v-if="messages.length == 0">
@@ -66,20 +66,15 @@ export default {
             },
     methods:{
         view(room){
-            console.log(room);
-            console.log(room.nickName)
              window.db.collection('test').doc(this.room.rid).collection('messages').orderBy('time').onSnapshot(snapshot=>{
                   snapshot.docChanges().forEach(change =>{
                     if (change.type == 'added'){
-                      console.log(change.doc.data());
+                    //   console.log(change.doc.data());
                       var doc = change.doc;
 
                       //닉네임 구하기
                       var id = doc.data().from;
-                      var num = this.room.id.indexOf(id);
-                      console.log(num);
-                      console.log(this.room.nickName);
-                      
+                      var num = this.room.id.indexOf(id*1);                     
 
                       var ms ={
                         message : doc.data().message,
@@ -87,7 +82,7 @@ export default {
                         time : moment(doc.data().time).format('LLL'),
                         userid : doc.data().from
                       }
-                      console.log(ms);
+                    //   console.log(ms);
 
                       this.messages.push(ms);
 

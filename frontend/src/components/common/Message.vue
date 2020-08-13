@@ -17,7 +17,6 @@
           </v-card>
       </v-col>    
       
-      
       <!-- dialog -->
       <v-dialog
         dark
@@ -34,9 +33,17 @@
           </v-list-item>
       </v-list>
       </v-dialog>
- 
       </v-row>
+    <!-- 스크랩 없을 때 -->
+    <div v-if="items.length == 0" class="aligncss"> 
+      <i class="fas fa-utensils fa-5x"></i>
+      <h3 class="mt-5">스크랩한 음식점이 없습니다.</h3>
+    </div>
   </v-layout>
+
+
+
+
 </template>
 
 
@@ -123,6 +130,13 @@ export default {
 <style>
   .entireClass{
     padding: 20px;
+  }
+
+  .aligncss {
+    margin: 70px 0 0 0;
+    color: rgba(0,0,0,.6);
+    width: 100%;
+    text-align: center;
   }
 
 

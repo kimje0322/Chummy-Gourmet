@@ -29,7 +29,7 @@
       </v-toolbar-title>
       <br />
 
-
+    <GoChatForMeetUp :meetup ="meetup" />
       <!-- 입력 폼 -->
       <div class="party wrapC">
 
@@ -79,11 +79,15 @@
 
 <script>
 import axios from "axios";
+import GoChatForMeetUp from '../../components/common/GoChatForMeetUp';
 
-// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-const SERVER_URL = "https://localhost:8080";
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "https://localhost:8080";
 
 export default {
+  components:{
+    GoChatForMeetUp
+  },
   data: () => {
     return {
       meetup : ''
@@ -98,7 +102,7 @@ export default {
         meetup.personalities = this.stringToArray(meetup.personalities);
         this.meetup = meetup;
         
-        console.log(this.meetup)
+        // console.log(this.meetup)
     })  
   },
   methods: {

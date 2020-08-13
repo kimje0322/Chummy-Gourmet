@@ -43,6 +43,9 @@ public interface MeetUpDao extends JpaRepository<Meetup, String> {
 			+ "(:#{#meetup.master}, :#{#meetup.title}, :#{#meetup.content}, :#{#meetup.location}, :#{#meetup.address},:#{#meetup.date}, :#{#meetup.maxPersonnel}, :#{#meetup.img}, :#{#meetup.personalities}, :#{#meetup.category})", nativeQuery = true)
 	Meetup save(Meetup meetup);
 
+	@Query(value = "select meetup_member from meetup_member where meetup_id = :data", nativeQuery = true)
+	List<Integer> selectAllUserByMeetUpID(String data);
+
 
 
 

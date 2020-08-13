@@ -38,8 +38,9 @@
                   width="84"
                   style="position: absolute; top: -5px; left: -5px; width: 42px; height: 42px;"
                 ></canvas>
-                <a class="a-img1 a-img2" href="#" tabindex="0" style="width: 32px; height: 32px;">
+                <a class="a-img1 a-img2" tabindex="0" style="width: 32px; height: 32px;">
                   <img
+                    @click="gotoProfile(lst)"
                     style="height: 100%; width: 100%;"
                     :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+lst.user_img"
                   />
@@ -48,9 +49,9 @@
               <div class="pf">
                 <div>
                   <div class="pf-n">
-                    <a
+                    <a 
+                      @click="gotoProfile(lst)"
                       class="pf-n-a"
-                      href="#"
                       tabindex="0"
                       style="color: black; font-weight: 600;"
                     >{{lst.usernickname}}</a>
@@ -158,7 +159,7 @@
               </span>
               <span style="display: inline-block;">
                 <button
-                  @click="onComment(lst.postid, lst.usernickname, lst.postcontent,lst.user_img)"
+                  @click="onComment(lst.postid, lst.usernickname, lst.postcontent,lst.user_img,lst.postuserid)"
                   style="background: 0 0; border: 0; display: flex; padding: 8px 6px;"
                 >
                   <div>
@@ -207,7 +208,7 @@
                   <div v-if="commentlst[i][0] > 0" style="marign-bottom: 4px; padding-left: 5px;">
                     <a
                       style="font-size: 14px; font-weight: 400; color: #8e8e8e;"
-                      @click="onComment(lst.postid, lst.usernickname, lst.postcontent, lst.user_img)"
+                      @click="onComment(lst.postid, lst.usernickname, lst.postcontent, lst.user_img, lst.postuserid)"
                     >
                       댓글
                       <span>{{commentlst[i][0]}}</span>개 모두 보기
@@ -260,8 +261,8 @@ export default {
   mounted() {},
   created() {
     this.timestamp = new Date();
-    console.log(this.$cookie.get("userId"));
-    this.userid = this.$cookie.get("userId");
+
+    this.userid = this.$cookie.get("userId")
     axios
       .get(`${SERVER_URL}/post?userid=${this.$cookie.get("userId")}`)
       .then((response) => {
@@ -333,6 +334,19 @@ export default {
         this.dialog = false;
       }
     },
+    gotoProfile(user) {
+      // 나를 누르면 마이페이지로 이동
+      if(user.postuserid == this.$cookie.get("userId")){
+        this.$router.push('/user/info');
+      }
+      // 타 유저 프로필 페이지로 이동
+      else{
+        let userImg = `https://i3b302.p.ssafy.io:8080/img/user?imgname=`+user.user_img;
+         this.$router.push('/user/profile?userId='+user.postuserid
+        +'&followerFollowing='+true
+        +'&userImg='+userImg);
+      }
+    },
     onDelete(lst) {
       console.log(lst);
       axios
@@ -362,16 +376,17 @@ export default {
         })
         .catch((error) => {});
     },
-    onComment(pid, pname, pcontent, puserimg) {
+    onComment(pid, pname, pcontent, puserimg,puserid) {
       let postinfo = {
         postid: pid,
         postnickname: pname,
         postcontent: pcontent,
         postuserimg: puserimg,
+        postuserid : puserid
       };
       // console.log("dfsdafgfgfdfadf");
-      console.log(pid);
-      router.push({ name: "Comment", params: postinfo });
+      // query로 넘기고 받는 라우터에서 query로 받아야 뒤로가기했을때 데이터 존재
+      router.push({ name: "Comment", query: postinfo });
     },
     onLike(postlike, idx) {
       this.likestate = !this.likestate;

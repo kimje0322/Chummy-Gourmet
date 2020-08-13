@@ -207,7 +207,7 @@ export default {
         // post: this.postlst,
         // comment : this.commentlst
       };
-      router.push({ name: "Comment", params: postinfo });
+      router.push({ name: "Comment", query: postinfo });
      
     },
   },

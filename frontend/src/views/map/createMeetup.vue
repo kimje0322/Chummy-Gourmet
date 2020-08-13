@@ -1,5 +1,5 @@
 <template>
-  <div class="user join" style="height: 1200px;">
+  <div class="user join">
     <!-- <v-app> -->
     <v-bottom-navigation
       scroll-target="#scroll-area-2"
@@ -212,84 +212,6 @@
               >
               </v-combobox>
             </template>
-            <v-time-picker v-model="time" ampm-in-title width="260px">
-              <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="menu2 = false">Cancel</v-btn>
-              <v-btn text color="primary" @click="test">OK</v-btn>
-            </v-time-picker>
-          </v-menu>
-        </v-date-picker>
-      </v-menu>
-
-      <!-- 파티 시간 -->
-      <!-- <vue-timepicker v-model="day.start_time" placeholder="Start Time"></vue-timepicker>
-      <span>to</span>
-      <vue-timepicker v-model="day.end_time" placeholder="End Time"></vue-timepicker>-->
-      <!-- <span>
-        <vue-timepicker v-model="timeinfo1" :minute-interval="10" format="hh:mm A"></vue-timepicker>
-      </span>
-      <span>
-        <vue-timepicker v-model="timeinfo2" :minute-interval="10" format="hh:mm A"></vue-timepicker>
-      </span>
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />-->
-      <div>
-        <v-menu
-          ref="menu"
-          v-model="menu22"
-          :close-on-content-click="false"
-          :nudge-right="40"
-          :return-value.sync="time1"
-          transition="scale-transition"
-          offset-y
-          max-width="290px"
-          min-width="290px"
-        >
-        <!-- prepend-icon="access_time" -->
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-              solo
-              v-model="time1"
-              label="Picker in menu"
-              readonly
-              v-bind="attrs"
-              v-on="on"
-            ></v-text-field>
-          </template>
-          <v-time-picker
-            v-if="menu22"
-            v-model="time1"
-            full-width
-            @click:minute="$refs.menu.save(time1)"
-          ></v-time-picker>
-        </v-menu>
-      </div>
-
-      <!-- 파티 인원 -->
-      <div id="dropdown-example">
-        <v-overflow-btn
-          v-model="meetup.personnel"
-          solo
-          class="my-2"
-          :items="dropdown_font"
-          placeholder="인원"
-          style="margin:0px;"
-          target="#dropdown-example"
-        ></v-overflow-btn>
-      </div>
-
-      <!-- 성향 -->
-      <div class="text-center">
-        <v-dialog v-model="dialog2" width="500">
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field solo v-model="selected" v-on="on" v-bind="attrs" placeholder="성향"></v-text-field>
-          </template>
 
             <v-card
               class="mx-auto"
@@ -330,23 +252,15 @@
 
 <script>
 import axios from "axios";
-import VueTimepicker from "vue2-timepicker";
-import "vue2-timepicker/dist/VueTimepicker.css";
 
 const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 // const SERVER_URL = "https://localhost:8080";
 
 export default {
-  components: {
-    // VueTimepicker,
-  },
   data: () => {
     return {
-      time1: null,
-      menu22: false,
-      day: [{ start_time: { HH: "", mm: "" }, end_time: { HH: "", mm: "" } }],
-      keyword: "",
-      date: "",
+      keyword : '',
+      date: '',
       time: null,
       menu: false,
       menu2 : false,
@@ -356,19 +270,18 @@ export default {
       dialog: false,
       dialog2: false,
 
-      restaurants: [],
+      restaurants : [],
 
-      meetup: {
-        title: "",
-        content: "",
-        location: "",
-        address: "",
-        date: "",
-        personnel: "",
-        master: 70,
-        img: "",
-        timeinfo1: "",
-        timeinfo2: "",
+      meetup : {
+        title : '',
+        content : '',
+        location : '',
+        address : '',
+        date : '',
+        maxPersonnel : '',
+        master : 70,
+        img : '',
+        personalities : [],
       },
 
       error: {
@@ -456,74 +369,75 @@ export default {
         this.geocoder = new kakao.maps.services.Geocoder();
     },
     meetUp() {
-      console.log(this.meetup.title.length);
-      console.log(this.meetup.content.length);
-      console.log(this.meetup.location);
-      console.log(this.meetup.date);
-      console.log(this.meetup.maxPersonnel);
-      // console.log(this.meetup.timeinfo1);
-      // console.log(this.meetup.timeinfo2);
-      console.log(this.time1)
-
       if (this.meetup.title.length === 0) {
         this.error.title = "제목을 입력해주세요.";
         return false;
-      } else this.error.title = false;
+      }
+      else this.error.title = false;
 
       if (this.meetup.content.length === 0) {
         // alert("내용을 작성해주세요.");
         this.error.content = "내용을 입력해주세요.";
         return false;
-      } else this.error.content = false;
+      }
+      else this.error.content = false;
 
       if (!this.meetup.location) {
         this.error.location = "장소를 선택해주세요.";
         return false;
-      } else this.error.location = false;
-
+      }
+      else this.error.location = false;
+      
       if (!this.meetup.date) {
         this.error.date = "날짜를 선택해주세요.";
         return false;
-      } else this.error.date = false;
+      }
+      else this.error.date = false;
 
       if (!this.meetup.maxPersonnel) {
         this.error.personnel = "인원을 선택해주세요.";
         return false;
-      } else this.error.personnel = false;
+      }
+      else this.error.personnel = false;
+
 
       if (!this.meetup.personalities) {
         this.error.personalities = "성향을 선택해주세요.";
         return false;
-      } else this.error.personnel = false;
+      }
+      else this.error.personnel = false;
 
-      if (this.isValidForm()) {
+
+      
+      if (this.isValidForm()){
         var personalities = this.meetup.personalities.toString();
         personalities = `[${personalities}]`;
 
         var newMeetup = {
-          title: this.meetup.title,
-          content: this.meetup.content,
-          location: this.meetup.location,
-          address: this.meetup.address,
-          date: this.meetup.date,
-          maxPersonnel: this.meetup.maxPersonnel,
-          master: this.meetup.master,
-          img: this.meetup.img,
-          personalities: personalities,
-        };
+          title :this.meetup.title,
+          content :this.meetup.content,
+          location :this.meetup.location,
+          address :this.meetup.address,
+          date :this.meetup.date,
+          maxPersonnel :this.meetup.maxPersonnel,
+          master :this.meetup.master,
+          img :this.meetup.img,
+          category :this.meetup.category,
+          personalities : personalities
+        }
 
         axios
           .post(`${SERVER_URL}/meetup`, newMeetup)
           .then((response) => {
             alert("밋업 등록이 완료됐습니다.");
-            this.$router.push("/map");
+            this.$router.push("/map")
           })
           .catch((error) => {
-            console.log("error보기");
-          });
+            console.log('error보기')
+          })
       }
     },
-
+    
     checkForm() {
       if (this.meetup.title.length < 1) this.error.title = "제목을 입력해주세요.";
       else { this.error.title = false; return; }
@@ -644,4 +558,5 @@ div {
 .cssBox {
   margin: 0 0 18px 0;
 }
+
 </style>

@@ -55,20 +55,48 @@
                       tabindex="0"
                       style="color: black; font-weight: 600;"
                     >{{lst.usernickname}}</a>
-                    <div v-if="lst.postuserid  == userid" style="float: right; margin-right: 0px; ">
+
+                    <div v-if="lst.postuserid  == userid" style="float: right; ">
+                      <button @click.stop="dialog = true">
+                        <div style="padding: 2px; width: 24px; height: 24px;">
+                          <i class="far fa-trash-alt"></i>
+                        </div>
+                      </button>
+                      <v-dialog dark v-model="dialog" max-width="300">
+                        <v-list>
+                          게시글을 삭제하시겠습니까?
+                          <v-list-item
+                            v-for="(item, index) in items"
+                            :key="index"
+                            @click="doit(item, lst)"
+                          >
+                            <v-list-item-title>{{ item.title }}</v-list-item-title>
+                          </v-list-item>
+                        </v-list>
+                      </v-dialog>
+                    </div>
+
+                    <div
+                      v-if="lst.postuserid  == userid"
+                      style="float: right; margin-right: 0px; margin-left: 167px;"
+                    >
                       <button @click="onRevise(lst)">
                         <div style="padding: 2px; width: 24px; height: 24px;">
-                          <i class="fas fa-ellipsis-v"></i>
+                          <i class="far fa-edit"></i>
                         </div>
                       </button>
                     </div>
-                    <div v-if="lst.postuserid  == userid" style="float: right; margin-left: 160px; ">
+
+                    <!-- <div
+                      v-if="lst.postuserid  == userid"
+                      style="float: right; margin-left: 160px; "
+                    >
                       <button @click="onDelete(lst)">
                         <div style="padding: 2px; width: 24px; height: 24px;">
                           <i class="far fa-trash-alt"></i>
                         </div>
                       </button>
-                    </div>
+                    </div>-->
                   </div>
                 </div>
                 <div></div>
@@ -99,12 +127,14 @@
                   <div style="border: 0">
                     <span style="margin: 0; height: 24px; width: 24px;">
                       <!-- {{likelist}}
-                      뿅 -->
-                      <v-icon style="display: block; position: relative; height: 24px; width: 24px; color: red;">mdi-heart</v-icon>
+                      뿅-->
+                      <v-icon
+                        style="display: block; position: relative; height: 24px; width: 24px; color: red;"
+                      >mdi-heart</v-icon>
                       <!-- <i
                         style="display: block; position: relative; height: 24px; width: 24px; color: red;"
                         class="fas fa-heart"
-                      ></i> -->
+                      ></i>-->
                     </span>
                   </div>
                 </button>
@@ -114,12 +144,14 @@
                   <div style="border: 0">
                     <span style="margin: 0; height: 24px; width: 24px;">
                       <!-- {{likelist}}
-                      하트 -->
-                      <v-icon style="display: block; position: relative; height: 24px; width: 24px;">mdi-heart-outline</v-icon>
+                      하트-->
+                      <v-icon
+                        style="display: block; position: relative; height: 24px; width: 24px;"
+                      >mdi-heart-outline</v-icon>
                       <!-- <i
                         style="display: block; position: relative; height: 24px; width: 24px; "
                         class="far fa-heart"
-                      ></i> -->
+                      ></i>-->
                     </span>
                   </div>
                 </button>
@@ -142,7 +174,7 @@
                 </button>
               </span>
               <!-- here messageing -->
-              <CreateChat :postuserid ="lst.postuserid" />
+              <CreateChat :postuserid="lst.postuserid" />
               <!-- <span style="display: inline-block; margin-left: auto; margin-right: -10px;">
                 <button>
 
@@ -168,7 +200,7 @@
                       style="text-decoration: none; font-weight: 600; font-size: 14px; padding-left: 5px; padding-right: 5px;color: rgba(var(--i1d,38,38,38),1)"
                       href="#"
                     >{{lst.usernickname}}</a>
-                    <span>{{ lst.postcontent }}</span>
+                    <span>{{ lst.postcontent }} {{lst.postid}}</span>
                   </div>
                 </div>
                 <div>
@@ -198,7 +230,7 @@ import axios from "axios";
 import router from "@/routes";
 import Vue from "vue";
 import vueMoment from "vue-moment";
-import CreateChat from '../../components/common/CreateChat';
+import CreateChat from "../../components/common/CreateChat";
 
 Vue.use(vueMoment);
 
@@ -206,11 +238,13 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 // const SERVER_URL = "https://localhost:8080";
 
 export default {
-   components: {
-        CreateChat
-    },
+  components: {
+    CreateChat,
+  },
   data() {
     return {
+      dialog: false,
+      show: false,
       postlst: [],
       commentlst: [],
       like: false,
@@ -218,13 +252,14 @@ export default {
       likelist: [],
       likeornot: "",
       likestate: true,
+      items: [{ title: "삭제" }, { title: "취소" }],
     };
   },
 
   mounted() {},
   created() {
     this.timestamp = new Date();
-    // console.log(this.$cookie.get("userId"));
+
     this.userid = this.$cookie.get("userId")
     axios
       .get(`${SERVER_URL}/post?userid=${this.$cookie.get("userId")}`)
@@ -256,6 +291,42 @@ export default {
       });
   },
   methods: {
+    doit(item, lst) {
+      if (item.title == "삭제") {
+        console.log("삭제해버려?");
+        console.log(lst.postid);
+        axios
+          .delete(`${SERVER_URL}/post?postid=${lst.postid}`)
+          .then((response) => {
+            this.dialog = false;
+
+            axios
+              .get(`${SERVER_URL}/post?userid=${this.$cookie.get("userId")}`)
+              .then((response) => {
+                console.log(response);
+                var posts = response.data.data;
+                var comments = response.data.comment;
+                // alert(this.postlst.length);
+                // console.log(posts);
+                posts.sort((a, b) => {
+                  return -1 * (a.postid - b.postid);
+                });
+                comments.sort((a, b) => {
+                  return -1 * (a[1] - b[1]);
+                });
+                this.postlst = posts;
+                this.commentlst = response.data.comment;
+                console.log("mentlst : " + response.data.comment);
+              })
+              .catch((error) => {
+                console.log(error.response);
+              });
+          })
+          .catch((error) => {});
+      } else {
+        this.dialog = false;
+      }
+    },
     gotoProfile(user) {
       // 나를 누르면 마이페이지로 이동
       if(user.postuserid == this.$cookie.get("userId")){
@@ -268,7 +339,6 @@ export default {
         +'&followerFollowing='+true
         +'&userImg='+userImg);
       }
-     
     },
     onDelete(lst) {
       console.log(lst);

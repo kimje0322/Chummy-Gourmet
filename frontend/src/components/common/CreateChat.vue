@@ -61,7 +61,11 @@ export default {
                             //만들기
 
                             //새로운 채팅방 생성 
-                            window.db.collection('test').add({
+                            const newRoomRef = window.db.collection('test').doc();
+                            console.log(newRoomRef.id);
+                            window.db.collection('test').doc(newRoomRef.id).collection('test').doc();
+
+                             var res = window.db.collection('test').doc(newRoomRef.id).set({
                                 id :this.data,
                                 time : Date.now(),
                                 name : "Room"
@@ -69,14 +73,8 @@ export default {
                                 console.log(err);
                             })
 
-                            window.db.collection('test').where('id', '==', this.data).get().then(snapshot=>{
-                                snapshot.forEach(doc=>{
-                                    room.rid = doc.id;
-                                })
-                            })
-
-                            room.id = this.data;
-                            room.time = Date.now();
+                            alert("새로운 채팅방 생성");
+                            return;
                         }
 
                     //있을경우

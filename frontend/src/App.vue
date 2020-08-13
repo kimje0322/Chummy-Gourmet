@@ -16,41 +16,40 @@
             color="white"
             horizontal
           >
-            <v-btn class="nav-btn" text color="deep-purple accent-4">
-              <router-link to="/map">
+            <router-link to="/map">
+              <!-- <v-btn class="nav-btn" text color="orange accent-4"> -->
                 <!-- <v-icon>fas fa-search</v-icon> -->
-                <v-icon>mdi-map-marker-radius</v-icon>
-              </router-link>
-            </v-btn>
+                <v-icon class="icon-css">mdi-map-marker-radius</v-icon>
+              <!-- </v-btn> -->
+            </router-link>
 
-            <v-btn text color="deep-purple accent-4">
-              <router-link to=/newsfeed>
-                <v-icon>mdi-history</v-icon>
-              </router-link>
-            </v-btn>
+            <router-link to=/newsfeed>
+              <!-- <v-btn text color="orange accent-4"> -->
+                <v-icon class="icon-css">mdi-history</v-icon>
+              <!-- </v-btn> -->
+            </router-link>
 
-            <v-btn text color="deep-purple accent-4">
-               <!-- <input ref="imageInput" type="file" hidden @change="onChangeImages"> -->
+            <router-link to="/feed/add">
+              <!-- <v-btn text color="orange accent-4"> -->
+              <!-- <input ref="imageInput" type="file" hidden @change="onChangeImages"> -->
               <!-- <v-btn type="button" @click="onClickImageUpload"> -->
               <!-- </v-btn> -->
-              <router-link to="/feed/add">
+                <v-icon class="icon-css">fas fa-plus</v-icon>
+              <!-- </v-btn> -->
+            </router-link>
 
-                <v-icon>fas fa-plus</v-icon>
-              </router-link>
-            </v-btn>
-
-            <v-btn text color="deep-purple accent-4">
-              <router-link to="/curator">
+            <router-link to="/curator">
+              <!-- <v-btn text color="orange accent-4"> -->
                 <!-- <v-icon>fas fa-list</v-icon> -->
-                <v-icon>mdi-magnify</v-icon>
-              </router-link>
-            </v-btn>
+                <v-icon class="icon-css">mdi-magnify</v-icon>
+              <!-- </v-btn> -->
+            </router-link>
 
-            <v-btn text color="deep-purple accent-4">
-              <router-link to="/user/info">
-                <v-icon>fas fa-user</v-icon>
-              </router-link>
-            </v-btn>
+            <router-link to="/user/info">
+              <!-- <v-btn text color="orange accent-4"> -->
+                <v-icon class="icon-css">fas fa-user</v-icon>
+              <!-- </v-btn> -->
+            </router-link>
           </v-bottom-navigation>
 
           <!-- home -->
@@ -152,8 +151,13 @@ export default {
 .home-padding {
   padding: 0px !important;
 }
-/* 
-.navbar {
-  position: fixed;
+.icon-css {
+  padding: 0 27px
+}
+
+/* .navbar-fixed-bottom {
+  padding: 15px 0 0 0;
 } */
+
+
 </style>

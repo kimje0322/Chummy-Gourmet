@@ -74,9 +74,9 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 </script>
 
 <style scoped>
-  .entireClass{
+  /* .entireClass{
     padding: 20px;
-  }
+  } */
   .aligncss {
     margin: 70px 0 0 0;
     color: rgba(0,0,0,.6);

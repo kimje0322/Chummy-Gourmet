@@ -13,9 +13,8 @@
         <v-img :src="this.userImg"></v-img>
       </v-list-item-avatar>
       {{ userNickname }}
-      <!-- <v-btn><br>매너온도</v-btn> -->
       <v-spacer></v-spacer>
-        <v-btn depressed>매너평가</v-btn>
+        <v-btn depressed @click="show">관심사</v-btn>
       <v-spacer></v-spacer>
         <v-btn color="primary"  @click="onFollow()" v-if="followerFollowing === 'false'">
             팔로우
@@ -29,9 +28,33 @@
       <v-spacer></v-spacer>
     </v-toolbar>
   </v-layout>
+
+  <!-- dialog -->
+      <v-dialog
+        dark
+        v-model="dialog"
+        max-width="190"
+        >
+        <v-list v-if="realInterests.length > 0"> 
+          <v-list-item
+          v-for="(interest, index) in realInterests"
+          :key="index"
+          >
+          <v-list-item-title># {{ interest }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+        <v-list v-else>
+          <h4 class="noInterest">
+            <!-- <i class="far fa-surprise"></i>
+            <span style="margin: 0 1px"></span> -->
+            등록된 관심사가 없습니다.
+          </h4>
+        </v-list>
+      </v-dialog>
+
+
   <v-layout class="entireClass">
       <v-row>
-        
       <v-col v-for="(lst,i) in postlst" :key="i" class="d-flex child-flex" cols="4">
           <v-card flat tile class="d-flex">
               {{lst.postimgurl}}
@@ -75,10 +98,16 @@ export default {
       userImg:"",
       postlst: [],
       commentlst :[],
-      userInfo: "",
+      realInterests: [],
+      checkedInterests: [],
+      dialog: false,
+      
     }
   },
   methods :{
+    show() {
+      this.dialog = true;
+    },
     detailInfo(post,comment) {
       let users = {
       userId: this.anotherId,
@@ -167,13 +196,88 @@ export default {
             this.commentlst = response.data.comment;
             // console.log(this.postlst)
         })
-        
+
+      // 유저 추가 정보  
       axios 
       .get(`${SERVER_URL}/userpage/getuserInfo?userId=`+this.anotherId)
          .then((response) => {
-           this.userInfo = response.data
-           console.log(this.userInfo)
+           console.log(response.data)
+            var tmp = response.data.userInterest.replace('[','').replace(']',''); 
+            var s = "";
+            for (let i = 0; i < tmp.length; i++) {
+              if(tmp[i] == ','){
+                this.checkedInterests.push(s);
+                s = "";
+              }
+              else if(tmp[i] == ' '){
+                continue;
+              }
+              else{
+                s += tmp[i];
+              }
+            }
+            this.checkedInterests.push(s);
+            
+            console.log(this.checkedInterests)
+            console.log(this.checkedInterests.length)
+            for (var i=0; i<this.checkedInterests.length; i++ ) {
+              if (this.checkedInterests[i] === "1") {
+              this.realInterests.push("아이돌")
+              }
+              if (this.checkedInterests[i] === "2") {
+              this.realInterests.push("콘서트")
+              }
+              if (this.checkedInterests[i] === "3") {
+              this.realInterests.push("취업")
+              }
+              if (this.checkedInterests[i] === "4") {
+              this.realInterests.push("게임")
+              }
+              if (this.checkedInterests[i] === "5") {
+              this.realInterests.push("패션")
+              }
+              if (this.checkedInterests[i] === "6") {
+              this.realInterests.push("다이어트")
+              }
+              if (this.checkedInterests[i] === "7") {
+              this.realInterests.push("재테크")
+              }
+              if (this.checkedInterests[i] === "8") {
+              this.realInterests.push("사업")
+              }
+              if (this.checkedInterests[i] === "9") {
+              this.realInterests.push("경제")
+              }
+              if (this.checkedInterests[i] === "10") {
+              this.realInterests.push("건강")
+              }
+              if (this.checkedInterests[i] === "11") {
+              this.realInterests.push("스포츠")
+              }
+              if (this.checkedInterests[i] === "12") {
+              this.realInterests.push("요리")
+              }
+              if (this.checkedInterests[i] === "13") {
+              this.realInterests.push("군대")
+              }
+              if (this.checkedInterests[i] === "14") {
+              this.realInterests.push("인테리어")
+              }
+              if (this.checkedInterests[i] === "15") {
+              this.realInterests.push("여행")
+              }
+              if (this.checkedInterests[i] === "16") {
+              this.realInterests.push("일러스트")
+              }
+              if (this.checkedInterests[i] === "17") {
+              this.realInterests.push("동물")
+              }
+              if (this.checkedInterests[i] === "18") {
+              this.realInterests.push("IT")
+              }
+            }
          })
+      
   },
   
 }
@@ -186,6 +290,9 @@ export default {
   }
   .my-auto {
   font-size: 20px;
+  }
+  .noInterest {
+    text-align: center;
   }
 
 </style>

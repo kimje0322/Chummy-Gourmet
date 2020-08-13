@@ -1,11 +1,20 @@
 <template>
   <div>
+       <v-toolbar dark>
+      <!-- 중앙정렬 하기 위해 2개씀 -->
+      <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
+      <p class="my-auto">채팅방</p>
+      <v-spacer></v-spacer>
+    </v-toolbar>
+
       <div v-for="(room, i) in chatroom" :key="i"> 
         <div>
-            <span>{{ room.nickName }} 채팅방</span>
-            <button @click="chatGo(room)">입장</button>
+            <br><br>
+            <input style="width : 80%; border : 1px solid" readonly :value="room.name"/>
+            <v-btn height="48px" width="8%" style="float : right;" class="btn btn-primary" @click="chatGo(room)">입장</v-btn>
         </div>
       </div>
+
       <!-- <div>
         <input type = "text" v-model = "name" placeholder="추가할 채팅방 이름입력">
         <button @click="addRoom">추가</button>
@@ -17,8 +26,8 @@
 import axios from "axios";
 import router from "@/routes";
 
-// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-const SERVER_URL = "https://localhost:8080";
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "https://localhost:8080";
 
 export default {
 
@@ -49,13 +58,23 @@ export default {
                             .then((response) => {
                                 this.responseNickName = response.data;
                                 console.log(this.responseNickName);
-
+                                var chatName;
+                                //채팅방이름이 Room일경우 (1대1 대화일 경우)
+                                console.log(doc.data().name);
+                                if(doc.data().name == 'Room')
+                                {
+                                    chatName = this.responseNickName;
+                                }
+                                //아닐경우 -> firestore에 저장된 이름
+                                else{
+                                    chatName = doc.data().name;
+                                }
                                 var chatData = {
-                                name : doc.data().name,
+                                name : chatName,
                                 id : doc.data().id,
                                 rid : doc.id,
                                 nickName : this.responseNickName
-                            }
+                                }
                             console.log(chatData);
 
                             this.chatroom.push(chatData);

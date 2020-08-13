@@ -3,7 +3,7 @@
         <form @submit.prevent="createMessage">
             <div class="form-group">
                 <input style = "width : 80%; display : inline" type="text" name="message" class="form-control" placeholder="Enter message ..." v-model="newMessage">
-               <v-btn style = "width : 20%" @click="doSearch">검색</v-btn>
+               <v-btn style = "width : 20%" class="btn btn-primary" type="submit" name="action">Submit</v-btn>
                <!-- <button style = "float : right" class="btn btn-primary" type="submit" name="action">Submit</button> -->
                 <p class="text-danger" v-if="errorText">{{ errorText }}</p>
             </div>

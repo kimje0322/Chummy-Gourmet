@@ -10,11 +10,8 @@
       </v-toolbar>
     </v-toolbar-title>
     
-   
     
-    
-    
-    <div v-if="item">
+    <div v-if="items.length > 0">
     <v-list subheader>
       <v-list-item
         v-for="item in items"

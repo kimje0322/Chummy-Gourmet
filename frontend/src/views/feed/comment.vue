@@ -53,9 +53,9 @@
                 :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+this.myimg"
               />
             </span>
-            <form style="height: 42px;" class="text-box">
+            <form style="height: 42px; " class="text-box">
               <!-- v-model="recommentText" -->
-              <v-textarea style="height: 18px;" class="text" v-model="commentcontent"></v-textarea>
+              <textarea style="height: 18px;" class="text" v-model="commentcontent"></textarea>
               <button @click="onRewrite()" class="upload">수정</button>
             </form>
           </div>
@@ -81,7 +81,7 @@
                       </span>
                     </div>
                     <div
-                      style="float: left; width: 285px; flex-direction: column; position: relative;"
+                      style="float: left; flex-direction: column; position: relative;"
                     >
                       <!-- <div style="display: inline-flex;"> -->
                       <h2
@@ -122,7 +122,7 @@
                           />
                         </span>
                       </div>
-                      <div style="float: left;">
+                      <div style="float: left; width: 250px;">
                         <!-- <h3 style="display: inline-flex;"></h3> -->
                         <h2
                           style="font-size: 14px; font-weight: 600; align-items: center; display: inline-flex; margin-right: 4px;"
@@ -138,23 +138,23 @@
                             <a class="prf-link" href="#">dlwlrma</a>
                           </div>
                         </h3>-->
-                        <span>
+                        <span style="width: 270px;">
                           <!-- {{lst}} -->
                           {{lst.postcomment}}
-                          <br />
-                          {{ lst.commentdate }}
                           <!-- {{ }} -->
                         </span>
                         <div style="color: #8e8e8e; margin-top: 12px; margin-bottom: 4px;">
-                          <a style="margin-right: 12px; color: #8e8e8e;">X시간</a>
+                          <a style="margin-right: 12px; color: #8e8e8e;">
+                            {{ lst.commentdate | moment("from", "now") }}
+                          </a>
                           <!-- v-if="lst.commentid === userId" -->
-                          <button @click="rewrite(lst)">수정하기</button>
+                          <button v-if="lst.commentuserid  == userid" @click="rewrite(lst)">수정하기</button>
                         </div>
                       </div>
                     </div>
                   </div>
                   <!-- v-if="commentid === user" -->
-                  <span style="margin-top: 9px;">
+                  <span  v-if="lst.commentuserid  == userid" style="margin-top: 9px;">
                     <div style="float: right;">
                       <button @click="onDelete(lst)">
                         <div>
@@ -198,7 +198,8 @@ export default {
       postname: "",
       recomment: false,
       cid : "",
-      postuserid:""
+      postuserid:"",
+      userid : "",
     };
   },
   watch: {
@@ -218,6 +219,7 @@ export default {
       .then((response) => {
         // console.log("alfkjsdsi");
         console.log(response);
+        this.userid = this.$cookie.get("userId");
         this.username = response.data.userNickname;
         this.myimg = response.data.userImg;
       })

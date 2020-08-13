@@ -40,10 +40,21 @@ import Chat from './views/chat/chat.vue'
 //피드 게시글 업로드
 import AddFeed from './views/feed/addFeed.vue'
 
+// 리뷰 작성
+import AddReview from './views/review/addReview.vue'
 
 Vue.use(VueRouter);
 export default new VueRouter({
     routes: [
+        //리뷰 작성
+        {
+            path: '/review/add',
+            name: 'AddFeed',
+            component: AddReview,
+            // meta: {
+            //     navbar: true
+            // }
+        },
         //피드 게시글 업로드
         {
             path: '/feed/add',

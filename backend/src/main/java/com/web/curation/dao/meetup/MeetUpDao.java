@@ -25,7 +25,12 @@ public interface MeetUpDao extends JpaRepository<Meetup, String> {
 			"WHERE meetup_id = :id", nativeQuery = true)
 	Optional<Meetup> getMeetupByMeetupID(int id);
 	
-	// 해당 지역(구)에 있는 밋업 정보 가져오기
+	// 유저 아이디로 참석한 밋업 객체 리스트 가져오기
+	@Query(value = "SELECT a.* " + "FROM meetup a " + "INNER JOIN meetup_member b ON a.meetup_id = b.meetup_id "
+			+ "WHERE b.meetup_member = :userId", nativeQuery = true)
+	Optional<List<Meetup>> getMeetupByUserID(int userId);
+	
+	// 해당 지역(구)에 있는 밋업 리스트 가져오기
 	@Query(value =
 				"SELECT * " + 
 				"FROM meetup " + 
@@ -33,6 +38,8 @@ public interface MeetUpDao extends JpaRepository<Meetup, String> {
 				"AND meetup_address LIKE %:location1% " +
 				"AND meetup_address LIKE %:location2% ", nativeQuery = true)
 	List<Meetup> selectMeetUpByLocation(String location1, String location2);
+	
+	
 	
 	// 밋업 생성
 	@Query(value = "INSERT INTO meetup "
@@ -42,6 +49,7 @@ public interface MeetUpDao extends JpaRepository<Meetup, String> {
 			+ "VALUES "
 			+ "(:#{#meetup.master}, :#{#meetup.title}, :#{#meetup.content}, :#{#meetup.location}, :#{#meetup.address},:#{#meetup.date}, :#{#meetup.maxPersonnel}, :#{#meetup.img}, :#{#meetup.personalities}, :#{#meetup.category})", nativeQuery = true)
 	Meetup save(Meetup meetup);
+
 
 
 

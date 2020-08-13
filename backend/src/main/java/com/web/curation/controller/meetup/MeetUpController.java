@@ -60,6 +60,23 @@ public class MeetUpController {
 		return data.get();
 	}
 	
+	//유저 아이디로 밋업 리스트 조회
+	@GetMapping("/meetup/list/{userId}")
+	@ApiOperation(value = "userId로 밋업 리스트 조회 | success | fail")
+	public Object searchByUserID(@PathVariable int userId) {
+		final BasicResponse result = new BasicResponse();
+		Optional<List<Meetup>> data = meetupDao.getMeetupByUserID(userId);
+		if(data.isPresent()) {
+			result.status = true;
+	        result.data = "success";
+	        result.object = data.get();;
+		}else {
+			result.status = true;
+	        result.data = "fail";
+		}
+		return result;
+	}
+	
 	//해당 지역의 밋업 정보 조회
 	@GetMapping("/meetup/search/{location}")
 	@ApiOperation(value = "해당 지역의 밋업 정보 조회")

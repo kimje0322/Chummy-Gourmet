@@ -9,7 +9,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dao.meetup.MeetUpDao;
@@ -49,33 +52,31 @@ public class ReviewController {
 	MeetUpDao meetUpDao;
 	
 	//리뷰 추가
-	@GetMapping("/review/add")
+	@PutMapping("/review")
 	@ApiOperation(value = "리뷰 작성")
-	public void addReview(@RequestParam(required = true) final String name,
-			@RequestParam(required = true) final String category,
-			@RequestParam(required = true) final String writer,
-			@RequestParam(required = true) final String content) {
-		
+	public void addReview(@RequestBody Review review) {
+		System.out.println(review);
 		//1. DB의 가게 테이블에 name 상호명을 가진 가게가 있는지 검색
 		//2. 없을 경우 가게 테이블에 입력(review = 1), 있을경우 review++
 		//3. 리뷰 테이블에 정보 입력
-		System.out.println(restDao.selectRestNameByName(name));
+		
+//		System.out.println(restDao.selectRestNameByName(name));
 //		Restaurant rest = restDao.selectRestNameByName(name);
-		Optional<Restaurant> rest = restDao.selectRestNameByName(name);
-		System.out.println(rest);
-		if(rest == null) {
-			System.out.println("없다");
-			//가게 테이블에 정보 입력
-			restDao.insertRestaurant(name, category);
-		}
-		else {
-			System.out.println("있다.");
-			restDao.updateRestaurantReview(name);
-		}
-		
-		reviewDao.insertReview(name, category, writer, content);
-		
-		System.out.println(name+" "+category +" "+ writer+" "+ content);
+//		Optional<Restaurant> rest = restDao.selectRestNameByName(name);
+//		System.out.println(rest);
+//		if(rest == null) {
+//			System.out.println("없다");
+//			//가게 테이블에 정보 입력
+//			restDao.insertRestaurant(name, category);
+//		}
+//		else {
+//			System.out.println("있다.");
+//			restDao.updateRestaurantReview(name);
+//		}
+//		
+//		reviewDao.insertReview(name, category, writer, content);
+//		
+//		System.out.println(name+" "+category +" "+ writer+" "+ content);
 	}
 	
 	//리뷰 검색

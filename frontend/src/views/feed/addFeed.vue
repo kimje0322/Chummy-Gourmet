@@ -94,6 +94,7 @@ export default {
       revise: false,
       revise1: false,
       revise3: true,
+      uploadimg: false,
     };
   },
   created() {
@@ -107,6 +108,7 @@ export default {
       this.postimg = this.$route.params.postimage;
       this.content = this.$route.params.postcontent;
       console.log(this.content);
+      console.log("이거이거");
       console.log(this.postimg);
     }
     axios
@@ -148,44 +150,64 @@ export default {
     },
 
     reviseImg() {
-      const file = new FormData();
-      file.append("file", this.file);
-      console.log(file);
-      axios
-        .post(`${SERVER_URL}/post/img`, file)
+      if (!this.uploadimg) {
+        var repost = {
+          postcontent: this.content,
+          postid: this.$route.params.postid,
+          postimgurl: this.postimg,
+        };
+        axios
+          .put(`${SERVER_URL}/post`, repost)
 
-        .then((response) => {
-          this.postimgurl = response.data;
-          console.log("여기");
-          console.log(this.postimgurl);
-          var repost = {
-            postcontent: this.content,
-            postid: this.$route.params.postid,
-            postimgurl: this.postimgurl
-          };
-          console.log(this.postimgurl);
-          console.log("여기여기");
-          console.log(repost);
-          axios
-            .put(`${SERVER_URL}/post`, repost)
+          .then((response) => {
+            console.log("여기여기여기역이겨이겨");
+            router.push({ name: "NewsFeed" });
+          })
 
-            .then((response) => {
-              // this.postimgurl = response.data;
-              // console.log(this.postimgurl);
-              console.log("여기여기여기역이겨이겨")
-              router.push({ name: "NewsFeed" });
-            })
+          .catch((error) => {
+            console.log(error.response);
+            alert("이미지 전송 실패");
+          });
+      } else {
+        const file = new FormData();
+        file.append("file", this.file);
+        console.log(file);
+        axios
+          .post(`${SERVER_URL}/post/img`, file)
 
-            .catch((error) => {
-              console.log(error.response);
-              alert("이미지 전송 실패");
-            });
-        })
+          .then((response) => {
+            this.postimgurl = response.data;
+            console.log("여기");
+            console.log(this.postimgurl);
+            var repost = {
+              postcontent: this.content,
+              postid: this.$route.params.postid,
+              postimgurl: this.postimgurl,
+            };
+            console.log(this.postimgurl);
+            console.log("여기여기");
+            console.log(repost);
+            axios
+              .put(`${SERVER_URL}/post`, repost)
 
-        .catch((error) => {
-          console.log(error.response);
-          alert("이미지 전송 실패");
-        });
+              .then((response) => {
+                // this.postimgurl = response.data;
+                // console.log(this.postimgurl);
+                console.log("여기여기여기역이겨이겨");
+                router.push({ name: "NewsFeed" });
+              })
+
+              .catch((error) => {
+                console.log(error.response);
+                alert("이미지 전송 실패");
+              });
+          })
+
+          .catch((error) => {
+            console.log(error.response);
+            alert("이미지 전송 실패");
+          });
+      }
     },
     //게시물을 DB에 저장하는 부분
     addPost() {
@@ -230,6 +252,7 @@ export default {
     },
 
     onClickImageUpload() {
+      this.uploadimg = true;
       this.$refs.imageInput.click();
     },
 

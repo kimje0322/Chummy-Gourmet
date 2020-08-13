@@ -20,7 +20,7 @@
           
         <!-- 팔로워 -->
         <v-list nav dense  v-if="item=='follower'">
-
+        <!-- 팔로워 존재하면  -->
           <!-- 팔로워 검색바 -->
           <v-row>
             <v-col class="search-bar">
@@ -60,12 +60,20 @@
                 <v-btn depressed @click="unFollow(user,i,'followerlist')" v-else>
                     팔로잉
                 </v-btn>
-
             </v-list-item>
+        <!-- 팔로워 존재하지 않으면 -->
+        <div v-if="followerList.length == 0">
+          <i class="fas fa-user-plus fa-6x"></i>
+          <div class="text-css">
+            <h1>팔로워</h1>
+            <p>회원님을 팔로우하는 모든 사람이 표시됩니다.</p>
+          </div>
+        </div>
         </v-list>
-        
+
         <!-- 팔로잉 -->
         <v-list nav dense v-else>
+        <!-- 팔로잉 존재하면  -->
           <!-- 팔로잉 검색바 -->
           <v-row>
             <v-col class="search-bar">
@@ -95,8 +103,15 @@
             <v-btn depressed @click="unFollow(user,i,'followinglist')">
                 팔로잉
             </v-btn>
+          </v-list-item>
 
-        </v-list-item>
+          <div v-if="followingList.length == 0">
+            <i class="fas fa-user-plus fa-6x"></i>
+            <div class="text-css">
+              <h1>팔로잉</h1>
+              <p>회원님이 팔로우하는 모든 사람이 표시됩니다.</p>
+            </div>
+          </div>
           </v-list>
         </v-card>
       </v-tab-item>
@@ -387,5 +402,12 @@ export default {
   .v-list-item__content {
     width: 12px;
   }
-
+  .text-css {
+    /* margin-top: 70px; */
+    text-align: center;
+  }
+  .fa-user-plus {
+    /* margin: 70px 0 20px 140px; */
+    text-align: center;
+  }
 </style>

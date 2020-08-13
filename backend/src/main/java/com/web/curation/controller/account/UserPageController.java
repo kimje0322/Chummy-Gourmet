@@ -185,24 +185,9 @@ public class UserPageController {
 				map.put("followerPhone", user.getUserPhone());
 				map.put("followerComment", user.getUserComment());
 				map.put("followerImg", user.getUserImg());
-				// 내가 팔로잉 중이냐
-				int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, followeruserId);
-				// 내가 요청중이냐
-				int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, followeruserId);
-
-				// 내가 팔로잉 중임
-				if (ans1 > 0) {
-					map.put("followerFollowing", "true");
-					System.out.println("나(" + userId + ")는 상대방인 " + user.getUserName() + " 님을 팔로우 한 상태입니다.");
-				}
-				// 내가 요청중임
-				else if (ans2 > 0) {
-					map.put("followerFollowing", "doing");
-					System.out.println("나(" + userId + ")는 상대방인 " + user.getUserName() + " 님을 팔로우 요청한 상태입니다.");
-				} else {
-					map.put("followerFollowing", "false");
-					System.out.println(userId + "님은 상대방인 " + user.getUserName() + " 님을 팔로우 하지 않은 상태입니다.");
-				}
+				
+				String result = getfollowerfollowing(userId,followeruserId);
+				map.put("followerFollowing", result);
 				userList.add(map);
 			}
 			// 유저 검색을 한 경우
@@ -220,26 +205,8 @@ public class UserPageController {
 						map.put("followerComment", user.get().getUserComment());
 						map.put("followerImg", user.get().getUserImg());
 
-						// 내가 팔로잉 중이냐
-						int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, followeruserId);
-						// 내가 요청중이냐
-						int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, followeruserId);
-
-						// 내가 팔로잉 중임
-						if (ans1 > 0) {
-							map.put("followerFollowing", "true");
-							System.out.println(
-									"나(" + userId + ")는 상대방인 " + user.get().getUserName() + " 님을 팔로우 한 상태입니다.");
-						}
-						// 내가 요청중임
-						else if (ans2 > 0) {
-							map.put("followerFollowing", "doing");
-							System.out.println(
-									"나(" + userId + ")는 상대방인 " + user.get().getUserName() + " 님을 팔로우 요청한 상태입니다.");
-						} else {
-							map.put("followerFollowing", "false");
-							System.out.println(userId + "님은 상대방인 " + user.get().getUserName() + " 님을 팔로우 하지 않은 상태입니다.");
-						}
+						String result = getfollowerfollowing(userId,followeruserId);
+						map.put("followerFollowing", result);
 						userList.add(map);
 					}
 
@@ -248,7 +215,28 @@ public class UserPageController {
 		}
 		return userList;
 	}
+	// 내가 상대방 유저의 팔로잉 상태 확인
+	@GetMapping("/userpage/getfollowerfollowing")
+	@ApiOperation(value = "[유저페이지] 내가 상대방 유저의 팔로잉 상태 확인")
+	public String getfollowerfollowing(@RequestParam(required = true) final String userId,
+			@RequestParam(required = true) final String followeruserId) {
+		// 내가 팔로잉 중이냐
+		int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, followeruserId);
+		// 내가 요청중이냐
+		int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, followeruserId);
 
+		// 내가 팔로잉 중임
+		if (ans1 > 0) {
+			return "true";
+		}
+		// 내가 요청중임
+		else if (ans2 > 0) {
+			return "doing";
+		} else {
+			return "false";
+		}
+	}
+	
 	// 사용자의 유저 추가정보 업데이트
 	@PutMapping("/userpage/putuserInfo")
 	@ApiOperation(value = "[유저페이지] 사용자의 유저추가정보 업데이트")

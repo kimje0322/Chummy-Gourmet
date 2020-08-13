@@ -202,8 +202,8 @@ import CreateChat from '../../components/common/CreateChat';
 
 Vue.use(vueMoment);
 
-// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-const SERVER_URL = "https://localhost:8080";
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "https://localhost:8080";
 
 export default {
    components: {
@@ -224,7 +224,6 @@ export default {
   mounted() {},
   created() {
     this.timestamp = new Date();
-    // console.log(this.$cookie.get("userId"));
     // console.log(this.$cookie.get("userId"));
     this.userid = this.$cookie.get("userId")
     axios

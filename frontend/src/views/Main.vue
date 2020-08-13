@@ -26,6 +26,10 @@
             <History :proptoTopsub="users" v-else-if="item=='History'"></History>
             <!-- profile -->
             <v-card-text v-else>
+
+              <span class="material-icons">
+              account_circle</span>
+              
               <v-row dense>
                 <v-col
                   v-for="(item, i) in mData"

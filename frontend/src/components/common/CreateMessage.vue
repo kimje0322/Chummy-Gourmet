@@ -1,11 +1,13 @@
 <template>
-    <div class="container" style="margin-bottom: 30px">
+    <div style="margin-bottom: 30px;">
         <form @submit.prevent="createMessage">
             <div class="form-group">
-                <input type="text" name="message" class="form-control" placeholder="Enter message ..." v-model="newMessage">
+                <input style = "width : 80%; display : inline" type="text" name="message" class="form-control" placeholder="Enter message ..." v-model="newMessage">
+               <v-btn style = "width : 20%" class="btn btn-primary" type="submit" name="action">Submit</v-btn>
+               <!-- <button style = "float : right" class="btn btn-primary" type="submit" name="action">Submit</button> -->
                 <p class="text-danger" v-if="errorText">{{ errorText }}</p>
             </div>
-            <button class="btn btn-primary" type="submit" name="action">Submit</button>
+            
         </form>
     </div>
 </template>
@@ -14,7 +16,7 @@
 // import fb from '@/firebase/init';
 export default {
     name: 'CreateMessage',
-    props: ['name'],
+    props: ['id','rid'],
     data() {
         return {
             newMessage: null,
@@ -24,10 +26,10 @@ export default {
     methods: {
         createMessage () {
             if (this.newMessage) {
-                window.db.collection('messages').add({
+                window.db.collection('test').doc(this.rid).collection('messages').add({
+                    from : this.id,
                     message: this.newMessage,
-                    name: this.name,
-                    timestamp: Date.now()
+                    time: Date.now()
                 }).catch(err => {
                     console.log(err);
                 });

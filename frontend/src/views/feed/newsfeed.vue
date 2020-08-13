@@ -93,25 +93,24 @@
           </div>
           <div class="fb">
             <section class="func">
-              <span v-if="!like" @click="onLike(lst.postlike)" class="heart">
+              <span v-if="likelist.includes(lst.postid*1)" class="heart" @click="unLike(lst, i)">
                 <button class="heart-btn">
-                  <div style="border: 0" class="heart-div">
+                  <div style="border: 0">
                     <span style="margin: 0; height: 24px; width: 24px;">
                       <i
                         style="display: block; position: relative; height: 24px; width: 24px; color: red;"
-                        class="far fa-heart"
+                        class="fas fa-heart"
                       ></i>
                     </span>
                   </div>
                 </button>
               </span>
-              <span v-else @click="onLike(lst.postlike)" class="heart">
+              <span v-else class="heart" @click="onLike(lst, i)">
                 <button class="heart-btn">
-                  <div style="border: 0" class="heart-div">
+                  <div style="border: 0">
                     <span style="margin: 0; height: 24px; width: 24px;">
-                      dfdfad
                       <i
-                        style="display: block; position: relative; height: 24px; width: 24px;"
+                        style="display: block; position: relative; height: 24px; width: 24px; "
                         class="far fa-heart"
                       ></i>
                     </span>
@@ -135,16 +134,8 @@
                   </div>
                 </button>
               </span>
-              <span style="display: inline-block;">
-                <button style="background: 0 0; border: 0; display: flex; padding: 8px;">
-                  <div>
-                    <i
-                      style="display: block; position: relative; height: 24px; width: 24px;"
-                      class="far fa-paper-plane"
-                    ></i>
-                  </div>
-                </button>
-              </span>
+              <!-- here messageing -->
+              <CreateChat :postuserid ="lst.postuserid" />
               <!-- <span style="display: inline-block; margin-left: auto; margin-right: -10px;">
                 <button>
 
@@ -174,7 +165,7 @@
                   </div>
                 </div>
                 <div>
-                  <div style="marign-bottom: 4px; padding-left: 5px;">
+                  <div v-if="commentlst[i][0] > 0" style="marign-bottom: 4px; padding-left: 5px;">
                     <a
                       style="font-size: 14px; font-weight: 400; color: #8e8e8e;"
                       @click="onComment(lst.postid, lst.usernickname, lst.postcontent, lst.user_img)"
@@ -184,13 +175,7 @@
                     </a>
                   </div>
                 </div>
-                <div>
-                  {{ lst.postdate }}
-                  <br />
-                  {{ lst.postdate | moment("from", "now") }}
-                  <br />
-                  {{ timestamp }}
-                </div>
+                <div>{{ lst.postdate | moment("from", "now") }}</div>
               </div>
             </div>
             <!-- <p>{{ lst.postcontent }}</p> -->
@@ -206,6 +191,7 @@ import axios from "axios";
 import router from "@/routes";
 import Vue from "vue";
 import vueMoment from "vue-moment";
+import CreateChat from '../../components/common/CreateChat';
 
 Vue.use(vueMoment);
 
@@ -213,12 +199,17 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 // const SERVER_URL = "https://localhost:8080";
 
 export default {
+   components: {
+        CreateChat
+    },
   data() {
     return {
       postlst: [],
       commentlst: [],
       like: false,
-      timestamp : "",
+      timestamp: "",
+      likelist: [],
+      likeornot: "",
     };
   },
 
@@ -246,6 +237,13 @@ export default {
       })
       .catch((error) => {
         console.log(error.response);
+      });
+    axios
+      .get(`${SERVER_URL}/post/like/${this.$cookie.get("userId")}`)
+      .then((response) => {
+        console.log(response);
+        this.likelist = response.data;
+        console.log(this.likelist);
       });
   },
   methods: {
@@ -289,11 +287,101 @@ export default {
       console.log(pid);
       router.push({ name: "Comment", params: postinfo });
     },
-    onLike(plike) {
-      this.like = !this.like;
+    onLike(postlike, idx) {
       console.log(this.like);
-      // axios
-      //   .post(`${SERVER_URL}/post`)
+      console.log(this.postlst[idx].postid);
+      if (this.postlst[idx].postid in this.likelist) {
+        console.log("이거나오면안됨");
+      } else {
+        axios
+          .put(
+            `${SERVER_URL}/post/like?postid=${
+              this.postlst[idx].postid
+            }&userid=${this.$cookie.get("userId")}`
+          )
+          .then((response) => {
+            console.log("유저가 좋아요 성공");
+            this.like = !this.like;
+            this.timestamp = new Date();
+            console.log(this.$cookie.get("userId"));
+            axios
+              .get(`${SERVER_URL}/post?userid=${this.$cookie.get("userId")}`)
+              .then((response) => {
+                console.log(response);
+                var posts = response.data.data;
+                var comments = response.data.comment;
+                // alert(this.postlst.length);
+                // console.log(posts);
+                posts.sort((a, b) => {
+                  return -1 * (a.postid - b.postid);
+                });
+                comments.sort((a, b) => {
+                  return -1 * (a[1] - b[1]);
+                });
+                this.postlst = posts;
+                this.commentlst = response.data.comment;
+                console.log("mentlst : " + response.data.comment);
+              })
+              .catch((error) => {
+                console.log(error.response);
+              });
+            axios
+              .get(`${SERVER_URL}/post/like/${this.$cookie.get("userId")}`)
+              .then((response) => {
+                console.log(response);
+                this.likelist = response.data;
+                console.log(this.likelist);
+              });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    },
+    unLike(list, idx) {
+      axios
+        .delete(
+          `${SERVER_URL}/post/like?postid=${
+            this.postlst[idx].postid
+          }&userid=${this.$cookie.get("userId")}`
+        )
+        .then((response) => {
+          console.log("성공함");
+          console.log(response);
+          this.timestamp = new Date();
+          console.log(this.$cookie.get("userId"));
+          axios
+            .get(`${SERVER_URL}/post?userid=${this.$cookie.get("userId")}`)
+            .then((response) => {
+              console.log(response);
+              var posts = response.data.data;
+              var comments = response.data.comment;
+              // alert(this.postlst.length);
+              // console.log(posts);
+              posts.sort((a, b) => {
+                return -1 * (a.postid - b.postid);
+              });
+              comments.sort((a, b) => {
+                return -1 * (a[1] - b[1]);
+              });
+              this.postlst = posts;
+              this.commentlst = response.data.comment;
+              console.log("mentlst : " + response.data.comment);
+            })
+            .catch((error) => {
+              console.log(error.response);
+            });
+          axios
+            .get(`${SERVER_URL}/post/like/${this.$cookie.get("userId")}`)
+            .then((response) => {
+              console.log(response);
+              this.likelist = response.data;
+              console.log(this.likelist);
+            });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     onRevise(lst) {
       let repost = {
@@ -324,13 +412,13 @@ export default {
   position: relative;
 } */
 
-.heart-div {
+/* .heart-div {
   -webkit-box-align: center;
   align-items: center;
   -webkit-box-pack: center;
   justify-content: center;
   position: relative;
-}
+} */
 
 .heart-btn {
   -webkit-box-align: center;
@@ -350,7 +438,7 @@ export default {
   padding: 0;
   border: 0;
   /* vertical-align: baseline; */
-  -webkit-box-direction: normal;
+  /* -webkit-box-direction: normal; */
 }
 
 .func {

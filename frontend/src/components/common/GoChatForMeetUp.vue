@@ -33,20 +33,6 @@ export default {
     },
     methods:{
         onClick(){
-            console.log(this.meetup);
-            console.log(this.meetup.id);
-
-//  window.db.collection('test').where('name', 'array-contains', this.meeup.title).orderby('time').get()
-//                 .then(snapshot=>{
-//                     //있을경우
-//                     console.log("ssabil");
-//                     snapshot.forEach(doc=>{
-//                     })
-//                 })
-//                 .catch(err => {
-//                     console.log(err);
-//                 });
-
             // meetup의 이름으로 채팅방을 가져온다.
             window.db.collection('test').where('name', '==', this.meetup.title).get()
                  .then(snapshot=>{
@@ -85,7 +71,7 @@ export default {
 
         getMeetUpUser(room){
             this.room = room;
-             axios.post(`${SERVER_URL}/chat/meetup`,this.userid)
+             axios.post(`${SERVER_URL}/chat/meetup`,this.meetup.id)
                  .then(response=>{         
                      this.room.id = response.data;
                       //닉네임 집어넣기      

@@ -41,70 +41,6 @@
           </div>
           <div class="error-text" v-if="error.title">{{ error.title }} </div>
         </div>
-        <!-- 파티 내용 -->
-        <div class="cssBox">
-        <div class="input-group mb-3">
-          <v-textarea hide-details v-model="meetup.content" solo placeholder="내용을 입력하세요."></v-textarea>
-        </div>
-        <div class="error-text" v-if="error.content">{{ error.content }} </div>
-        </div>
-        
-        
-        <!-- 파티 장소 -->
-          <div class="cssBox">
-          <v-layout justify-center>
-            <v-dialog v-model="dialog" scrollable max-width="300px">
-              <template v-slot:activator="{on}">
-                <v-text-field
-                  hide-details
-                  slot="activator"
-                  v-on="on"
-                  v-model="meetup.location"
-                  solo
-                  readonly
-                  placeholder="장소"
-                  :append-icon="isColor ? 'mdi-map-marker orange--text text--lighten-2' : 'mdi-map-marker'"
-                  @click:append="isColor = !isColor"
-                  @click:input="isClick = !isClick"
-               ></v-text-field>
-              </template>
-              <!-- dialog -->
-              <v-card>
-        
-                <v-card-title class="headline">
-                  <input
-                    v-model="keyword"
-                    @keyup.enter="search"
-                    type="text"
-                    placeholder="원하는 지역 검색"
-                    style="width : 100%; border : 1px solid"
-                  />
-                  <v-btn width="100%" @click="search">검색</v-btn>
-                </v-card-title>
-
-                <v-card-text style="height: 300px;">
-                    <!-- 음식점 리스트 들어감 -->
-                    
-                    <v-card class="mx-auto" max-width="500">
-                        <v-row dense>
-                          <v-col v-for="restaurant in restaurants" :key="restaurant.restId" cols="12">
-                            <v-hover v-slot:default="{ hover }">
-                              <v-card  :elevation="hover ? 12 : 2"
-                              :class="{ 'on-hover': hover }"
-                              @click="select(restaurant)">
-                                <v-card-actions>
-                                  <div>
-                                    <v-card-title v-text="restaurant.name"></v-card-title>
-                                    <v-card-subtitle v-text="restaurant.location"></v-card-subtitle>
-                                  </div>
-                                  <v-spacer></v-spacer>
-                                </v-card-actions>
-                              </v-card>
-                            </v-hover>
-                          </v-col>
-                        </v-row>
-                      </v-card>
-
 
       <!-- 파티 내용 -->
       <div class="input-group mb-3">
@@ -408,7 +344,6 @@ export default {
     meetUp() {
       if (this.meetup.title.length === 0) {
         this.error.title = "제목을 입력해주세요.";
-        alert("제목을 작성해주세요.");
         return false;
       }
       else this.error.title = false;

@@ -223,7 +223,7 @@ public class UserPageController {
 		// 내가 팔로잉 중이냐
 		int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, followeruserId);
 		// 내가 요청중이냐
-		int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, followeruserId);
+		int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(followeruserId, userId);
 
 		// 내가 팔로잉 중임
 		if (ans1 > 0) {

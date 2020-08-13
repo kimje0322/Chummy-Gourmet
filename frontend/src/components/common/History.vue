@@ -1,7 +1,6 @@
 <template>
   <v-layout class="entireClass">
-      <v-row>
-        
+    <v-row>
       <v-col v-for="(lst,i) in postlst" :key="i" class="d-flex child-flex" cols="4">
           <v-card flat tile class="d-flex">
               {{lst.postimgurl}}
@@ -21,8 +20,15 @@
               </template>
               </v-img>
           </v-card>
-      </v-col>
+        </v-col>
+  
+    <!-- 피드 없을 때 -->
+    <div v-if="postlst.length == 0" class="aligncss"> 
+      <i class="far fa-file-image fa-5x"></i>
+      <h3 class="mt-5">등록된 게시물이 없습니다.</h3>
+    </div>
       </v-row>
+    
   </v-layout>
 </template>
 
@@ -67,8 +73,14 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
   }
 </script>
 
-<style>
+<style scoped>
   .entireClass{
     padding: 20px;
+  }
+  .aligncss {
+    margin: 70px 0 0 0;
+    color: rgba(0,0,0,.6);
+    width: 100%;
+    text-align: center;
   }
 </style>

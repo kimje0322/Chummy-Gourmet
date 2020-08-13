@@ -16,20 +16,20 @@
             color="white"
             horizontal
           >
-            <v-btn class="nav-btn" href="/map" text color="orange accent-4">
+            <v-btn class="nav-btn" @click="gotomap" text color="orange accent-4">
               <router-link to="/map">
                 <!-- <v-icon>fas fa-search</v-icon> -->
                 <v-icon class="icon-css">mdi-map-marker-radius</v-icon>
               </router-link>
             </v-btn>
 
-            <v-btn href="/newsfeed" text color="orange accent-4">
+            <v-btn @click="gotonewsfeed" text color="orange accent-4">
               <router-link to=/newsfeed>
                 <v-icon class="icon-css">mdi-history</v-icon>
               </router-link>
             </v-btn>
 
-            <v-btn href="/feed/add" text color="orange accent-4">
+            <v-btn @click="gotofeedadd" text color="orange accent-4">
               <router-link to="/feed/add">
               <!-- <input ref="imageInput" type="file" hidden @change="onChangeImages"> -->
               <!-- <v-btn type="button" @click="onClickImageUpload"> -->
@@ -38,14 +38,14 @@
               </router-link>
             </v-btn>
 
-            <v-btn href="/feed/add" text color="orange accent-4">
+            <v-btn @click="gotocurator" text color="orange accent-4">
               <router-link to="/curator">
                 <!-- <v-icon>fas fa-list</v-icon> -->
                 <v-icon class="icon-css">mdi-magnify</v-icon>
               </router-link>
             </v-btn>
 
-            <v-btn href="/user/info" text color="orange accent-4">
+            <v-btn @click="gotouserinfo" text color="orange accent-4">
               <router-link to="/user/info">
                 <v-icon class="icon-css">fas fa-user</v-icon>
               </router-link>
@@ -98,6 +98,24 @@ import router from "@/routes";
 export default {
   name: "app",
   methods: {
+    gotomap() {
+      router.push({ path: '/map' })
+    },
+    gotonewsfeed() {
+      router.push({ path: '/newsfeed' })
+      
+    },
+    gotofeedadd() {
+      router.push({ path: '/feed/add' })
+      
+    },
+    gotocurator() {
+      router.push({ path: '/curator' })
+    },
+    gotouserinfo() {
+      router.push({ path: '/user/info' })
+
+    },
       // onClickImageUpload() {
       //   this.$refs.imageInput.click();
   // },

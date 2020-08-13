@@ -58,9 +58,19 @@ export default {
                             .then((response) => {
                                 this.responseNickName = response.data;
                                 console.log(this.responseNickName);
-
+                                var chatName;
+                                //채팅방이름이 Room일경우 (1대1 대화일 경우)
+                                console.log(doc.data().name);
+                                if(doc.data().name == 'Room')
+                                {
+                                    chatName = this.responseNickName;
+                                }
+                                //아닐경우 -> firestore에 저장된 이름
+                                else{
+                                    chatName = doc.data().name;
+                                }
                                 var chatData = {
-                                name : doc.data().name,
+                                name : chatName,
                                 id : doc.data().id,
                                 rid : doc.id,
                                 nickName : this.responseNickName

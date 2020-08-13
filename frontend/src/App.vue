@@ -16,40 +16,40 @@
             color="white"
             horizontal
           >
-            <router-link to="/map">
-              <!-- <v-btn class="nav-btn" text color="orange accent-4"> -->
+            <v-btn class="nav-btn" @click="gotomap" text color="orange accent-4">
+              <router-link to="/map">
                 <!-- <v-icon>fas fa-search</v-icon> -->
                 <v-icon class="icon-css">mdi-map-marker-radius</v-icon>
-              <!-- </v-btn> -->
-            </router-link>
+              </router-link>
+            </v-btn>
 
-            <router-link to=/newsfeed>
-              <!-- <v-btn text color="orange accent-4"> -->
+            <v-btn @click="gotonewsfeed" text color="orange accent-4">
+              <router-link to=/newsfeed>
                 <v-icon class="icon-css">mdi-history</v-icon>
-              <!-- </v-btn> -->
-            </router-link>
+              </router-link>
+            </v-btn>
 
-            <router-link to="/feed/add">
-              <!-- <v-btn text color="orange accent-4"> -->
+            <v-btn @click="gotofeedadd" text color="orange accent-4">
+              <router-link to="/feed/add">
               <!-- <input ref="imageInput" type="file" hidden @change="onChangeImages"> -->
               <!-- <v-btn type="button" @click="onClickImageUpload"> -->
-              <!-- </v-btn> -->
+              <!-- </v-btn> -->  
                 <v-icon class="icon-css">fas fa-plus</v-icon>
-              <!-- </v-btn> -->
-            </router-link>
+              </router-link>
+            </v-btn>
 
-            <router-link to="/curator">
-              <!-- <v-btn text color="orange accent-4"> -->
+            <v-btn @click="gotocurator" text color="orange accent-4">
+              <router-link to="/curator">
                 <!-- <v-icon>fas fa-list</v-icon> -->
                 <v-icon class="icon-css">mdi-magnify</v-icon>
-              <!-- </v-btn> -->
-            </router-link>
+              </router-link>
+            </v-btn>
 
-            <router-link to="/user/info">
-              <!-- <v-btn text color="orange accent-4"> -->
+            <v-btn @click="gotouserinfo" text color="orange accent-4">
+              <router-link to="/user/info">
                 <v-icon class="icon-css">fas fa-user</v-icon>
-              <!-- </v-btn> -->
-            </router-link>
+              </router-link>
+            </v-btn>
           </v-bottom-navigation>
 
           <!-- home -->
@@ -98,6 +98,24 @@ import router from "@/routes";
 export default {
   name: "app",
   methods: {
+    gotomap() {
+      router.push({ path: '/map' })
+    },
+    gotonewsfeed() {
+      router.push({ path: '/newsfeed' })
+      
+    },
+    gotofeedadd() {
+      router.push({ path: '/feed/add' })
+      
+    },
+    gotocurator() {
+      router.push({ path: '/curator' })
+    },
+    gotouserinfo() {
+      router.push({ path: '/user/info' })
+
+    },
       // onClickImageUpload() {
       //   this.$refs.imageInput.click();
   // },
@@ -151,12 +169,12 @@ export default {
 .home-padding {
   padding: 0px !important;
 }
-.icon-css {
-  padding: 0 27px
+/* .icon-css {
+  padding: 0px
 }
 
-/* .navbar-fixed-bottom {
-  padding: 15px 0 0 0;
+.navbar-fixed-bottom {
+  padding: 15px 5px 0 0;
 } */
 
 

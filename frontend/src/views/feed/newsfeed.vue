@@ -57,7 +57,7 @@
                     >{{lst.usernickname}}</a>
 
                     <div v-if="lst.postuserid  == userid" style="float: right; ">
-                      <button @click.stop="dialog = true">
+                      <button @click.stop="del(lst.postid)">
                         <div style="padding: 2px; width: 24px; height: 24px;">
                           <i class="far fa-trash-alt"></i>
                         </div>
@@ -68,7 +68,8 @@
                           <v-list-item
                             v-for="(item, index) in items"
                             :key="index"
-                            @click="doit(item, lst)"
+                            @click="doit(item)"
+                            
                           >
                             <v-list-item-title>{{ item.title }}</v-list-item-title>
                           </v-list-item>
@@ -253,6 +254,7 @@ export default {
       likeornot: "",
       likestate: true,
       items: [{ title: "삭제" }, { title: "취소" }],
+      delid : "",
     };
   },
 
@@ -291,12 +293,17 @@ export default {
       });
   },
   methods: {
-    doit(item, lst) {
+    del(deleteid){
+      this.dialog =  true;
+      this.delid = deleteid;
+
+    },
+    doit(item, deleteid) {
       if (item.title == "삭제") {
         console.log("삭제해버려?");
-        console.log(lst.postid);
+        // console.log(deleteid);
         axios
-          .delete(`${SERVER_URL}/post?postid=${lst.postid}`)
+          .delete(`${SERVER_URL}/post?postid=${this.delid}`)
           .then((response) => {
             this.dialog = false;
 

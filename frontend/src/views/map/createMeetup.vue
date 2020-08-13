@@ -49,6 +49,7 @@
         <div class="error-text" v-if="error.content">{{ error.content }} </div>
         </div>
         
+        
         <!-- 파티 장소 -->
           <div class="cssBox">
           <v-layout justify-center>

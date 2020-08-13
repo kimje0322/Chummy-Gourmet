@@ -253,8 +253,8 @@
 <script>
 import axios from "axios";
 
-const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-// const SERVER_URL = "https://localhost:8080";
+// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "https://localhost:8080";
 
 export default {
   data: () => {
@@ -371,7 +371,6 @@ export default {
     meetUp() {
       if (this.meetup.title.length === 0) {
         this.error.title = "제목을 입력해주세요.";
-        // alert("제목을 작성해주세요.");
         return false;
       }
       else this.error.title = false;
@@ -423,6 +422,7 @@ export default {
           maxPersonnel :this.meetup.maxPersonnel,
           master :this.meetup.master,
           img :this.meetup.img,
+          category :this.meetup.category,
           personalities : personalities
         }
 
@@ -514,6 +514,7 @@ export default {
       this.meetup.location = restaurant.name;
       this.meetup.address = restaurant.location;
       this.meetup.img = restaurant.img[0];
+      this.meetup.category = restaurant.category;
       this.dialog = false;
     },
   },

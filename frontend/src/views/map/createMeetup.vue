@@ -369,6 +369,7 @@ export default {
         this.geocoder = new kakao.maps.services.Geocoder();
     },
     meetUp() {
+      this.createMeetUpChat();
       if (this.meetup.title.length === 0) {
         this.error.title = "제목을 입력해주세요.";
         return false;
@@ -429,6 +430,7 @@ export default {
         axios
           .post(`${SERVER_URL}/meetup`, newMeetup)
           .then((response) => {
+            this.createMeetUpChat()
             alert("밋업 등록이 완료됐습니다.");
             this.$router.push("/map")
           })
@@ -436,6 +438,48 @@ export default {
             console.log('error보기')
           })
       }
+    },
+
+    //밋업에대한 채팅방 등록
+    createMeetUpChat(){
+
+      const newRoomRef = window.db.collection('test').doc();
+                            console.log(newRoomRef.id);
+                            window.db.collection('test').doc(newRoomRef.id).collection('test').doc();
+
+                             var res = window.db.collection('test').doc(newRoomRef.id).set({
+                                id :[this.meetup.master],
+                                time : Date.now(),
+                                name : this.meetup.title
+                            }).catch(err =>{
+                                console.log(err);
+                            })
+
+                            alert("새로운 채팅방 생성");
+                            return;
+
+
+
+
+  // 유저 밋업에 추가할 때 사용할 코드 삭제하지 말 것
+    
+    //  const newRoomRef = window.db.collection('test').where('name','==','테스트').get()
+    //  .then(snapshot =>{
+    //    if(snapshot.empty){
+    //      alert("없다");
+    //    }
+    //    snapshot.forEach(doc=>{
+    //      alert(doc.data().id)
+    //      var id = doc.data().id;
+    //      id.push('56');
+    //      id.push('2');
+    //      alert(id.sort())
+    //      window.db.collection('test').doc(doc.id).set({
+    //        id : id
+    //      },{merge:true});
+    //    })
+    //  })
+                          
     },
     
     checkForm() {

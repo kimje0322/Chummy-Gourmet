@@ -35,7 +35,7 @@
                       style="color: black; font-weight: 600;"
                     >{{this.postlst.user_nickname}}</a>
                     <div style="float: right; margin-left:190px; ">
-                      <button @click.stop="dialog = true" v-show="show">
+                      <button @click="dialog = true" v-show="show">
                         <div style="padding: 2px; width: 24px; height: 24px;">
                           <i class="fas fa-ellipsis-v"></i>
                         </div>
@@ -207,7 +207,7 @@ export default {
         // post: this.postlst,
         // comment : this.commentlst
       };
-      router.push({ name: "Comment", params: postinfo });
+      router.push({ name: "Comment", query: postinfo });
      
     },
   },

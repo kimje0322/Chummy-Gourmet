@@ -10,7 +10,7 @@
       <div v-for="(room, i) in chatroom" :key="i"> 
         <div>
             <br><br>
-            <input style="width : 80%; border : 1px solid" readonly :value="room.nickName"/>
+            <input style="width : 80%; border : 1px solid" readonly :value="room.name"/>
             <v-btn height="48px" width="8%" style="float : right;" class="btn btn-primary" @click="chatGo(room)">입장</v-btn>
         </div>
       </div>

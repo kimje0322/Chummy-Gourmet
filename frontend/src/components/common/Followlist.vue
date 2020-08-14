@@ -403,11 +403,10 @@ export default {
     width: 12px;
   }
   .text-css {
-    /* margin-top: 70px; */
     text-align: center;
   }
   .fa-user-plus {
-    /* margin: 70px 0 20px 140px; */
-    text-align: center;
+    margin: 70px 0 20px 140px;
+    align-items: center;
   }
 </style>

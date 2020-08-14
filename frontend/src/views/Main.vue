@@ -198,4 +198,7 @@ export default {
 .text-meetup {
   text-align: center;
 }
+.mt-5 {
+  font-family: 'Jua', sans-serif;
+}
 </style>

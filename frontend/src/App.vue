@@ -99,21 +99,21 @@ export default {
   name: "app",
   methods: {
     gotomap() {
-      router.push({ path: '/map' })
+      this.$router.push({ path: '/map' })
     },
     gotonewsfeed() {
-      router.push({ path: '/newsfeed' })
+      this.$router.push({ path: '/newsfeed' })
       
     },
     gotofeedadd() {
-      router.push({ path: '/feed/add' })
+      this.$router.push({ path: '/feed/add' })
       
     },
     gotocurator() {
-      router.push({ path: '/curator' })
+     this.$router.push({ path: '/curator' })
     },
     gotouserinfo() {
-      router.push({ path: '/user/info' })
+      this.$router.push({ path: '/user/info' })
 
     },
       // onClickImageUpload() {

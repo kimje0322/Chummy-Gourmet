@@ -263,22 +263,28 @@ export default {
       }
       // 타 유저 프로필 페이지로 이동
       else{
+        let flag = "";
         // 댓글을 단 사용자들은 내가 팔로잉 중인 사용자가 무조건 적인게 아닐 수있다.그래서 검사
         axios
         .get(
           `${SERVER_URL}/userpage/getfollowerfollowing?userId=`+this.userId+`&followeruserId=`+user.commentuserid
         )
         .then((response) => {
-          console.log(response);
-          this.username = response.data.userNickname;
-          this.myimg = response.data.userImg;
+          console.log(response.data)
+          if(response.data == "true"){
+            flag = "true"
+          }else if(response.data == "false"){
+            flag = "false"
+          }else{
+            flag = "doing" 
+          }
         })
         .catch((error) => {
           console.log(error.response);
         });
         let userImg = `https://i3b302.p.ssafy.io:8080/img/user?imgname=`+user.userimg;
          this.$router.push('/user/profile?userId='+user.commentuserid
-        +'&followerFollowing='+true
+        +'&followerFollowing='+flag
         +'&userImg='+userImg);
       }
     },

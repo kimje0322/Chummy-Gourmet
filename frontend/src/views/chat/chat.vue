@@ -74,13 +74,17 @@ export default {
 
                       //닉네임 구하기
                       var id = doc.data().from;
-                      var num = this.room.id.indexOf(id*1);       
-                    //   console.log("--------------------")
-                    //   console.log(id)
-                    //   console.log(num)              
-                    //   console.log(this.room.id)
-                    //   console.log(this.room.nickName[num])
-                    //   console.log(this.room.nickName)
+                      var num = this.room.id.indexOf(id*1);   
+                      if(num == -1){
+                          num = this.room.id.indexOf(id);
+                      }    
+                      console.log("--------------------")
+                      console.log(id)
+                      console.log(typeof(id));
+                      console.log(num)              
+                      console.log(this.room.id)
+                      console.log(this.room.nickName[num])
+                      console.log(this.room.nickName)
 
                       var ms ={
                         message : doc.data().message,

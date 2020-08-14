@@ -223,7 +223,7 @@ public class UserPageController {
 		// 내가 팔로잉 중이냐
 		int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, followeruserId);
 		// 내가 요청중이냐
-		int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(followeruserId, userId);
+		int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId,followeruserId);
 
 		// 내가 팔로잉 중임
 		if (ans1 > 0) {
@@ -404,20 +404,9 @@ public class UserPageController {
 			map.put("followingRequestPhone", user.getUserPhone());
 			map.put("followingRequestComment", user.getUserComment());
 			map.put("followingRequestUserImg", user.getUserImg());
-			// 내가 팔로잉 중이냐
-			int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, followingrequestuserId);
-			// 내가 요청중이냐
-			int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, followingrequestuserId);
-			// 내가 팔로잉 중임
-			if (ans1 > 0) {
-				map.put("followerFollowing", "true");
-			}
-			// 내가 요청중임
-			else if (ans2 > 0) {
-				map.put("followerFollowing", "doing");
-			} else {
-				map.put("followerFollowing", "false");
-			}
+			
+			String result = getfollowerfollowing(userId,followingrequestuserId);
+			map.put("followerFollowing", result);
 			userList.add(map);
 		}
 
@@ -542,20 +531,9 @@ public class UserPageController {
 				map.put("UserPhone", user.getUserPhone());
 				map.put("UserComment", user.getUserComment());
 				map.put("UserImg", user.getUserImg());
-				// 내가 팔로잉 중이냐
-				int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, anotherId);
-				// 내가 요청중이냐
-				int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, anotherId);
-				// 내가 팔로잉 중임
-				if (ans1 > 0) {
-					map.put("followerFollowing", "true");
-				}
-				// 내가 요청중임
-				else if (ans2 > 0) {
-					map.put("followerFollowing", "doing");
-				} else {
-					map.put("followerFollowing", "false");
-				}
+				
+				String result = getfollowerfollowing(userId,anotherId);
+				map.put("followerFollowing", result);
 				userList.add(map);
 			}
 			// 유저 검색을 한 경우
@@ -571,20 +549,9 @@ public class UserPageController {
 					map.put("UserPhone", user.get().getUserPhone());
 					map.put("UserComment", user.get().getUserComment());
 					map.put("UserImg", user.get().getUserImg());
-					// 내가 팔로잉 중이냐
-					int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, anotherId);
-					// 내가 요청중이냐
-					int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, anotherId);
-					// 내가 팔로잉 중임
-					if (ans1 > 0) {
-						map.put("followerFollowing", "true");
-					}
-					// 내가 요청중임
-					else if (ans2 > 0) {
-						map.put("followerFollowing", "doing");
-					} else {
-						map.put("followerFollowing", "false");
-					}
+					
+					String result = getfollowerfollowing(userId,anotherId);
+					map.put("followerFollowing", result);
 					userList.add(map);
 				}
 			}

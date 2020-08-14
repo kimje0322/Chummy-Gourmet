@@ -199,7 +199,6 @@
                   <div>
                     <a
                       style="text-decoration: none; font-weight: 600; font-size: 14px; padding-left: 5px; padding-right: 5px;color: rgba(var(--i1d,38,38,38),1)"
-                      href="#"
                     >{{lst.usernickname}}</a>
                     <span>{{ lst.postcontent }} {{lst.postid}}</span>
                   </div>

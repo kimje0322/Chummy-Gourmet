@@ -17,38 +17,38 @@
             horizontal
           >
             <v-btn class="nav-btn" @click="gotomap" text color="orange accent-4">
-              <router-link to="/map">
+              <!-- <router-link to="/map"> -->
                 <!-- <v-icon>fas fa-search</v-icon> -->
                 <v-icon class="icon-css">mdi-map-marker-radius</v-icon>
-              </router-link>
+              <!-- </router-link> -->
             </v-btn>
 
             <v-btn @click="gotonewsfeed" text color="orange accent-4">
-              <router-link to=/newsfeed>
+              <!-- <router-link to=/newsfeed> -->
                 <v-icon class="icon-css">mdi-history</v-icon>
-              </router-link>
+              <!-- </router-link> -->
             </v-btn>
 
             <v-btn @click="gotofeedadd" text color="orange accent-4">
-              <router-link to="/feed/add">
+              <!-- <router-link to="/feed/add"> -->
               <!-- <input ref="imageInput" type="file" hidden @change="onChangeImages"> -->
               <!-- <v-btn type="button" @click="onClickImageUpload"> -->
               <!-- </v-btn> -->  
                 <v-icon class="icon-css">fas fa-plus</v-icon>
-              </router-link>
+              <!-- </router-link> -->
             </v-btn>
 
             <v-btn @click="gotocurator" text color="orange accent-4">
-              <router-link to="/curator">
+              <!-- <router-link to="/curator"> -->
                 <!-- <v-icon>fas fa-list</v-icon> -->
                 <v-icon class="icon-css">mdi-magnify</v-icon>
-              </router-link>
+              <!-- </router-link> -->
             </v-btn>
 
             <v-btn @click="gotouserinfo" text color="orange accent-4">
-              <router-link to="/user/info">
+              <!-- <router-link to="/user/info"> -->
                 <v-icon class="icon-css">fas fa-user</v-icon>
-              </router-link>
+              <!-- </router-link> -->
             </v-btn>
           </v-bottom-navigation>
 
@@ -99,21 +99,21 @@ export default {
   name: "app",
   methods: {
     gotomap() {
-      this.$router.push({ path: '/map' })
+      router.push({ path: '/map' }).catch(()=>{});
     },
     gotonewsfeed() {
-      this.$router.push({ path: '/newsfeed' })
+      router.push({ path: '/newsfeed' }).catch(()=>{});
       
     },
     gotofeedadd() {
-      this.$router.push({ path: '/feed/add' })
+      router.push({ path: '/feed/add' }).catch(()=>{});
       
     },
     gotocurator() {
-     this.$router.push({ path: '/curator' })
+      router.push({ path: '/curator' }).catch(()=>{});
     },
     gotouserinfo() {
-      this.$router.push({ path: '/user/info' })
+      router.push({ path: '/user/info' }).catch(()=>{});
 
     },
       // onClickImageUpload() {

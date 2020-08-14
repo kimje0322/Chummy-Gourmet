@@ -68,7 +68,7 @@
         </div>
       </v-expand-transition>
 
-      <v-list three-line>
+      <v-list two-line>
         <template v-for="(review, index) in reviews">
           <v-divider :key="index"></v-divider>
           <v-subheader v-if="review.header" :key="review.header" v-text="review.header"></v-subheader>
@@ -84,10 +84,11 @@
                 {{review.title}}
               </v-list-item-title>
               <v-list-item-subtitle>
-                <span class="text--primary" v-for="(member, index) in members[index]" :key="index">
+                {{review.content}}
+                <!-- <span class="text--primary" v-for="(member, index) in members[index]" :key="index">
                   <span class="blue--text" v-if="index == 0">@{{member}} </span>
                   <span v-else>@{{member}} </span>
-                </span>
+                </span> -->
                 <span class="text-caption grey--text text--lighten-1" style="float:right;" v-text="review.date"></span>
                 <!-- &mdash; {{review.content}} -->
               </v-list-item-subtitle>
@@ -105,7 +106,7 @@ import router from "@/routes";
 
 
 const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-// const SERVER_URL = "http://localhost:8080";
+// const SERVER_URL = "https://localhost:8080";
 
 export default {
   data() {
@@ -118,13 +119,12 @@ export default {
     };
   },
   created() {
-    console.log(this.restaurant);
     axios
-        .get(`${SERVER_URL}/review/search?id=${this.restaurant.id}`)
+        .get(`${SERVER_URL}/rest/review/${this.restaurant.id}`)
         .then((response) => {
-          console.log(response.data);
-          this.reviews = response.data.review;
-          this.members = response.data.member;
+          this.reviews = response.data.object;
+          // this.reviews = response.data.review;
+          // this.members = response.data.member;
           
         })
         .catch((error) => {
@@ -132,8 +132,8 @@ export default {
         });
   },
   methods : {
-    moveReviewDetail(review, member) {
-      router.push({name : "ReviewDetail", params : { review : review, members : member }});
+    moveReviewDetail(review) {
+      router.push({name : "ReviewDetail", params : { review : review }});
     }
   }
 };

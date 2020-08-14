@@ -209,9 +209,6 @@ export default {
   },
   mounted() {},
   created() {
-    // console.log(this.$route.params);
-    // console.log("aaaaaaaaaaaaaaaa");
-    // console.log(this.$cookie.get("userId"));
     axios
       .get(
         `${SERVER_URL}/userpage/getuser?userId=${this.$cookie.get("userId")}`
@@ -270,7 +267,6 @@ export default {
           `${SERVER_URL}/userpage/getfollowerfollowing?userId=`+this.userId+`&followeruserId=`+user.commentuserid
         )
         .then((response) => {
-          console.log(response.data)
           if(response.data == "true"){
             flag = "true"
           }else if(response.data == "false"){
@@ -289,7 +285,6 @@ export default {
       }
     },
     onDelete(lst) {
-      console.log(lst);
       axios
         .delete(`${SERVER_URL}/post/comment?commentid=${lst.commentid}`)
         .then((response) => {
@@ -318,7 +313,6 @@ export default {
       };
       this.commentText = "";
 
-      console.log(commentxt);
       axios
         .post(`${SERVER_URL}/post/comment`, commentxt)
         .then((respose) => {
@@ -327,7 +321,6 @@ export default {
               `${SERVER_URL}/post/comment?commentid=${this.$route.params.postid}`
             )
             .then((response) => {
-              console.log(response);
               this.commentlst = response.data.data;
               this.postname = this.$route.params.postnickname;
               this.postcontent = this.$route.params.postcontent;
@@ -341,37 +334,21 @@ export default {
     },
     rewrite(comment) {
       this.recomment = true
-        // var commmenttxt = {
-        //   commentuserid : this.$cookie.get("userId"),
-        //   commentcontent: comment.postcomment,
-        //   postid: this.$route.params.postid,
-        // 148 /
-        // 5;
       this.cid = comment.commentid
       
       this.commentcontent = comment.postcomment;
-      console.log("여기여기");
-      console.log(this.commentcontent);
-      // axios
-      //   .post(`${SERVER_URL}/post/comment`, commmenttxt)
-      //   .then((response) => {
-      //     alert("수정 완료");
-      //   })
     },
     onRewrite() {
       var commentxt = {
-        // commentuserid: this.$cookie.get("userId"),
         postcomment: this.commentcontent,
         commentid: this.cid
 
-        // postid: this.$route.params.postid,
       };
       
       axios
         .put(`${SERVER_URL}/post/comment`, commentxt)
         .then((response) => {
           this.recomment = false
-          console.log(commentxt)
           alert("성공!");
           axios
             .get(

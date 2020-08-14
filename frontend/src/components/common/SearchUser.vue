@@ -41,9 +41,15 @@
                 </v-list-item-avatar>
                 
                 <v-list-item-content>
-                <v-list-item-title @click="gotoProfile(user)" v-text="user.UserNickname"></v-list-item-title>
-                <!-- 이름 표기 -->
-                <!-- <v-list-item-title v-text="user.followingName"></v-list-item-title> -->
+                <a
+                class="pf-n-a"
+                tabindex="0"
+                style="color: black; font-weight: 600;" 
+                @click="gotoProfile(user)"
+                >
+                  {{user.UserNickname}}
+                </a> 
+                <!-- <v-list-item-title @click="gotoProfile(user)" v-text="user.UserNickname"></v-list-item-title> -->
                 </v-list-item-content>
 
                 <v-btn color="primary"  @click="onFollow(user,i)" v-if="user.followerFollowing === 'false'">

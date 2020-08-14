@@ -271,6 +271,7 @@ export default {
       dialog2: false,
 
       restaurants : [],
+      selectedRest : '',
 
       meetup : {
         title : '',
@@ -409,11 +410,14 @@ export default {
       else this.error.personnel = false;
 
 
-      
+      // 밋업 등록 폼 유효성 검사
       if (this.isValidForm()){
+
+        // 밋업 성향 배열을 String으로 변환
         var personalities = this.meetup.personalities.toString();
         personalities = `[${personalities}]`;
 
+        // 새로운 밋업 객체 생성      
         var newMeetup = {
           title :this.meetup.title,
           content :this.meetup.content,
@@ -424,19 +428,67 @@ export default {
           master :this.meetup.master,
           img :this.meetup.img,
           category :this.meetup.category,
-          personalities : personalities
+          personalities : personalities,
+          restId : this.selectedRest.id,
         }
 
-        axios
-          .post(`${SERVER_URL}/meetup`, newMeetup)
+        // REST ID 추가 프로세스
+        // DB에 존재하지 않는 음식점이라면 DB에 음식점 등록 후 REST ID 반환
+        if(this.selectedRest.id == null){
+
+          // img src 배열을 String으로 변환 "[src1,src2,...,src5]"
+          var imgSrcs = this.selectedRest.img.toString();
+          imgSrcs = `[${imgSrcs}]`;
+
+          // 새로운 음식점 객체 생성
+          var newRest = {
+            category : this.selectedRest.category,
+            img : imgSrcs,
+            like : this.selectedRest.like,
+            location : this.selectedRest.location,
+            name : this.selectedRest.name,
+            review : this.selectedRest.review,
+            scrap : this.selectedRest.scrap,
+            telphone : this.selectedRest.telphone,
+            url : this.selectedRest.url,
+            dist  : this.selectedRest.dist
+          };
+
+          // DB에 음식점 정보 등록 후 restId 반환
+          axios
+          .post(`${SERVER_URL}/rest`, newRest)
           .then((response) => {
-            this.createMeetUpChat()
-            alert("밋업 등록이 완료됐습니다.");
-            this.$router.push("/map")
-          })
-          .catch((error) => {
-            console.log('error보기')
-          })
+              this.selectedRest.id = response.data;
+              newMeetup.restId = this.selectedRest.id;
+
+              // 밋업 객체 DB 등록
+              axios
+                .post(`${SERVER_URL}/meetup`, newMeetup)
+                .then((response) => {
+                  this.createMeetUpChat()
+                  alert("밋업 등록이 완료됐습니다.");
+                  this.$router.push("/map")
+                })
+                .catch((error) => {
+                  console.log('error보기')
+                })
+          });
+        }
+
+        // DB에 존재하는 음식점이라면
+        else{
+          // 밋업 객체 DB 등록
+          axios
+            .post(`${SERVER_URL}/meetup`, newMeetup)
+            .then((response) => {
+              this.createMeetUpChat()
+              alert("밋업 등록이 완료됐습니다.");
+              this.$router.push("/map")
+            })
+            .catch((error) => {
+              console.log('error보기')
+            })
+        }
       }
     },
 
@@ -554,7 +606,7 @@ export default {
         })
     },
     select(restaurant){
-      console.log(restaurant);
+      this.selectedRest = restaurant;
       this.meetup.location = restaurant.name;
       this.meetup.address = restaurant.location;
       this.meetup.img = restaurant.img[0];

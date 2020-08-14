@@ -34,21 +34,28 @@
       <div class="party wrapC">
 
         <!-- 파티 타이틀 -->
+        <div class="cssBox">
+          <div class="input-group mb-3">
+            <v-text-field hide-details v-model="meetup.title" solo placeholder="제목">
+            </v-text-field>
+          </div>
+          <div class="error-text" v-if="error.title">{{ error.title }} </div>
+        </div>
+        <!-- 파티 내용 -->
+        <div class="cssBox">
         <div class="input-group mb-3">
-          <v-text-field v-model="meetup.title" solo placeholder="제목">
-          </v-text-field>
+          <v-textarea hide-details v-model="meetup.content" solo placeholder="내용을 입력하세요."></v-textarea>
+        </div>
+        <div class="error-text" v-if="error.content">{{ error.content }} </div>
         </div>
         
-        <!-- 파티 내용 -->
-        <div class="input-group mb-3">
-          <v-textarea v-model="meetup.content" solo placeholder="일정 내용을 입력하세요."></v-textarea>
-        </div>
-
         <!-- 파티 장소 -->
+          <div class="cssBox">
           <v-layout justify-center>
             <v-dialog v-model="dialog" scrollable max-width="300px">
               <template v-slot:activator="{on}">
                 <v-text-field
+                  hide-details
                   slot="activator"
                   v-on="on"
                   v-model="meetup.location"
@@ -108,8 +115,11 @@
               </v-card>
             </v-dialog>
           </v-layout>
+         <div class="error-text mt-2" v-if="error.location">{{ error.location }} </div>
+         </div>
 
         <!-- 파티 날짜 -->
+        <div class="cssBox">
         <v-menu
           v-model = "menu"
           :close-on-content-click="false"
@@ -121,6 +131,7 @@
           <!-- 월/일 선택 -->
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
+              hide-details
               solo
               v-model="meetup.date"
               placeholder="날짜"
@@ -158,51 +169,22 @@
                 >
                 <v-spacer></v-spacer>
                 <v-btn text color="primary" @click="menu2 = false">Cancel</v-btn>
-                <v-btn text color="primary" @click="test">OK</v-btn>
+                <v-btn text color="primary" @click="setDate">OK</v-btn>
               </v-time-picker>
 
             </v-menu>
           </v-date-picker>
         </v-menu>
+        <div class="error-text mt-2" v-if="error.date">{{ error.date }} </div>
+        </div>
+      
 
-        <!-- 파티 시간
-        <v-menu
-          ref="menu"
-          v-model="menu2"
-          :close-on-content-click="false"
-          :return-value.sync="date"
-          transition="scale-transition"
-          offset-y
-          min-width="300px"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-              solo
-              v-model="meetup.time"
-              placeholder="시간"
-              :append-icon="isColor1 ? 'mdi-calendar-check orange--text text--lighten-2' : 'mdi-calendar-check'"
-              @click:append="isColor1 = !isColor1"
-              readonly
-              v-bind="attrs"
-              v-on="on"
-            ></v-text-field>
-          </template>
-            <v-time-picker
-            v-if="menu2"
-            v-model="time"
-            full-width
-            @click:minute="$refs.menu.save(time)"
-          >
-            <v-spacer></v-spacer>
-            <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
-            <v-btn text color="primary" @click="$refs.menu.save(meetup.date)">OK</v-btn>
-            </v-time-picker>
-        </v-menu> -->
 
         <!-- 파티 인원 -->
-        <div id="dropdown-example">
+        <div id="dropdown-example" class="cssBox">
           <v-overflow-btn
-            v-model="meetup.personnel"
+            hide-details
+            v-model="meetup.maxPersonnel"
             solo
             class="my-2"
             :items="dropdown_font"
@@ -210,8 +192,59 @@
             style="margin:0px;"
             target="#dropdown-example"
           ></v-overflow-btn>
+        <div class="error-text" v-if="error.personnel">{{ error.personnel }} </div>
         </div>
 
+        <!-- 성향 -->
+        <div>
+        <div class="text-center">
+          <v-dialog
+            v-model="dialog2"
+            width="500"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-combobox 
+                hide-details
+                v-model="meetup.personalities" 
+                solo multiple chips deletable-chips
+                v-on="on" v-bind="attrs"
+                label="성향"
+              >
+              </v-combobox>
+            </template>
+
+            <v-card
+              class="mx-auto"
+              max-width="400"
+            >
+              <v-toolbar
+                flat dark
+              >
+              <v-btn icon>
+                  <v-icon @click="dialog2 = false">mdi-close</v-icon>
+                </v-btn>
+                <v-toolbar-title>밋업 성향 선택</v-toolbar-title>
+              </v-toolbar>
+
+              <v-card-text>
+                <h2 class="subtitle mb-1">원하는 성향을 선택하세요</h2>
+                <v-chip-group
+                  v-model="meetup.personalities"
+                  active-class="deep-purple--text text--accent-4"
+                  column
+                  multiple
+                >
+                  <v-chip outlined v-for="personality in personalities" :value="personality" :key="personality">
+                  {{personality}}                        
+                  </v-chip>
+                </v-chip-group>
+              </v-card-text>
+            </v-card>
+          </v-dialog>
+        </div>
+          <div class="error-text mt-2" v-if="error.personality">{{ error.personality }} </div>
+        </div>
+        
       </div>
     <!-- </v-app> -->
   </div>
@@ -235,6 +268,7 @@ export default {
       isColor1: false,
       isClick: false,
       dialog: false,
+      dialog2: false,
 
       restaurants : [],
 
@@ -244,8 +278,10 @@ export default {
         location : '',
         address : '',
         date : '',
-        personnel : '',
-        master : 70
+        maxPersonnel : '',
+        master : 70,
+        img : '',
+        personalities : [],
       },
 
       error: {
@@ -255,39 +291,46 @@ export default {
         date: false,
         personnel: false,
         master : false,
+        personality: false,
       },
 
-      dropdown_font: ["1", "2", "3", "4", "5", "6+"],
+      dropdown_font: ["1", "2", "3", "4", "5", "6", "7", "8"],
+
+      personalities : [
+        "낙천적", "부정적", "내향적", "외향적", "충동적", "사교적",
+        "대담함", "성실함", "냉정함", "온화함", "신중함", "게으름"
+      ],
 
       targetLocation : {
         lat : '',
         lng : ''
-      }
+      },
+      geocoder : '',
     }
   },
   watch: {
-    title : function() {
+    'meetup.title' : function() {
       if (this.meetup.title.length < 1) this.error.title = "제목을 입력해주세요.";
       else this.error.title = false;
       return;
     },
-    content : function() {
-      if ( this.meetup.content.length > 0 ) this.error.content = "내용을 입력해주세요.";
+    'meetup.content' : function() {
+      if ( this.meetup.content.length < 1 ) this.error.content = "내용을 입력해주세요.";
       else this.error.content = false;
       return;
     },
-    location : function() {
-      if (this.meetup.location.length < 1)
+    'meetup.location' : function() {
+      if (!this.meetup.location)
         this.error.location = "음식점을 입력해주세요.";
       else this.error.location = false;
       return;
     },
-    date : function() {
+    'meetup.date' : function() {
       if (this.meetup.date.length < 1) this.error.date = "날짜를 입력해주세요.";
       else this.error.date = false;
       return;
     },
-    personnel : function() {
+    'meetup.personnel' : function() {
       if (this.meetup.personnel.length < 1) this.error.personnel = "인원을 입력해주세요.";
       else this.error.personnel = false;
       return;
@@ -302,52 +345,147 @@ export default {
         });
       }
 
-      const script = document.createElement("script");
-      /* global kakao */
-      script.onload = () => kakao.maps.load();
-      script.src =
-        "https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=90891b3c4fa765cd378361c6b16e4dd6&libraries=services";
-      document.head.appendChild(script);
+      if (window.kakao && window.kakao.maps) {
+        console.log("이미 로딩됨");
+        this.initMap();
+      } else {
+        console.log("카카오맵 로딩");
+        const script = document.createElement("script");
+        /* global kakao */
+        script.onload = () => kakao.maps.load(this.initMap);
+        script.src =
+          "https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=90891b3c4fa765cd378361c6b16e4dd6&libraries=services";
+        document.head.appendChild(script);
+      }
   },
   methods: {
-    test() {
+    setDate() {
       this.menu = false;
       this.menu2 = false;
       this.meetup.date = this.date + " " + this.time;
     },
+    initMap() {
+        // 좌표->주소
+        this.geocoder = new kakao.maps.services.Geocoder();
+    },
     meetUp() {
+      this.createMeetUpChat();
       if (this.meetup.title.length === 0) {
-        alert("제목을 작성해주세요.");
-        return;
+        this.error.title = "제목을 입력해주세요.";
+        return false;
       }
+      else this.error.title = false;
 
       if (this.meetup.content.length === 0) {
-        alert("내용을 작성해주세요.");
-        return;
+        // alert("내용을 작성해주세요.");
+        this.error.content = "내용을 입력해주세요.";
+        return false;
       }
+      else this.error.content = false;
 
-      if (this.meetup.date.length === 0) {
-        alert("날짜를 선택해주세요.");
-        return;
+      if (!this.meetup.location) {
+        this.error.location = "장소를 선택해주세요.";
+        return false;
       }
-
-      if (this.meetup.personnel.length === 0) {
-        alert("인원을 선택해주세요.");
-        return;
+      else this.error.location = false;
+      
+      if (!this.meetup.date) {
+        this.error.date = "날짜를 선택해주세요.";
+        return false;
       }
+      else this.error.date = false;
 
-      axios
-        .post(`${SERVER_URL}/meetup`, this.meetup)
-        .then((response) => {
-          // console.log(response);
-          alert("밋업 등록이 완료됐습니다.");
-          this.$router.push("/map")
-        })
+      if (!this.meetup.maxPersonnel) {
+        this.error.personnel = "인원을 선택해주세요.";
+        return false;
+      }
+      else this.error.personnel = false;
+
+
+      if (!this.meetup.personalities) {
+        this.error.personalities = "성향을 선택해주세요.";
+        return false;
+      }
+      else this.error.personnel = false;
+
+
+      
+      if (this.isValidForm()){
+        var personalities = this.meetup.personalities.toString();
+        personalities = `[${personalities}]`;
+
+        var newMeetup = {
+          title :this.meetup.title,
+          content :this.meetup.content,
+          location :this.meetup.location,
+          address :this.meetup.address,
+          date :this.meetup.date,
+          maxPersonnel :this.meetup.maxPersonnel,
+          master :this.meetup.master,
+          img :this.meetup.img,
+          category :this.meetup.category,
+          personalities : personalities
+        }
+
+        axios
+          .post(`${SERVER_URL}/meetup`, newMeetup)
+          .then((response) => {
+            this.createMeetUpChat()
+            alert("밋업 등록이 완료됐습니다.");
+            this.$router.push("/map")
+          })
+          .catch((error) => {
+            console.log('error보기')
+          })
+      }
     },
+
+    //밋업에대한 채팅방 등록
+    createMeetUpChat(){
+
+      const newRoomRef = window.db.collection('test').doc();
+                            console.log(newRoomRef.id);
+                            window.db.collection('test').doc(newRoomRef.id).collection('test').doc();
+
+                             var res = window.db.collection('test').doc(newRoomRef.id).set({
+                                id :[this.meetup.master],
+                                time : Date.now(),
+                                name : this.meetup.title
+                            }).catch(err =>{
+                                console.log(err);
+                            })
+
+                            alert("새로운 채팅방 생성");
+                            return;
+
+
+
+
+  // 유저 밋업에 추가할 때 사용할 코드 삭제하지 말 것
+    
+    //  const newRoomRef = window.db.collection('test').where('name','==','테스트').get()
+    //  .then(snapshot =>{
+    //    if(snapshot.empty){
+    //      alert("없다");
+    //    }
+    //    snapshot.forEach(doc=>{
+    //      alert(doc.data().id)
+    //      var id = doc.data().id;
+    //      id.push('56');
+    //      id.push('2');
+    //      alert(id.sort())
+    //      window.db.collection('test').doc(doc.id).set({
+    //        id : id
+    //      },{merge:true});
+    //    })
+    //  })
+                          
+    },
+    
     checkForm() {
       if (this.meetup.title.length < 1) this.error.title = "제목을 입력해주세요.";
       else { this.error.title = false; return; }
-      if ( this.meetup.content.length > 0 ) this.error.content = "내용을 입력해주세요.";
+      if ( this.meetup.content.length < 1 ) this.error.content = "내용을 입력해주세요.";
       else {this.error.content = false;
       return;}
       if (this.meetup.location.length < 1)
@@ -357,13 +495,21 @@ export default {
       if (this.meetup.date.length < 1) this.error.date = "날짜를 입력해주세요.";
       else {this.error.date = false;
       return;}
-      if (this.meetup.personnel.length < 1) this.error.personnel = "인원을 입력해주세요.";
+      if (this.meetup.maxPersonnel.length < 1) this.error.personnel = "인원을 입력해주세요.";
       else {this.error.personnel = false;
       return;}
+      if (this.meetup.personalities.length < 1) this.error.personality = "성향을 입력해주세요.";
+      else {this.error.personality = false;
+      return;}
+    },
+     // 입력 정보가 다 유효하면 true, 아니면 false
+    isValidForm() {
+      for (let key in this.error) {
+        if (this.error[key]) return false;
+      }
+      return true;
     },
     search(){
-      // 주소-좌표 변환 객체를 생성합니다
-      var geocoder = new kakao.maps.services.Geocoder();
       axios
         .get(`${SERVER_URL}/curation?location=${this.keyword}`)
         .then((response) => {
@@ -374,8 +520,16 @@ export default {
           // 음식점리스트 돌면서 좌표(position), 거리(dist) 구하기
           restaurants.forEach(restaurant => {
 
+            // String 형태의 img src 5개를 파싱해서 배열로 만듬
+            let imgSrcs = restaurant.img;
+            imgSrcs = imgSrcs.replace('[', '');
+            imgSrcs = imgSrcs.replace(']', '');
+            imgSrcs = imgSrcs.replace(/(\s*)/g, ''); // 모든공백제거
+            imgSrcs = imgSrcs.split(",");
+            restaurant.img = imgSrcs;
+
             // 주소 -> 좌표
-            geocoder.addressSearch(restaurant.location, (result, status) => {
+            this.geocoder.addressSearch(restaurant.location, (result, status) => {
               if (status === kakao.maps.services.Status.OK) {
                 var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
               }
@@ -400,8 +554,11 @@ export default {
         })
     },
     select(restaurant){
+      console.log(restaurant);
       this.meetup.location = restaurant.name;
       this.meetup.address = restaurant.location;
+      this.meetup.img = restaurant.img[0];
+      this.meetup.category = restaurant.category;
       this.dialog = false;
     },
   },
@@ -439,4 +596,11 @@ div {
 /* .btn-person{
   margin: 0px;
 } */
+.error-text {
+  margin: 0 0 8px 8px;
+}
+.cssBox {
+  margin: 0 0 18px 0;
+}
+
 </style>

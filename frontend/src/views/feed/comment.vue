@@ -43,7 +43,20 @@
                 placeholder="write here!"
                 v-model="commentText"
               ></textarea>
-              <button @click="onCreate(commentText)" class="upload">게시</button>
+              <button @click="onCreate()" class="upload">게시</button>
+            </form>
+          </div>
+          <div v-if="recomment" class="top">
+            <span class="prf">
+              <img
+                style="height: 100%; width: 100%; -webkit-user-drag: none;"
+                :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+this.myimg"
+              />
+            </span>
+            <form style="height: 42px; " class="text-box">
+              <!-- v-model="recommentText" -->
+              <textarea style="height: 18px;" class="text" v-model="commentcontent"></textarea>
+              <button @click="onRewrite()" class="upload">수정</button>
             </form>
           </div>
         </section>
@@ -61,20 +74,21 @@
                     >
                       <span class="prf" style="margin-left: 0px;">
                         <img
+                          @click="gotoProfile({userid:postuserid, userimg: postuserimg})"
                           style="height: 100%; width: 100%; -webkit-user-drag: none;"
                           :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+postuserimg"
                         />
                       </span>
                     </div>
                     <div
-                      style="float: left; width: 285px; flex-direction: column; position: relative;"
+                      style="float: left; flex-direction: column; position: relative;"
                     >
                       <!-- <div style="display: inline-flex;"> -->
                       <h2
                         style="font-size: 14px; font-weight: 600; align-items: center; display: inline-flex; margin-right: 4px;"
                       >
                         <div style="display: flex; flex-direction: column;">
-                          <a class="prf-link" href="#">{{postname}}</a>
+                          <a class="prf-link" @click="gotoProfile({userid:postuserid, userimg : postuserimg})">{{postname}}</a>
                         </div>
                       </h2>
                       <!-- </div> -->
@@ -102,18 +116,19 @@
                       >
                         <span class="prf" style="margin-left: 0px;">
                           <img
+                            @click="gotoProfileByComment(lst)"
                             style="height: 100%; width: 100%; -webkit-user-drag: none;"
                             :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+lst.userimg"
                           />
                         </span>
                       </div>
-                      <div style="float: left;">
+                      <div style="float: left; width: 250px;">
                         <!-- <h3 style="display: inline-flex;"></h3> -->
                         <h2
                           style="font-size: 14px; font-weight: 600; align-items: center; display: inline-flex; margin-right: 4px;"
                         >
                           <div style="display: flex; flex-direction: column;">
-                            <a class="prf-link" href="#">{{ lst.usernickname }}</a>
+                            <a class="prf-link" @click="gotoProfileByComment(lst)">{{ lst.usernickname }}</a>
                           </div>
                         </h2>
                         <!-- <h3
@@ -123,23 +138,23 @@
                             <a class="prf-link" href="#">dlwlrma</a>
                           </div>
                         </h3>-->
-                        <span>
+                        <span style="width: 270px;">
                           <!-- {{lst}} -->
                           {{lst.postcomment}}
-                          <br />
-                          {{ lst.commentdate }}
                           <!-- {{ }} -->
                         </span>
                         <div style="color: #8e8e8e; margin-top: 12px; margin-bottom: 4px;">
-                          <a href="#" style="margin-right: 12px; color: #8e8e8e;">X시간</a>
+                          <a style="margin-right: 12px; color: #8e8e8e;">
+                            {{ lst.commentdate | moment("from", "now") }}
+                          </a>
                           <!-- v-if="lst.commentid === userId" -->
-                          <button>수정하기</button>
+                          <button v-if="lst.commentuserid  == userid" @click="rewrite(lst)">수정하기</button>
                         </div>
                       </div>
                     </div>
                   </div>
                   <!-- v-if="commentid === user" -->
-                  <span style="margin-top: 9px;">
+                  <span  v-if="lst.commentuserid  == userid" style="margin-top: 9px;">
                     <div style="float: right;">
                       <button @click="onDelete(lst)">
                         <div>
@@ -175,12 +190,16 @@ export default {
     return {
       commentText: "",
       commentlst: [],
-      myimg:'',
-      postid:'',
-      postnickname:'',
-      postuserimg:'',
-      postcontent:'',
-      postname:''
+      myimg: "",
+      postid: "",
+      postnickname: "",
+      postuserimg: "",
+      postcontent: "",
+      postname: "",
+      recomment: false,
+      cid : "",
+      postuserid:"",
+      userid : "",
     };
   },
   watch: {
@@ -190,7 +209,8 @@ export default {
   },
   mounted() {},
   created() {
-    console.log(this.$route.params);
+    // console.log(this.$route.params);
+    // console.log("aaaaaaaaaaaaaaaa");
     // console.log(this.$cookie.get("userId"));
     axios
       .get(
@@ -199,46 +219,175 @@ export default {
       .then((response) => {
         // console.log("alfkjsdsi");
         console.log(response);
+        this.userid = this.$cookie.get("userId");
         this.username = response.data.userNickname;
         this.myimg = response.data.userImg;
       })
       .catch((error) => {
-        console.log(error.response)
+        console.log(error.response);
       });
 
     axios
-      .get(`${SERVER_URL}/post/comment?commentid=${this.$route.params.postid}`)
+      .get(`${SERVER_URL}/post/comment?commentid=${this.$route.query.postid}`)
       .then((response) => {
-        console.log(response);
         this.commentlst = response.data.data;
-        this.postname = this.$route.params.postnickname;
-        this.postcontent = this.$route.params.postcontent;
-        this.postuserimg = this.$route.params.postuserimg;
+        this.postname = this.$route.query.postnickname;
+        this.postcontent = this.$route.query.postcontent;
+        this.postuserimg = this.$route.query.postuserimg;
+        this.postuserid = this.$route.query.postuserid;
+        // alert(this.postuserid)
       })
       .catch((error) => {
         console.log(error.response);
       });
   },
   methods: {
+    gotoProfile(user) {
+      // 나를 누르면 마이페이지로 이동
+      if(user.userid == this.$cookie.get("userId")){
+        this.$router.push('/user/info');
+      }
+      // 타 유저 프로필 페이지로 이동
+      else{
+        let userImg = `https://i3b302.p.ssafy.io:8080/img/user?imgname=`+user.userimg;
+         this.$router.push('/user/profile?userId='+user.userid
+        +'&followerFollowing='+true
+        +'&userImg='+userImg);
+      }
+    },
+    gotoProfileByComment(user) {
+      console.log(user)
+      // 나를 누르면 마이페이지로 이동
+      if(user.commentuserid == this.$cookie.get("userId")){
+        this.$router.push('/user/info');
+      }
+      // 타 유저 프로필 페이지로 이동
+      else{
+        let flag = "";
+        // 댓글을 단 사용자들은 내가 팔로잉 중인 사용자가 무조건 적인게 아닐 수있다.그래서 검사
+        axios
+        .get(
+          `${SERVER_URL}/userpage/getfollowerfollowing?userId=`+this.userId+`&followeruserId=`+user.commentuserid
+        )
+        .then((response) => {
+          console.log(response.data)
+          if(response.data == "true"){
+            flag = "true"
+          }else if(response.data == "false"){
+            flag = "false"
+          }else{
+            flag = "doing" 
+          }
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
+        let userImg = `https://i3b302.p.ssafy.io:8080/img/user?imgname=`+user.userimg;
+         this.$router.push('/user/profile?userId='+user.commentuserid
+        +'&followerFollowing='+flag
+        +'&userImg='+userImg);
+      }
+    },
     onDelete(lst) {
       console.log(lst);
       axios
         .delete(`${SERVER_URL}/post/comment?commentid=${lst.commentid}`)
         .then((response) => {
-          // console.log(response)
+          axios
+            .get(
+              `${SERVER_URL}/post/comment?commentid=${this.$route.params.postid}`
+            )
+            .then((response) => {
+              console.log(response);
+              this.commentlst = response.data.data;
+              this.postname = this.$route.params.postnickname;
+              this.postcontent = this.$route.params.postcontent;
+              this.postuserimg = this.$route.params.postuserimg;
+            })
+            .catch((error) => {
+              console.log(error.response);
+            });
         })
         .catch((error) => {});
     },
-    onCreate(text) {
+    onCreate() {
       var commentxt = {
         commentuserid: this.$cookie.get("userId"),
-        postcomment: text,
+        postcomment: this.commentText,
         postid: this.$route.params.postid,
       };
+      this.commentText = "";
+
       console.log(commentxt);
       axios
         .post(`${SERVER_URL}/post/comment`, commentxt)
-        .then((respose) => {})
+        .then((respose) => {
+          axios
+            .get(
+              `${SERVER_URL}/post/comment?commentid=${this.$route.params.postid}`
+            )
+            .then((response) => {
+              console.log(response);
+              this.commentlst = response.data.data;
+              this.postname = this.$route.params.postnickname;
+              this.postcontent = this.$route.params.postcontent;
+              this.postuserimg = this.$route.params.postuserimg;
+            })
+            .catch((error) => {
+              console.log(error.response);
+            });
+        })
+        .catch((error) => {});
+    },
+    rewrite(comment) {
+      this.recomment = true
+        // var commmenttxt = {
+        //   commentuserid : this.$cookie.get("userId"),
+        //   commentcontent: comment.postcomment,
+        //   postid: this.$route.params.postid,
+        // 148 /
+        // 5;
+      this.cid = comment.commentid
+      
+      this.commentcontent = comment.postcomment;
+      console.log("여기여기");
+      console.log(this.commentcontent);
+      // axios
+      //   .post(`${SERVER_URL}/post/comment`, commmenttxt)
+      //   .then((response) => {
+      //     alert("수정 완료");
+      //   })
+    },
+    onRewrite() {
+      var commentxt = {
+        // commentuserid: this.$cookie.get("userId"),
+        postcomment: this.commentcontent,
+        commentid: this.cid
+
+        // postid: this.$route.params.postid,
+      };
+      
+      axios
+        .put(`${SERVER_URL}/post/comment`, commentxt)
+        .then((response) => {
+          this.recomment = false
+          console.log(commentxt)
+          alert("성공!");
+          axios
+            .get(
+              `${SERVER_URL}/post/comment?commentid=${this.$route.params.postid}`
+            )
+            .then((response) => {
+              console.log(response);
+              this.commentlst = response.data.data;
+              this.postname = this.$route.params.postnickname;
+              this.postcontent = this.$route.params.postcontent;
+              this.postuserimg = this.$route.params.postuserimg;
+            })
+            .catch((error) => {
+              console.log(error.response);
+            });
+        })
         .catch((error) => {});
     },
     // Text() {

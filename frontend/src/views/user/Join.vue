@@ -299,16 +299,14 @@ export default {
 </script>
 
 
-<style>
+<style scoped>
 .entire {
   padding: 18px
 }
 .my-auto {
   font-size: 20px;
 }
-/* h1 {
-    margin: 0 0 10px 0;
-  } */
+
 h2 {
   text-align: center;
 }
@@ -333,4 +331,15 @@ h2 {
 .input-with-label {
   margin: 0 0 15px 0;
 }
+
+#password{
+  background-color: transparent !important;
+  border: 1px solid black !important;
+}
+[type=checkbox]:checked + span:before, 
+[type=radio]:checked + span:before {
+  background: orange;
+  border: 1px solid orange;
+}
+
 </style>

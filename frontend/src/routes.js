@@ -24,18 +24,22 @@ import FollowList from './components/common/Followlist.vue'
 import NewsFeed from './views/feed/newsfeed.vue'
 import FollowRequestList from './components/common/FollowRequestList.vue'
 import Feedcomment from './views/feed/comment.vue'
-
-//추가
 import UpdateUser from './views/user/UpdateUser.vue'
 import Profile from './views/user/Profile.vue'
+import PostDetail from './views/user/PostDetail.vue'
+import SearchUser from './components/common/SearchUser.vue'
+//추가
+import PostUpdate from './views/user/PostUpdate.vue'
 
 import UpdateUserInfo from './views/user/UpdateUserInfo.vue'
 
-// //사진업로드 테스트용
-import UploadTest from './views/feed/uploadtest.vue'
+//채팅
+import ChatRoom from './views/chat/chatRoom.vue'
+import Chat from './views/chat/chat.vue'
 
 //피드 게시글 업로드
 import AddFeed from './views/feed/addFeed.vue'
+
 
 Vue.use(VueRouter);
 export default new VueRouter({
@@ -49,14 +53,19 @@ export default new VueRouter({
             //     navbar: true
             // }
         },
-        //사진업로드 테스트용 추후 삭제.
-        {
-            path: '/uploadtest',
-            name: 'UploadTest',
-            component: UploadTest,
-            meta: {
-                navbar: true
-            }
+         //채팅방
+         {
+            path: '/chat',
+            name: 'Chat',
+            component: Chat,
+            props:true
+        },
+         //채팅목록
+         {
+            path: '/chatroom',
+            name: 'ChatRoom',
+            component: ChatRoom,
+            props:true
         },
         {
 
@@ -67,8 +76,22 @@ export default new VueRouter({
                 navbar: true
             }
         },
-
         //승범 추가
+        {
+            path: '/PostUpdate',
+            name: 'PostUpdate',
+            component: PostUpdate,
+        },
+        {
+            path: '/SearchUser',
+            name: 'SearchUser',
+            component: SearchUser,
+        },
+        {
+            path: '/user/PostDetail',
+            name: 'PostDetail',
+            component: PostDetail,
+        },
         {
             path: '/user/FollowRequestList',
             name: 'FollowRequestList',
@@ -127,7 +150,10 @@ export default new VueRouter({
         {
             path: '/user/findPw',
             name: 'FindPw',
-            component: FindPw
+            component: FindPw,
+            meta: {
+                navbar: true
+            }
         },
         {
             path: '/user/foundPw',

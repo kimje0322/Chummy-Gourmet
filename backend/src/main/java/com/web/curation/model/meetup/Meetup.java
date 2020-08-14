@@ -35,16 +35,24 @@ public class Meetup {
 	private String address;
 	@Column(name = "meetup_date")
 	private String date;
-	@Column(name = "meetup_personnel")
-	private String personnel;
+	@Column(name = "meetup_cur_personnel")
+	private String curPersonnel;
+	@Column(name = "meetup_max_personnel")
+	private String maxPersonnel;
 	@Column(name = "meetup_create_date")
 	private String createDate;
+	@Column(name = "meetup_img")
+	private String img;
+	@Column(name = "meetup_personality")
+	private String personalities;
+	@Column(name = "meetup_category")
+	private String category;
 
 	public Meetup() {
 	}
 
 	public Meetup(String master, String title, String content, String location, String address, String date,
-			String personnel) {
+			String curPersonnel, String maxPersonnel, String img, String personalities, String category) {
 		super();
 		this.master = master;
 		this.title = title;
@@ -52,7 +60,11 @@ public class Meetup {
 		this.location = location;
 		this.address = address;
 		this.date = date;
-		this.personnel = personnel;
+		this.curPersonnel = curPersonnel;
+		this.maxPersonnel = maxPersonnel;
+		this.img = img;
+		this.personalities = personalities;
+		this.category = category;
 	}
 
 	public String getId() {
@@ -111,12 +123,20 @@ public class Meetup {
 		this.date = date;
 	}
 
-	public String getPersonnel() {
-		return personnel;
+	public String getCurPersonnel() {
+		return curPersonnel;
 	}
 
-	public void setPersonnel(String personnel) {
-		this.personnel = personnel;
+	public void setCurPersonnel(String curPersonnel) {
+		this.curPersonnel = curPersonnel;
+	}
+
+	public String getMaxPersonnel() {
+		return maxPersonnel;
+	}
+
+	public void setMaxPersonnel(String maxPersonnel) {
+		this.maxPersonnel = maxPersonnel;
 	}
 
 	public String getCreateDate() {
@@ -127,11 +147,36 @@ public class Meetup {
 		this.createDate = createDate;
 	}
 
+	public String getImg() {
+		return img;
+	}
+
+	public void setImg(String img) {
+		this.img = img;
+	}
+
+	public String getPersonalities() {
+		return personalities;
+	}
+
+	public void setPersonalities(String personalities) {
+		this.personalities = personalities;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
 	@Override
 	public String toString() {
 		return "Meetup [id=" + id + ", master=" + master + ", title=" + title + ", content=" + content + ", location="
-				+ location + ", address=" + address + ", date=" + date + ", personnel=" + personnel + ", createDate="
-				+ createDate + "]";
+				+ location + ", address=" + address + ", date=" + date + ", curPersonnel=" + curPersonnel
+				+ ", maxPersonnel=" + maxPersonnel + ", createDate=" + createDate + ", img=" + img + ", personalities="
+				+ personalities + ", category=" + category + "]";
 	}
 
 }

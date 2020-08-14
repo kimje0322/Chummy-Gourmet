@@ -7,6 +7,7 @@
             <v-toolbar-title style="margin:auto;">돈독한 미식가</v-toolbar-title>
           </v-app-bar>-->
           <v-bottom-navigation
+            class="navbar-fixed-bottom"
             v-if="!$route.meta.navbar"
             scroll-target="#scroll-area-2"
             hide-on-scroll
@@ -15,39 +16,38 @@
             color="white"
             horizontal
           >
-            <v-btn class="nav-btn" text color="deep-purple accent-4">
+            <v-btn class="nav-btn" @click="gotomap" text color="orange accent-4">
               <router-link to="/map">
                 <!-- <v-icon>fas fa-search</v-icon> -->
-                <v-icon>mdi-map-marker-radius</v-icon>
+                <v-icon class="icon-css">mdi-map-marker-radius</v-icon>
               </router-link>
             </v-btn>
 
-            <v-btn text color="deep-purple accent-4">
+            <v-btn @click="gotonewsfeed" text color="orange accent-4">
               <router-link to=/newsfeed>
-                <v-icon>mdi-history</v-icon>
+                <v-icon class="icon-css">mdi-history</v-icon>
               </router-link>
             </v-btn>
 
-            <v-btn text color="deep-purple accent-4">
-               <!-- <input ref="imageInput" type="file" hidden @change="onChangeImages"> -->
-              <!-- <v-btn type="button" @click="onClickImageUpload"> -->
-              <!-- </v-btn> -->
+            <v-btn @click="gotofeedadd" text color="orange accent-4">
               <router-link to="/feed/add">
-
-                <v-icon>fas fa-plus</v-icon>
+              <!-- <input ref="imageInput" type="file" hidden @change="onChangeImages"> -->
+              <!-- <v-btn type="button" @click="onClickImageUpload"> -->
+              <!-- </v-btn> -->  
+                <v-icon class="icon-css">fas fa-plus</v-icon>
               </router-link>
             </v-btn>
 
-            <v-btn text color="deep-purple accent-4">
+            <v-btn @click="gotocurator" text color="orange accent-4">
               <router-link to="/curator">
                 <!-- <v-icon>fas fa-list</v-icon> -->
-                <v-icon>mdi-magnify</v-icon>
+                <v-icon class="icon-css">mdi-magnify</v-icon>
               </router-link>
             </v-btn>
 
-            <v-btn text color="deep-purple accent-4">
+            <v-btn @click="gotouserinfo" text color="orange accent-4">
               <router-link to="/user/info">
-                <v-icon>fas fa-user</v-icon>
+                <v-icon class="icon-css">fas fa-user</v-icon>
               </router-link>
             </v-btn>
           </v-bottom-navigation>
@@ -77,7 +77,7 @@
           </v-sheet>
           
           <!-- home, login 이외 -->
-          <v-sheet v-if="$route.name !== 'Home'"  id="scroll-area-1" class="overflow-y-auto" max-height="610">
+          <v-sheet v-if="$route.name !== 'Home'"  id="scroll-area-1" class="overflow-y-auto" max-height="100%">
             <v-container class="nothome" style="height: 100%;">
               <router-view></router-view>
             </v-container>
@@ -98,6 +98,24 @@ import router from "@/routes";
 export default {
   name: "app",
   methods: {
+    gotomap() {
+      this.$router.push({ path: '/map' })
+    },
+    gotonewsfeed() {
+      this.$router.push({ path: '/newsfeed' })
+      
+    },
+    gotofeedadd() {
+      this.$router.push({ path: '/feed/add' })
+      
+    },
+    gotocurator() {
+     this.$router.push({ path: '/curator' })
+    },
+    gotouserinfo() {
+      this.$router.push({ path: '/user/info' })
+
+    },
       // onClickImageUpload() {
       //   this.$refs.imageInput.click();
   // },
@@ -151,4 +169,13 @@ export default {
 .home-padding {
   padding: 0px !important;
 }
+/* .icon-css {
+  padding: 0px
+}
+
+.navbar-fixed-bottom {
+  padding: 15px 5px 0 0;
+} */
+
+
 </style>

@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.web.curation.dao.review.RestaurantDao;
+import com.web.curation.dao.post.PostDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.dao.user.UserDetailDao;
 import com.web.curation.dao.user.UserPageDao;
@@ -55,71 +55,11 @@ public class UserPageController {
 	@Autowired
 	UserDetailDao userDetailDao;
 
+
 	@Autowired
-	RestaurantDao restDao;
+	PostDao postDao;
 
-	@GetMapping("/userpage/restlike")
-	@ApiOperation(value = "[유저페이지] 식당 좋아요 하기")
-	public void insertRestLike(@RequestParam(required = true) final String userid,
-			@RequestBody(required = true) final String restid) {
-		userPageDao.insertRestLike(userid, restid);
-	}
-
-	@DeleteMapping("/userpage/restlike")
-	@ApiOperation(value = "[유저페이지] 식당 좋아요 취소")
-	public void deleteRestLike(@RequestParam(required = true) final String userid,
-			@RequestParam(required = true) final String restid) {
-		userPageDao.deleteRestLike(userid, restid);
-	}
-
-	@GetMapping("/userpage/restscrap")
-	@ApiOperation(value = "[유저페이지] 식당 스크랩 하기")
-	public void insertScrap(@RequestParam(required = true) final String userid,
-			@RequestParam(required = true) final String restid) {
-		userPageDao.insertRestScrap(userid, restid);
-	}
-
-	@DeleteMapping("/userpage/restscrap")
-	@ApiOperation(value = "[유저페이지] 식당 스크랩 취소")
-	public void deleteScrap(@RequestParam(required = true) final String userid,
-			@RequestParam(required = true) final String restid) {
-		userPageDao.deleteRestScrap(userid, restid);
-	}
-
-	@GetMapping("/userpage/like")
-	@ApiOperation(value = "[유저페이지] 좋아요한 식당 번호 가져오기")
-	public List<Integer> getGoodId(@RequestParam(required = true) final String userid) {
-
-		List<Integer> list = new ArrayList<Integer>();
-
-		list = userPageDao.selectRestLikeIdByUserId(userid);
-
-		return list;
-	}
-
-	// userid로 scarp한 식당 번호 가져오기
-	@GetMapping("/userpage/scrap")
-	@ApiOperation(value = "[유저페이지] 스크랩한 식당 번호 가져오기")
-	public List<Integer> getScrapId(@RequestParam(required = true) final String userid) {
-
-		List<Integer> list = new ArrayList<Integer>();
-
-		list = userPageDao.selectRestScrapIdbyUserId(userid);
-
-		return list;
-	}
-
-	// userid로 scarp한 식당 모두 가져오기
-	@GetMapping("/userpage/getRest")
-	@ApiOperation(value = "[유저페이지] 스크랩한 식당 데이터 가져오기")
-	public List<Restaurant> getScrap(@RequestParam(required = true) final String userid) {
-
-		List<Restaurant> list = new ArrayList<Restaurant>();
-
-		list = restDao.selectAllRestByUserId(userid);
-
-		return list;
-	}
+	
 
 	// 밋업에 대한 참가자들 가져오기
 	@GetMapping("/userpage/getMeetupMember")
@@ -245,24 +185,9 @@ public class UserPageController {
 				map.put("followerPhone", user.getUserPhone());
 				map.put("followerComment", user.getUserComment());
 				map.put("followerImg", user.getUserImg());
-				// 내가 팔로잉 중이냐
-				int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, followeruserId);
-				// 내가 요청중이냐
-				int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, followeruserId);
-
-				// 내가 팔로잉 중임
-				if (ans1 > 0) {
-					map.put("followerFollowing", "true");
-					System.out.println("나(" + userId + ")는 상대방인 " + user.getUserName() + " 님을 팔로우 한 상태입니다.");
-				}
-				// 내가 요청중임
-				else if (ans2 > 0) {
-					map.put("followerFollowing", "doing");
-					System.out.println("나(" + userId + ")는 상대방인 " + user.getUserName() + " 님을 팔로우 요청한 상태입니다.");
-				} else {
-					map.put("followerFollowing", "false");
-					System.out.println(userId + "님은 상대방인 " + user.getUserName() + " 님을 팔로우 하지 않은 상태입니다.");
-				}
+				
+				String result = getfollowerfollowing(userId,followeruserId);
+				map.put("followerFollowing", result);
 				userList.add(map);
 			}
 			// 유저 검색을 한 경우
@@ -280,26 +205,8 @@ public class UserPageController {
 						map.put("followerComment", user.get().getUserComment());
 						map.put("followerImg", user.get().getUserImg());
 
-						// 내가 팔로잉 중이냐
-						int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, followeruserId);
-						// 내가 요청중이냐
-						int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, followeruserId);
-
-						// 내가 팔로잉 중임
-						if (ans1 > 0) {
-							map.put("followerFollowing", "true");
-							System.out.println(
-									"나(" + userId + ")는 상대방인 " + user.get().getUserName() + " 님을 팔로우 한 상태입니다.");
-						}
-						// 내가 요청중임
-						else if (ans2 > 0) {
-							map.put("followerFollowing", "doing");
-							System.out.println(
-									"나(" + userId + ")는 상대방인 " + user.get().getUserName() + " 님을 팔로우 요청한 상태입니다.");
-						} else {
-							map.put("followerFollowing", "false");
-							System.out.println(userId + "님은 상대방인 " + user.get().getUserName() + " 님을 팔로우 하지 않은 상태입니다.");
-						}
+						String result = getfollowerfollowing(userId,followeruserId);
+						map.put("followerFollowing", result);
 						userList.add(map);
 					}
 
@@ -308,7 +215,28 @@ public class UserPageController {
 		}
 		return userList;
 	}
+	// 내가 상대방 유저의 팔로잉 상태 확인
+	@GetMapping("/userpage/getfollowerfollowing")
+	@ApiOperation(value = "[유저페이지] 내가 상대방 유저의 팔로잉 상태 확인")
+	public String getfollowerfollowing(@RequestParam(required = true) final String userId,
+			@RequestParam(required = true) final String followeruserId) {
+		// 내가 팔로잉 중이냐
+		int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, followeruserId);
+		// 내가 요청중이냐
+		int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(followeruserId, userId);
 
+		// 내가 팔로잉 중임
+		if (ans1 > 0) {
+			return "true";
+		}
+		// 내가 요청중임
+		else if (ans2 > 0) {
+			return "doing";
+		} else {
+			return "false";
+		}
+	}
+	
 	// 사용자의 유저 추가정보 업데이트
 	@PutMapping("/userpage/putuserInfo")
 	@ApiOperation(value = "[유저페이지] 사용자의 유저추가정보 업데이트")
@@ -572,5 +500,95 @@ public class UserPageController {
 		// 로컬에서 테스트할때
 //	    FileCopyUtils.copy(file.getBytes(), new File("C:/"+fileFullName));
 		return fileFullName;
+	}
+
+	@GetMapping("/userpage/getuserpost")
+	@ApiOperation(value = "현재 사용자의 게시글 가져오기")
+	public Map<String, Object> getuserpost(@RequestParam(required = true) final String userId) {
+		List<Map<String, Object>> post = new ArrayList<>();
+		post = postDao.selectAllByUserid(Integer.parseInt(userId));
+		System.out.println(post);
+		List<Integer> commentcount = new ArrayList<Integer>();
+		for (Map<String, Object> p : post) {
+			commentcount.add(postDao.selectAllCommentByPostId(p.get("post_id").toString()));
+		}
+
+		Map<String, Object> data = new HashMap<String, Object>();
+
+		data.put("data", post);
+		data.put("comment", commentcount);
+
+		return data;
+	}
+	
+	@GetMapping("/userpage/getalluser")
+	@ApiOperation(value = "모든 사용자 정보 가져오기")
+	public Object getalluser(@RequestParam(required = true) final String userId,
+			@RequestParam(required = true) final String searchName){
+		// 팔로워유저 Id리스트
+		ArrayList<String> List = userPageDao.getAllUser(userId);
+		// user리스트
+		ArrayList<Map<String, Object>> userList = new ArrayList<>();
+
+		for (String anotherId : List) {
+			if (searchName == "") {
+				User user;
+				user = userdao.getUserByUserId(anotherId);
+				Map<String, Object> map = new HashMap();
+				map.put("UserId", user.getUserId());
+				map.put("UserName", user.getUserName());
+				map.put("UserEmail", user.getUserEmail());
+				map.put("UserNickname", user.getUserNickname());
+				map.put("UserPhone", user.getUserPhone());
+				map.put("UserComment", user.getUserComment());
+				map.put("UserImg", user.getUserImg());
+				// 내가 팔로잉 중이냐
+				int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, anotherId);
+				// 내가 요청중이냐
+				int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, anotherId);
+				// 내가 팔로잉 중임
+				if (ans1 > 0) {
+					map.put("followerFollowing", "true");
+				}
+				// 내가 요청중임
+				else if (ans2 > 0) {
+					map.put("followerFollowing", "doing");
+				} else {
+					map.put("followerFollowing", "false");
+				}
+				userList.add(map);
+			}
+			// 유저 검색을 한 경우
+			else {
+				Optional<User> user;
+				user = userdao.getUserByUserId(anotherId, searchName);
+				if (user.isPresent()) {
+					Map<String, Object> map = new HashMap();
+					map.put("UserId", user.get().getUserId());
+					map.put("UserName", user.get().getUserName());
+					map.put("UserEmail", user.get().getUserEmail());
+					map.put("UserNickname", user.get().getUserNickname());
+					map.put("UserPhone", user.get().getUserPhone());
+					map.put("UserComment", user.get().getUserComment());
+					map.put("UserImg", user.get().getUserImg());
+					// 내가 팔로잉 중이냐
+					int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, anotherId);
+					// 내가 요청중이냐
+					int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, anotherId);
+					// 내가 팔로잉 중임
+					if (ans1 > 0) {
+						map.put("followerFollowing", "true");
+					}
+					// 내가 요청중임
+					else if (ans2 > 0) {
+						map.put("followerFollowing", "doing");
+					} else {
+						map.put("followerFollowing", "false");
+					}
+					userList.add(map);
+				}
+			}
+		}
+		return userList;
 	}
 }

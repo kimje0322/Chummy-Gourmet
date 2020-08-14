@@ -32,12 +32,12 @@
 
       <v-list nav dense>
         <v-list-item-group>
-          <v-list-item>
+          <v-list-item @click="SearchUser">
             <v-list-item-icon>
-              <v-icon>mdi-star</v-icon>
+              <v-icon>mdi-account-search-outline</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>favorite</v-list-item-title>
+              <v-list-item-title>유저검색</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -54,12 +54,12 @@
             
           </v-list-item>
 
-          <v-list-item>
+          <v-list-item @click="chatRoom">
             <v-list-item-icon>
-              <v-icon>mdi-folder</v-icon>
+              <v-icon>far fa-paper-plane</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>스크랩</v-list-item-title>
+              <v-list-item-title>Message</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
 
@@ -105,6 +105,12 @@ export default {
   computed: {
   },
   methods:{
+    chatRoom(){
+      this.$router.push('/chatroom');
+    },
+    SearchUser(){
+      this.$router.push('/SearchUser');  
+    },
     followRequestList(){
       this.$router.push('/user/FollowRequestList');
     },
@@ -119,6 +125,7 @@ export default {
       //do something...
       this.$cookie.delete('accesstoken');
       this.$cookie.delete('userId');
+      this.$cookie.delete('loginSave');
       this.$router.push('/');
     });
     }

@@ -29,7 +29,7 @@
       </v-toolbar-title>
       <br />
 
-
+    <GoChatForMeetUp :meetup ="meetup" />
       <!-- 입력 폼 -->
       <div class="party wrapC">
 
@@ -62,10 +62,15 @@
         ></v-text-field>
 
         <!-- 파티 인원 -->
-        <v-text-field
-        v-model="meetup.personnel"
-        solo
-        ></v-text-field>
+        <v-text-field solo readonly :value="meetup.curPersonnel + ' / ' + meetup.maxPersonnel ">
+        </v-text-field>
+
+        <!-- 파티 성향 -->
+        <v-combobox 
+          v-model="meetup.personalities" 
+          solo multiple chips readonly
+        >
+        </v-combobox>
 
       </div>
     <!-- </v-app> -->
@@ -74,11 +79,15 @@
 
 <script>
 import axios from "axios";
+import GoChatForMeetUp from '../../components/common/GoChatForMeetUp';
 
-// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-const SERVER_URL = "https://localhost:8080";
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "https://localhost:8080";
 
 export default {
+  components:{
+    GoChatForMeetUp
+  },
   data: () => {
     return {
       meetup : ''
@@ -89,10 +98,21 @@ export default {
     axios
     .get(`${SERVER_URL}/meetup/searchByMeetupID/${meetupId}`)
     .then((response) => {
-        this.meetup = response.data;
+        let meetup = response.data;
+        meetup.personalities = this.stringToArray(meetup.personalities);
+        this.meetup = meetup;
+        
+        // console.log(this.meetup)
     })  
   },
   methods: {
+    stringToArray(strings){
+        strings = strings.replace('[', '');
+        strings = strings.replace(']', '');
+        strings = strings.replace(/(\s*)/g, ''); // 모든공백제거
+        strings = strings.split(",");
+        return strings;
+    }
     
   },
 

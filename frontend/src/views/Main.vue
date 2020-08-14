@@ -11,8 +11,9 @@
       <v-tabs dark v-model="currentItem" fixed-tabs slider-color="grey">
         <v-tab v-for="item in items" :key="item" :href="'#tab-' + item">
           <v-icon v-if="item=='Profile'">mdi-account-box</v-icon>
-          <v-icon v-if="item=='History'">mdi-heart</v-icon>
-          <v-icon v-if="item=='Message'">far fa-paper-plane</v-icon>
+          <v-icon v-if="item=='History'">fas fa-list</v-icon>
+          <v-icon v-if="item=='Message'">mdi-folder</v-icon>
+          
         </v-tab>
       </v-tabs>
 
@@ -22,39 +23,70 @@
             <!-- dm -->
             <Message v-if="item=='Message'" v-bind:userId="userId"></Message>
             <!-- history -->
-            <History v-else-if="item=='History'" v-bind:userId="userId" ></History>
+            <History :proptoTopsub="users" v-else-if="item=='History'"></History>
             <!-- profile -->
             <v-card-text v-else>
-              <!-- meetupData -->
-              <!-- <h2>Meet Up</h2><br>
-            <div v-if="meetupData" class="meetupData">
-              <h3 v-for="(meetup, i) in meetupData" :key="i">{{ meetup.meetupTitle }}</h3>-->
-              <!-- <span class="meetup-title">{{ meetupData.title }}</span>
-              <span class="ml-2"><i class="fas fa-crown"></i><span class="mr-2"></span>{{ meetupData.master }}</span>-->
-              <!-- <v-row>
-            </v-row>
-          </div>
-
-          <div v-else class="meetupData">
-            <h3 class="text-meetup">예정된 meetup이 없습니다.</h3>
-              </div>-->
-
-              <v-row justify="space-around">
-                <v-date-picker
-                  v-model="picker"
-                  :show-current="showCurrent"
-                  :type="month ? 'month' : 'date'"
-                  :multiple="multiple"
-                  :events="enableEvents ? functionEvents : null"
-                ></v-date-picker>
+            
+            <!-- 밋업 있을 때 -->
+            <div v-if="mData.length > 0">
+              <v-row dense>
+                <v-col
+                  v-for="(item, i) in mData"
+                  :key="i"
+                  cols="12"
+                >
+                  <v-card @click="MeetupDetail(item)">
+                    <div class="d-flex">
+                      <v-avatar
+                      class="ma-3"
+                      size="85"
+                      tile
+                      >
+                        <v-img :src="item.meetupImg"></v-img>
+                      </v-avatar>
+                      <div>
+                        <v-card-title
+                        class="headline"
+                        v-text="item.meetupTitle"
+                        ></v-card-title>
+                        <v-card-subtitle v-html="item.meetupLocation+'<br>'+item.meetupPersonnel.slice(0, 16)" ></v-card-subtitle>
+                      </div>
+                    </div>
+                  </v-card>
+                </v-col>
               </v-row>
+            </div>
+
+            <!-- 밋업 없을 때 --> 
+            <div v-else style="margin-top:70px;text-align: center;"> 
+              <i class="fab fa-meetup fa-6x"></i>
+              <h3 class="mt-5">등록된 Meetup이 없습니다.</h3>
+            </div>
+
             </v-card-text>
           </v-card>
         </v-tab-item>
       </v-tabs-items>
     </div>
+    <!-- dialog -->
+      <v-dialog
+        dark
+        v-model="dialog"
+        max-width="190"
+        >
+         <v-list> 
+          <v-list-item
+          v-for="(iitem, index) in iitems"
+          :key="index"
+          @click="doit(iitem)"
+          >
+          <v-list-item-title>{{ iitem.title }}</v-list-item-title>
+          </v-list-item>
+      </v-list>
+      </v-dialog>
   </v-app>
 </template>
+
 
 <script>
 import Top from "../components/common/Top";
@@ -74,57 +106,17 @@ export default {
     Message,
     History,
   },
-  created() {
-    // alert(this.$cookie.get("userId"));
-    this.userId = this.$cookie.get("userId");
-    axios
-      .get(`${SERVER_URL}/userpage/getuser?userId=` + this.userId)
-      .then((response) => {
-        // console.log(response.data);
-        this.users = response.data;
-      })
-      .catch((error) => {
-        console.log(error.response);
-      });
-    //  meetup 정보 받아오기
-    axios
-      .get(
-        `${SERVER_URL}/userpage/getuserMeetup?userId=${this.userId}`
-      )
-      .then((response) => {
-        // console.log(response.data);
-        this.meetupData = response.data;
-        console.log("밋업 data 성공");
-        console.log(this.meetupData[0].meetupPersonnel);
-        // for (var i=0; i<this.meetupData.length; i++) {
-        //   this.meetupdate = this.meetupData[i].meetupPersonnel.slice(0, 11);
-        //   this.muyear.push(this.meetupdate[i].meetupPersonnel.slice(0, 4));
-        //   this.mumonth.push(this.meetupdate[i].meetupPersonnel.slice(5, 7));
-        //   this.muday.push(this.meetupdate[i].meetupPersonnel.slice(8, 10));
-        // }
-        // this.meetupData[i].meetupContent
-        // for (var i=0; i<this.meetupData.length; i++) {
-        // }
-      })
-      .catch((error) => {
-        console.log(error.response);
-        this.meetupData = false;
-        console.log("밋업 실패");
-      });
-  },
+  
   data: () => {
     return {
-      dateData: {
-        muyear: [],
-        mumonth: [],
-        muday: [],
-      },
-      picker: new Date().toISOString().substr(0, 10),
-      enableEvents: true,
-      showCurrent: true,
-      meetupData: {},
-      month: false,
-      multiple: false,
+      iitems:[
+        { title: '밋업상세보기' },
+        { title: '참여취소' },
+      ],
+      list:[],
+      dialog:false,
+      // 밋업 전체 데이터
+      mData: {}, 
       users: {},
       userId: "",
       contents: "",
@@ -145,55 +137,54 @@ export default {
           },
         },
       ],
-      options: [
-        {
-          value: "option1",
-          title: "옵션1",
-        },
-        {
-          value: "option2",
-          title: "옵션2",
-        },
-      ],
     };
   },
-  computed: {
-    functionEvents() {
-      return this.month ? this.monthFunctionEvents : this.dateFunctionEvents;
-    },
+  created() {
+    this.userId = this.$cookie.get("userId");
+    axios
+      .get(`${SERVER_URL}/userpage/getuser?userId=`+ this.userId)
+      .then((response) => {
+        this.users = response.data;
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+    //  meetup 정보 받아오기
+    axios
+      .get(
+        `${SERVER_URL}/userpage/getuserMeetup?userId=${this.userId}`
+      )
+      .then((response) => {
+        this.mData = response.data
+      })
+      .catch((error) => {
+        console.log(error.response);
+        this.meetupData = false;
+      });
   },
   methods: {
-    dateFunctionEvents(date) {
-      // this.meetupdate = this.meetupData.date.slice(0, 11);
-      // var muyear = this.meetupdate.slice(0, 4);
-      // var mumonth = this.meetupdate.slice(5, 7);
-      // if (this.meetupdate[8] == '0') {
-      //   let muday = this.meetupdate[9];
-      // } else {
-        // let muday = this.meetupdate.slice(8, 10);
-      // }
-      
-      // console.log(this.meetupdate);
-      // console.log(mumonth);
-      // console.log(muday);
-      // console.log(muyear);
-      
-      const [, , day] = date.split("-");
-      console.log();
-      if ([2, 17, 28].includes(parseInt(day, 10))) return true;
-      // if ([1, 19, 22].includes(parseInt(day, 10))) return ['red', '#00f']
-      return false;
+    doit(iitem){
+      if(iitem.title == '참여취소') {
+        alert("취소하기 백엔드완성되면 이어붙일 예정")
+        // axios.delete(`${SERVER_URL}/userpage/restsacrp?userid=${this.userId}&restid=`)
+        // .then((response) => {
+        //     this.dialog = false
+        // })
+        // .catch((error) => {
+        //     console.log(error.response);
+        // });
+      }else{
+        this.$router.push('/map/detailMeetup?meetupId='+this.list.meetupId);
+      }
     },
-    monthFunctionEvents(date) {
-      const month = parseInt(date.split("-")[1], 10);
-      if ([1, 3, 7].includes(month)) return true;
-      if ([2, 5, 12].includes(month))
-        return ["error", "purple", "rgba(0, 128, 0, 0.5)"];
-      return false;
+    MeetupDetail(item){
+      this.dialog = true;
+      this.list = item;
     },
   },
 };
 </script>
+
 
 <style>
 .container nothome {
@@ -206,5 +197,8 @@ export default {
 
 .text-meetup {
   text-align: center;
+}
+.mt-5 {
+  font-family: 'Jua', sans-serif;
 }
 </style>

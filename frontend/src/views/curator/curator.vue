@@ -1,14 +1,23 @@
 <template>
+  <div>
+    <v-toolbar dark>
+      <!-- 중앙정렬 하기 위해 2개씀 -->
+      <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
+      <p class="my-auto">음식점 검색</p>
+      <v-spacer></v-spacer>
+    </v-toolbar>
+  
+  <div class="entire">
   <div style="padding : 0">
     <input
       v-model="keyword"
-      @keyup.enter="search"
+      @keyup.enter="doSearch"
       type="text"
       placeholder="원하는 지역 검색"
-      style="width : 100%; border : 1px solid"
+      style="width : 80%; border : 1px solid"
     />
 
-    <v-btn width="100%" @click="search">검색</v-btn>
+    <v-btn height="48px" width="8%" style="float: right;" @click="doSearch">검색</v-btn>
     <p>{{keyword}}에 대한 결과</p>
 
 <!--  pop over  -->
@@ -16,7 +25,6 @@
           <v-menu
             v-model="menu"
             :close-on-content-click="false"
-            :nudge-width="375"
             transition="slide-y-transition"
             offset-y
           >
@@ -32,10 +40,10 @@
             <v-card>
               <v-card-actions>
                 <v-btn-toggle>
-                  <v-btn outlined @click="getNear">거리순</v-btn>
-                  <v-btn outlined @click="getRating">평점순</v-btn>
-                  <v-btn outlined @click="getManyReview">리뷰순</v-btn>
-                  <v-btn outlined @click="getProperties">선호음식</v-btn>
+                  <v-btn outlined @click="sortByDist">거리순</v-btn>
+                  <v-btn outlined @click="sortByLike">좋아요순</v-btn>
+                  <v-btn outlined @click="sortByReview">리뷰순</v-btn>
+                  <v-btn outlined @click="sortByProperties">선호음식</v-btn>
                 </v-btn-toggle>
                 <!-- <v-spacer></v-spacer>
                 <v-btn @click="menu = false">Cancel</v-btn>
@@ -46,47 +54,54 @@
         </div>
 
 
-    <v-card class="mx-auto" max-width="500">
+    <v-card>
         <v-row dense>
-          <v-col v-for="restaurant in restaurants" :key="restaurant.restId" cols="12">
+          <v-col v-for="restaurant in restaurants" :key="restaurant.id" cols="12">
             <v-hover v-slot:default="{ hover }">
               <v-card  :elevation="hover ? 12 : 2"
               :class="{ 'on-hover': hover }"
-              @click="moveDetail(restaurant)">
+              >
                 <v-img
-                  :src="restaurant.img"
+                  :src="restaurant.img[0]"
                   class="white--text align-end"
                   gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                  height="200px">
+                  height="200px"
+                  @click="moveDetail(restaurant)"
+                  >
                 </v-img>
 
                 <v-card-actions>
-                  <div>
-                    <v-card-title v-text="restaurant.name"></v-card-title>
-                    <v-card-subtitle v-text="restaurant.location"></v-card-subtitle>
+                  <div style="width:55%;">
+                    <v-card-title @click="moveDetail(restaurant)">{{restaurant.name}}</v-card-title>
+                    <v-card-subtitle v-text="restaurant.location" @click="moveDetail(restaurant)"></v-card-subtitle>
+                    <v-card-subtitle class="caption grey--text" v-html="restaurant.distUnit" @click="moveDetail(restaurant)"></v-card-subtitle>
                   </div>
                   <v-spacer></v-spacer>
+                  <v-spacer></v-spacer>
+                  <v-spacer></v-spacer>
+                  <v-btn icon small :color="likes.indexOf(restaurant.id*1) != -1 ? 'pink' : ''" @click="doLike(restaurant)">
+                    <v-icon v-text="likes.indexOf(restaurant.id*1) != -1 ? 'mdi-heart' : 'mdi-heart-outline' "></v-icon>
+                  </v-btn>
+                  <span style="margin:0 5px 0 -1px;">{{restaurant.like}}</span>
+
+                  <v-btn icon small :color="scraps.indexOf(restaurant.id*1) != -1 ? 'blue' : ''" @click="doScrap(restaurant)">
+                    <v-icon v-text="scraps.indexOf(restaurant.id*1) != -1 ? 'mdi-bookmark-check' : 'mdi-bookmark-check-outline' "></v-icon>
+                  </v-btn>
+                  <span style="margin:0 3px 0 -2px;">{{restaurant.scrap}}</span>
 
                   <v-btn icon>
-                    <v-icon>mdi-heart-outline</v-icon>
+                    <v-icon size="23">mdi-comment-edit-outline</v-icon>
                   </v-btn>
-                  <span v-text="restaurant.restLike"></span>
-
-                  <v-btn icon>
-                    <v-icon>mdi-bookmark-check-outline</v-icon>
-                  </v-btn>
-                  <span v-text="restaurant.restReview"></span>
-
-                  <v-btn icon>
-                    <v-icon>mdi-comment-edit-outline</v-icon>
-                  </v-btn>
-                  <span v-text="restaurant.restScrap"></span>
+                  <span style="margin:0 2px 0 -4px;">{{restaurant.review}}</span>
+                  <v-spacer></v-spacer>
                 </v-card-actions>
               </v-card>
             </v-hover>
           </v-col>
         </v-row>
     </v-card>
+  </div>
+  </div>
   </div>
 </template>
 <script>
@@ -100,7 +115,10 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 export default {
   data() {
     return {
-      on : '',
+      restaurantsLength : "",
+      likes : [],
+      scraps : [],
+      reviews : [],
       fav: true,
       menu: false,
       message: false,
@@ -111,16 +129,23 @@ export default {
         lng : '',
       },
 
-
-      keyword: "",
+      geocoder : '',
+      keyword: '',
       restaurants : []
     };
   },
   mounted() {
-      if (window.kakao && window.kakao.maps) {
-      this.initMap();
-    }else{
+    
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(pos => {
+        this.targetLocation.lat = pos.coords.latitude;
+        this.targetLocation.lng = pos.coords.longitude;
+      });
+    }
 
+    if (window.kakao && window.kakao.maps) {
+      // this.initMap();
+    }else{
       const script = document.createElement("script");
       /* global kakao */
       script.onload = () => kakao.maps.load(this.initMap);
@@ -129,40 +154,45 @@ export default {
       document.head.appendChild(script);
     }
 
+    // 페이지 로딩 시 로그인한 유저의 좋아요/스크랩 정보를 가져옴
+    axios
+      .get(`${SERVER_URL}/rest/like/${this.$cookie.get('userId')}`)
+      .then((response) => {
+        this.likes = response.data;
+        console.log(this.likes);
+    });
 
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(pos => {
-          // console.log(pos);
-          this.targetLocation.lat = pos.coords.latitude;
-          this.targetLocation.lng = pos.coords.longitude;
-          // console.log(this.targetLocation.lat + "," + this.targetLocation.lng);
-        });
-      }
+    axios
+      .get(`${SERVER_URL}/rest/scrap/${this.$cookie.get('userId')}`)
+      .then((response) => {
+        this.scraps = response.data;
+        console.log(this.scraps);
+    });
+
   },
   methods: {
-    getNear(){
+    sortByDist(){
       console.log("거리순");
       this.restaurants.sort((a, b) => {
         return a.dist - b.dist;
       })
     },
-    getRating(){
+    sortByLike(){
       console.log("좋아요순");
       this.restaurants.sort((a, b) => {
-        return a.like - b.like;
+        return -1 * (a.like - b.like);
       })
     },
-    getManyReview(){
+    sortByReview(){
       console.log("리뷰순");
       this.restaurants.sort((a, b) => {
-        return a.review - b.review;
+        return -1 * (a.review - b.review);
       })
     },
-    getProperties(){
+    sortByProperties(){
       console.log("선호음식");
       axios
-        // .get(`${SERVER_URL}/userpage/getuserInfo?userId=${this.$cookie.get('userId')}`)
-        .get(`${SERVER_URL}/userpage/getuserInfo?userId=62`)
+        .get(`${SERVER_URL}/userpage/getuserInfo?userId=${this.$cookie.get('userId')}`)
         .then((response) => {
           var userInfo = response.data;
           var userFavoriteID = userInfo.userFavorite;
@@ -194,22 +224,37 @@ export default {
           })
         })
     },
-
-    search() {
+    distUnitConversion(distance){
+      var result = '';
+      var tempDist = Math.round(distance);
+      var km = Math.floor(tempDist / 1000);
+      var m = tempDist % 1000;
+      if(km > 0)
+        result = result.concat(km, "km ");
+      result = result.concat(m, "m");
+      return result;
+    },
+    doSearch() {
       // 주소-좌표 변환 객체를 생성합니다
-      var geocoder = new kakao.maps.services.Geocoder();
+      this.geocoder = new kakao.maps.services.Geocoder();
       axios
         .get(`${SERVER_URL}/curation?location=${this.keyword}`)
         .then((response) => {
-            console.log(response);
           // 음식점리스트 받기
-          var restaurants = response.data.list;
-
+          var restaurants = response.data.list;       
           // 음식점리스트 돌면서 좌표(position), 거리(dist) 구하기
           restaurants.forEach(restaurant => {
 
+            // String 형태의 img src 5개를 파싱해서 배열로 만듬
+            let imgSrcs = restaurant.img;
+            imgSrcs = imgSrcs.replace('[', '');
+            imgSrcs = imgSrcs.replace(']', '');
+            imgSrcs = imgSrcs.replace(/(\s*)/g, ''); // 모든공백제거
+            imgSrcs = imgSrcs.split(",");
+            restaurant.img = imgSrcs;
+
             // 주소 -> 좌표
-            geocoder.addressSearch(restaurant.location, (result, status) => {
+            this.geocoder.addressSearch(restaurant.location, (result, status) => {
               if (status === kakao.maps.services.Status.OK) {
                 var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
               }
@@ -224,6 +269,7 @@ export default {
                   ],
                 });
                 restaurant.dist = polyline.getLength();
+                restaurant.distUnit = this.distUnitConversion(polyline.getLength());
               }
             });
           })
@@ -231,12 +277,140 @@ export default {
         })
         .catch((error) => {
           console.log(error.response);
-          alert("로그인 실패");
         });
     },
     moveDetail(restaurant) {
       router.push({name : "Detail", params : restaurant});
-    }
+    },
+    doLike(restaurant){
+      if(this.$cookie.get('userId') == null){
+        alert("로그인 해주세요");
+        return;
+      }
+
+      // DB에 존재하지 않는 음식점이라면
+      if(restaurant.id == null){
+
+        // img src 배열을 String으로 변환 "[src1,src2,...,src5]"
+        var imgSrcs = restaurant.img.toString();
+        imgSrcs = `[${imgSrcs}]`;
+
+        // 새로운 음식점 객체 생성
+        var newRest = {
+          category : restaurant.category,
+          img : imgSrcs,
+          like : restaurant.like,
+          location : restaurant.location,
+          name : restaurant.name,
+          review : restaurant.review,
+          scrap : restaurant.scrap,
+          telphone : restaurant.telphone,
+          url : restaurant.url,
+          dist  : restaurant.dist
+        };
+
+        // DB에 음식점 정보 등록 후 restId 반환
+        axios
+        .post(`${SERVER_URL}/rest`, newRest)
+        .then((response) => {
+            var newRestId = response.data;
+            restaurant.id = newRestId;
+            console.log(restaurant.id);
+            this.toggleLike(restaurant);
+        });
+      }
+      // DB에 존재하는 음식점이라면
+      else{
+        this.toggleLike(restaurant);
+      }
+    },
+    toggleLike(restaurant){
+        // 내가 좋아요한 음식점이 아니라면
+        if(this.likes.indexOf(restaurant.id*1) == -1){
+          this.likes.push(restaurant.id*1);
+          axios
+          .put(`${SERVER_URL}/rest/like?userid=${this.$cookie.get('userId')}&restid=${restaurant.id}`)
+          .then((response) => {
+            // reponse : 해당 음식점의 좋아요 갯수
+            restaurant.like = response.data;
+            
+          })       
+        }
+        // 내가 좋아요한 음식점이라면
+        else{
+          this.likes.splice(this.likes.indexOf(restaurant.id), 1);
+          axios
+          .delete(`${SERVER_URL}/rest/like?userid=${this.$cookie.get('userId')}&restid=${restaurant.id}`)
+          .then((response) => {
+            // reponse : 해당 음식점의 좋아요 갯수
+            restaurant.like = response.data;
+          })  
+        }
+    },
+    doScrap(restaurant){
+      if(this.$cookie.get('userId') == null){
+        alert("로그인 해주세요");
+        return;
+      }
+
+      // DB에 존재하지 않는 음식점이라면
+      if(restaurant.id == null){
+
+        // img src 배열을 String으로 변환 "[src1,src2,...,src5]"
+        var imgSrcs = restaurant.img.toString();
+        imgSrcs = `[${imgSrcs}]`;
+
+        // 새로운 음식점 객체 생성
+        var newRest = {
+          category : restaurant.category,
+          img : imgSrcs,
+          like : restaurant.like,
+          location : restaurant.location,
+          name : restaurant.name,
+          review : restaurant.review,
+          scrap : restaurant.scrap,
+          telphone : restaurant.telphone,
+          url : restaurant.url,
+          dist  : restaurant.dist
+        };
+
+        // DB에 음식점 정보 등록 후 restId 반환
+        axios
+        .post(`${SERVER_URL}/rest`, newRest)
+        .then((response) => {
+            var newRestId = response.data;
+            restaurant.id = newRestId;
+            console.log(restaurant.id);
+            this.toggleScrap(restaurant);
+        });
+      }
+      // DB에 존재하는 음식점이라면
+      else{
+        this.toggleScrap(restaurant);
+      }
+    },
+    toggleScrap(restaurant){
+        // 내가 좋아요한 음식점이 아니라면
+        if(this.scraps.indexOf(restaurant.id*1) == -1){
+          this.scraps.push(restaurant.id*1);
+          axios
+          .put(`${SERVER_URL}/rest/scrap?userid=${this.$cookie.get('userId')}&restid=${restaurant.id}`)
+          .then((response) => {
+            // reponse : 해당 음식점의 좋아요 갯수
+            restaurant.scrap = response.data;
+          })       
+        }
+        // 내가 좋아요한 음식점이라면
+        else{
+          this.scraps.splice(this.scraps.indexOf(restaurant.id), 1);
+          axios
+          .delete(`${SERVER_URL}/rest/scrap?userid=${this.$cookie.get('userId')}&restid=${restaurant.id}`)
+          .then((response) => {
+            // reponse : 해당 음식점의 좋아요 갯수
+            restaurant.scrap = response.data;
+          })  
+        }
+    },
   },
   components: {},
 };

@@ -3,7 +3,7 @@
       <v-row>
       <v-col v-for="item in items" :key="item.title" class="d-flex child-flex" cols="4">
           <v-card flat tile class="d-flex">
-              <v-img :src="item.img" aspect-ratio="1" class="grey lighten-2">
+              <v-img @click.stop="show(item)" :src="item.img[0]" aspect-ratio="1" class="grey lighten-2">
               <template v-slot:placeholder>
               <v-row
                   class="fill-height ma-0"
@@ -15,9 +15,35 @@
               </template>
               </v-img>
           </v-card>
-      </v-col>
+      </v-col>    
+      
+      <!-- dialog -->
+      <v-dialog
+        dark
+        v-model="dialog"
+        max-width="190"
+        >
+         <v-list> 
+          <v-list-item
+          v-for="(iitem, index) in iitems"
+          :key="index"
+          @click="doit(iitem)"
+          >
+          <v-list-item-title>{{ iitem.title }}</v-list-item-title>
+          </v-list-item>
+      </v-list>
+      </v-dialog>
       </v-row>
+    <!-- 스크랩 없을 때 -->
+    <div v-if="items.length == 0" class="aligncss"> 
+      <i class="fas fa-utensils fa-5x"></i>
+      <h3 class="mt-5">스크랩한 음식점이 없습니다.</h3>
+    </div>
   </v-layout>
+
+
+
+
 </template>
 
 
@@ -35,26 +61,69 @@ export default {
 
     data () {
       return {
-        items:[]
+        restaurant: [],
+        restid:[],
+        items:[],
+        iitems:[
+        { title: '상세보기' },
+        { title: '삭제' },
+      ],
+       dialog: false,
+       data : [],
+       list : [],
       }
     },
-
     created(){
-      console.log("생성");
-      console.log(this.userId);
-
-       axios
-        .get(`${SERVER_URL}/userpage/getRest?userid=${this.userId}`)
+      this.whenCreated();
+    },
+    methods: {
+      whenCreated() {
+        axios
+        .get(`${SERVER_URL}/rest/scrap/${this.userId}`)
         .then((response) => {
-          // console.log(response);
-          this.items = response.data;
-          console.log(this.items);
+          this.restid = response.data; // [11,12,13]
+          for (var i=0; i<this.restid.length; i++) {
+            axios
+              .get(`${SERVER_URL}/rest/${this.restid[i]}`)
+              .then((response) => {
+                var restaurant = response.data;
+                this.restaurant = restaurant
+                // String 형태의 img src 5개를 파싱해서 배열로 만듬
+                let imgSrcs = restaurant.img;
+                imgSrcs = imgSrcs.replace('[', '');
+                imgSrcs = imgSrcs.replace(']', '');
+                imgSrcs = imgSrcs.replace(/(\s*)/g, ''); // 모든공백제거
+                imgSrcs = imgSrcs.split(",");
+                restaurant.img = imgSrcs;               
+                this.items.push(restaurant); 
+              })
+              .catch((error) => {
+              console.log(error.response);
+              });
+            }
         })
         .catch((error) => {
           console.log(error.response);
         });
+      },
+      show(item){
+        this.dialog = true;
+        this.list = item;
+      },
+      doit(iitem){
+        if(iitem.title == '삭제') {
+          console.log(this.list);
+          axios.delete(`${SERVER_URL}/rest/scrap?restid=${this.list.id}&userid=${this.userId}`)
+          .then((response) => {
+              this.dialog = false
+              this.items = []
+              this.whenCreated();
+          })
+        } else {
+          router.push({name: "Detail", params: this.list});
+        }
+      }
     }
-
   }
 </script>
 
@@ -62,4 +131,13 @@ export default {
   .entireClass{
     padding: 20px;
   }
+
+  .aligncss {
+    margin: 70px 0 0 0;
+    color: rgba(0,0,0,.6);
+    width: 100%;
+    text-align: center;
+  }
+
+
 </style>

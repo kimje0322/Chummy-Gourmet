@@ -28,7 +28,7 @@
             <v-card-text v-else>
             
             <!-- 밋업 있을 때 -->
-            <div v-if="mData.length > 0">
+            <div>
               <v-row dense>
                 <v-col
                   v-for="(item, i) in mData"
@@ -58,7 +58,7 @@
             </div>
 
             <!-- 밋업 없을 때 --> 
-            <div v-else style="margin-top:100px;text-align: center;"> 
+            <div v-if="mData.length==0" style="margin-top:100px;text-align: center;"> 
               <i class="fab fa-meetup fa-6x"></i>
               <h3 class="mt-5">등록된 Meetup이 없습니다.</h3>
             </div>

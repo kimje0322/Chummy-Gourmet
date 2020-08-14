@@ -137,6 +137,7 @@ export default {
     color: rgba(0,0,0,.6);
     width: 100%;
     text-align: center;
+    min-height: 300px
   }
 
 

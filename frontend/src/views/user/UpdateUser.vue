@@ -4,7 +4,7 @@
       <v-toolbar dark>
         <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
         <v-spacer></v-spacer>
-        <p class="my-auto">프로필 수정</p>
+        <p class="my-auto">profile 수정</p>
         <v-spacer></v-spacer>
         <v-spacer></v-spacer>
       </v-toolbar>

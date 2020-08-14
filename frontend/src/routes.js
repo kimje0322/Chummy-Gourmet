@@ -49,7 +49,7 @@ export default new VueRouter({
         //리뷰 작성
         {
             path: '/review/add',
-            name: 'AddFeed',
+            name: 'AddReview',
             component: AddReview,
             // meta: {
             //     navbar: true

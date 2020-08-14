@@ -23,7 +23,8 @@
 
       <div>
         <!-- <p>{{this.postuserid}}</p> -->
-        <div style="padding: 18px 25px;">
+        
+        <!-- <div style="padding: 18px 25px;">
           <div>
             <div style="padding: 12px 0;">
               <div style="margin-right: 8px;">
@@ -36,7 +37,7 @@
                 <span>{{username}}</span>
                 <div style="float: right;">
                   <div @click="onClickImageUpload">
-                    <!-- <input ref="imageInput" type="file" hidden @change="onChangeImages" /> -->
+                    <input ref="imageInput" type="file" hidden @change="onChangeImages" />
                     <i class="fa fa-images" style="margin-top: 6px; width: 20px; height: 20px;"></i>
                   </div>
                 </div>
@@ -50,58 +51,51 @@
             :src="`https://i3b302.p.ssafy.io:8080/img/post?imgname=`+postimg"
           />
           <img id="imageview" style="width: 100%" v-if="revise1" :src="postimg" />
-          <!-- <input ref="imageInput" type="file" hidden @change="onChangeImages" /> -->
-          <!-- <v-img v-if="postimgurl" :src="postimgurl"></v-img> -->
+          <input ref="imageInput" type="file" hidden @change="onChangeImages" />
+          <v-img v-if="postimgurl" :src="postimgurl"></v-img>
           <v-img v-else :src="postimgurl"></v-img>
           <v-textarea v-if="revise" style="margin-top: 0;" v-model="content"></v-textarea>
-
-    <v-form
-      ref="form" v-model="form"
-      class="pa-1 pt-4"
-    >
-      <v-text-field
-        v-model="review.title"
-        filled clearable
-        color="deep-purple"
-        label="Title"
-      ></v-text-field>
-      <v-textarea
-        v-model="review.content"
-        filled clearable
-        color="deep-purple"
-        label="Contents"
-        rows="7"
-      ></v-textarea>
-    </v-form>
-    <v-divider></v-divider>
-    <v-card-actions>
-      <v-btn
-        text
-        @click="$refs.form.reset()"
-      >
-        Clear
-      </v-btn>
-      <v-spacer></v-spacer>
-      <v-btn
-        :disabled="!form"
-        :loading="isLoading"
-        class="white--text"
-        color="deep-purple accent-4"
-        depressed
-        @click="addReview"
-      >Submit</v-btn>
-    </v-card-actions>
-
-
-
-        </div>
+        </div> -->
+        <v-form
+          ref="form" v-model="form"
+          class="pa-8 pt-8"
+        >
+          <v-text-field
+            v-model="review.title"
+            filled clearable
+            color="deep-purple"
+            label="Title"
+          ></v-text-field>
+          <v-textarea
+            v-model="review.content"
+            filled clearable
+            color="deep-purple"
+            label="Contents"
+            rows="7"
+          ></v-textarea>
+        </v-form>
+        <v-divider></v-divider>
+        <v-card-actions class="pa-8 pt-8">
+          <v-btn @click="$refs.form.reset()" text>
+            Clear
+          </v-btn>
+          <v-spacer></v-spacer>
+          <v-btn
+            :disabled="!form"
+            :loading="isLoading"
+            class="white--text"
+            color="deep-purple accent-4"
+            depressed
+            @click="addReview"
+          >Submit</v-btn>
+        </v-card-actions>
 
         <!-- <div style="padding: 12px; 0;">
           <div style="margin: 0 12px; border: solid 1px var(--divider); border-radius: 8px;">
             <div style="6px;" aria-label="게시물에 이미지 추가">adfadfffgdsgsdㅗㅓㅗㅓㅛㅛㅅ</div>
           </div>
         </div>-->
-        <input ref="imageInput" type="file" hidden @change="onChangeImages" />
+        <!-- <input ref="imageInput" type="file" hidden @change="onChangeImages" /> -->
         <!-- <v-btn type="button" @click="onClickImageUpload">이미지 업로드</v-btn> -->
         <!-- <v-btn @click="addImg">입력</v-btn> -->
       </div>
@@ -113,8 +107,8 @@
 import axios from "axios";
 import router from "@/routes";
 
-const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-// const SERVER_URL = "http://localhost:8080";
+// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "https://localhost:8080";
 
 export default {
   data() {
@@ -123,6 +117,10 @@ export default {
         writer : this.$cookie.get("userId"),
         title : '',
         content : '',
+
+        category : '',
+        restId : '',
+        meetupId : '',
       },
 
 
@@ -144,17 +142,18 @@ export default {
   },
   created() {
     console.log(this.$cookie.get("userId"));
+    
 
-    if (this.$route.params.postid >= 0) {
-      console.log("여기");
-      console.log(this.$route.params);
-      this.revise = true;
-      console.log(this.revise);
-      this.postimg = this.$route.params.postimage;
-      this.content = this.$route.params.postcontent;
-      console.log(this.content);
-      console.log(this.postimg);
-    }
+    // if (this.$route.params.postid >= 0) {
+    //   console.log("여기");
+    //   console.log(this.$route.params);
+    //   this.revise = true;
+    //   console.log(this.revise);
+    //   this.postimg = this.$route.params.postimage;
+    //   this.content = this.$route.params.postcontent;
+    //   console.log(this.content);
+    //   console.log(this.postimg);
+    // }
     axios
       .get(
         `${SERVER_URL}/userpage/getuser?userId=${this.$cookie.get("userId")}`
@@ -168,11 +167,21 @@ export default {
       .catch((error) => {
         console.log(error.response);
       });
-    console.log(this.username);
   },
   methods: {
     addReview(){
       console.log(this.review)
+      var meetup = this.$route.params;
+      this.review.category = meetup.category;
+      this.review.meetupId = meetup.id;
+      axios
+        .put(`${SERVER_URL}/review`, this.review)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
     },
     // addImg() {
     //   //이미지 서버에 전송해서 저장하는부분
@@ -236,7 +245,7 @@ export default {
     //     });
     // },
     //게시물을 DB에 저장하는 부분
-    addPost() {
+    // addPost() {
       // if (this.revise1) {
       //   var repost = {
       //     postcontent: this.postcontent,
@@ -275,27 +284,27 @@ export default {
       //       alert("데이터 전송 실패");
       //     });
       // }
-    },
+    // },
 
-    onClickImageUpload() {
-      this.$refs.imageInput.click();
-    },
+    // onClickImageUpload() {
+    //   this.$refs.imageInput.click();
+    // },
 
-    onChangeImages(e) {
-      if (this.$route.params.postid >= 0) {
-        this.file = e.target.files[0];
-        this.postimg = URL.createObjectURL(this.file);
-        this.revise1 = true;
-        this.revise3 = false;
-      } else {
-        this.file = e.target.files[0];
-        this.postimgurl = URL.createObjectURL(this.file);
-      }
-      console.log(e.target.files);
-      console.log(this.postimg);
-    },
+    // onChangeImages(e) {
+    //   if (this.$route.params.postid >= 0) {
+    //     this.file = e.target.files[0];
+    //     this.postimg = URL.createObjectURL(this.file);
+    //     this.revise1 = true;
+    //     this.revise3 = false;
+    //   } else {
+    //     this.file = e.target.files[0];
+    //     this.postimgurl = URL.createObjectURL(this.file);
+    //   }
+    //   console.log(e.target.files);
+    //   console.log(this.postimg);
+    // },
 
-    insert() {},
+    // insert() {},
   },
 };
 </script>

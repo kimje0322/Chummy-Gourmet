@@ -11,9 +11,13 @@ import com.web.curation.model.review.Review;
 public interface ReviewDao extends JpaRepository<Review, String>{
 	
 	//리뷰 등록
-	@Query(value = "Insert into review (review_name,review_category,review_writer,review_content)"
-			+ "values (:name,:category,:writer,:content)", nativeQuery = true)
-	void insertReview(String name, String category,String writer,String content); 
+	@Query(value = "INSERT INTO review "
+			+ "(review_title, review_content, review_writer, "
+			+ "review_category, rest_id, meetup_id) "
+			+ "VALUES "
+			+ "(:#{#review.title}, :#{#review.content}, :#{#review.writer}, "
+			+ ":#{#review.category}, :#{#review.restId}, :#{#review.meetupId})", nativeQuery = true)
+	Review save(Review review); 
 
 	//리뷰 조회
 	@Query(value = "Select * from review where rest_id = :id", nativeQuery = true)

@@ -34,9 +34,9 @@ public class Review {
 	@Column(name = "review_date")
 	private String date;
 	@Column(name = "rest_id")
-	private String restid;
+	private String restId;
 	@Column(name = "meetup_id")
-	private String meetupid;
+	private String meetupId;
 
 	public String getTitle() {
 		return title;
@@ -46,28 +46,12 @@ public class Review {
 		this.title = title;
 	}
 
-	public String getMeetupid() {
-		return meetupid;
-	}
-
-	public void setMeetupid(String meetupid) {
-		this.meetupid = meetupid;
-	}
-
 	public String getDate() {
 		return date;
 	}
 
 	public void setDate(String date) {
 		this.date = date;
-	}
-
-	public String getRestid() {
-		return restid;
-	}
-
-	public void setRestid(String restid) {
-		this.restid = restid;
 	}
 
 	public String getId() {
@@ -102,10 +86,26 @@ public class Review {
 		this.content = content;
 	}
 
+	public String getRestId() {
+		return restId;
+	}
+
+	public void setRestId(String restId) {
+		this.restId = restId;
+	}
+
+	public String getMeetupId() {
+		return meetupId;
+	}
+
+	public void setMeetupId(String meetupId) {
+		this.meetupId = meetupId;
+	}
+
 	@Override
 	public String toString() {
 		return "Review [id=" + id + ", title=" + title + ", category=" + category + ", writer=" + writer + ", content="
-				+ content + ", date=" + date + ", restid=" + restid + ", meetupid=" + meetupid + "]";
+				+ content + ", date=" + date + ", restId=" + restId + ", meetupId=" + meetupId + "]";
 	}
 
 }

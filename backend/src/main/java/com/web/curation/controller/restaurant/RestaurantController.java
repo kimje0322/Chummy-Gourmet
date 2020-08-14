@@ -85,7 +85,7 @@ public class RestaurantController {
 	}
 
 	@GetMapping("/rest/scrap/{userid}")
-	@ApiOperation(value = "[음식점] userid 에 해당하는 유저가 좋아요한 음식점 restid 가져오기")
+	@ApiOperation(value = "[음식점] userid 에 해당하는 유저가 스크랩한 음식점 restid 가져오기")
 	public List<Integer> getScrapId(@PathVariable String userid) {
 		List<Integer> list = new ArrayList<Integer>();
 		list = restDao.selectRestScrapIdbyUserId(userid);
@@ -110,5 +110,21 @@ public class RestaurantController {
 		restDao.updateRestScrapM(restid);
 		String restScrapCount = restDao.selectByRestId(restid).getScrap();
 		return restScrapCount;
+	}
+	
+	@PutMapping("/rest/review/{restId}")
+	@ApiOperation(value = "[음식점] 음식점 리뷰갯수 +1 뒤 해당 음식점의 리뷰 갯수 리턴")
+	public String updateReview(@PathVariable String restid) {
+		restDao.updateRestReview(restid);
+		String restReviewCount = restDao.selectByRestId(restid).getReview();
+		return restReviewCount;
+	}
+	
+	@DeleteMapping("/rest/review/{restId}")
+	@ApiOperation(value = "[음식점] 음식점 리뷰갯수 -1 뒤 해당 음식점의 리뷰 갯수 리턴")
+	public String updateReviewM(@PathVariable String restid) {
+		restDao.updateRestReviewM(restid);
+		String restReviewCount = restDao.selectByRestId(restid).getReview();
+		return restReviewCount;
 	}
 }

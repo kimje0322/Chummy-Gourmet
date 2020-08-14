@@ -142,6 +142,8 @@ export default {
   },
   created() {
     console.log(this.$cookie.get("userId"));
+    // console.log(this.$route.params);
+
     
 
     // if (this.$route.params.postid >= 0) {
@@ -170,14 +172,15 @@ export default {
   },
   methods: {
     addReview(){
-      console.log(this.review)
       var meetup = this.$route.params;
       this.review.category = meetup.category;
       this.review.meetupId = meetup.id;
+      this.review.restId = meetup.restId;
       axios
         .put(`${SERVER_URL}/review`, this.review)
         .then((response) => {
-          console.log(response);
+          alert("리뷰가 등록되었습니다.");
+          this.$router.go(-1);
         })
         .catch((error) => {
           console.log(error.response);

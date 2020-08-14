@@ -2,8 +2,11 @@ package com.web.curation.controller.restaurant;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dao.restaurant.RestaurantDao;
+import com.web.curation.dao.restaurant.ReviewDao;
 import com.web.curation.model.BasicResponse;
+import com.web.curation.model.meetup.Meetup;
 import com.web.curation.model.review.Restaurant;
+import com.web.curation.model.review.Review;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -33,6 +39,9 @@ public class RestaurantController {
 
 	@Autowired
 	RestaurantDao restDao;
+	
+	@Autowired
+	ReviewDao reviewDao;
 
 	@PostMapping("/rest")
 	@ApiOperation(value = "[음식점] 음식점테이블에 음식점 정보 입력 후 입력된 restid 반환")
@@ -112,19 +121,39 @@ public class RestaurantController {
 		return restScrapCount;
 	}
 	
+	@GetMapping("/rest/review/{restId}")
+	@ApiOperation(value = "[음식점] restId에 해당하는 음식점의 리뷰 리스트 가져오기")
+	public Object getReviews(@PathVariable int restId) {
+		System.out.println(restId);
+		final BasicResponse result = new BasicResponse();
+		Optional<List<Review>> reviews = reviewDao.findAllById(restId);
+		// 리뷰가 있다면
+		if(reviews.isPresent()) {
+			result.status = true;
+			result.data = "success";
+			result.object = reviews;
+		}
+		// 데이터가 있다면
+		else {
+			result.status = true;
+			result.data = "NO DATA";
+		}
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
 	@PutMapping("/rest/review/{restId}")
 	@ApiOperation(value = "[음식점] 음식점 리뷰갯수 +1 뒤 해당 음식점의 리뷰 갯수 리턴")
-	public String updateReview(@PathVariable String restid) {
-		restDao.updateRestReview(restid);
-		String restReviewCount = restDao.selectByRestId(restid).getReview();
+	public String updateReview(@PathVariable String restId) {
+		restDao.updateRestReview(restId);
+		String restReviewCount = restDao.selectByRestId(restId).getReview();
 		return restReviewCount;
 	}
 	
 	@DeleteMapping("/rest/review/{restId}")
 	@ApiOperation(value = "[음식점] 음식점 리뷰갯수 -1 뒤 해당 음식점의 리뷰 갯수 리턴")
-	public String updateReviewM(@PathVariable String restid) {
-		restDao.updateRestReviewM(restid);
-		String restReviewCount = restDao.selectByRestId(restid).getReview();
+	public String updateReviewM(@PathVariable String restId) {
+		restDao.updateRestReviewM(restId);
+		String restReviewCount = restDao.selectByRestId(restId).getReview();
 		return restReviewCount;
 	}
 }

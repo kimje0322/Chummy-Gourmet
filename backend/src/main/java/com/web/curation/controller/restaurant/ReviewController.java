@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -98,24 +99,37 @@ public class ReviewController {
 		return map;
 	}
 
-	// 리뷰 상세페이지 검색
-	@GetMapping("/review/searchcomment")
-	@ApiOperation(value = "리뷰 상세페이지")
-	public Map<String, Object> searchReviewComment(@RequestParam(required = true) int id) {
-		// 1. 리뷰id 입력받음
-		// 2. 리뷰 아이디로 리뷰 객체 가져오기 // 없어도됨
-		// 3. 리뷰 아이디로 밋업 객체 가져오기
-		// 4. 리뷰아이디로 파티원 객체 가져오기 //없어도됨
-		// 5. 리뷰 아이디로 파티원 코멘트 가져오기
+	// 리뷰 추가
+	@PutMapping("/review/comment")
+	@ApiOperation(value = "리뷰 작성")
+	public Object addReviewComment(@RequestBody ReviewComment comment) {
+		final BasicResponse result = new BasicResponse();
+		System.out.println(comment);
+		reviewCommentDao.save(comment); 
 
-		System.out.println("들어왓니?");
-		Optional<Meetup> meetUp = meetUpDao.selectMeetUpById(id);
-		List<ReviewComment> comment = reviewCommentDao.selectReviewCommentByReviewId(id);
-		System.out.println(meetUp.get());
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("meetup", meetUp);
-		map.put("comment", comment);
-		return map;
-
+		result.status = true;
+		result.data = "success";
+		
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+	
+	// 리뷰에 달린 댓글 검색
+	@GetMapping("/review/comment/{reviewId}")
+	@ApiOperation(value = "review id에 해당하는 리뷰에 달린 댓글 리스트 조회")
+	public Object searchReviewComment(@PathVariable String reviewId) {
+		final BasicResponse result = new BasicResponse();
+		Optional<List<ReviewComment>> comments = reviewCommentDao.findAllByReviewId(reviewId);
+		
+		if(comments.isPresent()) {
+			result.status = true;
+	        result.data = "success";
+	        result.object = comments.get();;
+		}else {
+			result.status = true;
+	        result.data = "fail";
+		}
+		return result;
+	}
+	
+
 }

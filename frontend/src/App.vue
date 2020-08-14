@@ -99,21 +99,21 @@ export default {
   name: "app",
   methods: {
     gotomap() {
-      router.push({ path: '/map' })
+      router.push({ path: '/map' }).catch(()=>{});
     },
     gotonewsfeed() {
-      router.push({ path: '/newsfeed' })
+      router.push({ path: '/newsfeed' }).catch(()=>{});
       
     },
     gotofeedadd() {
-      router.push({ path: '/feed/add' })
+      router.push({ path: '/feed/add' }).catch(()=>{});
       
     },
     gotocurator() {
-      router.push({ path: '/curator' })
+      router.push({ path: '/curator' }).catch(()=>{});
     },
     gotouserinfo() {
-      router.push({ path: '/user/info' })
+      router.push({ path: '/user/info' }).catch(()=>{});
 
     },
       // onClickImageUpload() {

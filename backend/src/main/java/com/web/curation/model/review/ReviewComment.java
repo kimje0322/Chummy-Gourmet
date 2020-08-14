@@ -17,60 +17,62 @@ import lombok.NoArgsConstructor;
 public class ReviewComment {
 
 	@Id
+	@Column(name = "comment_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "no")
-	private String no;
-
+	private String id;
+	@Column(name = "comment_writer")
+	private String writer;
+	@Column(name = "comment_content")
+	private String content;
+	@Column(name = "comment_date")
+	private String date;
 	@Column(name = "review_id")
-	private String reviewid;
-	@Column(name = "user_id")
-	private String userid;
-	@Column(name = "review_comment")
-	private String comment;
-	@Column(name = "user_nickname")
-	private String nickname;
+	private String reviewId;
 
-	public String getReviewid() {
-		return reviewid;
+	public String getId() {
+		return id;
 	}
 
-	public void setReviewid(String reviewid) {
-		this.reviewid = reviewid;
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	public String getUserid() {
-		return userid;
+	public String getWriter() {
+		return writer;
 	}
 
-	public void setUserid(String userid) {
-		this.userid = userid;
+	public void setWriter(String writer) {
+		this.writer = writer;
 	}
 
-	public String getComment() {
-		return comment;
+	public String getContent() {
+		return content;
 	}
 
-	public void setComment(String comment) {
-		this.comment = comment;
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	public String getReviewId() {
+		return reviewId;
+	}
+
+	public void setReviewId(String reviewId) {
+		this.reviewId = reviewId;
 	}
 
 	@Override
 	public String toString() {
-		return "ReviewComment [reviewid=" + reviewid + ", userid=" + userid + ", comment=" + comment + "]";
+		return "ReviewComment [id=" + id + ", writer=" + writer + ", content=" + content + ", date=" + date
+				+ ", reviewId=" + reviewId + "]";
 	}
-
-	public String getNickname() {
-		return nickname;
-	}
-
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
-//
-//	@Override
-//	public String toString() {
-//		return "ReviewComment [reviewid=" + reviewid + ", userid=" + userid + ", comment=" + comment + ", nickname="
-//				+ nickname + "]";
-//	}
 
 }

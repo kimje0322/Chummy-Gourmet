@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.web.curation.model.review.Restaurant;
+import com.web.curation.model.review.Review;
 import com.web.curation.model.user.User;
 
 public interface RestaurantDao extends JpaRepository<Restaurant, String> {
@@ -81,7 +82,7 @@ public interface RestaurantDao extends JpaRepository<Restaurant, String> {
 	// 감소 증가
 	@Query(value = "update restaurant set rest_review = rest_review-1 where rest_id = :restid", nativeQuery = true)
 	void updateRestReviewM(String restid);
-	
+
 
 	
 }

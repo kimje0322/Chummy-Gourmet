@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dao.meetup.MeetUpDao;
+import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.meetup.Meetup;
+import com.web.curation.model.user.User;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -35,6 +37,9 @@ public class MeetUpController {
 
 	@Autowired
 	MeetUpDao meetupDao;
+	
+	@Autowired
+	UserDao userDao;
 	
 	//밋업 정보 조회
 	@GetMapping("/meetup/search")
@@ -77,9 +82,26 @@ public class MeetUpController {
 		return result;
 	}
 	
+	// 밋업 아이디로 밋업 멤버 리스트 조회
+	@GetMapping("/meetup/members/{meetupId}")
+	@ApiOperation(value = "meetupId로 해당 밋업의 멤버 리스트 조회 | success | fail")
+	public Object findAllByMeetupId(@PathVariable int meetupId) {
+		final BasicResponse result = new BasicResponse();
+		Optional<List<User>> data = userDao.findMembersByMeetupId(meetupId);
+		if(data.isPresent()) {
+			result.status = true;
+	        result.data = "success";
+	        result.object = data.get();;
+		}else {
+			result.status = true;
+	        result.data = "fail";
+		}
+		return result;
+	}
+	
 	//해당 지역의 밋업 정보 조회
-	@GetMapping("/meetup/search/{location}")
-	@ApiOperation(value = "해당 지역의 밋업 정보 조회")
+	@GetMapping("/meetup/search/location/{location}")
+	@ApiOperation(value = "해당 지역의 밋업 정보 조회 | success | fail")
 	public Object searchMeetUp(@PathVariable String location) {
 		final BasicResponse result = new BasicResponse();
 		List<Meetup> data = meetupDao.selectMeetUpByLocation(location.split(" ")[0],location.split(" ")[1]);

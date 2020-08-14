@@ -24,10 +24,17 @@
         </v-toolbar>
       </v-toolbar-title>
 
+      <div v-if="postlst.length==0" class="nofeed" style="text-align: center;">
+        <i class="far fa-images fa-5x"></i>
+        <p style="font-size:1.1rem; margin-top:15px">다른 사람을 팔로우하면 <br>상대방의 피드를 확인할 수 있습니다.</p>
+        <router-link to="/SearchUser"><v-btn color="warning" style="width: 60%">유저 보기</v-btn></router-link>
+
+      </div>
+
       <div style="flex-direction: column; padding-bottom: 5600px; padding-top: 0px">
         <!-- <span v-for="(n, i) in 10" :key="i">{{ n }} </span> -->
         <!-- <p>dkfjdlf=adfldfa;lkdfj;lkj</p> -->
-
+          
         <article v-for="(lst, i) in postlst" :key="i">
           <!-- <p>{{ lst.postid }}</p> -->
           <div role="button" tabindex="-1">
@@ -221,6 +228,8 @@
             <!-- <p>{{ lst.postcontent }}</p> -->
           </div>
         </article>
+
+
       </div>
     </v-app>
   </section>
@@ -232,6 +241,7 @@ import router from "@/routes";
 import Vue from "vue";
 import vueMoment from "vue-moment";
 import CreateChat from "../../components/common/CreateChat";
+
 
 Vue.use(vueMoment);
 
@@ -322,6 +332,7 @@ export default {
                   return -1 * (a[1] - b[1]);
                 });
                 this.postlst = posts;
+                
                 this.commentlst = response.data.comment;
                 console.log("mentlst : " + response.data.comment);
               })
@@ -737,4 +748,9 @@ export default {
   padding: 0;
   position: relative;
 } */
+
+.nofeed {
+  margin: 120px 0 0 0;
+  text-align: center;
+}
 </style>

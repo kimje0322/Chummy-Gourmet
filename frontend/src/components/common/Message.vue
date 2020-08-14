@@ -36,7 +36,7 @@
       </v-row>
     <!-- 스크랩 없을 때 -->
     <div v-if="items.length == 0" class="aligncss"> 
-      <i class="fas fa-utensils fa-5x"></i>
+      <i class="fas fa-utensils fa-6x"></i>
       <h3 class="mt-5">스크랩한 음식점이 없습니다.</h3>
     </div>
   </v-layout>

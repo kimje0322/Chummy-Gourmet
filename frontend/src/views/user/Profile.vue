@@ -30,27 +30,27 @@
   </v-layout>
 
   <!-- dialog -->
-      <v-dialog
-        dark
-        v-model="dialog"
-        max-width="190"
-        >
-        <v-list v-if="realInterests.length > 0"> 
-          <v-list-item
-          v-for="(interest, index) in realInterests"
-          :key="index"
-          >
-          <v-list-item-title># {{ interest }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-        <v-list v-else>
-          <h4 class="noInterest">
-            <!-- <i class="far fa-surprise"></i>
-            <span style="margin: 0 1px"></span> -->
-            등록된 관심사가 없습니다.
-          </h4>
-        </v-list>
-      </v-dialog>
+  <v-dialog
+    dark
+    v-model="dialog"
+    max-width="190"
+    >
+    <v-list v-if="realInterests.length > 0"> 
+      <v-list-item
+      v-for="(interest, index) in realInterests"
+      :key="index"
+      >
+      <v-list-item-title># {{ interest }}</v-list-item-title>
+      </v-list-item>
+    </v-list>
+    <v-list v-else>
+      <h4 class="noInterest">
+        <!-- <i class="far fa-surprise"></i>
+        <span style="margin: 0 1px"></span> -->
+        등록된 관심사가 없습니다.
+      </h4>
+    </v-list>
+  </v-dialog>
 
 
   <v-layout class="entireClass">
@@ -75,6 +75,12 @@
               </v-img>
           </v-card>
       </v-col>
+
+      <!-- 피드 없을 때 -->
+      <div v-if="postlst.length == 0" class="aligncss"> 
+        <i class="far fa-file-image fa-5x"></i>
+        <h3 class="mt-5">등록된 게시물이 없습니다.</h3>
+      </div>
       </v-row>
   </v-layout>
   </div>

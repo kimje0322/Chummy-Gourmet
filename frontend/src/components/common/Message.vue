@@ -133,7 +133,7 @@ export default {
   }
 
   .aligncss {
-    margin: 70px 0 0 0;
+    margin: 100px 0 0 0;
     color: rgba(0,0,0,.6);
     width: 100%;
     text-align: center;

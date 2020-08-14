@@ -58,7 +58,7 @@
             </div>
 
             <!-- 밋업 없을 때 --> 
-            <div v-else style="margin-top:70px;text-align: center;"> 
+            <div v-else style="margin-top:100px;text-align: center;"> 
               <i class="fab fa-meetup fa-6x"></i>
               <h3 class="mt-5">등록된 Meetup이 없습니다.</h3>
             </div>

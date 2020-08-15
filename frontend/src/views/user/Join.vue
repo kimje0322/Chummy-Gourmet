@@ -34,7 +34,7 @@
                 @input="hint.nickName=''"
               >
                 <template v-slot:append>
-                  <v-btn ref="button1" @click="checkNicknameAndEmail" class="ml-2 px-0" color="blue-grey lighten-1" style="top:-9px;" height="40" width="30" tile>
+                  <v-btn ref="button1" @click="checkNickname" class="ml-2 px-0" color="blue-grey lighten-1" style="top:-9px;" height="40" width="30" tile>
                     <label class="my-0 white--text text-caption">중복확인</label>
                   </v-btn>
                 </template>
@@ -54,7 +54,7 @@
                 @input="hint.email=''"
               >
                 <template v-slot:append>
-                  <v-btn @click="checkNicknameAndEmail" class="ml-2 px-0" color="blue-grey lighten-1" style="top:-9px;" height="40" width="30" tile>
+                  <v-btn @click="checkEmail" class="ml-2 px-0" color="blue-grey lighten-1" style="top:-9px;" height="40" width="30" tile>
                     <label class="my-0 white--text text-caption">중복확인</label>
                   </v-btn>
                 </template>
@@ -191,24 +191,41 @@ export default {
     };
   },
   methods: {
-    checkNicknameAndEmail(){
+    checkNickname(){
        axios
         .get(`${SERVER_URL}/account/signup/valid?nickname=${this.nickName}&email=${this.email}`)
         .then(response => {
-          // data : success / isExistEmail / isExistNickname
+          // data : success / isExistNickname
           var data = response.data.data;
-          if(data == "success"){
-            this.error.email = '';
-            this.error.nickName = '';
-            this.hint.nickName = "사용가능한 닉네임입니다."
-            this.hint.email = "사용가능한 이메일입니다."
-          }
-          else if (data == "isExistEmail") {
-            this.error.email =
-              "사용중인 이메일입니다. 다른 이메일을 입력해주세요.";
-          } else if (data == "isExistNickname") {
+          console.log(data);
+          if (data == "isExistNickname") {
             this.error.nickName =
               "사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.";
+          }
+          else{
+            this.error.nickName = '';
+            this.hint.nickName = "사용가능한 닉네임입니다."
+          }
+        })
+        .catch(error => {
+          console.log(error.response);
+        });
+    },
+    checkEmail(){
+       axios
+        .get(`${SERVER_URL}/account/signup/valid?nickname=${this.nickName}&email=${this.email}`)
+        .then(response => {
+          // data : success / isExistEmail
+          var data = response.data.data;
+          console.log(data);
+
+          if (data == "isExistEmail") {
+            this.error.email =
+              "사용중인 이메일입니다. 다른 이메일을 입력해주세요.";
+          }
+          else{
+            this.error.email = '';
+            this.hint.email = "사용가능한 이메일입니다."
           }
         })
         .catch(error => {
@@ -217,7 +234,15 @@ export default {
     },
     checkFormAndSignUp() {
       // 모든 폼들의 유효성 검사가 됐다면
-      if(this.$refs.form.validate()){
+      if(this.hint.nickName == ''){
+        this.error.nickName = "닉네임 중복확인 해주세요"
+        return;
+      }
+      else if(this.hint.email == ''){
+        this.error.email = "이메일 중복확인 해주세요"
+        return;
+      }
+      else if(this.$refs.form.validate()){
         let userInfo = {
           email: this.email,
           password: this.password,

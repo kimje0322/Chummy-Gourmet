@@ -104,15 +104,14 @@
             </v-list-item-avatar>
 
             <v-list-item-content>
-            <!-- <v-list-item-title @click="gotoProfile(user)" v-text="user.followingNickname"></v-list-item-title> -->
             <a
-                class="pf-n-a"
-                tabindex="0"
-                style="color: black; font-weight: 600;" 
-                @click="gotoProfile(user)"
-                >
-                  {{user.followingNickname}}
-                </a>
+            class="pf-n-a"
+            tabindex="0"
+            style="color: black; font-weight: 600;" 
+            @click="gotoProfile(user)"
+            >
+              {{user.followingNickname}}
+            </a>
             </v-list-item-content>
 
             <v-btn depressed @click="unFollow(user,i,'followinglist')">
@@ -303,7 +302,6 @@ export default {
             `${SERVER_URL}/userpage/deletefollowingRequest?anotherId=`+this.anotherId+`&userId=`+this.userId
           )
           .then((response) => {
-            console.log('팔로우취소완료')
           })
           .catch((error) => {
             console.log(error.response);
@@ -316,7 +314,6 @@ export default {
         `${SERVER_URL}/userpage/insertfollowingRequest?followerId=`+user.followerId+`&userId=`+this.userId
       )
       .then((response) => {
-        console.log('팔로우성공')
       })
       .catch((error) => {
           console.log(error.response);

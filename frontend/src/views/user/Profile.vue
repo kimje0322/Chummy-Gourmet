@@ -2,7 +2,7 @@
   <div>
     <!-- Profile -->
     <v-toolbar dark>
-      <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
+       <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
       <p class="my-auto">Profile</p>
       <v-spacer></v-spacer>
     </v-toolbar>
@@ -14,7 +14,32 @@
       </v-list-item-avatar>
       {{ userNickname }}
       <v-spacer></v-spacer>
-        <v-btn depressed @click="show">관심사</v-btn>
+      <v-menu offset-y>
+        <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          depressed
+          v-bind="attrs"
+          v-on="on"
+        >
+          관심사
+        </v-btn>
+      </template>
+      <v-list  dark v-if="realInterests.length > 0"> 
+          <v-list-item
+          v-for="(interest, index) in realInterests"
+          :key="index"
+          >
+          <v-list-item-title># {{ interest }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+        <v-list dark v-else>
+          <h4 class="noInterest">
+            <!-- <i class="far fa-surprise"></i>
+            <span style="margin: 0 1px"></span> -->
+            등록된 관심사가 없습니다.
+          </h4>
+        </v-list>
+      </v-menu>
       <v-spacer></v-spacer>
         <v-btn color="primary"  @click="onFollow()" v-if="followerFollowing === 'false'">
             팔로우
@@ -26,33 +51,9 @@
             팔로잉
         </v-btn>
       <v-spacer></v-spacer>
+      <CreateChat :postuserid="this.anotherId" />
     </v-toolbar>
   </v-layout>
-
-  <!-- dialog -->
-  <v-dialog
-    dark
-    v-model="dialog"
-    max-width="190"
-    >
-    <v-list v-if="realInterests.length > 0"> 
-      <v-list-item
-      v-for="(interest, index) in realInterests"
-      :key="index"
-      >
-      <v-list-item-title># {{ interest }}</v-list-item-title>
-      </v-list-item>
-    </v-list>
-    <v-list v-else>
-      <h4 class="noInterest">
-        <!-- <i class="far fa-surprise"></i>
-        <span style="margin: 0 1px"></span> -->
-        등록된 관심사가 없습니다.
-      </h4>
-    </v-list>
-  </v-dialog>
-
-
   <v-layout class="entireClass">
       <v-row>
       <v-col v-for="(lst,i) in postlst" :key="i" class="d-flex child-flex" cols="4">
@@ -90,9 +91,13 @@
 
 const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 // const SERVER_URL = "https://localhost:8080";
+import CreateChat from "../../components/common/CreateChat";
 
 import axios from "axios";
 export default {
+  components: {
+    CreateChat,
+  },
   data() {
     return {
       anotherId:"",
@@ -111,9 +116,6 @@ export default {
     }
   },
   methods :{
-    show() {
-      this.dialog = true;
-    },
     detailInfo(post,comment) {
       let users = {
       userId: this.anotherId,
@@ -132,7 +134,6 @@ export default {
             `${SERVER_URL}/userpage/deletefollowingRequest?anotherId=`+this.anotherId+`&userId=`+this.userId
           )
           .then((response) => {
-            console.log('팔로우취소완료')
           })
           .catch((error) => {
             console.log(error.response);
@@ -145,7 +146,6 @@ export default {
         `${SERVER_URL}/userpage/insertfollowingRequest?followerId=`+this.anotherId+`&userId=`+this.userId
       )
       .then((response) => {
-        console.log('팔로우성공')
       })
       .catch((error) => {
           console.log(error.response);
@@ -158,7 +158,6 @@ export default {
           `${SERVER_URL}/userpage/deletefollowing?anotherId=`+this.anotherId+`&userId=`+this.userId
         )
         .then((response) => {
-          console.log("언팔로우 성공")
         })
         .catch((error) => {
           console.log(error.response);
@@ -207,7 +206,6 @@ export default {
       axios 
       .get(`${SERVER_URL}/userpage/getuserInfo?userId=`+this.anotherId)
          .then((response) => {
-           console.log(response.data)
             var tmp = response.data.userInterest.replace('[','').replace(']',''); 
             var s = "";
             for (let i = 0; i < tmp.length; i++) {

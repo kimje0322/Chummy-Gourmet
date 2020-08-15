@@ -44,7 +44,14 @@
                 </v-list-item-avatar>
                 
                 <v-list-item-content>
-                <v-list-item-title @click="gotoProfile(user)" v-text="user.followerNickname"></v-list-item-title>
+                <a
+                class="pf-n-a"
+                tabindex="0"
+                style="color: black; font-weight: 600;" 
+                @click="gotoProfile(user)"
+                >
+                  {{user.followerNickname}}
+                </a>
                 <!-- 이름 표기 -->
                 <!-- <v-list-item-title v-text="user.followingName"></v-list-item-title> -->
                 </v-list-item-content>
@@ -97,7 +104,15 @@
             </v-list-item-avatar>
 
             <v-list-item-content>
-            <v-list-item-title @click="gotoProfile(user)" v-text="user.followingNickname"></v-list-item-title>
+            <!-- <v-list-item-title @click="gotoProfile(user)" v-text="user.followingNickname"></v-list-item-title> -->
+            <a
+                class="pf-n-a"
+                tabindex="0"
+                style="color: black; font-weight: 600;" 
+                @click="gotoProfile(user)"
+                >
+                  {{user.followingNickname}}
+                </a>
             </v-list-item-content>
 
             <v-btn depressed @click="unFollow(user,i,'followinglist')">

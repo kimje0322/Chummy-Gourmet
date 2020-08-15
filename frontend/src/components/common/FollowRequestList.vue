@@ -26,7 +26,13 @@
         </v-list-item-avatar>
 
         <v-list-item-content @click="showUser(item)">
-          <v-list-item-title>{{item.followingRequestNickname}}</v-list-item-title>
+          <a
+          class="pf-n-a"
+          tabindex="0"
+          style="color: black; font-weight: 600;" 
+          >
+            {{item.followingRequestNickname}}
+          </a>
         </v-list-item-content>
 
         <v-list-item-icon @click="acceptFollowing(item.followingRequestId)">

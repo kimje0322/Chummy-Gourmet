@@ -7,6 +7,9 @@
         <p class="my-auto">profile 수정</p>
         <v-spacer></v-spacer>
         <v-spacer></v-spacer>
+        <a @click="checkForm">
+          <i class="fas fa-check"></i>
+        </a>
       </v-toolbar>
     </v-toolbar-title>
     
@@ -113,13 +116,6 @@
         hide-details
         outlined>
       </v-text-field>
-
-      <v-btn
-        block dark
-        @click="checkForm"
-      >
-        프로필 수정
-      </v-btn>
     </v-content>
     </v-layout>
     </div>
@@ -174,7 +170,6 @@ export default {
 
       .then((response) => {
         this.userImg = response.data;
-        console.log(this.userImg);
         this.addImg();
       })
 
@@ -248,7 +243,6 @@ export default {
         `${SERVER_URL}/userpage/getuser?userId=${this.$cookie.get("userId")}`
       )
       .then((response) => {
-        console.log(response.data);
         this.user = response.data;
         this.userNickname = this.user.userNickname;
         this.userPwd = this.user.userPWd;
@@ -256,7 +250,6 @@ export default {
         this.userImg = this.user.userImg;
         this.userId = this.$cookie.get("userId");
         this.viewImg = SERVER_URL+"/img/user?imgname="+this.userImg;
-        console.log("userImg : "+this.viewImg);
       })
       .catch((error) => {
         console.log(error.response);

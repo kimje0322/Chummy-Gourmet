@@ -3,14 +3,14 @@
     <v-system-bar lights-out></v-system-bar>
 
     <v-carousel :continuous="false" show-arrows hide-delimiter-background height="300">
-      <v-carousel-item v-for="index of 5" :key="index">
+      <!-- <v-carousel-item v-for="index of 5" :key="index"> -->
         <v-img
           src="https://img.siksinhot.com/place/1485274468095571.jpg?w=307&h=300&c=Y"
           class="white--text align-end"
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
           height="100%"
         ></v-img>
-      </v-carousel-item>
+      <!-- </v-carousel-item> -->
     </v-carousel>
     <v-expansion-panels accordion multiple hover>
       <v-expansion-panel>
@@ -57,7 +57,7 @@
                 <v-icon color="indigo">mdi-account-group-outline</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title v-for="(member,index) in members" :key="index">@{{member}}</v-list-item-title>
+                <v-list-item-title v-for="(member) in members" :key="member">@{{member}}</v-list-item-title>
                 <!-- <v-list-item-title v-if="restaurant.telphone" v-text="restaurant.telphone"></v-list-item-title> -->
                 <!-- <v-list-item-subtitle>Mobile</v-list-item-subtitle> -->
               </v-list-item-content>
@@ -84,7 +84,7 @@
           <v-spacer></v-spacer>
           <v-card class="mx-auto" max-width="400">
             <v-card-title>
-              <span class="title font-weight-bold">고기 맛있게 먹었습니다.</span>
+              <span class="title font-weight-bold">{{review.title}}</span>
             </v-card-title>
 
             <v-card-text class="headline font-weight-bold" v-text="review.content"></v-card-text>
@@ -107,30 +107,34 @@
           </v-card>
 
           <v-list>
-            <template v-for="(comment, index) in comments">
-              <v-divider :key="index"></v-divider>
-              <v-subheader v-if="comment.header" :key="comment.header" v-text="comment.header"></v-subheader>
-              <v-divider v-else-if="comment.divider" :key="index" :inset="comment.inset"></v-divider>
-              <v-list-item v-else :key="index">
+            <template v-for="(comment, i) of comments">
+              <v-divider :key="comment.id"></v-divider>
+              <v-list-item :key="comment.writer">
                 <v-list-item-avatar>
-                  <v-img :src="imgs[index]" />
+                  <v-img :src="imgs[i]" />
                 </v-list-item-avatar>
 
                 <v-list-item-content>
-                  <!-- <v-list-item-title v-html="comment.comment"></v-list-item-title> -->
-                  <!-- <v-list-item-sXbtitle v-html="review.subtitle"></v-list-item-subtitle> -->
                   <v-list-item-title>
-                    {{comment.comment}}
-                    <!-- <span
-                        class="text-caption grey--text text--lighten-1"
-                        style="float:right;"
-                    >2020-07-30</span>-->
+                    {{comment.content}}
                   </v-list-item-title>
-                  <v-list-item-subtitle>2020-07-30</v-list-item-subtitle>
+                  <v-list-item-subtitle>
+                    {{comment.date}}
+                  </v-list-item-subtitle>
                 </v-list-item-content>
+                
               </v-list-item>
             </template>
           </v-list>
+
+          <v-divider></v-divider>
+          <v-text-field
+            v-model="comment"
+            placeholder="댓글을 입력하세요.." solo
+            rounded dense clearable append-outer-icon="mdi-arrow-up-thick"
+            @keyup.enter="writeComment"
+            @click:append-outer="writeComment"
+          ></v-text-field>
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
@@ -142,7 +146,7 @@ import axios from "axios";
 import router from "@/routes";
 
 const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-// const SERVER_URL = "http://localhost:8080";
+// const SERVER_URL = "https://localhost:8080";
 
 export default {
   data() {
@@ -152,6 +156,7 @@ export default {
       meetup: "",
       members: [],
       comments: [],
+      comment : '',
       imgs: [
         "https://cdn.vuetifyjs.com/images/lists/1.jpg",
         "https://cdn.vuetifyjs.com/images/lists/2.jpg",
@@ -162,23 +167,40 @@ export default {
     };
   },
   created() {
-    this.members = this.$route.params.members;
     this.review = this.$route.params.review;
-    console.log(this.members);
-    console.log(this.review);
+    this.getComments();
+  },
+  methods : {
+    getComments(){
     axios
-      .get(`${SERVER_URL}/review/searchcomment?id=${this.review.id}`)
-
+      .get(`${SERVER_URL}/review/comment/${this.review.id}`)
       .then((response) => {
         console.log(response.data);
-        this.meetup = response.data.meetup;
-        this.comments = response.data.comment;
+        this.comments = response.data.object;
       })
-
       .catch((error) => {
         console.log(error.response);
-        alert("로그인 실패");
       });
+    },
+    writeComment() {
+      var newComment = {
+        writer : 70,
+        content : this.comment,
+        reviewId : this.review.id,
+      };
+      axios
+        .put(`${SERVER_URL}/review/comment`, newComment)
+        .then((response) => {
+          console.log(response.data);
+          this.getComments();
+          this.comment = "";
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
+
+    },
+
   },
 };
 </script>

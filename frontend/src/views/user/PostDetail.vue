@@ -11,136 +11,124 @@
           <p class="my-auto">게시물</p>
           <v-spacer></v-spacer>
           <v-spacer></v-spacer>
-
         </v-toolbar>
       </v-toolbar-title>
-          <!-- <p>{{ lst.postid }}</p> -->
-          <div role="button" tabindex="-1">
-            <div class="hc1 hc2" style="postion: relative; padding-right: 17px;">
-              <div class="hc-d1" tabindex="-1">
-                <a class="a-img1 a-img2" href="#" tabindex="0" style="width: 32px; height: 32px;">
-                  <img
-                    style="height: 100%; width: 100%;"
-                    :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+this.postlst.user_img"
-                  />
-                </a>
-              </div>
-              <div class="pf">
-                <div>
-                  <div class="pf-n">
-                    <a
-                      class="pf-n-a"
-                      href="#"
-                      tabindex="0"
-                      style="color: black; font-weight: 600;"
-                    >{{this.postlst.user_nickname}}</a>
-                    <div style="float: right; margin-left:190px; ">
-                      <button @click="dialog = true" v-show="show">
-                        <div style="padding: 2px; width: 24px; height: 24px;">
-                          <i class="fas fa-ellipsis-v"></i>
-                        </div>
-                      </button>
-                      <v-dialog
-                        dark
-                        v-model="dialog"
-                        max-width="190"
-                        >
-                        <v-list> 
-                            <v-list-item
-                            v-for="(item, index) in items"
-                            :key="index"
-                            @click="doit(item)"
-                            >
-                            <v-list-item-title>{{ item.title }}</v-list-item-title>
-                            </v-list-item>
-                        </v-list>
-                        </v-dialog>
+      <!-- <p>{{ lst.postid }}</p> -->
+      <div role="button" tabindex="-1">
+        <div class="hc1 hc2" style="postion: relative; padding-right: 17px;">
+          <div class="hc-d1" tabindex="-1">
+            <a class="a-img1 a-img2" href="#" tabindex="0" style="width: 32px; height: 32px;">
+              <img
+                style="height: 100%; width: 100%;"
+                :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+this.postlst.user_img"
+              />
+            </a>
+          </div>
+          <div class="pf">
+            <div>
+              <div class="pf-n">
+                <a
+                  class="pf-n-a"
+                  href="#"
+                  tabindex="0"
+                  style="color: black; font-weight: 600;"
+                >{{this.postlst.user_nickname}}</a>
+                <div style="float: right; margin-left:190px; ">
+                  <button @click="dialog = true" v-show="show">
+                    <div style="padding: 2px; width: 24px; height: 24px;">
+                      <i class="fas fa-ellipsis-v"></i>
                     </div>
-                  </div>
+                  </button>
+                  <v-dialog dark v-model="dialog" max-width="190">
+                    <v-list>
+                      <v-list-item v-for="(item, index) in items" :key="index" @click="doit(item)">
+                        <v-list-item-title>{{ item.title }}</v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-dialog>
                 </div>
               </div>
             </div>
           </div>
-        <img 
+        </div>
+      </div>
+      <img
         style="height: 350px;"
         :src="`https://i3b302.p.ssafy.io:8080/img/post?imgname=`+this.postlst.post_img_url"
         class="fc-img"
-        />
-          <div class="fb">
-            <section class="func">
-              <span class="heart">
-                <button class="heart-btn">
-                  <div style="border: 0" class="heart-div">
-                    <span style="margin: 0; height: 24px; width: 24px;">
-                      <i
-                        style="display: block; position: relative; height: 24px; width: 24px;"
-                        class="far fa-heart"
-                      ></i>
-                    </span>
-                  </div>
-                </button>
-              </span>
-              <span style="display: inline-block;">
-                <button
-                  @click="onComment(this.postlst.post_id, this.postlst.user_nickname, this.postlst.post_content,this.postlst.user_img)"
-                  style="background: 0 0; border: 0; display: flex; padding: 8px;"
-                >
-                  <div>
-                    <i
-                      style="display: block; position: relative; height: 24px; width: 24px;"
-                      class="far fa-comment"
-                    ></i>
-                    <!-- </div> -->
-                    <!-- </router-link> -->
-                  </div>
-                </button>
-              </span>
-              <span style="display: inline-block;">
-                <button style="background: 0 0; border: 0; display: flex; padding: 8px;">
-                  <div>
-                    <i
-                      style="display: block; position: relative; height: 24px; width: 24px;"
-                      class="far fa-paper-plane"
-                    ></i>
-                  </div>
-                </button>
-              </span>
-            </section>
-            <section style="height: 17.6px; margin-bottom: 8px;">
-              <div style="flex: 1 1 auto;">
-                <p style="font-weight: 600;">
-                  좋아요
-                  <span>{{ this.postlst.post_like }}</span>
-                  개
-                </p>
+      />
+      <div class="fb">
+        <section class="func">
+          <span class="heart">
+            <button class="heart-btn">
+              <div style="border: 0" class="heart-div">
+                <span style="margin: 0; height: 24px; width: 24px;">
+                  <i
+                    style="display: block; position: relative; height: 24px; width: 24px;"
+                    class="far fa-heart"
+                  ></i>
+                </span>
               </div>
-            </section>
-
-            <div style="margin-bottom: 4px;">
+            </button>
+          </span>
+          <span style="display: inline-block;">
+            <button
+              @click="onComment(this.postlst.post_id, this.postlst.user_nickname, this.postlst.post_content,this.postlst.user_img)"
+              style="background: 0 0; border: 0; display: flex; padding: 8px;"
+            >
               <div>
-                <div>
-                  <div>
-                    <a
-                      style="text-decoration: none; font-weight: 600; font-size: 14px; padding-left: 5px; color: rgba(var(--i1d,38,38,38),1)"
-                      href="#"
-                    >{{this.postlst.user_nickname}}</a>&nbsp;
-                    <span>{{ this.postlst.post_content }}</span>
-                  </div>
-                </div>
-                <div>
-                  <div style="marign-bottom: 4px; padding-left: 5px;">
-                    <a
-                      style="font-size: 14px; font-weight: 400; color: #8e8e8e;"
-                      @click="onComment()"
-                    >
-                      댓글
-                      <span>{{this.commentlst}}</span>개 모두 보기
-                    </a>
-                  </div>
-                </div>
+                <i
+                  style="display: block; position: relative; height: 24px; width: 24px;"
+                  class="far fa-comment"
+                ></i>
+                <!-- </div> -->
+                <!-- </router-link> -->
+              </div>
+            </button>
+          </span>
+          <span style="display: inline-block;">
+            <button style="background: 0 0; border: 0; display: flex; padding: 8px;">
+              <div>
+                <i
+                  style="display: block; position: relative; height: 24px; width: 24px;"
+                  class="far fa-paper-plane"
+                ></i>
+              </div>
+            </button>
+          </span>
+        </section>
+        <section style="height: 17.6px; margin-bottom: 8px;">
+          <div style="flex: 1 1 auto;">
+            <p style="font-weight: 600;">
+              좋아요
+              <span>{{ this.postlst.post_like }}</span>
+              개
+            </p>
+          </div>
+        </section>
+
+        <div style="margin-bottom: 4px;">
+          <div>
+            <div>
+              <div>
+                <a
+                  style="text-decoration: none; font-weight: 600; font-size: 14px; padding-left: 5px; color: rgba(var(--i1d,38,38,38),1)"
+                  href="#"
+                >{{this.postlst.user_nickname}}</a>&nbsp;
+                <span>{{ this.postlst.post_content }}</span>
+              </div>
+            </div>
+            <div>
+              <div style="marign-bottom: 4px; padding-left: 5px;">
+                <a style="font-size: 14px; font-weight: 400; color: #8e8e8e;" @click="onComment()">
+                  댓글
+                  <span>{{this.commentlst}}</span>개 모두 보기
+                </a>
               </div>
             </div>
           </div>
+        </div>
+      </div>
     </v-app>
   </section>
 </template>
@@ -156,47 +144,51 @@ export default {
   data() {
     return {
       postlst: [],
-      commentlst :[],
-      items: [
-        { title: '수정' },
-        { title: '삭제' },
-      ],
-       dialog: false,
-       userId : "",
-       show:false,
+      commentlst: [],
+      items: [{ title: "수정" }, { title: "삭제" }],
+      dialog: false,
+      userId: "",
+      show: false,
     };
   },
   created() {
-    this.postlst ={
-      post_content : this.$route.query.post_content,
-      post_id : this.$route.query.post_id,
-      post_img_url : this.$route.query.post_img_url,
-      post_like : this.$route.query.post_like,
-      post_userid : this.$route.query.post_userid,
-      user_img : this.$route.query.user_img,
-      user_nickname : this.$route.query.user_nickname,
+    this.postlst = {
+      post_content: this.$route.query.post_content,
+      post_id: this.$route.query.post_id,
+      post_img_url: this.$route.query.post_img_url,
+      post_like: this.$route.query.post_like,
+      post_userid: this.$route.query.post_userid,
+      user_img: this.$route.query.user_img,
+      user_nickname: this.$route.query.user_nickname,
+    };
+    this.userId = this.$route.query.userId;
+    // this.postlst = this.$route.query.post
+    this.commentlst = this.$route.query.comment;
+    if (this.userId == this.$cookie.get("userId")) {
+      this.show = true;
     }
-      this.userId = this.$route.query.userId
-      // this.postlst = this.$route.query.post
-      this.commentlst = this.$route.query.comment
-      if(this.userId == this.$cookie.get("userId")){
-          this.show = true;
-      }
   },
   methods: {
-    doit(item){
-        if(item.title == '삭제'){
-            axios
-            .delete(`${SERVER_URL}/post?postid=`+this.postlst.post_id)
-            .then((response) => {
-                this.dialog = false
-                router.go(-1)
-            })        
-        }
-        else{
-            // this.dialog = false
-            router.push({ name: "PostUpdate", query: {postlst: this.postlst}});
-        }
+    doit(item) {
+      if (item.title == "삭제") {
+        axios
+          .delete(`${SERVER_URL}/post?postid=` + this.postlst.post_id)
+          .then((response) => {
+            this.dialog = false;
+            router.go(-1);
+          });
+      } else {
+        // this.dialog = false
+        // router.push({ name: "PostUpdate", query: {postlst: this.postlst}});
+        let repost = {
+          postid: this.postlst.post_id,
+          postnickname: this.postlst.user_nickname,
+          postcontent: this.postlst.post_content,
+          postimage: this.postlst.post_img_url,
+          userpage: true,
+        };
+        router.push({ name: "AddFeed", params: repost });
+      }
     },
     onComment() {
       let postinfo = {
@@ -207,15 +199,13 @@ export default {
         // post: this.postlst,
         // comment : this.commentlst
       };
-      router.push({ name: "Comment", query: postinfo });
-     
+      router.push({ name: "Comment", params: postinfo });
     },
   },
 };
 </script>
 
 <style scoped>
-
 .heart-div {
   -webkit-box-align: center;
   align-items: center;

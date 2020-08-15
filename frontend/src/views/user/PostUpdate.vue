@@ -3,63 +3,80 @@
     <v-app>
       <v-toolbar-title dense>
         <v-toolbar dark>
-          <a @click="$router.go(-1)">
+          <!-- <a @click="$router.go(-1)"> -->
+          <a @click="dialog=true">
             <i class="fas fa-chevron-left back"></i>
           </a>
+          <v-dialog dark v-model="dialog" max-widht="250">
+            <v-list>
+              작업을 취소하시겠습니까?
+              <v-list-item v-for="(item, index) in items" :key="index" @click="doit(item)">
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-dialog>
           <v-spacer></v-spacer>
           <v-spacer></v-spacer>
           <p class="my-auto">정보 수정</p>
           <v-spacer></v-spacer>
           <v-spacer></v-spacer>
-        
-          <a @click="updatePost()">
-           <i class="fas fa-check"></i>
-          </a>
 
+          <a @click="updatePost()">
+            <i class="fas fa-check"></i>
+          </a>
         </v-toolbar>
       </v-toolbar-title>
-          <!-- <p>{{ lst.postid }}</p> -->
-          <div role="button" tabindex="-1">
-            <div class="hc1 hc2" style="postion: relative; padding-right: 17px;">
-              <div class="hc-d1" tabindex="-1">
-                <a class="a-img1 a-img2" href="#" tabindex="0" style="width: 32px; height: 32px;">
-                  <img
-                    style="height: 100%; width: 100%;"
-                    :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+this.userimg"
-                  />
-                </a>
-              </div>
-              <div class="pf">
-                <div>
-                  <div class="pf-n">
-                    <a
-                      class="pf-n-a"
-                      href="#"
-                      tabindex="0"
-                      style="color: black; font-weight: 600;"
-                    >{{this.usernickname}}</a>
-                  </div>
-                </div>
-                <div></div>
+      <!-- <p>{{ lst.postid }}</p> -->
+      <div style="padding: 18px; 25px;">
+        <div role="button" tabindex="-1">
+          <div class="hc1 hc2" style="postion: relative; padding-right: 17px;">
+            <div class="hc-d1" tabindex="-1">
+              <a class="a-img1 a-img2" href="#" tabindex="0" style="width: 32px; height: 32px;">
+                <img
+                  style="height: 100%; width: 100%;"
+                  :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+this.userimg"
+                />
+              </a>
+            </div>
+            <div style="float: right;">
+              <div @click="onClickImageUpload">
+                <!-- <input ref="imageInput" type="file" hidden @change="onChangeImages" /> -->
+                <i class="fa fa-images" style="margin-top: 6px; width: 20px; height: 20px;"></i>
               </div>
             </div>
+            <div class="pf">
+              <div>
+                <div class="pf-n">
+                  <!-- <a
+                    class="pf-n-a"
+                    href="#"
+                    tabindex="0"
+                    style="color: black; font-weight: 600;"
+                  >{{this.usernickname}}</a>-->
+                  <span>{{this.usernickname}}</span>
+                </div>
+              </div>
+              <div></div>
+            </div>
           </div>
-          <div class="fc">
-            <div class="fc-frame" tabindex="0">
-              <div class="fc-fr">
-                <img
+        </div>
+        <div class="fc">
+          <div class="fc-frame" tabindex="0">
+            <div class="fc-fr">
+              <img
                 style="height: 350px;"
                 :src="`https://i3b302.p.ssafy.io:8080/img/post?imgname=`+this.postimgurl"
                 class="fc-img"
-                />
-              </div>
+              />
             </div>
           </div>
-          <div class="fb">
-            <div style="margin-bottom: 4px;">
-                <v-text-field autofocus v-model="postcontent"></v-text-field>
-            </div>
+        </div>
+        <div class="fb">
+          <div style="margin-bottom: 4px;">
+            <v-text-field autofocus v-model="postcontent"></v-text-field>
           </div>
+        </div>
+      </div>
     </v-app>
   </section>
 </template>
@@ -74,41 +91,58 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 export default {
   data() {
     return {
-    postid : "",
-    postcontent: "",
-    postimgurl: "",
-    postuserid: this.$cookie.get("userId"),
-    usernickname : "",
-    userimg : "",
+      postid: "",
+      postcontent: "",
+      postimgurl: "",
+      postuserid: this.$cookie.get("userId"),
+      usernickname: "",
+      userimg: "",
+      items: [{ title: "예" }, { title: "아니오" }],
+      dialog: false,
+      uploadimg: false,
     };
   },
-  methods :{
-      updatePost() {
-        var newpost = {
-            postcontent: this.postcontent,
-            postimgurl: this.postimgurl,
-            postid: this.postid,
-        };
-        axios
+  methods: {
+    onClickImageUpload() {
+      this.uploadimg = true;
+      this.$refs.imageInput.click();
+    },
+    doit(item) {
+      if (item.title == "예") {
+        router.go(-1);
+        this.dialog = false;
+      } else {
+        this.dialog = false;
+      }
+    },
+    updatePost() {
+      var newpost = {
+        postcontent: this.postcontent,
+        postimgurl: this.postimgurl,
+        postid: this.postid,
+      };
+      axios
         .put(`${SERVER_URL}/post`, newpost)
 
         .then((response) => {
           this.$router.push("/user/info");
-        })
+        });
     },
   },
   created() {
-    this.postid = this.$route.query.postlst.post_id
-    this.postcontent = this.$route.query.postlst.post_content
-    this.postimgurl = this.$route.query.postlst.post_img_url
-    this.userimg = this.$route.query.postlst.user_img
-    this.usernickname = this.$route.query.postlst.user_nickname
+    this.postid = this.$route.query.postlst.post_id;
+    this.postcontent = this.$route.query.postlst.post_content;
+    this.postimgurl = this.$route.query.postlst.post_img_url;
+    this.userimg = this.$route.query.postlst.user_img;
+    this.usernickname = this.$route.query.postlst.user_nickname;
   },
 };
 </script>
 
 <style scoped>
-
+.v-application a {
+  color: white;
+}
 .heart-div {
   -webkit-box-align: center;
   align-items: center;

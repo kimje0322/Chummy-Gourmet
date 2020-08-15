@@ -3,15 +3,29 @@
     <v-app>
       <v-toolbar-title>
         <v-toolbar dark>
-          <a @click="$router.go(-1)">
+          <!-- <a @click="$router.go(-1)"> -->
+          <a @click="back">
             <i class="fas fa-chevron-left back"></i>
           </a>
+          <v-dialog dark v-model="dialog" max-widht="250">
+            <v-list>
+              작업을 취소하시겠습니까?
+              <v-list-item v-for="(item, index) in items" :key="index" @click="doit(item)">
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-dialog>
           <v-spacer></v-spacer>
           <v-spacer></v-spacer>
           <p class="my-auto">Posting</p>
           <v-spacer></v-spacer>
           <v-spacer></v-spacer>
-          <div v-if="revise" @click="reviseImg">
+          <!-- {{ this.userpage1 }}
+          {{ this.revise}} -->
+          <div v-if="userpage1" @click="reviseAll()">
+            <i class="fas fa-check"></i>
+          </div>
+          <div v-else-if="revise" @click="reviseImg()">
             <i class="fas fa-check"></i>
           </div>
           <div v-else @click="addImg">
@@ -46,17 +60,24 @@
           <img
             id="imageview"
             style="width: 100%"
-            v-if="revise && revise3"
+            v-if="userpage1&&userpage2"
             :src="`https://i3b302.p.ssafy.io:8080/img/post?imgname=`+postimg"
           />
+          <img
+            id="imageview"
+            style="width: 100%"
+            v-else-if="revise && revise3"
+            :src="`https://i3b302.p.ssafy.io:8080/img/post?imgname=`+postimg"
+          />
+          <!-- <img id="imageview" style="width: 100%" v-if="userpage1" :src="postimg" /> -->
           <img id="imageview" style="width: 100%" v-if="revise1" :src="postimg" />
           <!-- <input ref="imageInput" type="file" hidden @change="onChangeImages" /> -->
           <!-- <v-img v-if="postimgurl" :src="postimgurl"></v-img> -->
           <v-img v-else :src="postimgurl"></v-img>
-          <v-textarea v-if="revise" style="margin-top: 0;" v-model="content"></v-textarea>
+          <v-textarea v-if="revise || userpage1" style="margin-top: 0;" v-model="content"></v-textarea>
 
           <v-textarea
-            v-if="!revise"
+            v-if="!revise&&!userpage1"
             v-model="postcontent"
             placeholder="내용입력"
             style="margin-top: 0;"
@@ -95,21 +116,35 @@ export default {
       revise1: false,
       revise3: true,
       uploadimg: false,
+      items: [{ title: "예" }, { title: "아니오" }],
+      dialog: false,
+      userpage1: false,
+      userpage2: true,
     };
   },
   created() {
     console.log(this.$cookie.get("userId"));
+    console.log(this.$route.params);
+    console.log(this.$route.params.userpage);
+    if (this.$route.params.userpage) {
+      this.userpage1 = true;
+    } else {
+      this.userpage1 = false;
+    }
+    console.log(this.userpage1);
 
     if (this.$route.params.postid >= 0) {
-      console.log("여기");
-      console.log(this.$route.params);
-      this.revise = true;
-      console.log(this.revise);
-      this.postimg = this.$route.params.postimage;
-      this.content = this.$route.params.postcontent;
-      console.log(this.content);
-      console.log("이거이거");
-      console.log(this.postimg);
+      if (this.userpage1) {
+        console.log("여기영여여여영양아아앙");
+        // this.userpage = this.$router.params.userpage
+        this.postimg = this.$route.params.postimage;
+        this.content = this.$route.params.postcontent;
+      } else {
+        console.log("아야어여오요우유");
+        this.revise = true;
+        this.postimg = this.$route.params.postimage;
+        this.content = this.$route.params.postcontent;
+      }
     }
     axios
       .get(
@@ -128,6 +163,21 @@ export default {
     console.log(this.username);
   },
   methods: {
+    doit(item) {
+      if (item.title == "예") {
+        router.go(-1);
+        this.dialog = false;
+      } else {
+        this.dialog = false;
+      }
+    },
+    back() {
+      if (this.revise) {
+        this.dialog = true;
+      } else {
+        router.go(-1);
+      }
+    },
     addImg() {
       //이미지 서버에 전송해서 저장하는부분
       const file = new FormData();
@@ -148,22 +198,20 @@ export default {
           alert("이미지 전송 실패");
         });
     },
-
-    reviseImg() {
+    reviseAll() {
+      console.log("함수는 될걸?");
       if (!this.uploadimg) {
         var repost = {
           postcontent: this.content,
           postid: this.$route.params.postid,
           postimgurl: this.postimg,
         };
+
         axios
           .put(`${SERVER_URL}/post`, repost)
-
           .then((response) => {
-            console.log("여기여기여기역이겨이겨");
-            router.push({ name: "NewsFeed" });
+            router.push({ name: "UserInfo" });
           })
-
           .catch((error) => {
             console.log(error.response);
             alert("이미지 전송 실패");
@@ -177,23 +225,66 @@ export default {
 
           .then((response) => {
             this.postimgurl = response.data;
-            console.log("여기");
-            console.log(this.postimgurl);
+
             var repost = {
               postcontent: this.content,
               postid: this.$route.params.postid,
               postimgurl: this.postimgurl,
             };
-            console.log(this.postimgurl);
-            console.log("여기여기");
-            console.log(repost);
             axios
               .put(`${SERVER_URL}/post`, repost)
 
               .then((response) => {
-                // this.postimgurl = response.data;
-                // console.log(this.postimgurl);
-                console.log("여기여기여기역이겨이겨");
+                router.push({ name: "UserInfo" });
+              })
+
+              .catch((error) => {
+                console.log(error.response);
+                alert("이미지 전송 실패");
+              });
+          })
+
+          .catch((error) => {
+            console.log(error.response);
+            alert("이미지 전송 실패");
+          });
+      }
+    },
+
+    reviseImg() {
+      if (!this.uploadimg) {
+        var repost = {
+          postcontent: this.content,
+          postid: this.$route.params.postid,
+          postimgurl: this.postimg,
+        };
+        axios
+          .put(`${SERVER_URL}/post`, repost)
+          .then((response) => {
+            router.push({ name: "NewsFeed" });
+          })
+          .catch((error) => {
+            console.log(error.response);
+            alert("이미지 전송 실패");
+          });
+      } else {
+        const file = new FormData();
+        file.append("file", this.file);
+        console.log(file);
+        axios
+          .post(`${SERVER_URL}/post/img`, file)
+
+          .then((response) => {
+            this.postimgurl = response.data;
+            var repost = {
+              postcontent: this.content,
+              postid: this.$route.params.postid,
+              postimgurl: this.postimgurl,
+            };
+            axios
+              .put(`${SERVER_URL}/post`, repost)
+
+              .then((response) => {
                 router.push({ name: "NewsFeed" });
               })
 
@@ -252,16 +343,31 @@ export default {
     },
 
     onClickImageUpload() {
-      this.uploadimg = true;
       this.$refs.imageInput.click();
     },
 
     onChangeImages(e) {
       if (this.$route.params.postid >= 0) {
+        // if(this.userpage1){
+        //   this.file = e.target.files[0];
+        //   this.postimg = URL.createObjectURL(this.file);
+        //   // this.revise1 = false;
+        //   // this.revise3 = true
+
+        // }else {
+        this.uploadimg = true;
+
         this.file = e.target.files[0];
         this.postimg = URL.createObjectURL(this.file);
-        this.revise1 = true;
-        this.revise3 = false;
+        if (this.userpage1) {
+          this.revise1 = true;
+          this.revise3 = false;
+          this.userpage2 = false;
+        } else {
+          this.revise1 = true;
+          this.revise3 = false;
+        }
+        // }
       } else {
         this.file = e.target.files[0];
         this.postimgurl = URL.createObjectURL(this.file);

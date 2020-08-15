@@ -348,7 +348,7 @@ export default {
 
           // 해당 위치 주변의 밋업 리스트          
           axios
-            .get(`${SERVER_URL}/meetup/search/${address.region_1depth_name} ${address.region_2depth_name}`)
+            .get(`${SERVER_URL}/meetup/search/location/${address.region_1depth_name} ${address.region_2depth_name}`)
             .then((response) => {
               // 밋업 리스트
               this.meetups = response.data.object;

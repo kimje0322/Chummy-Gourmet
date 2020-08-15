@@ -28,7 +28,6 @@
             <v-card-text v-else>
             
             <!-- 밋업 있을 때 -->
-            <div v-if="meetups.length > 0">
               <v-row dense>
                 <v-col
                   v-for="(meetup, i) in meetups"
@@ -55,10 +54,9 @@
                   </v-card>
                 </v-col>
               </v-row>
-            </div>
 
             <!-- 밋업 없을 때 --> 
-            <div v-if="mData.length==0" style="margin-top:100px;text-align: center;"> 
+            <div v-if="meetups.length==0" style="margin-top:100px;text-align: center;"> 
               <i class="fab fa-meetup fa-6x"></i>
               <h3 class="mt-5">등록된 Meetup이 없습니다.</h3>
             </div>
@@ -98,8 +96,8 @@ import History from "../components/common/History";
 import "../assets/css/components.scss";
 import axios from "axios";
 
-// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-const SERVER_URL = "https://localhost:8080";
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "https://localhost:8080";
 
 export default {
   name: "components",

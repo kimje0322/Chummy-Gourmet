@@ -37,13 +37,13 @@ public class SignupRequest {
 	String userAge;
 	@ApiModelProperty(required = true)
 //	@NotNull
-	List<Integer> userFavorite;
+	List<String> userFavorite;
 	@ApiModelProperty(required = true)
 //	@NotNull
-	List<Integer> userPersonality;
+	List<String> userPersonality;
 	@ApiModelProperty(required = true)
 //	@NotNull
-	List<Integer> userInterest;
+	List<String> userInterest;
 	@ApiModelProperty(required = true)
 //	@NotNull
 	String userComment;
@@ -104,7 +104,6 @@ public class SignupRequest {
 		this.userAge = userAge;
 	}
 
-
 	public String getUserComment() {
 		return userComment;
 	}
@@ -113,34 +112,35 @@ public class SignupRequest {
 		this.userComment = userComment;
 	}
 
-	public List<Integer> getUserFavorite() {
+	public List<String> getUserFavorite() {
 		return userFavorite;
 	}
 
-	public void setUserFavorite(List<Integer> userFavorite) {
+	public void setUserFavorite(List<String> userFavorite) {
 		this.userFavorite = userFavorite;
 	}
 
-	public List<Integer> getUserPersonality() {
+	public List<String> getUserPersonality() {
 		return userPersonality;
 	}
 
-	public void setUserPersonality(List<Integer> userPersonality) {
+	public void setUserPersonality(List<String> userPersonality) {
 		this.userPersonality = userPersonality;
 	}
 
-	public List<Integer> getUserInterest() {
+	public List<String> getUserInterest() {
 		return userInterest;
 	}
 
-	public void setUserInterest(List<Integer> userInterest) {
+	public void setUserInterest(List<String> userInterest) {
 		this.userInterest = userInterest;
 	}
 
 	public SignupRequest(@NotNull String userEmail,
 			@NotNull @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d$@$!%*#?&]{8,}$") String userPwd,
 			@NotNull String userNickname, @NotNull String userName, @NotNull String userPhone, String userGender,
-			String userAge, List<Integer> userFavorite, List<Integer> userPersonality, List<Integer> userInterest) {
+			String userAge, List<String> userFavorite, List<String> userPersonality, List<String> userInterest,
+			String userComment) {
 		super();
 		this.userEmail = userEmail;
 		this.userPwd = userPwd;
@@ -152,12 +152,15 @@ public class SignupRequest {
 		this.userFavorite = userFavorite;
 		this.userPersonality = userPersonality;
 		this.userInterest = userInterest;
+		this.userComment = userComment;
 	}
 
 	@Override
 	public String toString() {
 		return "SignupRequest [userEmail=" + userEmail + ", userPwd=" + userPwd + ", userNickname=" + userNickname
-				+ ", userName=" + userName + ", userPhone=" + userPhone + "]";
+				+ ", userName=" + userName + ", userPhone=" + userPhone + ", userGender=" + userGender + ", userAge="
+				+ userAge + ", userFavorite=" + userFavorite + ", userPersonality=" + userPersonality
+				+ ", userInterest=" + userInterest + ", userComment=" + userComment + "]";
 	}
 
 }

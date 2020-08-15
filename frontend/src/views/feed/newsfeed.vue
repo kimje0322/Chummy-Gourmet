@@ -504,6 +504,7 @@ export default {
         postnickname: lst.postnickname,
         postcontent: lst.postcontent,
         postimage: lst.postimgurl,
+        userpage: false,
       };
       router.push({ name: "AddFeed", params: repost });
     },

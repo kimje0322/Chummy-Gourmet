@@ -1,82 +1,131 @@
-
-<!--
-    가입하기는 기본적인 폼만 제공됩니다
-    기능명세에 따라 개발을 진행하세요.
-    Sub PJT I에서는 UX, 디자인 등을 포함하여 백엔드를 제외하여 개발합니다.
- -->
 <template>
   <div>
-    <v-toolbar dark>
+    <v-toolbar dense>
       <!-- 중앙정렬 하기 위해 2개씀 -->
-      <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
-      <p class="my-auto">회원가입</p>
+      <v-icon @click="$router.go(-1)">
+        mdi-arrow-left
+      </v-icon>
+      <v-spacer></v-spacer>
+      <p class="my-auto text-center">회원가입</p>
       <v-spacer></v-spacer>
     </v-toolbar>
 
-    <div class="entire" @keyup.enter="test">
-    <div class="form-wrap">
-      <div class="input-with-label">
-        <input v-model="name" id="name" placeholder="이름을 입력하세요." type="text" />
-        <label for="name">이름</label>
-        <div class="error-text" v-if="error.name">{{error.name}}</div>
-      </div>
+    <div class="entire">
+      <v-form ref="form">
+        <v-col class="pb-0">
+              <v-text-field
+                :rules="[() => !!name || '이름을 입력해주세요']"
+                outlined hide-details="auto" 
+                v-model="name" 
+                label="이름"
+                clearable
+              ></v-text-field>
+        </v-col>
+        <v-col class="pb-0">
+              <v-text-field
+                :rules="[() => !!nickName || '닉네임을 입력해주세요']"
+                :error-messages="error.nickName"
+                :hint="hint.nickName"
+                outlined hide-details="auto" 
+                v-model="nickName"
+                label="닉네임"
+                clearable
+                class="pa-0"
+                @input="hint.nickName=''"
+              >
+                <template v-slot:append>
+                  <v-btn ref="button1" @click="checkNickname" class="ml-2 px-0" color="blue-grey lighten-1" style="top:-9px;" height="40" width="30" tile>
+                    <label class="my-0 white--text text-caption">중복확인</label>
+                  </v-btn>
+                </template>
+              
+              
+              </v-text-field>
+        </v-col>
+        <v-col class="pb-0">
+              <v-text-field
+                :rules="[() => !!email || '이메일을 입력해주세요', rules.email]"
+                :error-messages="error.email"
+                :hint="hint.email"
+                outlined hide-details="auto" 
+                v-model="email"
+                label="이메일"
+                clearable
+                @input="hint.email=''"
+              >
+                <template v-slot:append>
+                  <v-btn @click="checkEmail" class="ml-2 px-0" color="blue-grey lighten-1" style="top:-9px;" height="40" width="30" tile>
+                    <label class="my-0 white--text text-caption">중복확인</label>
+                  </v-btn>
+                </template>
+              </v-text-field>
+        </v-col>
+        <v-col class="pb-0">
+              <v-text-field
+                :rules="[() => !!password || '패스워드를 입력해주세요', rules.password]"
+                outlined hide-details="auto" 
+                type="password"
+                v-model="password"
+                label="비밀번호"
+                clearable
+              ></v-text-field>
+        </v-col>
+        <v-col class="pb-0">
+              <v-text-field
+                :rules="[() => password == passwordConfirm || '패스워드가 다릅니다.']"
+                outlined hide-details="auto" 
+                type="password"
+                v-model="passwordConfirm"
+                label="비밀번호 확인"
+                clearable
+              ></v-text-field>
+        </v-col>
+        <v-col class="pb-0">
+               <v-text-field
+               :rules="[() => !!phone || '연락처를 입력해주세요']"
+                outlined hide-details="auto" 
+                v-model="phone"
+                label="연락처"
+                clearable
+              ></v-text-field>
+        </v-col>
+        <v-col class="pb-4">
+            <v-checkbox
+              v-model="isTerm"
+              :rules="[() => !!isTerm || '약관에 동의해주세요.']"
+            >
+            <template v-slot:label >
+              <label class="text-body-2">
+                [필수] 
+                <a href="#" @click.stop.prevent="dialog = true">이용약관</a>,
+                <a href="#" @click.stop.prevent="dialog = true">개인정보처리방침</a>,
+                <a href="#" @click.stop.prevent="dialog = true">위치기반서비스약관</a>
+                에 동의합니다.
+              </label>
+            </template>
+            </v-checkbox>
+        </v-col>
+      </v-form>
 
-      <div class="input-with-label">
-        <input v-model="nickName" id="nickname" placeholder="닉네임을 입력하세요." type="text" />
-        <label for="nickname">닉네임</label>
-        <div class="error-text" v-if="error.nickName">{{error.nickName}}</div>
-      </div>
-
-      <div class="input-with-label">
-        <input v-model="email" id="email" placeholder="이메일을 입력하세요." type="text" />
-        <label for="email">이메일</label>
-        <div class="error-text" v-if="error.email">{{error.email}}</div>
-      </div>
-
-      <div class="input-with-label">
-        <input
-          v-model="password"
-          v-bind:class="{error : error.password, complete:!error.password&&password.length!==0}"
-          id="password"
-          :type="passwordType"
-          placeholder="비밀번호를 입력하세요."
-        />
-        <label for="password">비밀번호</label>
-        <div class="error-text" v-if="error.password">{{error.password}}</div>
-      </div>
-
-      <div class="input-with-label">
-        <input
-          v-model="passwordConfirm"
-          :type="passwordConfirmType"
-          id="password-confirm"
-          placeholder="비밀번호를 다시한번 입력하세요."
-        />
-        <label for="password-confirm">비밀번호 확인</label>
-        <div class="error-text" v-if="error.passwordConfirm">{{error.passwordConfirm}}</div>
-      </div>
-    </div>
-    <div class="input-with-label cell-label">
-      <input v-model="phone" id="cellphone" placeholder="휴대폰 번호를 입력하세요." type="text" />
-      <label for="cellphone">휴대폰</label>
-      <div class="error-text" v-if="error.phone">{{error.phone}}</div>
-      <!-- <v-btn @click="onSignup" class="cell-auth" color="error">인증</v-btn> -->
-    </div>
-
-    <label>
-      <input v-model="isTerm" type="checkbox" id="term" />
-      <span>약관을 동의합니다.</span>
-    </label>
-    <div class="error-text" style="color:red;" v-if="error.term">{{error.term}}</div>
-
-    <router-link to="/user/joinrule">
-      <span @click="termPopup=true" class="seeRules">약관보기</span>
-    </router-link>
-
-    <!-- <router-link to="/user/joininfo"> -->
-    <v-btn color="warning" class="next-btn" @click="checkFormAndSignUp">다음</v-btn>
-    <!-- @click="$emit('signup', signupData)" type="submit" -->
-    <!-- </router-link> -->
+    <v-dialog v-model="dialog" max-width="375"> 
+      <v-card>
+        <v-card-title class="h6 font-weight-bold mb-0">XX약관
+            <v-spacer></v-spacer>
+            <v-icon @click="dialog=false">mdi-close</v-icon>
+        </v-card-title>
+        <v-divider class="mt-0"></v-divider>
+        <v-card-text v-for="n in 5" :key="n">
+          약관이 들어갈 자리입니다.
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            text @click="dialog=false"
+          >닫기</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-btn color="orange lighten-1" class="next-btn my-0 text-white" @click="checkFormAndSignUp">다음</v-btn>
     </div>
   </div>
 </template>
@@ -97,212 +146,123 @@ export default {
   name: "Join",
   created() {
     this.component = this;
-
-    this.passwordSchema
-      .is()
-      .min(8)
-      .is()
-      .max(100)
-      .has()
-      .digits()
-      .has()
-      .letters();
   },
   data: () => {
     return {
       email: "",
       password: "",
-      passwordSchema: new PV(),
       passwordConfirm: "",
       nickName: "",
       name: "",
       phone: "",
       isTerm: false,
-      isLoading: false,
-      error: {
-        name: false,
-        email: false,
-        password: false,
-        nickName: false,
-        passwordConfirm: false,
-        term: false,
-        phone: false,
+      dialog : false,
+      hint : {
+        email : '',
+        nickName: '',
       },
-      isSubmit: false,
-      passwordType: "password",
-      passwordConfirmType: "password",
-      termPopup: false
-      // signupData: {
-      //   nickName: "",
-      //   email: ""
-      // }
+      error : {
+        email : '',
+        nickName: '',
+      },
+
+      // 유효성 검사를 위한 rule
+      rules: {
+        nickName : () => {
+          if(this.error.nickName)
+            return true;
+          else 
+            return false;
+        },
+        password : value =>{
+          const pattern = /^[A-Za-z0-9+]{8,}$/; 
+          var checkNum = value.search(/[0-9]/g);
+          var checkEng = value.search(/[a-z]/ig);
+          if(checkNum < 0 || checkEng < 0 || !pattern.test(value))
+            return "영문,숫자 포함 8 자리이상이어야 합니다.";
+          else
+            return true;
+        },
+        email: value => {
+          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          return pattern.test(value) || '이메일 형식이 아닙니다.'
+        },
+      },
     };
   },
-  watch: {
-    name: function() {
-      if (this.name.length < 1) this.error.name = "이름 입력해주세요.";
-      else this.error.name = false;
-      return;
-    },
-    password: function(v) {
-      if (
-        this.password.length > 0 &&
-        !this.passwordSchema.validate(this.password)
-      )
-      this.error.password = "영문,숫자 포함 8 자리이상이어야 합니다.";
-      else this.error.password = false;
-      return;
-    },
-    nickName: function(v) {
-      if (this.nickName.length < 1)
-        this.error.nickName = "닉네임을 입력해주세요.";
-      else this.error.nickName = false;
-      return;
-    },
-    email: function(v) {
-      if (this.email.length > 0 && !EmailValidator.validate(this.email))
-        this.error.email = "이메일 형식이 아닙니다.";
-      else this.error.email = false;
-      return;
-    },
-    passwordConfirm: function(v) {
-      if (
-        this.passwordConfirm.length > 0 &&
-        this.passwordConfirm != this.password
-      ) {
-        this.error.passwordConfirm = "비밀번호가 다릅니다.";
-      } else this.error.passwordConfirm = false;
-      return;
-    },
-    isTerm: function() {
-      if (this.isTerm) this.error.term = false;
-      return;
-    },
-    phone: function (v) {
-      if (this.phone.length > 0 && isNaN(this.phone))
-        this.error.phone = "올바른 휴대폰 번호를 입력해주세요.";
-      else this.error.phone = false;
-      return;
-    },
-  },
   methods: {
-    checkFormAndSignUp() {
-      // 전체적으로 폼들 유효성 체크하고,
-      if(this.checkForm()){
-       
-       // 약관 동의 체크하고, 
-        if (!this.isTerm) this.error.term = "약관에 동의해주세요.";
-       
-       // 입력한 정보에 이상이 없다면, 중복검사
-        if (this.isValidForm())
-          this.onSignup();
-      }
-
-
-    },
-    onSignup() {
-      axios
-        .get(
-          `${SERVER_URL}/account/signup/valid?nickname=${this.nickName}&email=${this.email}`
-          // `http://localhost:8080/account/signup/valid?nickname=${this.nickName}&email=${this.email}`
-        )
+    checkNickname(){
+       axios
+        .get(`${SERVER_URL}/account/signup/valid?nickname=${this.nickName}&email=${this.email}`)
         .then(response => {
-          // data : success / isExistEmail / isExistNickname
+          // data : success / isExistNickname
           var data = response.data.data;
-
-          // 이메일과 닉네임이 중복이 아니라면,
-          if (data == "success") {
-            let userInfo = {
-              email: this.email,
-              password: this.password,
-              nickName: this.nickName,
-              name: this.name,
-            };
-
-            // 현재 페이지에서 입력받은 정보를 params에 넣어서 다음 페이지로 이동
-            router.push({name : "JoinInfo", params : userInfo});
-          } else if (data == "isExistEmail") {
-            this.error.email =
-              "사용중인 이메일입니다. 다른 이메일을 입력해주세요.";
-          } else if (data == "isExistNickname") {
+          console.log(data);
+          if (data == "isExistNickname") {
             this.error.nickName =
               "사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.";
+          }
+          else{
+            this.error.nickName = '';
+            this.hint.nickName = "사용가능한 닉네임입니다."
           }
         })
         .catch(error => {
           console.log(error.response);
         });
     },
-    checkForm() {
-      if (this.name.length < 1) {
-        this.error.name = "이름을 입력해주세요.";
-        return false;
-      }
-      else this.error.name = false;
-      
+    checkEmail(){
+       axios
+        .get(`${SERVER_URL}/account/signup/valid?nickname=${this.nickName}&email=${this.email}`)
+        .then(response => {
+          // data : success / isExistEmail
+          var data = response.data.data;
+          console.log(data);
 
-      if (this.nickName.length < 1){
-        this.error.nickName = "닉네임을 입력해주세요.";
-        return false;
-      }
-      else this.error.nickName = false;
-
-      if(this.email.length < 1){
-        this.error.email = "이메일을 입력해주세요.";
-        return false;
-      }
-      else if (this.email.length > 0 && !EmailValidator.validate(this.email)){
-          this.error.email = "이메일 형식이 아닙니다.";
-          return false;
-      }
-      else this.error.email = false;
-
-      if(this.password.length < 1){
-        this.error.password = "영문,숫자 포함 8 자리이상이어야 합니다.";
-        return false;
-      }
-      else if (
-        this.password.length > 0 &&
-        !this.passwordSchema.validate(this.password)
-      ){
-        this.error.password = "영문,숫자 포함 8 자리이상이어야 합니다.";
-        return false;
-      }
-      else this.error.password = false;
-
-      if (
-        this.passwordConfirm.length > 0 &&
-        this.passwordConfirm != this.password
-      ) {
-        this.error.passwordConfirm = "비밀번호가 다릅니다.";
-        return false;
-      } else this.error.passwordConfirm = false;
-
-       if (this.phone.length < 1){
-        this.error.phone = "전화번호를 입력해주세요.";
-        return false;
-      }
-      else this.error.phone = false;
-
-      return true;
+          if (data == "isExistEmail") {
+            this.error.email =
+              "사용중인 이메일입니다. 다른 이메일을 입력해주세요.";
+          }
+          else{
+            this.error.email = '';
+            this.hint.email = "사용가능한 이메일입니다."
+          }
+        })
+        .catch(error => {
+          console.log(error.response);
+        });
     },
-
-    // 입력 정보가 다 유효하면 true, 아니면 false
-    isValidForm() {
-      for (let key in this.error) {
-        if (this.error[key]) return false;
+    checkFormAndSignUp() {
+      // 모든 폼들의 유효성 검사가 됐다면
+      if(this.hint.nickName == ''){
+        this.error.nickName = "닉네임 중복확인 해주세요"
+        return;
       }
-      return true;
-    }
+      else if(this.hint.email == ''){
+        this.error.email = "이메일 중복확인 해주세요"
+        return;
+      }
+      else if(this.$refs.form.validate()){
+        let userInfo = {
+          email: this.email,
+          password: this.password,
+          nickName: this.nickName,
+          name: this.name,
+        };
+
+        // 현재 페이지에서 입력받은 정보를 params에 넣어서 다음 페이지로 이동
+        router.push({name : "JoinInfo", params : userInfo});
+      }
+    },
   }
 };
 </script>
 
 
 <style scoped>
-.entire {
+/* .entire {
   padding: 18px
-}
+} */
 .my-auto {
   font-size: 20px;
 }
@@ -332,7 +292,7 @@ h2 {
   margin: 0 0 15px 0;
 }
 
-#password{
+/* #password{
   background-color: transparent !important;
   border: 1px solid black !important;
 }
@@ -340,6 +300,6 @@ h2 {
 [type=radio]:checked + span:before {
   background: orange;
   border: 1px solid orange;
-}
+} */
 
 </style>

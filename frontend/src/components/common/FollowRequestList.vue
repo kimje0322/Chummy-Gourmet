@@ -51,8 +51,9 @@
     </v-list>
     </div>
 
-    <div v-else>
-      <h3>팔로우 요청이 없습니다.</h3>
+    <div v-else class="aligncss">
+      <i class="fas fa-users fa-5x"></i>
+      <h3 class="mt-5">팔로우 요청이 없습니다.</h3>
     </div>
   
 
@@ -157,8 +158,16 @@ export default {
     width: 100px
   }
 
-  h3 {
+  /* h3 {
     margin: 60px;
     text-align: center;
+  } */
+  .aligncss {
+    margin: 100px 0 0 0;
+    color: rgba(0,0,0,.6);
+    width: 100%;
+    text-align: center;
   }
+
+
 </style>

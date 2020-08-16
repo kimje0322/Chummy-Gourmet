@@ -1,16 +1,17 @@
 <template>
   <v-app>
     <v-toolbar-title >
-      <v-toolbar dark>
-        <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
-        <v-spacer></v-spacer>
-        <p class="my-auto">프로필 수정</p>
-        <v-spacer></v-spacer>
-        <v-spacer></v-spacer>
-        <a @click="checkForm">
+      <v-toolbar dense>
+      <v-icon @click="$router.go(-1)">
+        mdi-arrow-left
+      </v-icon>
+      <v-spacer></v-spacer>
+      <p class="my-auto text-center">프로필 수정</p>
+      <v-spacer></v-spacer>
+      <a @click="checkForm">
           <i class="fas fa-check"></i>
         </a>
-      </v-toolbar>
+    </v-toolbar>
     </v-toolbar-title>
     
     <div class="entireClass">
@@ -63,6 +64,7 @@
         v-model="userNickname"
         label="Nickname"
         hide-details
+        ref="userNickname"
         outlined
         >
       </v-text-field >
@@ -77,6 +79,7 @@
         @click:append="show1 = !show1"
         label="Password" 
         hide-details
+         ref="userPwd"
         outlined
         >
       </v-text-field>
@@ -203,10 +206,14 @@ export default {
       this.updateUser();
     },
     updateUser (){
-      if (this.userNickname.length < 1)
+      if (this.userNickname.length < 1){
+        this.$refs.userNickname.focus()
         this.$alert("닉네임을 입력해주세요.");
-      else if (this.userPwd.length > 0 && !this.passwordSchema.validate(this.userPwd))
+      }
+      else if (this.userPwd.length > 0 && !this.passwordSchema.validate(this.userPwd)){
+        this.$refs.userPwd.focus()
         this.$alert("영문,숫자 포함 8 자리이상이어야 합니다.");
+      }
       else{
         axios
         .put(
@@ -214,6 +221,7 @@ export default {
         )
         .then((response) => {
           if(response.data.data == "isExistNickname"){
+            this.$refs.userNickname.focus()
             this.$alert("사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.");
           }
           else{

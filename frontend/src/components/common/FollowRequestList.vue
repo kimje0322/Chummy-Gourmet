@@ -1,15 +1,15 @@
 <template>
   <v-app>
     <v-toolbar-title >
-      <v-toolbar dark>
-        <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
-        <v-spacer></v-spacer>
-        <p class="my-auto">팔로우 요청</p>
-        <v-spacer></v-spacer>
-        <v-spacer></v-spacer>
-      </v-toolbar>
+      <v-toolbar dense>
+      <v-icon @click="$router.go(-1)">
+        mdi-arrow-left
+      </v-icon>
+      <v-spacer></v-spacer>
+      <p class="my-auto text-center">팔로우 요청</p>
+      <v-spacer></v-spacer>
+    </v-toolbar>
     </v-toolbar-title>
-    
     
     <div v-if="items.length > 0">
     <v-list subheader>

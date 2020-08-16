@@ -14,16 +14,16 @@
     </v-toolbar>
     
     <!-- 햄버거? 눌렀을 때 -->
-    <v-navigation-drawer dark v-model="drawer" app right>
+    <v-navigation-drawer v-model="drawer" app right>
       <v-system-bar></v-system-bar>
-      <v-list >
+      <v-list>
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title class="title">{{ user.userNickname }}</v-list-item-title><br>
             <v-list-item-subtitle>{{ user.userEmail }}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
-          <v-btn @click="updateUser" block>
+          <v-btn color="warning find-btn" @click="updateUser" block>
             프로필 수정
           </v-btn>
       </v-list>

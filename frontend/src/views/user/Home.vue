@@ -5,8 +5,8 @@
     <!-- <v-parallax src="../../assets/images/home-img.png" width="500"></v-parallax> -->
     
       <div class="home-btns">
-        <router-link to="/user/join"><v-btn color="warning" class="join-btn">회원가입</v-btn></router-link>
-        <router-link to="/login"><v-btn color="warning">로그인</v-btn></router-link>
+        <router-link to="/user/join"><v-btn color="orange accent-2 white--text" class="join-btn">회원가입</v-btn></router-link>
+        <router-link to="/login"><v-btn color="orange accent-2 white--text">로그인</v-btn></router-link>
       </div>
     </div>
   </v-app>

@@ -1,7 +1,6 @@
 <template>
   <div>
-    <v-toolbar dense>
-      <!-- 중앙정렬 하기 위해 2개씀 -->
+    <v-toolbar dense elevation="1">
       <v-icon @click="$router.go(-1)">
         mdi-arrow-left
       </v-icon>
@@ -97,9 +96,9 @@
             <template v-slot:label >
               <label class="text-body-2">
                 [필수] 
-                <a href="#" @click.stop.prevent="dialog = true">이용약관</a>,
-                <a href="#" @click.stop.prevent="dialog = true">개인정보처리방침</a>,
-                <a href="#" @click.stop.prevent="dialog = true">위치기반서비스약관</a>
+                <a href="#" @click.stop.prevent="dialog = true, joinrule=1">이용약관</a>,
+                <a href="#" @click.stop.prevent="dialog = true, joinrule=2">개인정보처리방침</a>,
+                <a href="#" @click.stop.prevent="dialog = true, joinrule=3">위치기반서비스약관</a>
                 에 동의합니다.
               </label>
             </template>
@@ -109,13 +108,18 @@
 
     <v-dialog v-model="dialog" max-width="375"> 
       <v-card>
-        <v-card-title class="h6 font-weight-bold mb-0">XX약관
-            <v-spacer></v-spacer>
-            <v-icon @click="dialog=false">mdi-close</v-icon>
+        <v-card-title class="h5 font-weight-bold mb-0">
+          <span v-if="joinrule==1">이용약관</span>
+          <span v-else-if="joinrule==2">개인정보처리방침</span>
+          <span v-else-if="joinrule==3">위치기반서비스약관</span>
+          <v-spacer></v-spacer>
+          <v-icon @click="dialog=false">mdi-close</v-icon>
         </v-card-title>
         <v-divider class="mt-0"></v-divider>
-        <v-card-text v-for="n in 5" :key="n">
-          약관이 들어갈 자리입니다.
+        <v-card-text>
+          <Join-Rule1 v-if="joinrule == 1"></Join-Rule1>
+          <Join-Rule2 v-else-if="joinrule == 2"></Join-Rule2>
+          <Join-Rule3 v-else-if="joinrule == 3"></Join-Rule3>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -125,7 +129,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-btn color="orange lighten-1" class="next-btn my-0 text-white" @click="checkFormAndSignUp">다음</v-btn>
+    <v-btn color="orange lighten-1" block class="ma-0 text-white" @click="checkFormAndSignUp">다음</v-btn>
     </div>
   </div>
 </template>
@@ -139,11 +143,17 @@ import router from "@/routes";
 import * as EmailValidator from "email-validator";
 import PV from "password-validator";
 import UserApi from "../../api/UserApi";
+import JoinRule1 from "../user/JoinRule1"
+import JoinRule2 from "../user/JoinRule2"
+import JoinRule3 from "../user/JoinRule3"
 
 const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 
 export default {
   name: "Join",
+  components : {
+    JoinRule1, JoinRule2, JoinRule3
+  },
   created() {
     this.component = this;
   },
@@ -165,6 +175,7 @@ export default {
         email : '',
         nickName: '',
       },
+      joinrule : '',
 
       // 유효성 검사를 위한 rule
       rules: {
@@ -176,8 +187,8 @@ export default {
         },
         password : value =>{
           const pattern = /^[A-Za-z0-9+]{8,}$/; 
-          var checkNum = value.search(/[0-9]/g);
-          var checkEng = value.search(/[a-z]/ig);
+          var checkNum = !value ? false : value.search(/[0-9]/g);
+          var checkEng = !value ? false : value.search(/[a-z]/ig);
           if(checkNum < 0 || checkEng < 0 || !pattern.test(value))
             return "영문,숫자 포함 8 자리이상이어야 합니다.";
           else
@@ -260,46 +271,4 @@ export default {
 
 
 <style scoped>
-/* .entire {
-  padding: 18px
-} */
-.my-auto {
-  font-size: 20px;
-}
-
-h2 {
-  text-align: center;
-}
-.seeRules {
-  float: right;
-}
-.next-btn {
-  margin: 20px 0 0 0;
-  height: 200px;
-  width: 100%;
-}
-.cell-label {
-  position: relative;
-}
-
-.cell-auth {
-  position: absolute;
-  right: 11px;
-  bottom: 8px;
-}
-
-.input-with-label {
-  margin: 0 0 15px 0;
-}
-
-/* #password{
-  background-color: transparent !important;
-  border: 1px solid black !important;
-}
-[type=checkbox]:checked + span:before, 
-[type=radio]:checked + span:before {
-  background: orange;
-  border: 1px solid orange;
-} */
-
 </style>

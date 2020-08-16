@@ -51,7 +51,15 @@
             <v-list-item-content>
               <v-list-item-title>팔로우요청</v-list-item-title>
             </v-list-item-content>
-            
+          </v-list-item>
+
+           <v-list-item @click="meetupRequestList">
+            <v-list-item-icon>
+                <v-icon>mdi-account-plus</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>밋업요청</v-list-item-title>
+            </v-list-item-content>
           </v-list-item>
 
           <v-list-item @click="chatRoom">
@@ -113,6 +121,9 @@ export default {
     },
     followRequestList(){
       this.$router.push('/user/FollowRequestList');
+    },
+    meetupRequestList(){
+      this.$router.push('/meetup/add');
     },
     updateUser(){
       this.$router.push('/user/updateUser');

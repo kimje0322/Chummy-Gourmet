@@ -43,9 +43,21 @@ import AddFeed from './views/feed/addFeed.vue'
 // 리뷰 작성
 import AddReview from './views/review/addReview.vue'
 
+//밋업 참가
+import MeetUpRequestList from './components/common/MeetUpRequestList.vue'
+
 Vue.use(VueRouter);
 export default new VueRouter({
     routes: [
+         //밋업 참가
+         {
+            path: '/meetup/add',
+            name: 'FollowRequestList',
+            component: MeetUpRequestList,
+            // meta: {
+            //     navbar: true
+            // }
+        },
         //리뷰 작성
         {
             path: '/review/add',

@@ -3,7 +3,7 @@ import VueRouter from 'vue-router';
 
 import Login from './views/user/Login.vue'
 import Join from './views/user/Join.vue'
-import JoinRule from './views/user/JoinRule.vue'
+import JoinRule1 from './views/user/JoinRule1.vue'
 import JoinInfo from './views/user/JoinInfo.vue'
 import FinishJoin from './views/user/FinishJoin.vue'
 import Curator from './views/curator/curator.vue'
@@ -151,8 +151,8 @@ export default new VueRouter({
         },
         {
             path: '/user/joinrule',
-            name: 'Joinrule',
-            component: JoinRule,
+            name: 'Joinrule1',
+            component: JoinRule1,
             meta: {
                 navbar: true
             }

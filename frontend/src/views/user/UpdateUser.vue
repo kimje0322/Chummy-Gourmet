@@ -4,7 +4,7 @@
       <v-toolbar dark>
         <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
         <v-spacer></v-spacer>
-        <p class="my-auto">프로필 수정</p>
+        <p class="my-auto">profile 수정</p>
         <v-spacer></v-spacer>
         <v-spacer></v-spacer>
         <a @click="checkForm">
@@ -43,80 +43,68 @@
     </v-layout>
 
     <v-layout>
-    <v-content>
+   <v-main>
 
-      <v-text-field
-        style="border-bottom-width: 15px;
-        margin: 7px 0 10px 0px;"
-        color="dark"
-        v-model="user.userName"
-        label="Name"       
-        disabled
-        hide-details
-        readonly
-        outlined
-        >
-      </v-text-field >
+    <v-col class="pb-0">
+          <v-text-field
+            outlined hide-details="auto" 
+            v-model="user.userName" 
+            disabled
+            label="이름"
+            clearable
+          ></v-text-field>
+      </v-col>
 
-      <v-text-field
-        color="dark"
-        v-model="userNickname"
-        label="Nickname"
-        hide-details
-        outlined
-        >
-      </v-text-field >
-      
-      <v-text-field 
-        color="dark"
-        style="border-bottom-width: 15px;
-        margin: 7px 0 10px 0px;"
-        v-model="userPwd"
-        :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" 
-        :type="show1 ? 'text' : 'password'"
-        @click:append="show1 = !show1"
-        label="Password" 
-        hide-details
-        outlined
-        >
-      </v-text-field>
+      <v-col class="pb-0">
+              <v-text-field
+              outlined hide-details="auto" 
+              v-model="userNickname"
+              label="닉네임"
+              clearable
+              >          
+            ></v-text-field>
+      </v-col>
 
-      <v-text-field
-        style="border-bottom-width: 15px;
-        margin: 7px 0 10px 0px;"
-        color="dark"
-        v-model="user.userEmail"
-        label="Email"       
-        disabled
-        hide-details
-        readonly
-        outlined
-        >
-      </v-text-field >
+      <v-col class="pb-0">
+              <v-text-field
+                outlined hide-details="auto" 
+                type="password"
+                :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" 
+                v-model="userPwd"
+                label="비밀번호"
+              ></v-text-field>
+        </v-col>
 
-      <v-text-field
-        style="border-bottom-width: 15px;
-        margin: 7px 0 10px 0px;"
-        color="dark"
-        v-model="user.userPhone"
-        label="Phone"       
-        disabled
-        hide-details
-        readonly
-        outlined
-        >
-      </v-text-field >
+        <v-col class="pb-0">
+               <v-text-field
+                outlined hide-details="auto" 
+                v-model="user.userEmail"
+                label="이메일"
+                disabled
+                clearable
+              ></v-text-field>
+        </v-col>
 
-      <v-text-field 
-        style="border-bottom-width: 15px;
-        margin: 7px 0 10px 0px;"
-        color="dark"
-        v-model="userComment" 
-        label="Comment" 
-        hide-details
-        outlined>
-      </v-text-field>
-    </v-content>
+        <v-col class="pb-0">
+               <v-text-field
+                outlined hide-details="auto" 
+                v-model="user.userPhone"
+                label="연락처"
+                disabled
+                clearable
+              ></v-text-field>
+        </v-col>
+
+        <v-col class="pb-0">
+               <v-text-field
+                outlined hide-details="auto" 
+                v-model="userComment"
+                label="코멘트"
+                clearable
+              ></v-text-field>
+        </v-col>
+
+    </v-main>
     </v-layout>
     </div>
   </v-app>

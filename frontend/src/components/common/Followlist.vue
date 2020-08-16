@@ -418,9 +418,11 @@ export default {
     width: 12px;
   }
   .text-css {
+    color: rgba(0,0,0,.6);
     text-align: center;
   }
   .fa-user-plus {
+    color: rgba(0,0,0,.6);
     margin: 70px 0 20px 140px;
     align-items: center;
   }

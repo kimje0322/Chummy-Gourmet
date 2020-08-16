@@ -76,6 +76,12 @@
               </v-img>
           </v-card>
       </v-col>
+
+      <!-- 피드 없을 때 -->
+      <div v-if="postlst.length == 0" class="aligncss"> 
+        <i class="far fa-file-image fa-5x"></i>
+        <h3 class="mt-5">등록된 게시물이 없습니다.</h3>
+      </div>
       </v-row>
   </v-layout>
   </div>

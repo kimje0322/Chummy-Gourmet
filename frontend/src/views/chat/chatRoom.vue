@@ -57,10 +57,10 @@ export default {
                             )
                             .then((response) => {
                                 this.responseNickName = response.data;
-                                console.log(this.responseNickName);
+                                // console.log(this.responseNickName);
                                 var chatName;
                                 //채팅방이름이 Room일경우 (1대1 대화일 경우)
-                                console.log(doc.data().name);
+                                // console.log(doc.data().name);
                                 if(doc.data().name == 'Room')
                                 {
                                     chatName = this.responseNickName;
@@ -69,13 +69,23 @@ export default {
                                 else{
                                     chatName = doc.data().name;
                                 }
+
+                                //수신하는 사람
+                                var to = doc.data().id;
+                                var idx = to.indexOf(this.$cookie.get('userId')) 
+                                if (idx > -1) to.splice(idx, 1)
+                                // console.log('수신인');
+                                // console.log(to)
+
+
                                 var chatData = {
                                 name : chatName,
                                 id : doc.data().id,
                                 rid : doc.id,
-                                nickName : this.responseNickName
+                                nickName : this.responseNickName,
+                                to : to,
                                 }
-                            console.log(chatData);
+                            // console.log(chatData);
 
                             this.chatroom.push(chatData);
                         //  console.log(doc.id, '=>',doc.data());
@@ -84,7 +94,7 @@ export default {
                                 console.log(error.response);
                             });
                           
-                                console.log(this.responseNickName);
+                                // console.log(this.responseNickName);
 
                          
                        })
@@ -95,7 +105,7 @@ export default {
     },
     methods:{
         chatGo(room){
-            console.log(room);
+            // console.log(room);
             this.$router.push({name: 'Chat', params: {room: room}});
         },
         addRoom(){
@@ -110,7 +120,7 @@ export default {
 
                     //있을경우
                     snapshot.forEach(doc=>{
-                        console.log(doc.id, '=>',doc.data());
+                        // console.log(doc.id, '=>',doc.data());
                     })
                 })
                 .catch(err => {

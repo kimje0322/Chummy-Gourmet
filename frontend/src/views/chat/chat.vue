@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="card-action">
-                <CreateMessage :id="userid" :rid="this.room.rid" />
+                <CreateMessage :id="userid" :rid="this.room.rid" :to="this.room.to" :myNickName="this.myNickName" />
             </div>
         </div>
     </div>
@@ -42,6 +42,12 @@
 <script>
 import CreateMessage from '../../components/common/CreateMessage';
 import moment from 'moment';
+
+import axios from "axios";
+import router from "@/routes";
+
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "https://localhost:8080";
 
 export default {
     props: ['room'],
@@ -53,6 +59,8 @@ export default {
             // room :{},
             messages : [],
             userid : this.$cookie.get('userId'),
+            // to : []
+            myNickName : ''
 
         }
     },
@@ -63,6 +71,38 @@ export default {
                 }
                 //  console.log(this.room)
               this.view(this.room);
+
+                    //접속한 방의 알림을 모두 읽음으로 변경.
+                      window.db.collection('alerm').doc('chat').collection('messages').where('roomid','==',this.room.rid).where('to','==',this.userid).onSnapshot(
+                      snapshot =>{
+                          if(snapshot.empty) {
+                              console.log('없다')
+                          }
+
+                          snapshot.forEach(doc =>{
+                              console.log(doc.id, '=>',doc.data())
+                             window.db.collection('alerm').doc('chat').collection('messages').doc(doc.id).set({
+                                    confirm : true
+                                },{merge:true}).catch(err => {
+                                    console.log(err);
+                                });
+                          })
+                      })
+
+              //내 닉네임 구하는 부분
+               axios
+                            .post(
+                                `${SERVER_URL}/chat/nickname`,[this.userid]
+                            ).then((response) =>{
+                                // console.log('내 닉네임');
+                                // console.log(response);
+                                this.myNickName = response.data[0];
+                                // console.log(this.myNickName);
+                            }).chatch((err) =>{
+
+                            })
+
+    
             },
     methods:{
         view(room){
@@ -78,20 +118,23 @@ export default {
                       if(num == -1){
                           num = this.room.id.indexOf(id);
                       }    
-                      console.log("--------------------")
-                      console.log(id)
-                      console.log(typeof(id));
-                      console.log(num)              
-                      console.log(this.room.id)
-                      console.log(this.room.nickName[num])
-                      console.log(this.room.nickName)
+             
+                    //   console.log("--------------------")
+                    //   console.log(id)
+                    //   console.log(typeof(id));
+                    //   console.log(num)              
+                    //   console.log(this.room.id)
+                    //   console.log(this.room.nickName[num])
+                    //   console.log(this.room.nickName)
 
                       var ms ={
                         message : doc.data().message,
                         nickname : this.room.nickName[num],
                         time : moment(doc.data().time).format('LLL'),
-                        userid : doc.data().from
+                        userid : doc.data().from,
+                        // to : to
                       }
+                    //   console.log('ms');
                     //   console.log(ms);
 
                       this.messages.push(ms);

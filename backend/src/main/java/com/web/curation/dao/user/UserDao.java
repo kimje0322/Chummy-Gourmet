@@ -52,8 +52,13 @@ public interface UserDao extends JpaRepository<User, String> {
 
 	
 	// MEETUP ID로 해당 밋업에 참가한 유저 리스트 반환
-	@Query(value = "SELECT * FROM user WHERE user_id IN (SELECT meetup_member as meetup_membermeetupmember FROM meetup_member WHERE meetup_id = :meetupId);" ,nativeQuery = true)
+	@Query(value = "SELECT * FROM user WHERE user_id IN (SELECT meetup_member FROM meetup_member WHERE meetup_id = :meetupId)" ,nativeQuery = true)
 	Optional<List<User>> findMembersByMeetupId(int meetupId);
+
+	
+	// MEETUP ID로 해당 밋업에 참가 신청 중인 유저 리스트 반환
+	@Query(value = "SELECT * FROM user WHERE user_id IN (SELECT guest_id FROM meetup_request WHERE meetup_id = :meetupId)" ,nativeQuery = true)
+	Optional<List<User>> findAllByMeetupId(int meetupId);
 	
 }
 

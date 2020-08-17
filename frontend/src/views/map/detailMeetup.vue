@@ -1,4 +1,5 @@
 <template>
+
   <div class="user join">
     <v-bottom-navigation
       scroll-target="#scroll-area-2"
@@ -8,9 +9,12 @@
       color="white"
       horizontal
     >
-      <v-btn-toggle tile color="deep-purple accent-3" group>
-          <v-btn @click="$router.go(-1)" value="center">취소</v-btn>
-          <v-btn @click="requestDialog = true">참석</v-btn>
+      <v-btn-toggle tile color="deep-purple accent-3" >
+          <v-btn  @click="$router.go(-1)">취소</v-btn>
+          <v-btn  v-if="isGuest" @click="cancleMeetup">{{text}}</v-btn>
+          <v-btn  v-else-if="meetup.curPersonnel==meetup.maxPersonnel" disabled>{{text}}</v-btn>
+          <v-btn  v-else-if="isRequest" @click="cancleRequestMeetup">{{text}}</v-btn>
+          <v-btn  v-else @click="requestDialog = true">{{text}}</v-btn>
       </v-btn-toggle>
     </v-bottom-navigation>
 
@@ -56,7 +60,7 @@
         <v-text-field
             solo
             v-model="meetup.date"
-            :append-icon="'mdi-calendar-check orange--teorange--text text--lighten-2'"
+            :append-icon="'mdi-calendar-check orange--text text--lighten-2'"
             readonly
         ></v-text-field>
 
@@ -129,21 +133,82 @@ export default {
       meetup : '',
       requestDialog : false,
       requestMessage : '',
-
+      text : '참석 신청',
+      isGuest : false,
+      isRequest : false,
     }
   },
-  mounted() {
+  created() {
     var meetupId = this.$route.query.meetupId;
+    
+    /* 밋업 정보 불러오기 */
+    this.init();
+
+    /* 해당 밋업에 참석 신청중인지 확인 */
     axios
-    .get(`${SERVER_URL}/meetup/searchByMeetupID/${meetupId}`)
+    .get(`${SERVER_URL}/meetup/request/${meetupId}`)
     .then((response) => {
-      console.log(response)
-        let meetup = response.data;
-        meetup.personalities = this.stringToArray(meetup.personalities);
-        this.meetup = meetup;
+      if(response.data == 'success'){
+        let requests = response.data.object; 
+        requests.forEach(request => {
+          if(request.guestId == "70"){
+          // if(request.userId == this.$cookie.get("userId")){
+            this.isRequest = request.id;
+            this.text = "신청 취소";
+          }
+        });
+      }
+    })
+
+    /* 해당 밋업의 멤버 리스트 조회해서 참석중인지 확인 */
+    axios
+    .get(`${SERVER_URL}/meetup/members/${meetupId}`)
+    .then((response) => {
+      let guests = response.data.object;
+      guests.forEach(guest => {
+        if(guest.userId == "70"){
+        // if(guest.userId == this.$cookie.get("userId")){
+          this.isGuest = true;
+          this.text = "참석 취소";
+        }
+      });
     })  
+
+
   },
   methods: {
+    init(){
+      var meetupId = this.$route.query.meetupId;
+      axios
+      .get(`${SERVER_URL}/meetup/search/${meetupId}`)
+      .then((response) => {
+          let meetup = response.data;
+          meetup.personalities = this.stringToArray(meetup.personalities);
+          this.meetup = meetup;
+      })
+    },
+    cancleMeetup(){
+      var meetupId = this.$route.query.meetupId;
+      axios
+      .delete(`${SERVER_URL}/meetup?meetupId=${meetupId}&userId=${this.$cookie.get("userId")}`)
+      .then((response) => {
+        this.isGuest = false;
+        this.isRequest = false;
+        this.text = "참석 신청";
+        this.init();
+        alert("밋업 참석이 취소되었습니다.");
+      })  
+    },
+    cancleRequestMeetup(){
+      console.log(this.isRequest)
+      axios
+      .delete(`${SERVER_URL}/meetup/request/${this.isRequest}`)
+      .then((response) => {
+        this.isRequest = false;
+        this.text = "참석 신청";
+        alert("밋업 참석 신청이 취소되었습니다.");
+      })  
+    },
     requestMeetup(){
       let request = {
         meetupId : this.meetup.id,
@@ -153,14 +218,12 @@ export default {
         requestMessage : this.requestMessage,
       };
       console.log(request);
-      // axios
-      // .put(`${SERVER_URL}/meetup/request`, this.request)
-      // .then((response) => {
-      //   // console.log(response)
-      //   //   let meetup = response.data;
-      //   //   meetup.personalities = this.stringToArray(meetup.personalities);
-      //   //   this.meetup = meetup;
-      // })  
+      axios
+      .post(`${SERVER_URL}/meetup/request`, request)
+      .then((response) => {
+        alert("신청이 완료되었습니다.")
+        this.$router.push("/map");
+      })  
     },
     stringToArray(strings){
         strings = strings.replace('[', '');

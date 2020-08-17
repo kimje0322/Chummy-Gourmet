@@ -2,7 +2,9 @@ package com.web.curation.controller.meetup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dao.meetup.MeetUpDao;
+import com.web.curation.dao.meetup.MeetUpRequsetDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.meetup.Meetup;
+import com.web.curation.model.meetup.MeetupRequest;
 import com.web.curation.model.user.User;
 
 import io.swagger.annotations.ApiOperation;
@@ -40,6 +44,9 @@ public class MeetUpController {
 	
 	@Autowired
 	UserDao userDao;
+	
+	@Autowired
+	MeetUpRequsetDao meetupRequestDao;
 	
 	//밋업 정보 조회
 	@GetMapping("/meetup/search")
@@ -134,5 +141,24 @@ public class MeetUpController {
         result.status = true;
         result.data = "success";
         return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/meetup/request")
+	@ApiOperation(value = "사용자가 방장인 밋업의 참가요청 리스트 가져오기")
+	public Object getMeetuprequest(@RequestParam(required = true) final String userId) {
+		final BasicResponse result = new BasicResponse();
+		// 밋업요청 정보와 요청한 사람 정보 한번에 들고오자
+		Optional<List<MeetupRequest>> data = meetupRequestDao.getMeetupRequestByUserId(userId);
+		// 데이터 존재
+		if(data.isPresent()) {
+			System.out.println(data.toString());
+			result.status = true;
+	        result.data = "success";
+	        result.object = data.get();;
+		}else {
+			result.status = true;
+	        result.data = "fail";
+		}
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 }

@@ -14,6 +14,8 @@
 
 <script>
 // import fb from '@/firebase/init';
+
+
 export default {
     name: 'CreateMessage',
     props: ['id','rid','to','myNickName'],
@@ -42,7 +44,7 @@ export default {
                 for(var i = 0;i<this.to.length;i++){
                     // console.log(this.myNickName);
                     //새로운 알람을 보낸다.
-                    window.db.collection('alerm').doc('chat').collection('messages').add({
+                    window.db.collection('alarm').doc('chat').collection('messages').add({
                         to : this.to[i],
                         from : this.id,
                         message: this.myNickName+"님이 채팅메시지를 보냈습니다.",

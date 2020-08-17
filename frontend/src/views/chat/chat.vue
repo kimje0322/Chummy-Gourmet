@@ -49,6 +49,8 @@ import router from "@/routes";
 const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 // const SERVER_URL = "https://localhost:8080";
 
+
+
 export default {
     props: ['room'],
     components: {
@@ -65,6 +67,7 @@ export default {
         }
     },
     created(){
+        
               var confirmChat = confirm("대화하시겠습니까?");
                 if(confirmChat == false){
                     this.$router.go(-1);
@@ -73,15 +76,14 @@ export default {
               this.view(this.room);
 
                     //접속한 방의 알림을 모두 읽음으로 변경.
-                      window.db.collection('alerm').doc('chat').collection('messages').where('roomid','==',this.room.rid).where('to','==',this.userid).onSnapshot(
-                      snapshot =>{
+                      window.db.collection('alarm').doc('chat').collection('messages').where('roomid','==',this.room.rid).where('to','==',this.userid).get()
+                      .then(snapshot =>{
                           if(snapshot.empty) {
                               console.log('없다')
                           }
 
                           snapshot.forEach(doc =>{
-                              console.log(doc.id, '=>',doc.data())
-                             window.db.collection('alerm').doc('chat').collection('messages').doc(doc.id).set({
+                             window.db.collection('alarm').doc('chat').collection('messages').doc(doc.id).set({
                                     confirm : true
                                 },{merge:true}).catch(err => {
                                     console.log(err);

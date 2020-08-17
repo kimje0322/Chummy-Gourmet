@@ -183,7 +183,7 @@ import axios from "axios";
 import $ from "jquery";
 
 const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-// const SERVER_URL = "http://localhost:8080";
+// const SERVER_URL = "https://localhost:8080";
 
 export default {
   data() {
@@ -214,14 +214,12 @@ export default {
         `${SERVER_URL}/userpage/getuser?userId=${this.$cookie.get("userId")}`
       )
       .then((response) => {
-        // console.log("alfkjsdsi");
-        console.log(response);
         this.userid = this.$cookie.get("userId");
         this.username = response.data.userNickname;
         this.myimg = response.data.userImg;
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
 
     axios
@@ -235,7 +233,7 @@ export default {
         // alert(this.postuserid)
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
   },
   methods: {
@@ -253,7 +251,6 @@ export default {
       }
     },
     gotoProfileByComment(user) {
-      console.log(user)
       // 나를 누르면 마이페이지로 이동
       if(user.commentuserid == this.$cookie.get("userId")){
         this.$router.push('/user/info');
@@ -276,7 +273,7 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
         });
         let userImg = `https://i3b302.p.ssafy.io:8080/img/user?imgname=`+user.userimg;
          this.$router.push('/user/profile?userId='+user.commentuserid
@@ -290,17 +287,16 @@ export default {
         .then((response) => {
           axios
             .get(
-              `${SERVER_URL}/post/comment?commentid=${this.$route.params.postid}`
+              `${SERVER_URL}/post/comment?commentid=${this.$route.query.postid}`
             )
             .then((response) => {
-              console.log(response);
               this.commentlst = response.data.data;
-              this.postname = this.$route.params.postnickname;
-              this.postcontent = this.$route.params.postcontent;
-              this.postuserimg = this.$route.params.postuserimg;
+              this.postname = this.$route.query.postnickname;
+              this.postcontent = this.$route.query.postcontent;
+              this.postuserimg = this.$route.query.postuserimg;
             })
             .catch((error) => {
-              console.log(error.response);
+              // console.log(error.response);
             });
         })
         .catch((error) => {});
@@ -313,25 +309,24 @@ export default {
         var commentxt = {
         commentuserid: this.$cookie.get("userId"),
         postcomment: this.commentText,
-        postid: this.$route.params.postid,
+        postid: this.$route.query.postid,
       };
       this.commentText = "";
-
       axios
         .post(`${SERVER_URL}/post/comment`, commentxt)
         .then((respose) => {
           axios
             .get(
-              `${SERVER_URL}/post/comment?commentid=${this.$route.params.postid}`
+              `${SERVER_URL}/post/comment?commentid=${this.$route.query.postid}`
             )
             .then((response) => {
               this.commentlst = response.data.data;
-              this.postname = this.$route.params.postnickname;
-              this.postcontent = this.$route.params.postcontent;
-              this.postuserimg = this.$route.params.postuserimg;
+              this.postname = this.$route.query.postnickname;
+              this.postcontent = this.$route.query.postcontent;
+              this.postuserimg = this.$route.query.postuserimg;
             })
             .catch((error) => {
-              console.log(error.response);
+              // console.log(error.response);
             });
         })
         .catch((error) => {});
@@ -354,20 +349,19 @@ export default {
         .put(`${SERVER_URL}/post/comment`, commentxt)
         .then((response) => {
           this.recomment = false
-          alert("성공!");
+          // alert("성공!");
           axios
             .get(
-              `${SERVER_URL}/post/comment?commentid=${this.$route.params.postid}`
+              `${SERVER_URL}/post/comment?commentid=${this.$route.query.postid}`
             )
             .then((response) => {
-              console.log(response);
               this.commentlst = response.data.data;
-              this.postname = this.$route.params.postnickname;
-              this.postcontent = this.$route.params.postcontent;
-              this.postuserimg = this.$route.params.postuserimg;
+              this.postname = this.$route.query.postnickname;
+              this.postcontent = this.$route.query.postcontent;
+              this.postuserimg = this.$route.query.postuserimg;
             })
             .catch((error) => {
-              console.log(error.response);
+              // console.log(error.response);
             });
         })
         .catch((error) => {});

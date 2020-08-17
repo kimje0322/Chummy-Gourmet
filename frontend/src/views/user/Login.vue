@@ -31,7 +31,7 @@
               v-model="password"
               :rules="[() => !!password || '패스워드를 입력해주세요', rules.password]"
               outlined hide-details="auto"
-              @keyup.enter="Login"
+              @keyup.enter="onLogin"
               placeholder="비밀번호를 입력하세요."
               type="password"
               clearable

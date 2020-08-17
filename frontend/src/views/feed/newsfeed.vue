@@ -262,11 +262,23 @@ export default {
       likestate: true,
       items: [{ title: "삭제" }, { title: "취소" }],
       delid : "",
+      mynickname : ''
     };
   },
 
   mounted() {},
   created() {
+    //유저의 닉네임 가져오기
+     axios
+      .post(`${SERVER_URL}/chat/nickname`,[this.$cookie.get('userId')])
+      .then((response) => {
+       this.mynickname = response.data[0];
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+
+
     this.timestamp = new Date();
 
     this.userid = this.$cookie.get("userId")
@@ -285,6 +297,7 @@ export default {
           return -1 * (a[1] - b[1]);
         });
         this.postlst = posts;
+
         this.commentlst = response.data.comment;
         console.log("mentlst : " + response.data.comment);
       })
@@ -410,14 +423,31 @@ export default {
             }&userid=${this.$cookie.get("userId")}`
           )
           .then((response) => {
-            console.log("유저가 좋아요 성공");
+            //게시한 유저가 자신이 아닐때만
+            //좋아요 알림 보냄
+            if(this.postlst[idx].postuserid != this.$cookie.get('userId')){
+              console.log(this.mynickname);
+               window.db.collection('alarm').doc('like').collection('messages').add({
+                        to : this.postlst[idx].postuserid,
+                        from : this.$cookie.get('userId'),
+                        message: this.mynickname+"님이 회원님의 게시글에 좋아요를 눌렀습니다..",
+                        time: Date.now(),
+                        postid : this.postlst[idx].postid,
+                        confirm : false
+                    }).catch(err => {
+                        console.log(err);
+                    });
+            }
+
+
+            // console.log("유저가 좋아요 성공");
             this.like = !this.like;
             this.timestamp = new Date();
-            console.log(this.$cookie.get("userId"));
+            // console.log(this.$cookie.get("userId"));
             axios
               .get(`${SERVER_URL}/post?userid=${this.$cookie.get("userId")}`)
               .then((response) => {
-                console.log(response);
+                // console.log(response);
                 var posts = response.data.data;
                 var comments = response.data.comment;
                 // alert(this.postlst.length);
@@ -430,7 +460,7 @@ export default {
                 });
                 this.postlst = posts;
                 this.commentlst = response.data.comment;
-                console.log("mentlst : " + response.data.comment);
+                // console.log("mentlst : " + response.data.comment);
               })
               .catch((error) => {
                 console.log(error.response);
@@ -438,10 +468,10 @@ export default {
             axios
               .get(`${SERVER_URL}/post/like/${this.$cookie.get("userId")}`)
               .then((response) => {
-                console.log(response);
+                // console.log(response);
                 this.likelist = response.data;
-                console.log("바뀐거보자");
-                console.log(this.likelist);
+                // console.log("바뀐거보자");
+                // console.log(this.likelist);
               });
           })
           .catch((error) => {

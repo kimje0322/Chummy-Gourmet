@@ -10,7 +10,7 @@
         <div>
             <br><br>
             <input style="width : 80%; border : 1px solid" readonly :value="list.message"/>
-            <v-btn height="48px" width="8%" style="float : right;" class="btn btn-primary" @click="onClick(list.type)">확인</v-btn>
+            <v-btn height="48px" width="8%" style="float : right;" class="btn btn-primary" @click="onClick(list)">확인</v-btn>
             <br>
             {{ list.time | moment("from","now")}}
         </div>
@@ -25,6 +25,11 @@
 
 <script>
 import moment from 'moment';
+
+import axios from "axios";
+// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "https://localhost:8080";
+
 export default {
   data(){
     return {
@@ -33,7 +38,7 @@ export default {
   },
   created(){
     this.chat();
-
+    this.like();
   },
 
   methods:{
@@ -48,11 +53,10 @@ export default {
 
                     //있을경우
                       snapshot.forEach(doc=>{
-                         var data ={
-                           type : '채팅',
-                           message : doc.data().message,
-                           time : moment(doc.data().time).format('LLL'),
-                         }
+                        var data = doc.data();
+                         data.rid = doc.id;
+                         data.type = '채팅';
+                         console.log('data',data)
                          this.alarm.push(data);
                        })
                   })
@@ -60,9 +64,50 @@ export default {
                      console.log(err);
                   });
     },
-    onClick(type){
-      if(type=='채팅'){
+    like(){
+       window.db.collection('alarm').doc('like').collection('messages').where('to', '==', this.$cookie.get('userId')).where('confirm','==',false).get()
+                 .then(snapshot=>{
+                  //없을경우
+                      if(snapshot.empty){
+                        console.log("왜없지");
+                        return;
+                        }
+
+                    //있을경우
+                      snapshot.forEach(doc=>{
+                         var data = doc.data();
+                        data.rid = doc.id;
+                        data.type = '좋아요';
+                         console.log('data',data)
+                         this.alarm.push(data);
+                       })
+                  })
+                  .catch(err => {
+                     console.log(err);
+                  });
+    },
+    onClick(list){
+      if(list.type=='채팅'){
         this.$router.push({ path: '/chatroom' });
+      }
+      else if(list.type=='좋아요'){
+        window.db.collection('alarm').doc('like').collection('messages').doc(list.rid).set({
+          confirm : true
+        },{merge : true})
+
+          axios
+            .get(`${SERVER_URL}/userpage/getpost?postId=`+list.postid)
+            .then((response) => {
+                var post = response.data.data
+                var comment = response.data.comment;
+                console.log(post.post_content);
+                console.log(comment);
+               this.$router.push({name :'PostDetail', query: {post_content: post.post_content
+                ,post_id : post.post_id, post_img_url : post.post_img_url,
+                post_like : post.post_like, post_userid : post.post_userid, user_img:post.user_img,
+                user_nickname : post.user_nickname, comment:comment , userId : this.userId}});
+            })  
+        
       }
     }
   }

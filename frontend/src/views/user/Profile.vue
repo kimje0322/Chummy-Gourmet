@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-app>
     <!-- Profile -->
     <v-toolbar dense>
       <v-icon @click="$router.go(-1)">
@@ -10,7 +10,6 @@
       <v-spacer></v-spacer>
     </v-toolbar>
     <!-- 매너온도/팔로워/팔로잉 -->
-    <v-layout>
     <v-toolbar > 
       <v-list-item-avatar>
         <v-img :src="this.userImg"></v-img>
@@ -45,7 +44,7 @@
         </v-list>
       </v-menu>
       <v-spacer></v-spacer>
-        <v-btn color="orange"  @click="onFollow()" v-if="followerFollowing === 'false'">
+        <v-btn outlined color="orange"  @click="onFollow()" v-if="followerFollowing === 'false'">
             팔로우
         </v-btn>
         <v-btn color="white" depressed  @click="deleteFollowRequest()" v-else-if="followerFollowing === 'doing'">
@@ -57,7 +56,7 @@
       <v-spacer></v-spacer>
       <CreateChat :postuserid="this.anotherId" />
     </v-toolbar>
-  </v-layout>
+    <v-container>
   <v-layout class="entireClass">
       <v-row>
       <v-col v-for="(lst,i) in postlst" :key="i" class="d-flex child-flex" cols="4">
@@ -88,7 +87,8 @@
       </div>
       </v-row>
   </v-layout>
-  </div>
+  </v-container>
+  </v-app>
 </template>
 
 <script>

@@ -20,5 +20,15 @@ public interface MeetUpRequsetDao extends JpaRepository<MeetupRequest, String> {
 			"WHERE host_id = :userId", nativeQuery = true)
 	Optional<List<MeetupRequest>> getMeetupRequestByUserId(String userId);
 	
+	// 밋업 요청 등록
+	@Query(value = "INSERT INTO meetup_request (meetup_id, host_id, guest_id, request_message)" + 
+			"VALUES (:#{#meetupRequest.meetupId}, :#{#meetupRequest.hostId}, :#{#meetupRequest.guestId}, :#{#meetupRequest.requestMessage})"
+			, nativeQuery = true)
+	MeetupRequest save(MeetupRequest meetupRequest);
+	
+	// MEETUP ID로 해당 밋업에 참가중인 Request들 반환
+	@Query(value="SELECT * FROM meetup_request WHERE meetup_id = :meetupId", nativeQuery = true)
+	Optional<List<MeetupRequest>> findAllRequestByMeetupId(int meetupId);
+
 
 }

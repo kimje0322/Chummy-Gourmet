@@ -45,9 +45,21 @@ import AddReview from './views/review/addReview.vue'
 //밋업 참가
 import MeetUpRequestList from './components/common/MeetUpRequestList.vue'
 
+//알람페이지
+import AlarmPage from './views/user/AlarmPage.vue'
+
 Vue.use(VueRouter);
 export default new VueRouter({
     routes: [
+         //알람페이지
+         {
+            path: '/user/alarm',
+            name: 'AlaramPage',
+            component: AlarmPage,
+            // meta: {
+            //     navbar: true
+            // }
+        },
          //밋업 참가
          {
             path: '/meetup/add',

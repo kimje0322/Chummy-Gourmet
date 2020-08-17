@@ -1,6 +1,7 @@
 <template>
   <v-app class="mypage">
     <!-- 상단 -->
+      <Alarm></Alarm>
     <v-toolbar-title>
       <Top></Top>
       <Topsub :proptoTopsub="users"></Topsub>
@@ -91,6 +92,9 @@ import Top from "../components/common/Top";
 import Topsub from "../components/common/Topsub";
 import Message from "../components/common/Message";
 import History from "../components/common/History";
+
+import Alarm from "../components/common/Alarm";
+
 import "../assets/css/components.scss";
 import axios from "axios";
 
@@ -104,6 +108,7 @@ export default {
     Topsub,
     Message,
     History,
+    Alarm
   },
   
   data: () => {
@@ -133,7 +138,11 @@ export default {
     };
   },
   created() {
-    this.userId = this.$cookie.get("userId");
+    this.created();
+  },
+  methods: {
+    created(){
+      this.userId = this.$cookie.get("userId");
     axios
       .get(`${SERVER_URL}/userpage/getuser?userId=`+ this.userId)
       .then((response) => {
@@ -149,27 +158,31 @@ export default {
       )
       .then((response) => {
         this.meetups = response.data.object;
-        console.log(response);
       })
       .catch((error) => {
         console.log(error.response);
         this.meetupData = false;
       });
-  },
-  methods: {
+    },
     showMenu(item){
       this.dialog = true;
       this.meetup = item;
     },
     cancelMeetup(){
-      alert("취소하기 백엔드완성되면 이어붙일 예정");
-      // axios.delete(`${SERVER_URL}/userpage/restsacrp?userid=${this.userId}&restid=`)
-      // .then((response) => {
-      //     this.dialog = false
-      // })
-      // .catch((error) => {
-      //     console.log(error.response);
-      // });
+      this.$confirm("참여취소 하시겠습니까?").then(() => {
+      //do something...
+        axios
+        .delete(
+          `${SERVER_URL}/meetup?meetupId=${this.meetup.id}&userId=${this.userId}`
+        )
+        .then((response) => {
+            this.dialog = false
+            this.created();
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
+      });
     },
     moveCreateReview(){
       this.$router.push({ name : 'AddReview', params : this.meetup });

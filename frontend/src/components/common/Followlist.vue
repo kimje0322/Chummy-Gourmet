@@ -56,7 +56,7 @@
                 <!-- <v-list-item-title v-text="user.followingName"></v-list-item-title> -->
                 </v-list-item-content>
 
-                <v-btn color="orange"  @click="onFollow(user,i)" v-if="user.followerFollowing === 'false'">
+                <v-btn outlined color="orange"  @click="onFollow(user,i)" v-if="user.followerFollowing === 'false'">
                     팔로우
                 </v-btn>
                 

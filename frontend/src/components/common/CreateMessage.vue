@@ -14,14 +14,18 @@
 
 <script>
 // import fb from '@/firebase/init';
+
+
 export default {
     name: 'CreateMessage',
-    props: ['id','rid'],
+    props: ['id','rid','to','myNickName'],
     data() {
         return {
             newMessage: null,
             errorText: null
         }
+    },
+    created(){
     },
     methods: {
         createMessage () {
@@ -35,6 +39,22 @@ export default {
                 });
                 this.newMessage = null;
                 this.errorText = null;
+
+
+                for(var i = 0;i<this.to.length;i++){
+                    // console.log(this.myNickName);
+                    //새로운 알람을 보낸다.
+                    window.db.collection('alarm').doc('chat').collection('messages').add({
+                        to : this.to[i],
+                        from : this.id,
+                        message: this.myNickName+"님이 채팅메시지를 보냈습니다.",
+                        time: Date.now(),
+                        roomid : this.rid,
+                        confirm : false
+                    }).catch(err => {
+                        console.log(err);
+                    });
+                }
             } else {
                 this.errorText = "A message must be entered first!";
             }

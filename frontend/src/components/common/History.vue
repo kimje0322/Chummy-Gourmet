@@ -1,4 +1,6 @@
 <template>
+  <v-app>
+    <v-container>
   <v-layout class="entireClass">
     <v-row>
       <v-col v-for="(lst,i) in postlst" :key="i" class="d-flex child-flex" cols="4">
@@ -28,8 +30,9 @@
       <h3 class="mt-5">등록된 게시물이 없습니다.</h3>
     </div>
       </v-row>
-    
   </v-layout>
+  </v-container>
+  </v-app>
 </template>
 
 

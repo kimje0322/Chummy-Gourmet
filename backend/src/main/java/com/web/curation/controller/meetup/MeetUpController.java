@@ -2,7 +2,9 @@ package com.web.curation.controller.meetup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,6 +48,7 @@ public class MeetUpController {
 	
 	@Autowired
 	UserDao userDao;
+
 	
 	//밋업 정보 조회
 	@GetMapping("/meetup/search")
@@ -61,7 +63,7 @@ public class MeetUpController {
 	}
 	
 	//밋업 아이디로 밋업 정보 조회
-	@GetMapping("/meetup/search/{id}")
+	@GetMapping("/meetup/searchByMeetupID/{id}")
 	@ApiOperation(value = "밋업 정보 조회")
 	public Meetup searchByMeetupID(@PathVariable int id) {
 		
@@ -128,8 +130,6 @@ public class MeetUpController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
-
-	
 	//신규 밋업 등록
 	@PostMapping("/meetup")
 	@ApiOperation(value = "신규 밋업 등록")
@@ -144,7 +144,6 @@ public class MeetUpController {
         result.data = "success";
         return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-	
 	// 밋업 참석
 	@GetMapping("/meetup")
 	@ApiOperation(value = "밋업 참석")
@@ -215,5 +214,47 @@ public class MeetUpController {
 			result.data = "fail";
 		}
         return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@GetMapping("/meetup/request")
+	@ApiOperation(value = "사용자가 방장인 밋업의 참가요청 리스트 가져오기")
+	public Object getMeetuprequest(@RequestParam(required = true) final String userId) {
+		final BasicResponse result = new BasicResponse();
+		// 밋업요청 정보와 요청한 사람 정보 한번에 들고오자
+		Optional<List<MeetupRequest>> data = meetupRequestDao.getMeetupRequestByUserId(userId);
+		// 데이터 존재
+		if(data.isPresent()) {
+			System.out.println(data.toString());
+			result.status = true;
+	        result.data = "success";
+	        result.object = data.get();;
+		}else {
+			result.status = true;
+	        result.data = "fail";
+		}
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/meetup/acceptMeetupRequest")
+	@ApiOperation(value = "밋업요청한것을 수락해줌")
+	public Object acceptMeetupRequest(@RequestParam(required = true) final String meetupId,
+			@RequestParam(required = true) final String guestId) {
+
+		ArrayList<User> userList = new ArrayList<>();
+		final BasicResponse result = new BasicResponse();
+		try {
+			// 밋업요청리스트에서 지우고
+			meetupRequestDao.deleteById(meetupId);
+			// 밋업참석리스트에 저장 및 숫자 증가
+			meetupDao.save(Integer.parseInt(meetupId), Integer.parseInt(guestId));
+			meetupDao.personnelUp(Integer.parseInt(meetupId));
+			result.status = true;
+			result.data = "success";
+		} catch (Exception e) {
+			result.status = true;
+			result.data = "fail";
+			return result;
+		}
+		return result;
 	}
 }

@@ -151,8 +151,8 @@ export default {
       if(response.data == 'success'){
         let requests = response.data.object; 
         requests.forEach(request => {
-          if(request.guestId == "70"){
-          // if(request.userId == this.$cookie.get("userId")){
+          // if(request.guestId == "70"){
+          if(request.guestId == this.$cookie.get("userId")){
             this.isRequest = request.id;
             this.text = "신청 취소";
           }
@@ -166,8 +166,8 @@ export default {
     .then((response) => {
       let guests = response.data.object;
       guests.forEach(guest => {
-        if(guest.userId == "70"){
-        // if(guest.userId == this.$cookie.get("userId")){
+        // if(guest.userId == "70"){
+        if(guest.userId == this.$cookie.get("userId")){
           this.isGuest = true;
           this.text = "참석 취소";
         }
@@ -213,8 +213,8 @@ export default {
       let request = {
         meetupId : this.meetup.id,
         hostId : this.meetup.master,
-        // guestId : this.$cookie.get("userId"),
-        guestId : '70',
+        guestId : this.$cookie.get("userId"),
+        // guestId : '70',
         requestMessage : this.requestMessage,
       };
       console.log(request);

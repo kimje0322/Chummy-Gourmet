@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-app>
     <!-- Profile -->
     <v-toolbar dense>
       <v-icon @click="$router.go(-1)">
@@ -10,7 +10,6 @@
       <v-spacer></v-spacer>
     </v-toolbar>
     <!-- 매너온도/팔로워/팔로잉 -->
-    <v-layout>
     <v-toolbar > 
       <v-list-item-avatar>
         <v-img :src="this.userImg"></v-img>
@@ -57,7 +56,7 @@
       <v-spacer></v-spacer>
       <CreateChat :postuserid="this.anotherId" />
     </v-toolbar>
-  </v-layout>
+    <v-container>
   <v-layout class="entireClass">
       <v-row>
       <v-col v-for="(lst,i) in postlst" :key="i" class="d-flex child-flex" cols="4">
@@ -88,7 +87,8 @@
       </div>
       </v-row>
   </v-layout>
-  </div>
+  </v-container>
+  </v-app>
 </template>
 
 <script>

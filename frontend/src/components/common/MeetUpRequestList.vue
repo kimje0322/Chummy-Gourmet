@@ -88,7 +88,7 @@
           <v-btn color="info" @click="acceptRequest()">
             수락
           </v-btn>
-          <v-btn color="error" @click="rejectRequest()">
+          <v-btn color="error" @click="deleteRequest()">
             거절
           </v-btn>
         </v-list-item-icon>
@@ -122,23 +122,23 @@ export default {
   },
   methods :{
     acceptRequest(){
-      // axios
-      // .get(
-      //   `${SERVER_URL}/meetup/acceptMeetuprequest?userId=${this.userId}&followingRequestId=`+followingRequestId
-      // )
-      // .then((response) => {
-      //   if(response.data.data == "success"){
-      //     alert("수락완료");
-      //     this.created();
-      //   }
-      //   else
-      //     alert("수락실패");
-      // })
-      // .catch((error) => {
-      //   console.log(error.response);
-      // });
+      axios
+      .get(
+        `${SERVER_URL}/meetup/acceptMeetupRequest?MeetupId=${this.meetupInfo[this.index].meetupId}&guestId=${this.guestList[this.index].guestId}`
+      )
+      .then((response) => {
+        if(response.data.data == "success"){
+          alert("수락완료");
+          this.created();
+        }
+        else
+          alert("수락실패");
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
     },
-    rejectRequest(){
+    deleteRequest(){
 
     },
     showRequest(idx){

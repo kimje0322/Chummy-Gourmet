@@ -161,4 +161,29 @@ public class MeetUpController {
 		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+	
+//	acceptMeetupRequest
+	@GetMapping("/meetup/acceptMeetupRequest")
+	@ApiOperation(value = "밋업요청한것을 수락해줌")
+	public Object acceptMeetupRequest(@RequestParam(required = true) final String meetupId,
+			@RequestParam(required = true) final String guestId) {
+
+		ArrayList<User> userList = new ArrayList<>();
+		final BasicResponse result = new BasicResponse();
+		try {
+			// 유저의 팔로워 리스트에 들어간다.
+//			String result1 = userPageDao.insertFollowerUser(meetupId, guestId);
+			// 밋업요청리스트에서 지우고
+			String result2 = meetupRequestDao.deleteMeetupRequestByMeetupId(meetupId);
+			// 밋업 멤버 리스트에 들어간다.
+//			String result3 = meetupRequestDao.insertFollowingUser(meetupId, guestId);
+			result.status = true;
+			result.data = "success";
+		} catch (Exception e) {
+			result.status = true;
+			result.data = "fail";
+			return result;
+		}
+		return result;
+	}
 }

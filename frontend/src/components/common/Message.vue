@@ -1,4 +1,6 @@
 <template>
+  <v-app>
+<v-container>
   <v-layout class="entireClass">
       <v-row>
       <v-col v-for="item in items" :key="item.title" class="d-flex child-flex" cols="4">
@@ -39,11 +41,10 @@
       <i class="fas fa-utensils fa-6x"></i>
       <h3 class="mt-5">스크랩한 음식점이 없습니다.</h3>
     </div>
+    
   </v-layout>
-
-
-
-
+</v-container>
+  </v-app>
 </template>
 
 

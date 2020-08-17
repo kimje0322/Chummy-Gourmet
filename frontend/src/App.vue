@@ -17,38 +17,28 @@
             horizontal
           >
             <v-btn class="nav-btn" @click="gotomap" text color="orange accent-4">
-              <!-- <router-link to="/map"> -->
                 <!-- <v-icon>fas fa-search</v-icon> -->
-                <v-icon class="icon-css">mdi-map-marker-radius</v-icon>
-              <!-- </router-link> -->
+                <v-icon>mdi-map-marker-radius</v-icon>
             </v-btn>
 
             <v-btn @click="gotonewsfeed" text color="orange accent-4">
-              <!-- <router-link to=/newsfeed> -->
-                <v-icon class="icon-css">mdi-history</v-icon>
-              <!-- </router-link> -->
+                <v-icon>mdi-history</v-icon>
             </v-btn>
 
             <v-btn @click="gotofeedadd" text color="orange accent-4">
-              <!-- <router-link to="/feed/add"> -->
               <!-- <input ref="imageInput" type="file" hidden @change="onChangeImages"> -->
               <!-- <v-btn type="button" @click="onClickImageUpload"> -->
               <!-- </v-btn> -->  
-                <v-icon class="icon-css">fas fa-plus</v-icon>
-              <!-- </router-link> -->
+                <v-icon>fas fa-plus</v-icon>
             </v-btn>
 
             <v-btn @click="gotocurator" text color="orange accent-4">
-              <!-- <router-link to="/curator"> -->
                 <!-- <v-icon>fas fa-list</v-icon> -->
-                <v-icon class="icon-css">mdi-magnify</v-icon>
-              <!-- </router-link> -->
+                <v-icon>mdi-magnify</v-icon>
             </v-btn>
 
             <v-btn @click="gotouserinfo" text color="orange accent-4">
-              <!-- <router-link to="/user/info"> -->
-                <v-icon class="icon-css">fas fa-user</v-icon>
-              <!-- </router-link> -->
+                <v-icon>fas fa-user</v-icon>
             </v-btn>
           </v-bottom-navigation>
 
@@ -169,13 +159,9 @@ export default {
 .home-padding {
   padding: 0px !important;
 }
-/* .icon-css {
-  padding: 0px
-}
-
 .navbar-fixed-bottom {
-  padding: 15px 5px 0 0;
-} */
+  padding-left: 12px;
+}
 
 
 </style>

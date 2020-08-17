@@ -162,7 +162,6 @@ public class MeetUpController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
-//	acceptMeetupRequest
 	@GetMapping("/meetup/acceptMeetupRequest")
 	@ApiOperation(value = "밋업요청한것을 수락해줌")
 	public Object acceptMeetupRequest(@RequestParam(required = true) final String meetupId,

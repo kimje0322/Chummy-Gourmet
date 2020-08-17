@@ -1,17 +1,17 @@
 <template>
   <v-app>
-    <v-toolbar-title >
-      <v-toolbar dark>
-        <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
-        <v-spacer></v-spacer>
-        <p class="my-auto">Profile 수정</p>
-        <v-spacer></v-spacer>
-        <v-spacer></v-spacer>
-        <a @click="update">
-           <i class="fas fa-check"></i>
-        </a>
-      </v-toolbar>
-    </v-toolbar-title>
+    <v-toolbar dense>
+      <v-icon @click="$router.go(-1)">
+        mdi-arrow-left
+      </v-icon>
+      <v-spacer></v-spacer>
+      <p class="my-auto text-center">Profile 수정</p>
+      <v-spacer></v-spacer>
+      <a @click="update">
+          <i class="fas fa-check"></i>
+      </a>
+    </v-toolbar>
+    
     <div class="entire">
     <!-- 선호 음식 -->
     <div class="label-with-input">

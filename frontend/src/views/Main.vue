@@ -8,12 +8,11 @@
     <!-- 가운데 부분 -->
     <div>
       <!-- tab view -->
-      <v-tabs dark v-model="currentItem" fixed-tabs slider-color="grey">
+      <v-tabs v-model="currentItem" fixed-tabs slider-color="orange">
         <v-tab v-for="item in items" :key="item" :href="'#tab-' + item">
           <v-icon v-if="item=='Profile'">mdi-account-box</v-icon>
           <v-icon v-if="item=='History'">fas fa-list</v-icon>
           <v-icon v-if="item=='Message'">mdi-folder</v-icon>
-          
         </v-tab>
       </v-tabs>
 
@@ -68,7 +67,6 @@
     </div>
     <!-- dialog -->
     <v-dialog
-      dark
       v-model="dialog"
       max-width="190"
       >
@@ -124,13 +122,11 @@ export default {
           title: "확인",
           highlight: true,
           onClick: () => {
-            console.log("클릭");
           },
         },
         {
           title: "취소",
           onClick: () => {
-            console.log("클릭");
           },
         },
       ],

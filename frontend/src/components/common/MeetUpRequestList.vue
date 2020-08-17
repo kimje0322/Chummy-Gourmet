@@ -67,8 +67,29 @@
             <v-card-subtitle>{{this.meetupInfo.location}}<br>{{this.meetupDate}}</v-card-subtitle>
           </div>
         </div>
+        <v-list-item>
+      <v-list-item-avatar>
+        <v-img
+            :src="'https://i3b302.p.ssafy.io:8080/img/user?imgname='+this.userImg">
+          </v-img>
+      </v-list-item-avatar>
+      <v-list-item-content>
+        <v-list-item-title class="headline">{{this.userNickname}}</v-list-item-title>
+        <v-list-item-subtitle style="text-color='orange'">{{this.requestMessage}}</v-list-item-subtitle>
+      </v-list-item-content>
+    </v-list-item>
+    <v-card-actions>
+      <v-spacer></v-spacer>
+      <v-btn outlined color="info" @click="acceptRequest()">
+        수락
+      </v-btn>
+      <v-btn outlined color="error" @click="deleteRequest()">
+        거절
+      </v-btn>
+    </v-card-actions>
       </v-card>
-      <v-list>
+      
+      <!-- <v-list>
         <v-list-item-avatar>
           <v-img
             :src="'https://i3b302.p.ssafy.io:8080/img/user?imgname='+this.userImg">
@@ -92,7 +113,7 @@
             거절
           </v-btn>
         </v-list-item-icon>
-      </v-list>
+      </v-list> -->
      
     </v-dialog>
   </v-app>
@@ -101,8 +122,8 @@
 <script>
 
 import axios from "axios";
-const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-// const SERVER_URL = "https://localhost:8080";
+// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+const SERVER_URL = "https://localhost:8080";
 export default {
   name: "components",
  

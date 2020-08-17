@@ -44,7 +44,7 @@
         </v-list>
       </v-menu>
       <v-spacer></v-spacer>
-        <v-btn color="orange"  @click="onFollow()" v-if="followerFollowing === 'false'">
+        <v-btn outlined color="orange"  @click="onFollow()" v-if="followerFollowing === 'false'">
             팔로우
         </v-btn>
         <v-btn color="white" depressed  @click="deleteFollowRequest()" v-else-if="followerFollowing === 'doing'">

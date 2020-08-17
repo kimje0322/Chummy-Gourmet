@@ -68,53 +68,26 @@
           </div>
         </div>
         <v-list-item>
-      <v-list-item-avatar>
-        <v-img
-            :src="'https://i3b302.p.ssafy.io:8080/img/user?imgname='+this.userImg">
-          </v-img>
-      </v-list-item-avatar>
-      <v-list-item-content>
-        <v-list-item-title class="headline">{{this.userNickname}}</v-list-item-title>
-        <v-list-item-subtitle style="text-color='orange'">{{this.requestMessage}}</v-list-item-subtitle>
-      </v-list-item-content>
-    </v-list-item>
-    <v-card-actions>
-      <v-spacer></v-spacer>
-      <v-btn outlined color="info" @click="acceptRequest()">
-        수락
-      </v-btn>
-      <v-btn outlined color="error" @click="deleteRequest()">
-        거절
-      </v-btn>
-    </v-card-actions>
-      </v-card>
-      
-      <!-- <v-list>
-        <v-list-item-avatar>
-          <v-img
-            :src="'https://i3b302.p.ssafy.io:8080/img/user?imgname='+this.userImg">
-          </v-img>
-        </v-list-item-avatar>
-        <span
-          style="color: black; font-weight: 600;" 
-          >
-            {{this.userNickname}}
-        </span>
-        <span
-          style="color: orange; font-weight: 600;" 
-          >
-            {{this.requestMessage}}
-        </span><br>   
-        <v-list-item-icon >
-          <v-btn color="info" @click="acceptRequest()">
+          <v-list-item-avatar>
+            <v-img
+                :src="'https://i3b302.p.ssafy.io:8080/img/user?imgname='+this.userImg">
+              </v-img>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title class="headline">{{this.userNickname}}</v-list-item-title>
+            <v-list-item-subtitle style="text-color='orange'">{{this.requestMessage}}</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn outlined color="info" @click="acceptRequest()">
             수락
           </v-btn>
-          <v-btn color="error" @click="deleteRequest()">
+          <v-btn outlined color="error" @click="deleteRequest()">
             거절
           </v-btn>
-        </v-list-item-icon>
-      </v-list> -->
-     
+        </v-card-actions>
+      </v-card>
     </v-dialog>
   </v-app>
 </template>
@@ -122,8 +95,8 @@
 <script>
 
 import axios from "axios";
-// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-const SERVER_URL = "https://localhost:8080";
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "https://localhost:8080";
 export default {
   name: "components",
  
@@ -145,11 +118,12 @@ export default {
     acceptRequest(){
       axios
       .get(
-        `${SERVER_URL}/meetup/acceptMeetupRequest?MeetupId=${this.meetupInfo[this.index].meetupId}&guestId=${this.guestList[this.index].guestId}`
+        `${SERVER_URL}/meetup/acceptMeetupRequest?meetupId=${this.meetupInfo.id}&guestId=${this.guestList[this.index].userId}`
       )
       .then((response) => {
         if(response.data.data == "success"){
           alert("수락완료");
+          this.dialog = false
           this.created();
         }
         else
@@ -160,7 +134,22 @@ export default {
       });
     },
     deleteRequest(){
-
+      axios
+      .delete(
+        `${SERVER_URL}/meetup/request/${this.meetupInfo.id}`
+      )
+      .then((response) => {
+        if(response.data.data == "success"){
+          alert("거절완료");
+          this.dialog = false
+          this.created();
+        }
+        else
+          alert("거절실패");
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
     },
     showRequest(idx){
       this.index = idx;
@@ -173,22 +162,34 @@ export default {
       .then((response) => {
         this.meetupInfo = response.data;
         this.meetupDate = this.meetupInfo.date.slice(0, 16)
-        console.log(this.meetupInfo)
       })
     },
     showUser(user){
-      let profileInfo = {
-        userId: user.userId,
-        userImg : user.userImg,
-        followerFollowing: user.followerFollowing
-      };
-      this.$router.push('/user/profile?userId='+user.followingRequestId
-        +'&followerFollowing='+user.followerFollowing
-        +'&userImg='+user.followingRequestUserImg);
+      let flag = "";
+      axios
+        .get(
+          `${SERVER_URL}/userpage/getfollowerfollowing?userId=`+this.userId+`&followeruserId=`+user.userId
+        )
+        .then((response) => {
+          if(response.data == "true"){
+            flag = "true"
+          }else if(response.data == "false"){
+            flag = "false"
+          }else{
+            flag = "doing" 
+          }
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
+        let userImg = `https://i3b302.p.ssafy.io:8080/img/user?imgname=`+user.userImg;
+         this.$router.push('/user/profile?userId='+user.userId
+        +'&followerFollowing='+flag
+        +'&userImg='+userImg);
     },
     created(){
       this.userId = this.$cookie.get("userId");
-      this.requestList =[]
+      this.guestList = []
     axios
       .get(
         `${SERVER_URL}/meetup/request?userId=${this.userId}`
@@ -209,7 +210,6 @@ export default {
             });
           }
         }
-        console.log(this.guestList)
       })
       .catch((error) => {
         console.log(error.response);

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,10 +44,11 @@ public class MeetUpController {
 	MeetUpDao meetupDao;
 	
 	@Autowired
-	UserDao userDao;
+	MeetUpRequsetDao meetupRequestDao;
 	
 	@Autowired
-	MeetUpRequsetDao meetupRequestDao;
+	UserDao userDao;
+
 	
 	//밋업 정보 조회
 	@GetMapping("/meetup/search")
@@ -142,7 +144,78 @@ public class MeetUpController {
         result.data = "success";
         return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+	// 밋업 참석
+	@GetMapping("/meetup")
+	@ApiOperation(value = "밋업 참석")
+	public Object appliMeetupRequest(@RequestParam int meetupId, @RequestParam int userId) {
+		final BasicResponse result = new BasicResponse();
+		meetupDao.save(meetupId, userId);
+		meetupDao.personnelUp(meetupId);
+		result.status = true;
+		result.data = "success";
+		
+        return new ResponseEntity<>(result, HttpStatus.OK);
+	}
 	
+	// 밋업 참석 취소
+	@DeleteMapping("/meetup")
+	@ApiOperation(value = "밋업 참석 취소")
+	public Object deleteMeetup(@RequestParam int meetupId, @RequestParam int userId) {
+		final BasicResponse result = new BasicResponse();
+		meetupDao.deleteByMeetupIdAndUserId(meetupId, userId);
+		meetupDao.personnelDown(meetupId);
+		result.status = true;
+		result.data = "success";
+		
+        return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	// 밋업 참석 요청
+	@PostMapping("/meetup/request")
+	@ApiOperation(value = "밋업 참석 요청")
+	public Object createMeetupRequest(@RequestBody MeetupRequest meetupRequest) {
+		final BasicResponse result = new BasicResponse();
+		System.out.println(meetupRequest);
+		meetupRequestDao.save(meetupRequest);
+		// ==================
+		// 유효성 체크할 부분
+		// ===================
+        result.status = true;
+        result.data = "success";
+        return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	
+	// 밋업 참석 요청 취소
+	@DeleteMapping("/meetup/request/{requestId}")
+	@ApiOperation(value = "밋업 참석 요청 취소")
+	public Object deleteMeetupRequest(@PathVariable String requestId) {
+		final BasicResponse result = new BasicResponse();
+		meetupRequestDao.deleteById(requestId);
+		result.status = true;
+		result.data = "success";
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	// 해당 밋업에 신청중인 유저 아이디 리스트 조회
+	@GetMapping("/meetup/request/{meetupId}")
+	@ApiOperation(value = "해당 밋업에 참석 요청중인 유저 리스트 조회")
+	public Object getMeetupRequest(@PathVariable int meetupId) {
+		final BasicResponse result = new BasicResponse();
+		Optional<List<MeetupRequest>> users = meetupRequestDao.findAllRequestByMeetupId(meetupId);
+		if(users.isPresent()) {
+			result.status = true;
+			result.data = "success";
+			result.object = users;
+		}
+		else {
+			result.status = true;
+			result.data = "fail";
+		}
+        return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
 	@GetMapping("/meetup/request")
 	@ApiOperation(value = "사용자가 방장인 밋업의 참가요청 리스트 가져오기")
 	public Object getMeetuprequest(@RequestParam(required = true) final String userId) {
@@ -170,12 +243,11 @@ public class MeetUpController {
 		ArrayList<User> userList = new ArrayList<>();
 		final BasicResponse result = new BasicResponse();
 		try {
-			// 유저의 팔로워 리스트에 들어간다.
-//			String result1 = userPageDao.insertFollowerUser(meetupId, guestId);
 			// 밋업요청리스트에서 지우고
-			String result2 = meetupRequestDao.deleteMeetupRequestByMeetupId(meetupId);
-			// 밋업 멤버 리스트에 들어간다.
-//			String result3 = meetupRequestDao.insertFollowingUser(meetupId, guestId);
+			meetupRequestDao.deleteById(meetupId);
+			// 밋업참석리스트에 저장 및 숫자 증가
+			meetupDao.save(Integer.parseInt(meetupId), Integer.parseInt(guestId));
+			meetupDao.personnelUp(Integer.parseInt(meetupId));
 			result.status = true;
 			result.data = "success";
 		} catch (Exception e) {

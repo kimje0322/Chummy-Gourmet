@@ -27,8 +27,8 @@
 import moment from 'moment';
 
 import axios from "axios";
-// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-const SERVER_URL = "https://localhost:8080";
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "https://localhost:8080";
 
 export default {
   data(){
@@ -37,13 +37,14 @@ export default {
     }
   },
   created(){
-    this.chat();
-    this.like();
+    this.view('chat');
+    this.view('like');
+    this.view('comment');
   },
 
   methods:{
-    chat(){
-       window.db.collection('alarm').doc('chat').collection('messages').where('to', '==', this.$cookie.get('userId')).where('confirm','==',false).get()
+    view(type){
+      window.db.collection('alarm').doc(type).collection('messages').where('to', '==', this.$cookie.get('userId')).where('confirm','==',false).get()
                  .then(snapshot=>{
                   //없을경우
                       if(snapshot.empty){
@@ -55,7 +56,7 @@ export default {
                       snapshot.forEach(doc=>{
                         var data = doc.data();
                          data.rid = doc.id;
-                         data.type = '채팅';
+                         data.type = type;
                          console.log('data',data)
                          this.alarm.push(data);
                        })
@@ -64,36 +65,22 @@ export default {
                      console.log(err);
                   });
     },
-    like(){
-       window.db.collection('alarm').doc('like').collection('messages').where('to', '==', this.$cookie.get('userId')).where('confirm','==',false).get()
-                 .then(snapshot=>{
-                  //없을경우
-                      if(snapshot.empty){
-                        console.log("왜없지");
-                        return;
-                        }
 
-                    //있을경우
-                      snapshot.forEach(doc=>{
-                         var data = doc.data();
-                        data.rid = doc.id;
-                        data.type = '좋아요';
-                         console.log('data',data)
-                         this.alarm.push(data);
-                       })
-                  })
-                  .catch(err => {
-                     console.log(err);
-                  });
-    },
     onClick(list){
-      if(list.type=='채팅'){
+      if(list.type=='chat'){
         this.$router.push({ path: '/chatroom' });
       }
-      else if(list.type=='좋아요'){
-        window.db.collection('alarm').doc('like').collection('messages').doc(list.rid).set({
-          confirm : true
-        },{merge : true})
+      else if(list.type=='like' || list.type =='comment'){
+        if(list.type == 'like'){
+          window.db.collection('alarm').doc('like').collection('messages').doc(list.rid).set({
+            confirm : true
+          },{merge : true})
+        }
+        else{
+          window.db.collection('alarm').doc('comment').collection('messages').doc(list.rid).set({
+            confirm : true
+          },{merge : true})
+        }
 
           axios
             .get(`${SERVER_URL}/userpage/getpost?postId=`+list.postid)
@@ -107,7 +94,6 @@ export default {
                 post_like : post.post_like, post_userid : post.post_userid, user_img:post.user_img,
                 user_nickname : post.user_nickname, comment:comment , userId : this.userId}});
             })  
-        
       }
     }
   }

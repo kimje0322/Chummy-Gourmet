@@ -159,14 +159,12 @@ export default {
       .get(`${SERVER_URL}/rest/like/${this.$cookie.get('userId')}`)
       .then((response) => {
         this.likes = response.data;
-        console.log(this.likes);
     });
 
     axios
       .get(`${SERVER_URL}/rest/scrap/${this.$cookie.get('userId')}`)
       .then((response) => {
         this.scraps = response.data;
-        console.log(this.scraps);
     });
 
   },

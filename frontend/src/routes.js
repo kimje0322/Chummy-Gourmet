@@ -3,13 +3,12 @@ import VueRouter from 'vue-router';
 
 import Login from './views/user/Login.vue'
 import Join from './views/user/Join.vue'
-import JoinRule from './views/user/JoinRule.vue'
+import JoinRule1 from './views/user/JoinRule1.vue'
 import JoinInfo from './views/user/JoinInfo.vue'
 import FinishJoin from './views/user/FinishJoin.vue'
 import Curator from './views/curator/curator.vue'
 import Detail from './views/curator/detail.vue'
 import ReviewDetail from './views/curator/reviewDetail.vue'
-import FeedMain from './views/feed/IndexFeed.vue'
 import Components from './views/Components.vue'
 import Party from './views/feed/Party.vue'
 import FindPw from './views/user/FindPw.vue'
@@ -40,10 +39,33 @@ import Chat from './views/chat/chat.vue'
 //피드 게시글 업로드
 import AddFeed from './views/feed/addFeed.vue'
 
+// 리뷰 작성
+import AddReview from './views/review/addReview.vue'
+
+//밋업 참가
+import MeetUpRequestList from './components/common/MeetUpRequestList.vue'
 
 Vue.use(VueRouter);
 export default new VueRouter({
     routes: [
+         //밋업 참가
+         {
+            path: '/meetup/add',
+            name: 'FollowRequestList',
+            component: MeetUpRequestList,
+            // meta: {
+            //     navbar: true
+            // }
+        },
+        //리뷰 작성
+        {
+            path: '/review/add',
+            name: 'AddReview',
+            component: AddReview,
+            // meta: {
+            //     navbar: true
+            // }
+        },
         //피드 게시글 업로드
         {
             path: '/feed/add',
@@ -128,8 +150,8 @@ export default new VueRouter({
         },
         {
             path: '/user/joinrule',
-            name: 'Joinrule',
-            component: JoinRule,
+            name: 'Joinrule1',
+            component: JoinRule1,
             meta: {
                 navbar: true
             }
@@ -179,11 +201,6 @@ export default new VueRouter({
             path: '/map/detailMeetup',
             name: 'DetailMeetup',
             component: DetailMeetup
-        },
-        {
-            path: '/feed/main',
-            name: 'FeedMain',
-            component: FeedMain
         },
         {
             path: '/components',

@@ -8,12 +8,11 @@
     <!-- 가운데 부분 -->
     <div>
       <!-- tab view -->
-      <v-tabs dark v-model="currentItem" fixed-tabs slider-color="grey">
+      <v-tabs v-model="currentItem" fixed-tabs slider-color="orange">
         <v-tab v-for="item in items" :key="item" :href="'#tab-' + item">
           <v-icon v-if="item=='Profile'">mdi-account-box</v-icon>
           <v-icon v-if="item=='History'">fas fa-list</v-icon>
           <v-icon v-if="item=='Message'">mdi-folder</v-icon>
-          
         </v-tab>
       </v-tabs>
 
@@ -28,37 +27,35 @@
             <v-card-text v-else>
             
             <!-- 밋업 있을 때 -->
-            <div v-if="mData.length > 0">
               <v-row dense>
                 <v-col
-                  v-for="(item, i) in mData"
+                  v-for="(meetup, i) in meetups"
                   :key="i"
                   cols="12"
                 >
-                  <v-card @click="MeetupDetail(item)">
+                  <v-card @click="showMenu(meetup)">
                     <div class="d-flex">
                       <v-avatar
                       class="ma-3"
                       size="85"
                       tile
                       >
-                        <v-img :src="item.meetupImg"></v-img>
+                        <v-img :src="meetup.img"></v-img>
                       </v-avatar>
                       <div>
                         <v-card-title
                         class="headline"
-                        v-text="item.meetupTitle"
+                        v-text="meetup.title"
                         ></v-card-title>
-                        <v-card-subtitle v-html="item.meetupLocation+'<br>'+item.meetupPersonnel.slice(0, 16)" ></v-card-subtitle>
+                        <v-card-subtitle v-html="meetup.location+'<br>'+meetup.date.slice(0, 16)" ></v-card-subtitle>
                       </div>
                     </div>
                   </v-card>
                 </v-col>
               </v-row>
-            </div>
 
             <!-- 밋업 없을 때 --> 
-            <div v-else style="margin-top:70px;text-align: center;"> 
+            <div v-if="!isNaN(meetups)" style="margin-top:100px;text-align: center;"> 
               <i class="fab fa-meetup fa-6x"></i>
               <h3 class="mt-5">등록된 Meetup이 없습니다.</h3>
             </div>
@@ -69,21 +66,22 @@
       </v-tabs-items>
     </div>
     <!-- dialog -->
-      <v-dialog
-        dark
-        v-model="dialog"
-        max-width="190"
-        >
-         <v-list> 
-          <v-list-item
-          v-for="(iitem, index) in iitems"
-          :key="index"
-          @click="doit(iitem)"
-          >
-          <v-list-item-title>{{ iitem.title }}</v-list-item-title>
-          </v-list-item>
-      </v-list>
-      </v-dialog>
+    <v-dialog
+      v-model="dialog"
+      max-width="190"
+      >
+        <v-list> 
+        <v-list-item @click="moveMeetupDetail">
+          <v-list-item-title>밋업상세보기</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="moveCreateReview">
+          <v-list-item-title>리뷰작성</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="cancelMeetup">
+          <v-list-item-title>참여취소</v-list-item-title>
+        </v-list-item>
+    </v-list>
+    </v-dialog>
   </v-app>
 </template>
 
@@ -97,6 +95,7 @@ import "../assets/css/components.scss";
 import axios from "axios";
 
 const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "https://localhost:8080";
 
 export default {
   name: "components",
@@ -109,14 +108,10 @@ export default {
   
   data: () => {
     return {
-      iitems:[
-        { title: '밋업상세보기' },
-        { title: '참여취소' },
-      ],
-      list:[],
+      meetup: "",
       dialog:false,
       // 밋업 전체 데이터
-      mData: {}, 
+      meetups: {}, 
       users: {},
       userId: "",
       contents: "",
@@ -127,13 +122,11 @@ export default {
           title: "확인",
           highlight: true,
           onClick: () => {
-            console.log("클릭");
           },
         },
         {
           title: "취소",
           onClick: () => {
-            console.log("클릭");
           },
         },
       ],
@@ -152,10 +145,11 @@ export default {
     //  meetup 정보 받아오기
     axios
       .get(
-        `${SERVER_URL}/userpage/getuserMeetup?userId=${this.userId}`
+        `${SERVER_URL}/meetup/list/${this.userId}`
       )
       .then((response) => {
-        this.mData = response.data
+        this.meetups = response.data.object;
+        console.log(response);
       })
       .catch((error) => {
         console.log(error.response);
@@ -163,24 +157,26 @@ export default {
       });
   },
   methods: {
-    doit(iitem){
-      if(iitem.title == '참여취소') {
-        alert("취소하기 백엔드완성되면 이어붙일 예정")
-        // axios.delete(`${SERVER_URL}/userpage/restsacrp?userid=${this.userId}&restid=`)
-        // .then((response) => {
-        //     this.dialog = false
-        // })
-        // .catch((error) => {
-        //     console.log(error.response);
-        // });
-      }else{
-        this.$router.push('/map/detailMeetup?meetupId='+this.list.meetupId);
-      }
-    },
-    MeetupDetail(item){
+    showMenu(item){
       this.dialog = true;
-      this.list = item;
+      this.meetup = item;
     },
+    cancelMeetup(){
+      alert("취소하기 백엔드완성되면 이어붙일 예정");
+      // axios.delete(`${SERVER_URL}/userpage/restsacrp?userid=${this.userId}&restid=`)
+      // .then((response) => {
+      //     this.dialog = false
+      // })
+      // .catch((error) => {
+      //     console.log(error.response);
+      // });
+    },
+    moveCreateReview(){
+      this.$router.push({ name : 'AddReview', params : this.meetup });
+    },
+    moveMeetupDetail(){
+      this.$router.push('/map/detailMeetup?meetupId='+this.meetup.id);
+    }
   },
 };
 </script>

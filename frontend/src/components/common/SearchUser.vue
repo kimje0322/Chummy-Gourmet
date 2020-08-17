@@ -1,12 +1,13 @@
 <template>
   <v-app>
     <v-toolbar-title >
-      <v-toolbar dark>
-        <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
-        <v-spacer></v-spacer>
-        <p class="my-auto">유저검색</p>
-        <v-spacer></v-spacer>
-        <v-spacer></v-spacer>
+      <v-toolbar dense>
+      <v-icon @click="$router.go(-1)">
+        mdi-arrow-left
+      </v-icon>
+      <v-spacer></v-spacer>
+      <p class="my-auto text-center">유저검색</p>
+      <v-spacer></v-spacer>
       </v-toolbar>
     </v-toolbar-title>
     
@@ -41,12 +42,18 @@
                 </v-list-item-avatar>
                 
                 <v-list-item-content>
-                <v-list-item-title @click="gotoProfile(user)" v-text="user.UserNickname"></v-list-item-title>
-                <!-- 이름 표기 -->
-                <!-- <v-list-item-title v-text="user.followingName"></v-list-item-title> -->
+                <a
+                class="pf-n-a"
+                tabindex="0"
+                style="color: black; font-weight: 600;" 
+                @click="gotoProfile(user)"
+                >
+                  {{user.UserNickname}}
+                </a> 
+                <!-- <v-list-item-title @click="gotoProfile(user)" v-text="user.UserNickname"></v-list-item-title> -->
                 </v-list-item-content>
 
-                <v-btn color="primary"  @click="onFollow(user,i)" v-if="user.followerFollowing === 'false'">
+                <v-btn color="orange"  @click="onFollow(user,i)" v-if="user.followerFollowing === 'false'">
                     팔로우
                 </v-btn>
                 

@@ -1,40 +1,43 @@
 <template>
   <div>
-    <v-toolbar dark>
-      <!-- 중앙정렬 하기 위해 2개씀 -->
-      <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
-      <!-- <v-spacer></v-spacer> -->
-      <p class="my-auto">비밀번호 찾기</p>
+    <v-toolbar dense>
+      <v-icon @click="$router.go(-1)">
+        mdi-arrow-left
+      </v-icon>
+      <v-spacer></v-spacer>
+      <p class="my-auto text-center">비밀번호 찾기</p>
       <v-spacer></v-spacer>
     </v-toolbar>
+
+    <div class="entire">
+      <v-form ref="form">
+        <v-col class="pb-0">
+          <p>※ 회원가입시 입력한 정보를 입력해주세요</p>
+          <v-text-field
+            :rules="[() => !!name || '이름을 입력해주세요']"
+            :error-messages="error.name"
+            outlined hide-details="auto" 
+            v-model="name" 
+            label="이름"
+            clearable
+          ></v-text-field>
+        </v-col>
+        <v-col class="pb-0">
+          <v-text-field
+            :rules="[() => !!email || '이메일을 입력해주세요', rules.email]"
+            :error-messages="error.email"
+            outlined hide-details="auto" 
+            v-model="email"
+            label="이메일"
+            clearable
+          >
+          </v-text-field>
+        </v-col>
+     </v-form>
+     </div>
     <!-- 이름 -->
     <div class="entire"><br>
-    <div class="input-with-label">
-      <input v-model="name" id="name" placeholder="이름을 입력하세요." type="text" />
-      <label for="name">이름</label>
-      <div class="error-text" v-if="error.name">{{error.name}}</div>
-    </div>
-
-    <!-- 이메일 -->
-    <div class="input-with-label">
-      <input v-model="email" id="email" placeholder="이메일을 입력하세요." type="text" />
-      <label for="email">이메일</label>
-      <div class="error-text" v-if="error.email">{{error.email}}</div>
-    </div>
-
-    <!-- 휴대폰 -->
-    <!-- <div class="input-with-label cell-label">
-      <input v-model="phone" id="phone" placeholder="휴대폰 번호을 입력하세요." type="text" />
-      <label for="email">휴대폰</label>
-      <div class="error-text" v-if="error.phone">{{error.phone}}</div>
-    </div> -->
-    <br />
-    <br />
-    <div>※ 회원가입시 입력한 정보를 입력해주세요</div>
-
-    <!-- 버튼 -->
     <v-btn @click="checkFormAndFindpw" color="warning find-btn">확인</v-btn>
-    <!-- <v-btn class="cell-auth" color="error">인증</v-btn> -->
   </div>
   </div>
 </template>
@@ -57,11 +60,6 @@ export default {
         this.error.email = "이메일 형식이 아닙니다.";
       else this.error.email = false;
     },
-    // phone: function (v) {
-    //   if (this.phone.length > 0 && isNaN(this.phone))
-    //     this.error.phone = "올바른 휴대폰 번호를 입력해주세요.";
-    //   else this.error.phone = false;
-    // },
   },
   methods: {
     checkFormAndFindpw() {
@@ -87,12 +85,6 @@ export default {
         return;
       }
       else this.error.email = false;
-      
-      // if(this.phone.length < 1)
-      //   this.error.phone = "휴대폰 번호를 입력해주세요.";
-      // else if (this.phone.length > 0 && isNaN(this.phone))
-      //   this.error.phone = "올바른 휴대폰 번호를 입력해주세요.";
-      // else this.error.phone = false;
     },
     isValidForm() {
       for (let key in this.error) {
@@ -110,19 +102,15 @@ export default {
       axios.post(`${SERVER_URL}/account/checkUser`, userData)
         .then(res => {
           // isNotExistName / isNotExistEmail / success  
-          console.log(res)
           var data = res.data.data;
           
           if(data == 'isNotExistName'){
-            console.log('isNotExistName');
             this.error.name = '가입되지 않는 이름입니다.'
           }
           if (data == 'isNotExistEmail'){
-            console.log('isNotExistEmail');
             this.error.email = '가입되지 않는 이메일입니다.'
           }
           else if (data == 'success'){
-            console.log('success');
             this.$router.push("/user/foundpw")
             axios.post(`${SERVER_URL}/account/sendUserPwd`, userData)
           }
@@ -141,6 +129,28 @@ export default {
         name: false,
         email: false,
         // phone: false,
+      },
+       // 유효성 검사를 위한 rule
+      rules: {
+        nickName : () => {
+          if(this.error.nickName)
+            return true;
+          else 
+            return false;
+        },
+        password : value =>{
+          const pattern = /^[A-Za-z0-9+]{8,}$/; 
+          var checkNum = value.search(/[0-9]/g);
+          var checkEng = value.search(/[a-z]/ig);
+          if(checkNum < 0 || checkEng < 0 || !pattern.test(value))
+            return "영문,숫자 포함 8 자리이상이어야 합니다.";
+          else
+            return true;
+        },
+        email: value => {
+          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          return pattern.test(value) || '이메일 형식이 아닙니다.'
+        },
       },
     }
   },

@@ -9,7 +9,6 @@ import FinishJoin from './views/user/FinishJoin.vue'
 import Curator from './views/curator/curator.vue'
 import Detail from './views/curator/detail.vue'
 import ReviewDetail from './views/curator/reviewDetail.vue'
-import FeedMain from './views/feed/IndexFeed.vue'
 import Components from './views/Components.vue'
 import Party from './views/feed/Party.vue'
 import FindPw from './views/user/FindPw.vue'
@@ -202,11 +201,6 @@ export default new VueRouter({
             path: '/map/detailMeetup',
             name: 'DetailMeetup',
             component: DetailMeetup
-        },
-        {
-            path: '/feed/main',
-            name: 'FeedMain',
-            component: FeedMain
         },
         {
             path: '/components',

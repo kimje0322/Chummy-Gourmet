@@ -2,7 +2,7 @@
   <div id="app">
     <v-app>
       <v-main>
-        <v-card class="overflow-hidden mx-auto" height="667" max-width="375">
+        <v-card class="overflow-hidden mx-auto">
           <!-- <v-app-bar color="deep-blue accent-4" dense dark>
             <v-toolbar-title style="margin:auto;">돈독한 미식가</v-toolbar-title>
           </v-app-bar>-->
@@ -12,6 +12,7 @@
             scroll-target="#scroll-area-2"
             hide-on-scroll
             scroll-threshold="500"
+            
             absolute
             color="white"
             horizontal
@@ -47,19 +48,6 @@
             v-if="$route.name === 'Home'"
             id="scroll-area-1"
             class="overflow-y-auto"
-            max-height="667"
-          >
-            <v-container class="home-padding" style="height: 100%;">
-              <router-view></router-view>
-            </v-container>
-          </v-sheet>
-
-          <!-- Login -->
-          <v-sheet
-            v-if="$route.name === 'Login'"
-            id="scroll-area-1"
-            class="overflow-y-auto"
-            max-height="667"
           >
             <v-container class="home-padding" style="height: 100%;">
               <router-view></router-view>
@@ -156,12 +144,17 @@ export default {
 </script>
 
 <style>
-.home-padding {
-  padding: 0px !important;
+/* #app {
+  min-height: 100%; 
+  position: relative;
 }
 .navbar-fixed-bottom {
   padding-left: 12px;
+  position: absolute;
+  bottom: 0;
+} */
+.home-padding {
+  padding: 0px !important;
 }
-
 
 </style>

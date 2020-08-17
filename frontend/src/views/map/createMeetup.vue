@@ -15,18 +15,14 @@
       </v-btn-toggle>
     </v-bottom-navigation>
 
-      <v-toolbar-title>
-        <v-toolbar dark>
-          <a @click="$router.go(-1)">
-            <i class="fas fa-chevron-left back"></i>
-          </a>
-          <v-spacer></v-spacer>
-          <v-spacer></v-spacer>
-          <p class="my-auto">Meet Up</p>
-          <v-spacer></v-spacer>
-          <v-spacer></v-spacer>
-        </v-toolbar>
-      </v-toolbar-title>
+    <v-toolbar dense elevation="1">
+      <v-icon @click="$router.go(-1)">
+        mdi-arrow-left
+      </v-icon>
+      <v-spacer></v-spacer>
+      <p class="my-auto text-center">MeetUp</p>
+      <v-spacer></v-spacer>
+    </v-toolbar>
       <br />
 
 
@@ -197,7 +193,7 @@
               v-model="meetup.maxPersonnel"
               class="my-2"
               :items="dropdown_font"
-              placeholder="인원"
+              label="인원"
               style="margin:0px;"
               target="#dropdown-example"
             ></v-overflow-btn>
@@ -213,7 +209,8 @@
             width="500"
           >
             <template v-slot:activator="{ on, attrs }">
-              <v-combobox 
+              <v-combobox
+                
                 hide-details
                 outlined
                 v-model="meetup.personalities" 
@@ -664,5 +661,8 @@ div {
 }
 .search-bar{
   margin-top: 8px;
+}
+.size-css {
+  overflow: hidden;
 }
 </style>

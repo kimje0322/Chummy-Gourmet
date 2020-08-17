@@ -1,29 +1,30 @@
 <template>
   <v-layout>
     <!-- color="orange" -->
-    <v-toolbar dark >
-      <!-- 중앙정렬 하기 위해 2개씀 -->
-      <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
+    <v-toolbar dense>
+      <v-icon @click="$router.go(-1)">
+        mdi-arrow-left
+      </v-icon>
       <v-spacer></v-spacer>
-      <p class="my-auto">MY PAGE</p>
       <v-spacer></v-spacer>
-      
-      <v-btn @click.stop="drawer = !drawer" depressed>
+      <p class="my-auto text-center">마이페이지</p>
+      <v-spacer></v-spacer>
+      <v-btn color="white" @click.stop="drawer = !drawer" depressed>
         <v-app-bar-nav-icon></v-app-bar-nav-icon>
       </v-btn>
     </v-toolbar>
     
     <!-- 햄버거? 눌렀을 때 -->
-    <v-navigation-drawer dark v-model="drawer" app right>
+    <v-navigation-drawer v-model="drawer" app right>
       <v-system-bar></v-system-bar>
-      <v-list >
+      <v-list>
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title class="title">{{ user.userNickname }}</v-list-item-title><br>
             <v-list-item-subtitle>{{ user.userEmail }}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
-          <v-btn @click="updateUser" block>
+          <v-btn color="warning find-btn" @click="updateUser" block>
             프로필 수정
           </v-btn>
       </v-list>
@@ -51,7 +52,15 @@
             <v-list-item-content>
               <v-list-item-title>팔로우요청</v-list-item-title>
             </v-list-item-content>
-            
+          </v-list-item>
+
+           <v-list-item @click="meetupRequestList">
+            <v-list-item-icon>
+                <v-icon>mdi-account-plus</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>밋업요청</v-list-item-title>
+            </v-list-item-content>
           </v-list-item>
 
           <v-list-item @click="chatRoom">
@@ -113,6 +122,9 @@ export default {
     },
     followRequestList(){
       this.$router.push('/user/FollowRequestList');
+    },
+    meetupRequestList(){
+      this.$router.push('/meetup/add');
     },
     updateUser(){
       this.$router.push('/user/updateUser');

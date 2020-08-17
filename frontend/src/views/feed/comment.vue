@@ -306,7 +306,11 @@ export default {
         .catch((error) => {});
     },
     onCreate() {
-      var commentxt = {
+      if(this.commentText.length == 0){
+        alert("댓글을 입력해주세요!!")
+      }
+      else{
+        var commentxt = {
         commentuserid: this.$cookie.get("userId"),
         postcomment: this.commentText,
         postid: this.$route.params.postid,
@@ -331,6 +335,7 @@ export default {
             });
         })
         .catch((error) => {});
+      }
     },
     rewrite(comment) {
       this.recomment = true

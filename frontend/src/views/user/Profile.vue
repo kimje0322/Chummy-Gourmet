@@ -1,14 +1,17 @@
 <template>
   <div>
     <!-- Profile -->
-    <v-toolbar dark>
-       <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
-      <p class="my-auto">Profile</p>
+    <v-toolbar dense>
+      <v-icon @click="$router.go(-1)">
+        mdi-arrow-left
+      </v-icon>
+      <v-spacer></v-spacer>
+      <p class="my-auto text-center">프로필</p>
       <v-spacer></v-spacer>
     </v-toolbar>
     <!-- 매너온도/팔로워/팔로잉 -->
     <v-layout>
-    <v-toolbar dark>
+    <v-toolbar > 
       <v-list-item-avatar>
         <v-img :src="this.userImg"></v-img>
       </v-list-item-avatar>
@@ -20,11 +23,12 @@
           depressed
           v-bind="attrs"
           v-on="on"
+          text 
         >
           관심사
         </v-btn>
       </template>
-      <v-list  dark v-if="realInterests.length > 0"> 
+      <v-list  v-if="realInterests.length > 0"> 
           <v-list-item
           v-for="(interest, index) in realInterests"
           :key="index"
@@ -32,7 +36,7 @@
           <v-list-item-title># {{ interest }}</v-list-item-title>
           </v-list-item>
         </v-list>
-        <v-list dark v-else>
+        <v-list v-else>
           <h4 class="noInterest">
             <!-- <i class="far fa-surprise"></i>
             <span style="margin: 0 1px"></span> -->
@@ -41,13 +45,13 @@
         </v-list>
       </v-menu>
       <v-spacer></v-spacer>
-        <v-btn color="primary"  @click="onFollow()" v-if="followerFollowing === 'false'">
+        <v-btn color="orange"  @click="onFollow()" v-if="followerFollowing === 'false'">
             팔로우
         </v-btn>
-        <v-btn depressed  @click="deleteFollowRequest()" v-else-if="followerFollowing === 'doing'">
+        <v-btn color="white" depressed  @click="deleteFollowRequest()" v-else-if="followerFollowing === 'doing'">
             요청중
         </v-btn>
-        <v-btn depressed @click="unFollow()" v-else>
+        <v-btn color="white" depressed @click="unFollow()" v-else>
             팔로잉
         </v-btn>
       <v-spacer></v-spacer>
@@ -76,6 +80,12 @@
               </v-img>
           </v-card>
       </v-col>
+
+      <!-- 피드 없을 때 -->
+      <div v-if="postlst.length == 0" class="aligncss"> 
+        <i class="far fa-file-image fa-5x"></i>
+        <h3 class="mt-5">등록된 게시물이 없습니다.</h3>
+      </div>
       </v-row>
   </v-layout>
   </div>

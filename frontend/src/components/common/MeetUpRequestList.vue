@@ -1,15 +1,15 @@
 <template>
   <v-app>
     <v-toolbar-title >
-      <v-toolbar dense>
-      <v-icon @click="$router.go(-1)">
-        mdi-arrow-left
-      </v-icon>
-      <v-spacer></v-spacer>
-      <p class="my-auto text-center">팔로우 요청</p>
-      <v-spacer></v-spacer>
-    </v-toolbar>
+      <v-toolbar dark>
+        <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
+        <v-spacer></v-spacer>
+        <p class="my-auto">밋업 참가 요청</p>
+        <v-spacer></v-spacer>
+        <v-spacer></v-spacer>
+      </v-toolbar>
     </v-toolbar-title>
+    
     
     <div v-if="items.length > 0">
     <v-list subheader>
@@ -51,9 +51,8 @@
     </v-list>
     </div>
 
-    <div v-else class="aligncss">
-      <i class="fas fa-users fa-5x"></i>
-      <h3 class="mt-5">팔로우 요청이 없습니다.</h3>
+    <div v-else>
+      <h3>밋업 참가 요청이 없습니다.</h3>
     </div>
   
 
@@ -158,16 +157,8 @@ export default {
     width: 100px
   }
 
-  /* h3 {
+  h3 {
     margin: 60px;
     text-align: center;
-  } */
-  .aligncss {
-    margin: 100px 0 0 0;
-    color: rgba(0,0,0,.6);
-    width: 100%;
-    text-align: center;
   }
-
-
 </style>

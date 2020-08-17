@@ -7,7 +7,7 @@
     <!-- 가운데 부분 -->
     <div>
       <!-- tab view -->
-      <v-tabs dark v-model="currentItem" fixed-tabs slider-color="grey">
+      <v-tabs v-model="currentItem" fixed-tabs slider-color="orange">
       <v-tab class="follow-list" v-for="item in items" :key="item" :href="'#tab-' + item">
         <v-icon class="followListBtn" v-if="item=='follower'">팔로워</v-icon>
         <v-icon class="followListBtn" v-if="item=='following'">팔로잉</v-icon>
@@ -56,15 +56,15 @@
                 <!-- <v-list-item-title v-text="user.followingName"></v-list-item-title> -->
                 </v-list-item-content>
 
-                <v-btn color="primary"  @click="onFollow(user,i)" v-if="user.followerFollowing === 'false'">
+                <v-btn color="orange"  @click="onFollow(user,i)" v-if="user.followerFollowing === 'false'">
                     팔로우
                 </v-btn>
                 
-                <v-btn depressed  @click="deleteFollowRequest(user,i)" v-else-if="user.followerFollowing === 'doing'">
+                <v-btn color="white" depressed  @click="deleteFollowRequest(user,i)" v-else-if="user.followerFollowing === 'doing'">
                     요청중
                 </v-btn>
 
-                <v-btn depressed @click="unFollow(user,i,'followerlist')" v-else>
+                <v-btn color="white" depressed @click="unFollow(user,i,'followerlist')" v-else>
                     팔로잉
                 </v-btn>
             </v-list-item>
@@ -104,18 +104,17 @@
             </v-list-item-avatar>
 
             <v-list-item-content>
-            <!-- <v-list-item-title @click="gotoProfile(user)" v-text="user.followingNickname"></v-list-item-title> -->
             <a
-                class="pf-n-a"
-                tabindex="0"
-                style="color: black; font-weight: 600;" 
-                @click="gotoProfile(user)"
-                >
-                  {{user.followingNickname}}
-                </a>
+            class="pf-n-a"
+            tabindex="0"
+            style="color: black; font-weight: 600;" 
+            @click="gotoProfile(user)"
+            >
+              {{user.followingNickname}}
+            </a>
             </v-list-item-content>
 
-            <v-btn depressed @click="unFollow(user,i,'followinglist')">
+            <v-btn color="white" depressed @click="unFollow(user,i,'followinglist')">
                 팔로잉
             </v-btn>
           </v-list-item>
@@ -303,7 +302,6 @@ export default {
             `${SERVER_URL}/userpage/deletefollowingRequest?anotherId=`+this.anotherId+`&userId=`+this.userId
           )
           .then((response) => {
-            console.log('팔로우취소완료')
           })
           .catch((error) => {
             console.log(error.response);
@@ -316,7 +314,6 @@ export default {
         `${SERVER_URL}/userpage/insertfollowingRequest?followerId=`+user.followerId+`&userId=`+this.userId
       )
       .then((response) => {
-        console.log('팔로우성공')
       })
       .catch((error) => {
           console.log(error.response);
@@ -418,9 +415,11 @@ export default {
     width: 12px;
   }
   .text-css {
+    color: rgba(0,0,0,.6);
     text-align: center;
   }
   .fa-user-plus {
+    color: rgba(0,0,0,.6);
     margin: 70px 0 20px 140px;
     align-items: center;
   }

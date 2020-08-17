@@ -8,12 +8,11 @@
     <!-- 가운데 부분 -->
     <div>
       <!-- tab view -->
-      <v-tabs dark v-model="currentItem" fixed-tabs slider-color="grey">
+      <v-tabs v-model="currentItem" fixed-tabs slider-color="orange">
         <v-tab v-for="item in items" :key="item" :href="'#tab-' + item">
           <v-icon v-if="item=='Profile'">mdi-account-box</v-icon>
           <v-icon v-if="item=='History'">fas fa-list</v-icon>
           <v-icon v-if="item=='Message'">mdi-folder</v-icon>
-          
         </v-tab>
       </v-tabs>
 
@@ -28,7 +27,6 @@
             <v-card-text v-else>
             
             <!-- 밋업 있을 때 -->
-            <div v-if="meetups.length > 0">
               <v-row dense>
                 <v-col
                   v-for="(meetup, i) in meetups"
@@ -55,10 +53,9 @@
                   </v-card>
                 </v-col>
               </v-row>
-            </div>
 
             <!-- 밋업 없을 때 --> 
-            <div v-else style="margin-top:70px;text-align: center;"> 
+            <div v-if="meetups.length==0" style="margin-top:100px;text-align: center;"> 
               <i class="fab fa-meetup fa-6x"></i>
               <h3 class="mt-5">등록된 Meetup이 없습니다.</h3>
             </div>
@@ -70,7 +67,6 @@
     </div>
     <!-- dialog -->
     <v-dialog
-      dark
       v-model="dialog"
       max-width="190"
       >
@@ -98,8 +94,8 @@ import History from "../components/common/History";
 import "../assets/css/components.scss";
 import axios from "axios";
 
-// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-const SERVER_URL = "https://localhost:8080";
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "https://localhost:8080";
 
 export default {
   name: "components",
@@ -126,13 +122,11 @@ export default {
           title: "확인",
           highlight: true,
           onClick: () => {
-            console.log("클릭");
           },
         },
         {
           title: "취소",
           onClick: () => {
-            console.log("클릭");
           },
         },
       ],

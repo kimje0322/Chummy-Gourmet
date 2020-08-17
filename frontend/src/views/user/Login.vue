@@ -46,11 +46,11 @@
               <v-col class="py-0" cols="5">
                   <v-checkbox v-model="checked" class="ma-0 pa-0">
                     <template v-slot:label>
-                      <span class="text-subtitle-2 font-weight-medium">로그인 유지</span>
+                      <span class="text-subtitle-2">로그인 유지</span>
                     </template>
                   </v-checkbox>
               </v-col>
-              <v-col class="py-0 text-right" cols="7">
+              <v-col class="py-0 text-right text-subtitle-2" cols="7">
                   <router-link to="/user/findpw">
                     비밀번호를 잊으셨습니까?
                   </router-link>

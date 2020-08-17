@@ -1,7 +1,8 @@
 
 <template>
   <div class="map_wrap_1">
-        
+
+        <!-- SPEED DIAL -->
         <v-speed-dial
           style="top:470px; height:10px;"
           v-model="fab"
@@ -10,6 +11,7 @@
           transition="slide-y-reverse-transition"
           retain-focus-on-click="true"
         >
+          <!-- BUTTON ACTIVATOR -->
           <template v-slot:activator>
             <v-btn
               v-model="fab"
@@ -21,91 +23,165 @@
             </v-btn>
           </template>
 
+          <!-- 현위치 버튼 -->
           <v-btn fab dark small color="pink" @click="moveCurPosition">
             <v-icon color="white">mdi-map-marker</v-icon>
           </v-btn>
 
+          <!-- 밋업 생성 페이지 이동 버튼 -->
           <v-btn fab dark small color="green">
-            <router-link to="/map/createMeetup">
-              <v-icon color="white">mdi-pencil</v-icon>
-            </router-link>    
+              <v-icon color="white" @click="$router.push('/map/createMeetup')">mdi-pencil</v-icon>
           </v-btn>
 
-          <v-btn
-            fab small dark
-            color="indigo"
-            @click="menu=true"
-          >
+          <!-- 밋업 필터링 버튼 -->
+          <v-btn fab small dark color="indigo" @click="menu=true">
             <v-icon color="white">mdi-tune-variant</v-icon>
           </v-btn>
-          
         </v-speed-dial>
 
         <!-- 필터창  -->
           <div class="text-center">
             <v-menu
+              transition="slide-y-transition"
                v-model="menu"
-              :close-on-click="false"
               :close-on-content-click="false"
-              :nudge-width="375"
-              :position-y="500"
-              offset-overflow
-              offset-y
+              :min-width="375" :max-width="375"
+              :position-y="235"
+              :position-x="574"
+              z-index="100"
+
             >
-
-              <v-card>
+            <!-- POP OVER -->
+              <v-card class="mx-auto">
                 <v-list>
-
+                  <!-- 선호 음식 -->
                   <v-list-item>
-                    <v-select
-                      ref="select1"
-                      v-model="selectedFoods"
-                      :items="foods"
-                      label="선호음식을 선택해주세요"
-                      multiple small-chips deletable-chips
-                      prepend-icon="mdi-food"
-                      auto
-                    >
-
-                      <template v-slot:append-item>
-                        <v-divider class="mb-2"></v-divider>
-                        <v-list-item>
-                            <v-btn block @click="$refs.select1.blur()">
-                              확인
-                            </v-btn>
-                        </v-list-item>
+                    <v-dialog v-model="modalFoods" :max-width="330">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-combobox
+                          ref="select1"
+                          v-model="selectedFoods"
+                          label="선호음식을 선택해주세요"
+                          multiple small-chips
+                          prepend-icon="mdi-food"
+                          v-on="on" v-bind="attrs"
+                          auto clearable
+                        >
+                             <template v-slot:selection="data">
+                                <v-chip
+                                  color="primary" small
+                                >
+                                  <span class="mr-2">
+                                    {{data.item}}
+                                  </span>
+                                  <v-icon small @click="data.parent.selectItem(data.item)">
+                                    mdi-close
+                                  </v-icon>
+                                </v-chip>
+                            </template>
+                        </v-combobox>
                       </template>
 
-
-                    </v-select>
+                      <!-- FOOD DIALOG -->
+                      <v-card>
+                        <v-card-title class="subtitle">선호음식
+                          <v-spacer></v-spacer>
+                          <v-btn outlined rounded small
+                            class="text-caption font-weight-bold"
+                            :class="{'primary--text': isAllFoodsSelect}"
+                            @click="doAllFoodsSelect"
+                          >
+                            <v-icon small>mdi-check</v-icon>                            
+                            전체
+                          </v-btn>
+                          <!-- <v-btn icon>
+                            <v-icon>mdi-close</v-icon>
+                          </v-btn> -->
+                        </v-card-title>
+                        
+                        <v-divider class="mt-1 mb-6"></v-divider>
+                        <v-card-text>
+                          <v-btn-toggle v-model="selectedFoods" multiple color="primary">
+                            <v-row justify="center">
+                              <v-btn tile outlined large v-for="food in foods" :key="food" :value="food"
+                              active-class="primary--text">
+                                {{food}}
+                              </v-btn>
+                            </v-row>
+                          </v-btn-toggle>
+                        </v-card-text>
+                        <v-card-actions>
+                          <v-btn block color="primary" @click="modalFoods = false">확인</v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-dialog>
                   </v-list-item>
 
+                  <!-- 성향 -->
                   <v-list-item>
-                    <v-select
-                      ref="select2"
-                      v-model="selectedProps"
-                      :items="personalities"
-                      label="성향을 선택해주세요"
-                      multiple small-chips deletable-chips
-                      prepend-icon="mdi-heart"
-                      auto
-                    >
-                    
-                    <template v-slot:append-item>
-                        <v-divider class="mb-2"></v-divider>
-                        <v-list-item>
-                            <v-btn block @click="$refs.select2.blur()">
-                              확인
-                            </v-btn>
-                        </v-list-item>
+                    <v-dialog v-model="modalProps" :max-width="330">
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-combobox
+                          ref="select2"
+                          v-model="selectedProps"
+                          label="성향을 선택해주세요"
+                          multiple small-chips
+                          prepend-icon="mdi-heart"
+                          v-on="on" v-bind="attrs"
+                          auto clearable
+                        >
+                             <template v-slot:selection="data">
+                                <v-chip class="mr-1 px-2"
+                                  color="primary" small
+                                >
+                                  <span class="mr-1">
+                                    {{data.item}}
+                                  </span>
+                                  <v-icon small @click="data.parent.selectItem(data.item)">
+                                    mdi-close
+                                  </v-icon>
+                                </v-chip>
+                            </template>
+                        </v-combobox>
                       </template>
-                    
-                    
-                    </v-select>
-                  </v-list-item>
-                  
-                  <v-list-item>
 
+                      <!-- PERSONALITIES DIALOG -->
+                      <v-card>
+                        <v-card-title class="subtitle">성향
+                          <v-spacer></v-spacer>
+                          <v-btn outlined rounded small
+                            class="text-caption font-weight-bold"
+                            :class="{'primary--text': isAllPropsSelect}"
+                            @click="doAllPropsSelect"
+                          >
+                            <v-icon small>mdi-check</v-icon>                            
+                            전체
+                          </v-btn>
+                          <!-- <v-btn icon>
+                            <v-icon>mdi-close</v-icon>
+                          </v-btn> -->
+                        </v-card-title>
+                        
+                        <v-divider class="mt-1 mb-6"></v-divider>
+                        <v-card-text>
+                          <v-btn-toggle v-model="selectedProps" multiple color="primary">
+                            <v-row justify="center">
+                              <v-btn tile outlined large v-for="props in personalities" :key="props" :value="props"
+                              active-class="primary--text">
+                                {{props}}
+                              </v-btn>
+                            </v-row>
+                          </v-btn-toggle>
+                        </v-card-text>
+                        <v-card-actions>
+                          <v-btn block color="primary" @click="modalProps = false">확인</v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-dialog>
+                  </v-list-item>
+
+                  <!-- 밋업 기간 -->
+                  <v-list-item>
                     <v-dialog
                       ref="dialog" v-model="modalCalendar"
                       :return-value.sync="dates"
@@ -122,36 +198,35 @@
                         ></v-text-field>
                       </template>
 
-                      <v-date-picker v-model="dates" range scrollable show-current
+                      <v-date-picker v-model="dates" range scrollable show-current no-title
                         :min="new Date().toISOString().substr(0, 10)"
                         max="2050-01-01"
                       >
                         <v-spacer></v-spacer>
                         <v-btn text color="primary" @click="modalCalendar = false">Cancel</v-btn>
-                        <v-btn text color="primary" @click="$refs.dialog.save(dates)">OK</v-btn>
+                        <v-btn text color="primary" @click="setDate">OK</v-btn>
                       </v-date-picker>
                     </v-dialog>
-
                   </v-list-item>
 
+                  <!-- 밋업 인원 -->
+                  <p class="ml-12 mb-n2 text-caption">인원을 선택해주세요</p>
                   <v-list-item>
-
-                    <v-range-slider
-                      v-model="personnel"
-                      prepend-icon="mdi-account-group"
-                      :tick-labels="['2','3','4','5','6','7','8']"
-                      min="2" max="8"
-                      ticks="always" tick-size="2"
-                    >
-                    </v-range-slider>
-
+                      <v-range-slider
+                        v-model="personnel"
+                        track-color="grey"
+                        prepend-icon="mdi-account-group"
+                        :tick-labels="['2','3','4','5','6','7','8']"
+                        min="2" max="8"
+                        ticks="always" tick-size="2"
+                      >
+                      </v-range-slider>
                   </v-list-item>
-
                 </v-list>
 
+                <!-- POP OVER FOOTER-->
                 <v-card-actions>
                   <v-spacer></v-spacer>
-
                   <v-btn text @click="menu = false">닫기</v-btn>
                   <v-btn color="primary" text @click.stop="doFilter" @click="menu=false">적용</v-btn>
                 </v-card-actions>
@@ -164,21 +239,24 @@
 
 
     <div id="map1" style="position:unset;">map</div>
-    <div id="menu_wrap" class="bg_white">
-        <div class="option">
+    <!-- <div id="menu_wrap" class="bg_white"> -->
+        <!-- <div class="option"> -->
             <div>
-              <!-- <v-container>
-                <v-text-field @keyup.enter="search" v-model="keyword">
-                  <template v-slot:label>
-                    Enter the location..<v-icon style="vertical-align: middle">mdi-find</v-icon>
-                  </template>
-                </v-text-field>
-              </v-container> -->
-              <input @keyup.enter="search"  v-model="keyword" type="text" placeholder="입력창"> 
-              <button @click="search"><v-icon size="20">mdi-magnify</v-icon></button> 
+              <!-- <input @keyup.enter="search"  v-model="keyword" type="text" placeholder="입력창"> 
+              <v-btn @click="search" icon><v-icon size="20">mdi-magnify</v-icon></v-btn>  -->
+<form action="">
+  <input type="search">
+  <i class="fa fa-search"></i>
+</form>
+
+        <v-text-field style="z-index:30; top:10px; left:30px;"
+        append-icon="mdi-heart" absolute>
+          
+          
+        </v-text-field>
             </div>
-        </div>
-    </div>
+        <!-- </div> -->
+    <!-- </div> -->
     <div class="custom_zoomcontrol radius_border">
       <span @click="zoomIn">
         <img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_plus.png" alt="확대" />
@@ -212,6 +290,8 @@ export default {
       markers : [],
       overlays : [],
 
+      isAllFoodsSelect : false,
+      isAllPropsSelect : false,
       modalFoods : false,
       foods: ['한식', '중식', '양식', '일식', '분식', '뷔페'],
       selectedFoods : [],
@@ -264,6 +344,44 @@ export default {
     // }
   },
   methods: {
+    setDate(){
+      if(this.dates.length == 1){
+        this.dates.push(this.dates[0]);
+      }
+      this.$refs.dialog.save(this.dates);
+    },
+    doAllFoodsSelect(){
+      this.$nextTick( () => {
+        if(this.selectedFoods.length===this.foods.length){
+          this.isAllFoodsSelect = false;
+          this.selectedFoods=[];
+        }
+        else{
+          this.foods.forEach(food => {
+            if(this.selectedFoods.indexOf(food) == -1){
+              this.selectedFoods.push(food)
+            }
+          });
+          this.isAllFoodsSelect = true;
+        }
+      })
+    },
+    doAllPropsSelect(){
+      this.$nextTick( () => {
+        if(this.selectedProps.length===this.personalities.length){
+          this.isAllPropsSelect = false;
+          this.selectedProps=[];
+        }
+        else{
+          this.personalities.forEach(props => {
+            if(this.selectedProps.indexOf(props) == -1){
+              this.selectedProps.push(props)
+            }
+          });
+          this.isAllPropsSelect = true;
+        }
+      })
+    },
     doFilter(){
       this.meetups.forEach((meetup, index) => {
         var isPersonalites = true;
@@ -451,6 +569,7 @@ export default {
   }
 }
 
+
 </script>
 
 
@@ -522,6 +641,73 @@ export default {
 ._info .img {position: absolute;top: 6px;left: 5px;width: 73px;height: 71px;border: 1px solid #ddd;color: #888;overflow: hidden;}
 ._info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
 ._info .link {color: #5085BB;}
+
+
+
+
+/* form{
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin : 30px 10px;
+    transform: translate(0,-50%);
+    transition: all .4s;
+    width: 50px;
+    height: 50px;
+    background: white;
+    box-sizing: border-box;
+    border-radius: 50px;
+    border: 4px solid white;
+    padding: 5px;
+    opacity: .8;
+    z-index: 10;
+}
+
+input{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;;
+    height: 42.5px;
+    line-height: 30px;
+    outline: 0;
+    border: 0;
+    display: none;
+    font-size: 1em;
+    border-radius: 20px;
+    padding: 0 20px;
+}
+
+.fa{
+    box-sizing: border-box;
+    padding: 10px;
+    width: 42.5px;
+    height: 42.5px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 50%;
+    color: #07051a;
+    text-align: center;
+    font-size: 1.2em;
+    transition: all 1s;
+}
+
+form:hover{
+    width: 250px;
+    cursor: pointer;
+}
+
+form:hover input{
+    display: block;
+}
+
+form:hover .fa{
+    background: #07051a;
+    color: white;
+} */
+
+
 
 </style>
 

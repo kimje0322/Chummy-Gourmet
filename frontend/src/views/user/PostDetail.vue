@@ -73,7 +73,7 @@
           </span>
           <span style="display: inline-block;">
             <button
-              @click="onComment(this.postlst.post_id, this.postlst.user_nickname, this.postlst.post_content,this.postlst.user_img)"
+              @click="onComment()"
               style="background: 0 0; border: 0; display: flex; padding: 8px;"
             >
               <div>
@@ -196,10 +196,9 @@ export default {
         postnickname: this.postlst.user_nickname,
         postcontent: this.postlst.post_content,
         postuserimg: this.postlst.user_img,
-        // post: this.postlst,
-        // comment : this.commentlst
+        postuserid : this.userId
       };
-      router.push({ name: "Comment", params: postinfo });
+      router.push({ name: "Comment", query: postinfo });
     },
   },
 };

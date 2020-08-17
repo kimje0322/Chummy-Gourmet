@@ -1,32 +1,31 @@
 <template>
   <v-app>
-    <v-toolbar-title >
-      <v-toolbar dense>
-      <v-icon @click="$router.go(-1)">
+    <v-app-bar
+      absolute
+      color="white"
+      elevate-on-scroll
+      scroll-target="#scrolling-techniques-7"
+    >
+    <v-icon @click="$router.go(-1)">
         mdi-arrow-left
       </v-icon>
-      <v-spacer></v-spacer>
-      <p class="my-auto text-center">유저검색</p>
-      <v-spacer></v-spacer>
-      </v-toolbar>
-    </v-toolbar-title>
-    
-    <!-- 팔로워 -->
+    <v-spacer></v-spacer>
+    <v-text-field 
+      @keyup="onSearchUser"
+      v-model="searchUser"
+      label="검색"
+      hide-details
+      solo
+      autofocus
+    ></v-text-field> 
+    <v-spacer></v-spacer>
+    </v-app-bar>
+    <v-sheet
+      id="scrolling-techniques-7"
+      class="overflow-y-auto"
+      max-height="600"
+    >
         <v-list nav dense >
-        
-          <!-- 팔로워 검색바 -->
-          <v-row>
-            <v-col class="search-bar">
-            <v-text-field 
-              @keyup="onSearchUser"
-              v-model="searchUser"
-              label="검색"
-              :append-icon="'mdi-account-search-outline'"
-              hide-details
-              solo
-            ></v-text-field>             
-            </v-col>
-          </v-row>
             <v-skeleton-loader
                 ref="skeleton"
                 type="list-item-avatar"
@@ -53,21 +52,21 @@
                 <!-- <v-list-item-title @click="gotoProfile(user)" v-text="user.UserNickname"></v-list-item-title> -->
                 </v-list-item-content>
 
-                <v-btn color="orange"  @click="onFollow(user,i)" v-if="user.followerFollowing === 'false'">
+                <v-btn outlined color="orange"  @click="onFollow(user,i)" v-if="user.followerFollowing === 'false'">
                     팔로우
                 </v-btn>
                 
-                <v-btn depressed  @click="deleteFollowRequest(user,i)" v-else-if="user.followerFollowing === 'doing'">
+                <v-btn depressed color="white" @click="deleteFollowRequest(user,i)" v-else-if="user.followerFollowing === 'doing'">
                     요청중
                 </v-btn>
 
-                <v-btn depressed @click="unFollow(user,i,'followerlist')" v-else>
+                <v-btn depressed color="white" @click="unFollow(user,i,'followerlist')" v-else>
                     팔로잉
                 </v-btn>
 
             </v-list-item>
         </v-list>
-
+    </v-sheet>
   </v-app>
 </template>
 

@@ -1,11 +1,13 @@
 <template>
-  <v-app>
+  <v-app >
     <!-- 상단 -->
      <v-toolbar-title>
       <Top></Top>
     </v-toolbar-title>
     <!-- 가운데 부분 -->
-    <div>
+    <v-sheet  id="scrolling-techniques"
+      class="overflow-y-auto"
+      max-height="600" >
       <!-- tab view -->
       <v-tabs v-model="currentItem" fixed-tabs slider-color="orange">
       <v-tab class="follow-list" v-for="item in items" :key="item" :href="'#tab-' + item">
@@ -131,7 +133,7 @@
       </v-tab-item>
     </v-tabs-items>
 
-    </div>
+    </v-sheet>
   </v-app>
 </template>
 

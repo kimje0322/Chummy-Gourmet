@@ -28,6 +28,7 @@
             <v-card-text v-else>
             
             <!-- 밋업 있을 때 -->
+            <v-container>
               <v-row dense>
                 <v-col
                   v-for="(meetup, i) in meetups"
@@ -54,7 +55,7 @@
                   </v-card>
                 </v-col>
               </v-row>
-
+            </v-container>
             <!-- 밋업 없을 때 --> 
             <div v-if="!isNaN(meetups)" style="margin-top:100px;text-align: center;"> 
               <i class="fab fa-meetup fa-6x"></i>

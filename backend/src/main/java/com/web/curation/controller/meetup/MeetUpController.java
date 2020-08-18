@@ -140,6 +140,10 @@ public class MeetUpController {
 		// ==================
 		// 유효성 체크할 부분
 		// ===================
+		
+		// 밋업에 참가한거 마냥 마스터를 밋업에 멤버로 등록하자 *그럴려면 밋업아이디 가져와야해
+		Meetup Tmp = meetupDao.findByTitle(meetup.getTitle());
+		meetupDao.save(Integer.parseInt(Tmp.getId()), Integer.parseInt(meetup.getMaster()));
         result.status = true;
         result.data = "success";
         return new ResponseEntity<>(result, HttpStatus.OK);

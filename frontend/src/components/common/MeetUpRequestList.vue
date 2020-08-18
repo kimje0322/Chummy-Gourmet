@@ -118,7 +118,7 @@ export default {
     acceptRequest(){
       axios
       .get(
-        `${SERVER_URL}/meetup/acceptMeetupRequest?meetupId=${this.meetupInfo.id}&guestId=${this.guestList[this.index].userId}`
+        `${SERVER_URL}/meetup/acceptMeetupRequest?meetupId=${this.meetupInfo.id}&guestId=${this.guestList[this.index].userId}&requestId=${this.requestList[this.index].id}`
       )
       .then((response) => {
         if(response.data.data == "success"){
@@ -136,7 +136,7 @@ export default {
     deleteRequest(){
       axios
       .delete(
-        `${SERVER_URL}/meetup/request/${this.meetupInfo.id}`
+        `${SERVER_URL}/meetup/request/${this.requestList[this.index].id}`
       )
       .then((response) => {
         if(response.data.data == "success"){
@@ -158,7 +158,7 @@ export default {
       this.userNickname = this.guestList[idx].userNickname
       this.requestMessage = this.requestList[idx].requestMessage
       axios
-      .get(`${SERVER_URL}/meetup/searchByMeetupID/${this.requestList[idx].meetupId}`)
+      .get(`${SERVER_URL}/meetup/search/${this.requestList[idx].meetupId}`)
       .then((response) => {
         this.meetupInfo = response.data;
         this.meetupDate = this.meetupInfo.date.slice(0, 16)

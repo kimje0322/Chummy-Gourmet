@@ -2,53 +2,46 @@
   <div id="app">
     <v-app>
       <v-main>
-        <v-card class="overflow-hidden mx-auto" height="667" max-width="375">
+        <v-card class="overflow-hidden mx-auto" >
           <!-- <v-app-bar color="deep-blue accent-4" dense dark>
             <v-toolbar-title style="margin:auto;">돈독한 미식가</v-toolbar-title>
           </v-app-bar>-->
+          <!-- class="navbar-static-bottom" -->
+          
           <v-bottom-navigation
             class="navbar-fixed-bottom"
             v-if="!$route.meta.navbar"
             scroll-target="#scroll-area-2"
-            hide-on-scroll
+            
             scroll-threshold="500"
+
             absolute
             color="white"
             horizontal
           >
             <v-btn class="nav-btn" @click="gotomap" text color="orange accent-4">
-              <!-- <router-link to="/map"> -->
                 <!-- <v-icon>fas fa-search</v-icon> -->
-                <v-icon class="icon-css">mdi-map-marker-radius</v-icon>
-              <!-- </router-link> -->
+                <v-icon>mdi-map-marker-radius</v-icon>
             </v-btn>
 
             <v-btn @click="gotonewsfeed" text color="orange accent-4">
-              <!-- <router-link to=/newsfeed> -->
-                <v-icon class="icon-css">mdi-history</v-icon>
-              <!-- </router-link> -->
+                <v-icon>mdi-history</v-icon>
             </v-btn>
 
             <v-btn @click="gotofeedadd" text color="orange accent-4">
-              <!-- <router-link to="/feed/add"> -->
               <!-- <input ref="imageInput" type="file" hidden @change="onChangeImages"> -->
               <!-- <v-btn type="button" @click="onClickImageUpload"> -->
               <!-- </v-btn> -->  
-                <v-icon class="icon-css">fas fa-plus</v-icon>
-              <!-- </router-link> -->
+                <v-icon>fas fa-plus</v-icon>
             </v-btn>
 
             <v-btn @click="gotocurator" text color="orange accent-4">
-              <!-- <router-link to="/curator"> -->
                 <!-- <v-icon>fas fa-list</v-icon> -->
-                <v-icon class="icon-css">mdi-magnify</v-icon>
-              <!-- </router-link> -->
+                <v-icon>mdi-magnify</v-icon>
             </v-btn>
 
             <v-btn @click="gotouserinfo" text color="orange accent-4">
-              <!-- <router-link to="/user/info"> -->
-                <v-icon class="icon-css">fas fa-user</v-icon>
-              <!-- </router-link> -->
+                <v-icon>fas fa-user</v-icon>
             </v-btn>
           </v-bottom-navigation>
 
@@ -57,19 +50,6 @@
             v-if="$route.name === 'Home'"
             id="scroll-area-1"
             class="overflow-y-auto"
-            max-height="667"
-          >
-            <v-container class="home-padding" style="height: 100%;">
-              <router-view></router-view>
-            </v-container>
-          </v-sheet>
-
-          <!-- Login -->
-          <v-sheet
-            v-if="$route.name === 'Login'"
-            id="scroll-area-1"
-            class="overflow-y-auto"
-            max-height="667"
           >
             <v-container class="home-padding" style="height: 100%;">
               <router-view></router-view>
@@ -166,16 +146,35 @@ export default {
 </script>
 
 <style>
+ #app {
+  min-height: 100%; 
+  position: relative;
+} 
+.navbar-fixed-bottom {
+  padding-left: 12px;
+  position: absolute;
+  bottom: 0;
+} 
 .home-padding {
   padding: 0px !important;
 }
-/* .icon-css {
-  padding: 0px
-}
 
-.navbar-fixed-bottom {
-  padding: 15px 5px 0 0;
+/* .nav-bar {
+  overflow: hidden;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;  
+  height: 75px;
+  padding: 0.5rem;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 } */
 
+/* .nav-css{
+  height: 100%;
+} */
 
 </style>

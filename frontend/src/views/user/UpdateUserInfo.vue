@@ -5,7 +5,7 @@
         mdi-arrow-left
       </v-icon>
       <v-spacer></v-spacer>
-      <p class="my-auto text-center">Profile 수정</p>
+      <p class="my-auto text-center">프로필 수정</p>
       <v-spacer></v-spacer>
       <a @click="update">
           <i class="fas fa-check"></i>

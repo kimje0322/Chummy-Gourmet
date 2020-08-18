@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import "../../components/css/user.scss";
+// import "../../components/css/user.scss";
 import PV from "password-validator";
 import * as EmailValidator from "email-validator";
 import KakaoLogin from "../../components/user/snsLogin/Kakao.vue";

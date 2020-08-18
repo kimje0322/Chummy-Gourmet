@@ -51,8 +51,8 @@ import AlarmPage from './views/user/AlarmPage.vue'
 Vue.use(VueRouter);
 export default new VueRouter({
     routes: [
-         //알람페이지
-         {
+        //알람페이지
+        {
             path: '/user/alarm',
             name: 'AlaramPage',
             component: AlarmPage,
@@ -60,8 +60,8 @@ export default new VueRouter({
             //     navbar: true
             // }
         },
-         //밋업 참가
-         {
+        //밋업 참가
+        {
             path: '/meetup/add',
             name: 'FollowRequestList',
             component: MeetUpRequestList,
@@ -87,19 +87,19 @@ export default new VueRouter({
             //     navbar: true
             // }
         },
-         //채팅방
-         {
+        //채팅방
+        {
             path: '/chat',
             name: 'Chat',
             component: Chat,
-            props:true
+            props: true
         },
-         //채팅목록
-         {
+        //채팅목록
+        {
             path: '/chatroom',
             name: 'ChatRoom',
             component: ChatRoom,
-            props:true
+            props: true
         },
         {
 
@@ -207,7 +207,10 @@ export default new VueRouter({
         {
             path: '/map/createMeetup',
             name: 'CreateMeetup',
-            component: CreateMeetup
+            component: CreateMeetup,
+            meta: {
+                navbar: true
+            }
         },
         {
             path: '/map/detailMeetup',

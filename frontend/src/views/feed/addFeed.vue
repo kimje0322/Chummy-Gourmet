@@ -123,24 +123,18 @@ export default {
     };
   },
   created() {
-    console.log(this.$cookie.get("userId"));
-    console.log(this.$route.params);
-    console.log(this.$route.params.userpage);
     if (this.$route.params.userpage) {
       this.userpage1 = true;
     } else {
       this.userpage1 = false;
     }
-    console.log(this.userpage1);
 
     if (this.$route.params.postid >= 0) {
       if (this.userpage1) {
-        console.log("여기영여여여영양아아앙");
         // this.userpage = this.$router.params.userpage
         this.postimg = this.$route.params.postimage;
         this.content = this.$route.params.postcontent;
       } else {
-        console.log("아야어여오요우유");
         this.revise = true;
         this.postimg = this.$route.params.postimage;
         this.content = this.$route.params.postcontent;
@@ -151,16 +145,12 @@ export default {
         `${SERVER_URL}/userpage/getuser?userId=${this.$cookie.get("userId")}`
       )
       .then((response) => {
-        // console.log("alfkjsdsi");
-        console.log(response);
         this.username = response.data.userNickname;
         this.userimg = response.data.userImg;
-        console.log(this.username);
       })
       .catch((error) => {
         console.log(error.response);
       });
-    console.log(this.username);
   },
   methods: {
     doit(item) {
@@ -182,14 +172,11 @@ export default {
       //이미지 서버에 전송해서 저장하는부분
       const file = new FormData();
       file.append("file", this.file);
-      console.log(file);
       axios
         .post(`${SERVER_URL}/post/img`, file)
 
         .then((response) => {
           this.postimgurl = response.data;
-          console.log("여기");
-          console.log(this.postimgurl);
           this.addPost();
         })
 
@@ -199,7 +186,6 @@ export default {
         });
     },
     reviseAll() {
-      console.log("함수는 될걸?");
       if (!this.uploadimg) {
         var repost = {
           postcontent: this.content,
@@ -219,7 +205,6 @@ export default {
       } else {
         const file = new FormData();
         file.append("file", this.file);
-        console.log(file);
         axios
           .post(`${SERVER_URL}/post/img`, file)
 

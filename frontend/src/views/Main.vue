@@ -1,5 +1,5 @@
 <template>
-  <v-app class="mypage">
+  <div>
     <!-- 상단 -->
       <Alarm></Alarm>
     <v-toolbar-title>
@@ -23,44 +23,43 @@
             <!-- dm -->
             <Message v-if="item=='Message'" v-bind:userId="userId"></Message>
             <!-- history -->
-            <History :proptoTopsub="users" v-else-if="item=='History'"></History>
+            <History v-else-if="item=='History'" :proptoTopsub="users" ></History>
             <!-- profile -->
             <v-card-text v-else>
             
-            <!-- 밋업 있을 때 -->
-            <v-container>
-              <v-row dense>
-                <v-col
-                  v-for="(meetup, i) in meetups"
-                  :key="i"
-                  cols="12"
-                >
-                  <v-card @click="showMenu(meetup)">
-                    <div class="d-flex">
-                      <v-avatar
-                      class="ma-3"
-                      size="85"
-                      tile
-                      >
-                        <v-img :src="meetup.img"></v-img>
-                      </v-avatar>
-                      <div>
-                        <v-card-title
-                        class="headline"
-                        v-text="meetup.title"
-                        ></v-card-title>
-                        <v-card-subtitle v-html="meetup.location+'<br>'+meetup.date.slice(0, 16)" ></v-card-subtitle>
+              <!-- 밋업 있을 때 -->
+                <v-row dense v-if="meetups"> 
+                  <v-col
+                    v-for="(meetup, i) in meetups"
+                    :key="i"
+                    cols="12"
+                  >
+                    <v-card @click="showMenu(meetup)">
+                      <div class="d-flex">
+                        <v-avatar
+                        class="ma-3"
+                        size="85"
+                        tile
+                        >
+                          <v-img :src="meetup.img"></v-img>
+                        </v-avatar>
+                        <div>
+                          <v-card-title
+                          class="headline"
+                          v-text="meetup.title"
+                          ></v-card-title>
+                          <v-card-subtitle v-html="meetup.location+'<br>'+meetup.date.slice(0, 16)" ></v-card-subtitle>
+                        </div>
                       </div>
-                    </div>
-                  </v-card>
+                    </v-card>
+                  </v-col>
+                </v-row>
+                <!-- 밋업 없을 때 --> 
+                <v-col v-else style="text-align: center; margin-top:30%;"> 
+                  <i class="fab fa-meetup fa-6x"></i>
+                  <h3 class="mt-5" style="font-family: 'Jua', sans-serif;">등록된 Meetup이 없습니다.</h3>
                 </v-col>
-              </v-row>
-            </v-container>
-            <!-- 밋업 없을 때 --> 
-            <div v-if="!isNaN(meetups)" style="margin-top:100px;text-align: center;"> 
-              <i class="fab fa-meetup fa-6x"></i>
-              <h3 class="mt-5">등록된 Meetup이 없습니다.</h3>
-            </div>
+              
 
             </v-card-text>
           </v-card>
@@ -84,7 +83,7 @@
         </v-list-item>
     </v-list>
     </v-dialog>
-  </v-app>
+  </div>
 </template>
 
 
@@ -197,9 +196,6 @@ export default {
 
 
 <style>
-.container nothome {
-  padding: 0px !important;
-}
 
 .meetup-title {
   font-size: 22px;
@@ -207,8 +203,5 @@ export default {
 
 .text-meetup {
   text-align: center;
-}
-.mt-5 {
-  font-family: 'Jua', sans-serif;
 }
 </style>

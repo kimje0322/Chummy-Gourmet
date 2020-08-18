@@ -4,12 +4,12 @@
 
         <!-- SPEED DIAL -->
         <v-speed-dial
-          style="top:470px; height:10px;"
           v-model="fab"
-          absolute bottom right
+          absolute
           direction="top"
           transition="slide-y-reverse-transition"
           retain-focus-on-click="true"
+          style="bottom:200px; right:20px;"
         >
           <!-- BUTTON ACTIVATOR -->
           <template v-slot:activator>
@@ -238,16 +238,17 @@
 
 
 
-    <div id="map1" style="position:unset;">map</div>
+    <div id="map1" style="position:absolute">map</div>
     <!-- <div id="menu_wrap" class="bg_white"> -->
         <!-- <div class="option"> -->
-            <div>
+            <div
+            >
               <v-text-field @keyup.enter="search" v-model="keyword"
               placeholder="지역을 입력하세요.."
               append-icon="mdi-magnify"
               background-color="white"
-              solo rounded 
-              style="position:absolute;top:10px;left:10px;z-index:20;opacity:.8"
+              solo rounded
+              style="position:absolute; left:10px; top:10px; z-index:20; opacity:.8;"
               > 
               </v-text-field>
 
@@ -577,15 +578,14 @@ export default {
 <style>
 #map1 {
   width: 100%;
-  height: 610px;
-  position: unset;
+  height: 969px;
 }
 
-.map_wrap1 {
+.map_wrap_1 {
   overflow: hidden;
   width: 100%;
-  height: 667px;
-  padding-top: 0px;
+  height: 969px;
+
 }
 .radius_border {
   border: 1px solid #919191;
@@ -593,8 +593,8 @@ export default {
 }
 .custom_zoomcontrol {
   position: absolute;
-  top: 520px;
-  right: 10px;
+  bottom: 100px;
+  right : 20px;
   width: 36px;
   height: 80px;
   overflow: hidden;
@@ -609,7 +609,6 @@ export default {
   cursor: pointer;
 }
 .custom_zoomcontrol span img {
-  width: 10px;
   height: 35px;
   padding: 12px 0;
   border: none;
@@ -618,11 +617,9 @@ export default {
   border-bottom: 1px solid #bfbfbf;
 }
 
-#menu_wrap {position:absolute;top:0;left:0;bottom:0;width:250px;margin:10px 0 30px 10px;padding:5px;overflow-y:hidden;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:14px;border-radius: 10px;height:55px;}
 .bg_white {background:#fff;}
 #menu_wrap hr { display: block; height: 1px;border: 0; border-top: 2px solid #5F5F5F;margin:3px 0;}
 #menu_wrap .option{text-align: center;}
-#menu_wrap .option p {margin:10px 0;}  
 #menu_wrap .option button {margin-left:5px;}
 
 
@@ -632,8 +629,6 @@ export default {
 ._wrap * {padding: 0;margin: 0;}
 ._wrap ._info {width: 286px;height: 120px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
 ._wrap ._info:nth-child(1) {border: 0;box-shadow: 0px 1px 2px #888;}
-._info ._title {padding: 5px 0 0 10px;height: 30px;background: #eee;border-bottom: 1px solid #ddd;font-size: 18px;font-weight: bold;}
-._info .close {position: absolute;top: 10px;right: 10px;color: #888;width: 17px;height: 17px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');}
 ._info .close:hover {cursor: pointer;}
 ._info ._body {position: relative;overflow: hidden; background: white;}
 ._info ._desc {position: relative;margin: 13px 0 0 90px;height: 75px;}

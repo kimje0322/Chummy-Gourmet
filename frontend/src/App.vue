@@ -1,90 +1,43 @@
 <template>
-  <div id="app">
+  <div class="pa-0 ma-0 mx-auto" id="app" style="max-width:960px; max-height:959px;">
     <v-app>
-      <v-main>
-        <v-card class="overflow-hidden mx-auto" height="667" max-width="375">
-          <!-- <v-app-bar color="deep-blue accent-4" dense dark>
-            <v-toolbar-title style="margin:auto;">돈독한 미식가</v-toolbar-title>
-          </v-app-bar>-->
+      <!-- <v-main class="ma-0 pa-0"> -->
           <v-bottom-navigation
             class="navbar-fixed-bottom"
             v-if="!$route.meta.navbar"
             scroll-target="#scroll-area-2"
             hide-on-scroll
-            scroll-threshold="500"
             absolute
             color="white"
             horizontal
+            grow
           >
             <v-btn class="nav-btn" @click="gotomap" text color="orange accent-4">
-              <!-- <router-link to="/map"> -->
-                <!-- <v-icon>fas fa-search</v-icon> -->
                 <v-icon class="icon-css">mdi-map-marker-radius</v-icon>
-              <!-- </router-link> -->
             </v-btn>
 
             <v-btn @click="gotonewsfeed" text color="orange accent-4">
-              <!-- <router-link to=/newsfeed> -->
                 <v-icon class="icon-css">mdi-history</v-icon>
-              <!-- </router-link> -->
             </v-btn>
 
             <v-btn @click="gotofeedadd" text color="orange accent-4">
-              <!-- <router-link to="/feed/add"> -->
-              <!-- <input ref="imageInput" type="file" hidden @change="onChangeImages"> -->
-              <!-- <v-btn type="button" @click="onClickImageUpload"> -->
-              <!-- </v-btn> -->  
                 <v-icon class="icon-css">fas fa-plus</v-icon>
-              <!-- </router-link> -->
             </v-btn>
 
             <v-btn @click="gotocurator" text color="orange accent-4">
-              <!-- <router-link to="/curator"> -->
-                <!-- <v-icon>fas fa-list</v-icon> -->
                 <v-icon class="icon-css">mdi-magnify</v-icon>
-              <!-- </router-link> -->
             </v-btn>
 
             <v-btn @click="gotouserinfo" text color="orange accent-4">
-              <!-- <router-link to="/user/info"> -->
                 <v-icon class="icon-css">fas fa-user</v-icon>
-              <!-- </router-link> -->
             </v-btn>
           </v-bottom-navigation>
 
-          <!-- home -->
-          <v-sheet
-            v-if="$route.name === 'Home'"
-            id="scroll-area-1"
-            class="overflow-y-auto"
-            max-height="667"
-          >
-            <v-container class="home-padding" style="height: 100%;">
-              <router-view></router-view>
-            </v-container>
-          </v-sheet>
+          <v-container class="pa-0 mx-auto" style="background-color:bisque;">
+            <router-view></router-view>
+          </v-container>
 
-          <!-- Login -->
-          <v-sheet
-            v-if="$route.name === 'Login'"
-            id="scroll-area-1"
-            class="overflow-y-auto"
-            max-height="667"
-          >
-            <v-container class="home-padding" style="height: 100%;">
-              <router-view></router-view>
-            </v-container>
-          </v-sheet>
-          
-          <!-- home, login 이외 -->
-          <v-sheet v-if="$route.name !== 'Home'"  id="scroll-area-1" class="overflow-y-auto" max-height="100%">
-            <v-container class="nothome" style="height: 100%;">
-              <router-view></router-view>
-            </v-container>
-          </v-sheet>
-          
-        </v-card>
-      </v-main>
+      <!-- </v-main> -->
     </v-app>
   </div>
 </template>
@@ -166,16 +119,5 @@ export default {
 </script>
 
 <style>
-.home-padding {
-  padding: 0px !important;
-}
-/* .icon-css {
-  padding: 0px
-}
-
-.navbar-fixed-bottom {
-  padding: 15px 5px 0 0;
-} */
-
 
 </style>

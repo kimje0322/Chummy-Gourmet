@@ -1,37 +1,100 @@
 <template>
-  <section class="user join">
-    <!-- <v-bottom-navigation
-      v-if="$route.name === 'NewsFeed'"
-      scroll-target="#scroll-area-2"
-      hide-on-scroll
-      scroll-threshold="500"
-      absolute
-      color="white"
-      horizontal
-    >
-    </v-bottom-navigation>-->
-    <v-app>
-      <v-toolbar-title>
-        <v-toolbar dark>
-          <a @click="$router.go(-1)">
-            <i class="fas fa-chevron-left back"></i>
-          </a>
-          <v-spacer></v-spacer>
-          <v-spacer></v-spacer>
-          <p class="my-auto">NewsFeed</p>
-          <v-spacer></v-spacer>
-          <v-spacer></v-spacer>
-        </v-toolbar>
-      </v-toolbar-title>
+  <div>
+    <!-- 상단 툴바 -->
+    <v-toolbar class="mb-1" dense elevation="1">
+      <v-icon @click="$router.go(-1)">
+        mdi-arrow-left
+      </v-icon>
+      <v-spacer></v-spacer>
+      <p class="my-auto">뉴스피드</p>
+      <v-spacer></v-spacer>
+    </v-toolbar>
 
-      <div style="flex-direction: column; padding-bottom: 5600px; padding-top: 0px">
-        <!-- <span v-for="(n, i) in 10" :key="i">{{ n }} </span> -->
-        <!-- <p>dkfjdlf=adfldfa;lkdfj;lkj</p> -->
-          
+      <!-- 피드 -->
+     <v-card class="mx-auto" tile flat>
+        <v-list-item>
+          <!-- 유저 프로필 사진-->
+          <v-list-item-avatar color="grey">
+            <img
+              @click="gotoProfile(lst)"
+              src="https://i3b302.p.ssafy.io:8080/img/user?imgname=profile_default.png"
+            />
+          </v-list-item-avatar>
+
+          <!-- 유저 닉네임 -->
+          <v-list-item-content>
+              <v-list-item-title class="font-weight-bold">
+                유저 닉네임
+              </v-list-item-title>
+          </v-list-item-content>
+
+          <!-- 수정/삭제 버튼 -->
+          <v-list-item-icon v-if="lst.postuserid==userid">
+              <v-btn-group class="float-right">
+                <v-btn icon small @click="onRevise(lst)">
+                  <v-icon>square-edit-outline</v-icon>
+                </v-btn>
+                <v-btn icon small @click.stop="del(lst.postid)">
+                  <v-icon>mdi-trash-can-outline</v-icon>
+                </v-btn>
+              </v-btn-group>
+              <v-dialog dark v-model="dialog" max-width="300">
+                <v-list>
+                  게시글을 삭제하시겠습니까?
+                  <v-list-item
+                    v-for="(item, index) in items"
+                    :key="index"
+                    @click="doit(item)"
+                    
+                  >
+                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-dialog>
+
+          </v-list-item-icon>
+        </v-list-item>
+
+        <!-- 피드 이미지 -->
+        <v-img
+          src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg"
+          min-height="300" max-height="300"
+        ></v-img>
+
+        <!-- 좋아요/댓글/DM 버튼 -->
+        <v-card-text class="pt-2 pb-0">
+          <v-btn icon>
+            <v-icon>mdi-heart-outline</v-icon>
+          </v-btn>
+          <v-btn icon>
+            <v-icon>mdi-chat-processing-outline</v-icon>
+          </v-btn>
+          <v-btn icon> 
+            <v-icon>mdi-send-outline</v-icon>
+          </v-btn>
+        </v-card-text>
+
+        <!-- 좋아요 갯수/컨텐츠/댓글보기/시간 -->
+        <v-card-text class="pt-0 pb-8">
+          <div class="font-weight-bold">좋아요 0개</div>
+          <div class="black--text"><span class="mr-2 font-weight-bold">닉네임</span>컨텐츠</div>
+          <div>댓글 4개 모두 보기</div>
+          <div>21 hours ago</div>
+        </v-card-text>
+
+      </v-card>
+
+
+      <!-- 피드 리스트 -->
+      <!-- <div style="flex-direction: column; padding-bottom: 5600px; padding-top: 0px"> -->
+      <div style="">
         <article v-for="(lst, i) in postlst" :key="i">
-          <!-- <p>{{ lst.postid }}</p> -->
+          <!-- 피드 상단바 -->
           <div role="button" tabindex="-1">
+
             <div class="hc1 hc2" style="postion: relative; padding-right: 17px;">
+
+             <!-- 유저 프로필 사진-->   
               <div class="hc-d1" tabindex="-1">
                 <canvas
                   height="84"
@@ -46,16 +109,20 @@
                   />
                 </a>
               </div>
+
+              <!-- 유저 아이디 및 수정/삭제 버튼 -->
               <div class="pf">
-                <div>
-                  <div class="pf-n">
+
+                    <!-- 유저 아이디 -->
                     <a 
                       @click="gotoProfile(lst)"
                       class="pf-n-a"
                       tabindex="0"
                       style="color: black; font-weight: 600;"
                     >{{lst.usernickname}}</a>
+                    
 
+                    <!-- 게시글 삭제 버튼 -->
                     <div v-if="lst.postuserid  == userid" style="float: right; ">
                       <button @click.stop="del(lst.postid)">
                         <div style="padding: 2px; width: 24px; height: 24px;">
@@ -77,6 +144,7 @@
                       </v-dialog>
                     </div>
 
+                    <!-- 게시글 수정 버튼 -->
                     <div
                       v-if="lst.postuserid  == userid"
                       style="float: right; margin-right: 0px; margin-left: 167px;"
@@ -87,30 +155,13 @@
                         </div>
                       </button>
                     </div>
-
-                    <!-- <div
-                      v-if="lst.postuserid  == userid"
-                      style="float: right; margin-left: 160px; "
-                    >
-                      <button @click="onDelete(lst)">
-                        <div style="padding: 2px; width: 24px; height: 24px;">
-                          <i class="far fa-trash-alt"></i>
-                        </div>
-                      </button>
-                    </div>-->
-                  </div>
-                </div>
-                <div></div>
               </div>
+
             </div>
-            <!-- <div style="float: right; width: 40px; height: 60px;">
-              <button>
-                <div style="padding: 8px; width: 24px; height: 24px;">
-                  <i class="fas fa-ellipsis-v"></i>
-                </div>
-              </button>
-            </div>-->
           </div>
+
+
+          <!-- 피드 컨텐츠 -->
           <div class="fc">
             <div class="fc-frame" tabindex="0">
               <div class="fc-fr">
@@ -121,69 +172,58 @@
               </div>
             </div>
           </div>
+
+
+          <!-- 피드 하단바-->
           <div class="fb">
             <section class="func">
+
+              <!-- 좋아요 -->
               <span v-if="likelist.includes(lst.postid*1)" class="heart" @click="unLike(lst, i)">
                 <button class="heart-btn">
                   <div style="border: 0">
                     <span style="margin: 0; height: 24px; width: 24px;">
-                      <!-- {{likelist}}
-                      뿅-->
                       <v-icon
                         style="display: block; position: relative; height: 24px; width: 24px; color: red;"
                       >mdi-heart</v-icon>
-                      <!-- <i
-                        style="display: block; position: relative; height: 24px; width: 24px; color: red;"
-                        class="fas fa-heart"
-                      ></i>-->
                     </span>
                   </div>
                 </button>
               </span>
+
               <span v-else class="heart" @click="onLike(lst, i)">
                 <button class="heart-btn">
                   <div style="border: 0">
                     <span style="margin: 0; height: 24px; width: 24px;">
-                      <!-- {{likelist}}
-                      하트-->
                       <v-icon
                         style="display: block; position: relative; height: 24px; width: 24px;"
                       >mdi-heart-outline</v-icon>
-                      <!-- <i
-                        style="display: block; position: relative; height: 24px; width: 24px; "
-                        class="far fa-heart"
-                      ></i>-->
                     </span>
                   </div>
                 </button>
               </span>
+
+              <!-- 댓글 -->
               <span style="display: inline-block;">
                 <button
                   @click="onComment(lst.postid, lst.usernickname, lst.postcontent,lst.user_img,lst.postuserid)"
                   style="background: 0 0; border: 0; display: flex; padding: 8px 6px;"
                 >
                   <div>
-                    <!-- <router-link to="/newsfeed/comment"> -->
-                    <!-- <div :v-model="pid" @click="onComment"> -->
                     <i
                       style="display: block; position: relative; height: 21px; width: 21px;"
                       class="far fa-comment"
                     ></i>
-                    <!-- </div> -->
-                    <!-- </router-link> -->
                   </div>
                 </button>
               </span>
-              <!-- here messageing -->
+
+              <!-- DM -->
               <CreateChat :postuserid="lst.postuserid" />
-              <!-- <span style="display: inline-block; margin-left: auto; margin-right: -10px;">
-                <button>
-
-                </button>
-
-              </span>-->
             </section>
 
+
+            <!-- 좋아요 갯수 --> 
             <section style="height: 17.6px; margin-bottom: 8px;">
               <div style="flex: 1 1 auto;">
                 <p style="font-weight: 600;">
@@ -193,6 +233,8 @@
                 </p>
               </div>
             </section>
+
+            <!-- 댓글 -->
             <div style="margin-bottom: 4px;">
               <div>
                 <div>
@@ -217,8 +259,8 @@
                 <div>{{ lst.postdate | moment("from", "now") }}</div>
               </div>
             </div>
-            <!-- <p>{{ lst.postcontent }}</p> -->
           </div>
+          
         </article>
       </div>
 
@@ -228,8 +270,7 @@
         <router-link to="/SearchUser"><v-btn color="warning" style="width: 60%">유저 보기</v-btn></router-link>
       </div>
 
-    </v-app>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -320,8 +361,6 @@ export default {
     },
     doit(item, deleteid) {
       if (item.title == "삭제") {
-        console.log("삭제해버려?");
-        // console.log(deleteid);
         axios
           .delete(`${SERVER_URL}/post?postid=${this.delid}`)
           .then((response) => {
@@ -330,11 +369,8 @@ export default {
             axios
               .get(`${SERVER_URL}/post?userid=${this.$cookie.get("userId")}`)
               .then((response) => {
-                console.log(response);
                 var posts = response.data.data;
                 var comments = response.data.comment;
-                // alert(this.postlst.length);
-                // console.log(posts);
                 posts.sort((a, b) => {
                   return -1 * (a.postid - b.postid);
                 });
@@ -342,9 +378,7 @@ export default {
                   return -1 * (a[1] - b[1]);
                 });
                 this.postlst = posts;
-                
                 this.commentlst = response.data.comment;
-                console.log("mentlst : " + response.data.comment);
               })
               .catch((error) => {
                 console.log(error.response);

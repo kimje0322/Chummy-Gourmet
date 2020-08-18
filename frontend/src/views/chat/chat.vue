@@ -79,7 +79,7 @@ export default {
                       window.db.collection('alarm').doc('chat').collection('messages').where('roomid','==',this.room.rid).where('to','==',this.userid).get()
                       .then(snapshot =>{
                           if(snapshot.empty) {
-                              console.log('없다')
+                              console.log('채팅이 없다')
                           }
 
                           snapshot.forEach(doc =>{

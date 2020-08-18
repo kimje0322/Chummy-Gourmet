@@ -32,9 +32,9 @@ export default {
     },
     methods:{
         onClick(){
-            console.log("hello");
-            console.log(this.postuserid);
-            console.log(this.userid);
+            // console.log("hello");
+            // console.log(this.postuserid);
+            // console.log(this.userid);
 
             //클릭한 아이디 둘로 배열을 만든다 (정렬해서)
             if(this.postuserid==this.userid){
@@ -42,17 +42,17 @@ export default {
                 return;
             }
             else if(parseInt(this.postuserid)>parseInt(this.userid)){
-                console.log("pustuserid가 더 크다")
+                // console.log("pustuserid가 더 크다")
                 this.data = [this.userid,this.postuserid];
             }
             else{
-                console.log("userid가 더 크다.");
+                // console.log("userid가 더 크다.");
                 this.data = [this.postuserid,this.userid];
             }
-                console.log(this.data);
+                // console.log(this.data);
 
             //동일한 채팅방이 있는지 검사한다.
-            window.db.collection('test').where('id', '==', this.data).get()
+            window.db.collection('test').where('id', '==', this.data).where('name','==','Room').get()
                  .then(snapshot=>{
                   //없을경우
                     var room = {};
@@ -73,7 +73,7 @@ export default {
                                 console.log(err);
                             })
 
-                            alert("새로운 채팅방 생성");
+                            alert("새로운 채팅방 생성완료 다시 요청해주세요");
                             return;
                         }
 
@@ -87,6 +87,7 @@ export default {
                             room.time = Date.now();
                             // room.name = doc.data().name;
                             room.rid = doc.id;
+                            room.to = this.postuserid;
                          })
                     }
 

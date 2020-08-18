@@ -1,7 +1,8 @@
 <template>
+
   <div class="user join">
     <!-- <v-app> -->
-    <v-bottom-navigation
+    <!-- <v-bottom-navigation
       scroll-target="#scroll-area-2"
       hide-on-scroll
       scroll-threshold="500"
@@ -13,7 +14,7 @@
           <v-btn @click="$router.go(-1)" value="center">취소</v-btn>
           <v-btn value="right" @click="meetUp">생성</v-btn>
       </v-btn-toggle>
-    </v-bottom-navigation>
+    </v-bottom-navigation> -->
 
     <v-toolbar dense elevation="1">
       <v-icon @click="$router.go(-1)">
@@ -27,40 +28,43 @@
 
 
       <!-- 입력 폼 -->
-      <div class="party wrapC">
+      <div class="party wrapC overflow:scroll">
 
         <v-form ref="form">
         <!-- 밋업 타이틀 -->
             <v-col class="pb-0">
               <v-text-field
+              :rules="[() => !!meetup.title]"
               outlined hide-details="auto" 
               v-model="meetup.title"
               label="제목"
               clearable
               >          
               </v-text-field>
-            <div class="error-text" v-if="error.title">{{ error.title }} </div>
+            <!-- <div class="error-text" v-if="error.title">{{ error.title }} </div> -->
             </v-col>
 
         <!-- 밋업 내용 -->
           <v-col class="pb-0">
             <v-textarea
+            :rules="[() => !!meetup.content]"
             outlined hide-details="auto" 
             v-model="meetup.content"
             label="내용"
             clearable
             >          
             </v-textarea>
-            <div class="error-text" v-if="error.content">{{ error.content }} </div>
+            <!-- <div class="error-text" v-if="error.content">{{ error.content }} </div> -->
           </v-col>
 
 
-        <!-- 밋업 위치 -->
+        <!-- 밋업 장소 -->
           <v-col class="pb-0">
           <v-layout justify-center>
                 <v-dialog v-model="dialog" scrollable max-width="300px">
                   <template v-slot:activator="{on}">
                     <v-text-field
+                      :rules="[() => !!meetup.location]"
                       outlined hide-details="auto" 
                       slot="activator"
                       v-on="on"
@@ -75,15 +79,19 @@
                   <!-- dialog -->
                   <v-card>
             
-                    <v-card-title class="headline">
+                    <v-card-title class="headline pb-0">
+                    <div class="input-container">
+                      <i class="fas fa-search fa-2x icon" @click="search"></i>
                       <input
+                        class="input-field"
                         v-model="keyword"
                         @keyup.enter="search"
                         type="text"
-                        placeholder="원하는 지역 검색"
-                        style="width : 100%; border : 1px solid"
+                        placeholder=' 위치 검색'
+                        style="width : 95%; height: 80%; border : 2px solid orange"
                       />
-                      <v-btn class="search-bar" color="warning" width="100%" @click="search">검색</v-btn>
+                    </div>
+                      <!-- <v-btn class="search-bar" color="warning" width="100%" @click="search">검색</v-btn> -->
                     </v-card-title>
 
                     <v-card-text style="height: 300px;">
@@ -111,16 +119,15 @@
 
 
                     </v-card-text>
-                    <v-divider></v-divider>
+                    <v-divider class="mb-0"></v-divider>
                     <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
+                      <v-btn color="black" text class="mx-auto btnbtn" @click="dialog = false">닫기</v-btn>
                       <!-- <v-btn color="blue darken-1" text @click="dialog = false">Save</v-btn> -->
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
               </v-layout>
-              <div class="error-text mt-2" v-if="error.location">{{ error.location }} </div>
+              <!-- <div class="error-text mt-2" v-if="error.location">{{ error.location }} </div> -->
               </v-col>
 
 
@@ -137,6 +144,7 @@
             <!-- 월/일 선택 -->
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
+                  :rules="[() => !!meetup.date]"
                   outlined
                   hide-details
                   v-model="meetup.date"
@@ -157,7 +165,7 @@
                   full-width
                 >
                   <v-spacer></v-spacer>
-                  <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
+                  <v-btn text color="black" @click="menu = false">취소</v-btn>
                   <v-menu
                     v-model="menu2"
                     :close-on-content-click="false"
@@ -166,37 +174,39 @@
                     offset-y
                   >
                     <template v-slot:activator="{ on, attrs }">
-                      <v-btn text color="primary"  v-on="on" v-bind="attrs">OK</v-btn>
+                      <v-btn text color="primary"  v-on="on" v-bind="attrs">확인</v-btn>
                     </template>
+                    
                     <v-time-picker
                       v-model="time"
                       ampm-in-title
                       width="260px"
                     >
+                   
                     <v-spacer></v-spacer>
-                    <v-btn text color="primary" @click="menu2 = false">Cancel</v-btn>
-                    <v-btn text color="primary" @click="setDate">OK</v-btn>
+                    <v-btn text color="primary" @click="menu2 = false">취소</v-btn>
+                    <v-btn text color="primary" @click="setDate">확인</v-btn>
                   </v-time-picker>
                 </v-menu>
               </v-date-picker>
             </v-menu>
-            <div class="error-text mt-2" v-if="error.date">{{ error.date }} </div>
+            <!-- <div class="error-text mt-2" v-if="error.date">{{ error.date }} </div> -->
             </v-col>
             
 
           <!-- 밋업 인원 -->
             <v-col class="pb-0">
             <div id="dropdown-example">
-            <v-overflow-btn
-              outlined
+            <v-select
               hide-details
+              outlined
+              :rules="[() => !!meetup.maxPersonnel]"
               v-model="meetup.maxPersonnel"
-              class="my-2"
+              class="my-0 pa-0"
               :items="dropdown_font"
               label="인원"
-              style="margin:0px;"
               target="#dropdown-example"
-            ></v-overflow-btn>
+            ></v-select>
           <div class="error-text" v-if="error.personnel">{{ error.personnel }} </div>
           </div>
             </v-col>
@@ -210,7 +220,7 @@
           >
             <template v-slot:activator="{ on, attrs }">
               <v-combobox
-                
+                :rules="[() => !!meetup.personalities || '성향을 선택해주세요']"
                 hide-details
                 outlined
                 v-model="meetup.personalities" 
@@ -252,8 +262,13 @@
             </v-col>
           <div class="error-text mt-2" v-if="error.personality">{{ error.personality }} </div>
           </v-form>
-
       </div>
+
+      <div class="mt-8 mb-5 btns">
+        <v-btn color="grey white--text" @click="$router.go(-1)" value="center">취소</v-btn>
+        <v-btn color="warning" value="right" class="ml-3" @click="meetUp">생성</v-btn>
+      </div>
+
     <!-- </v-app> -->
   </div>
 </template>
@@ -317,34 +332,34 @@ export default {
       geocoder : '',
     }
   },
-  watch: {
-    'meetup.title' : function() {
-      if (this.meetup.title.length < 1) this.error.title = "제목을 입력해주세요.";
-      else this.error.title = false;
-      return;
-    },
-    'meetup.content' : function() {
-      if ( this.meetup.content.length < 1 ) this.error.content = "내용을 입력해주세요.";
-      else this.error.content = false;
-      return;
-    },
-    'meetup.location' : function() {
-      if (!this.meetup.location)
-        this.error.location = "음식점을 입력해주세요.";
-      else this.error.location = false;
-      return;
-    },
-    'meetup.date' : function() {
-      if (this.meetup.date.length < 1) this.error.date = "날짜를 입력해주세요.";
-      else this.error.date = false;
-      return;
-    },
-    'meetup.personnel' : function() {
-      if (this.meetup.personnel.length < 1) this.error.personnel = "인원을 입력해주세요.";
-      else this.error.personnel = false;
-      return;
-    },
-  },
+  // watch: {
+  //   'meetup.title' : function() {
+  //     if (this.meetup.title.length < 1) this.error.title = "제목을 입력해주세요.";
+  //     else this.error.title = false;
+  //     return;
+  //   },
+  //   'meetup.content' : function() {
+  //     if ( this.meetup.content.length < 1 ) this.error.content = "내용을 입력해주세요.";
+  //     else this.error.content = false;
+  //     return;
+  //   },
+  //   'meetup.location' : function() {
+  //     if (!this.meetup.location)
+  //       this.error.location = "음식점을 입력해주세요.";
+  //     else this.error.location = false;
+  //     return;
+  //   },
+  //   'meetup.date' : function() {
+  //     if (this.meetup.date.length < 1) this.error.date = "날짜를 입력해주세요.";
+  //     else this.error.date = false;
+  //     return;
+  //   },
+  //   'meetup.personnel' : function() {
+  //     if (this.meetup.personnel.length < 1) this.error.personnel = "인원을 입력해주세요.";
+  //     else this.error.personnel = false;
+  //     return;
+  //   },
+  // },
 
   mounted() {
       if (navigator.geolocation) {
@@ -355,7 +370,7 @@ export default {
       }
 
       if (window.kakao && window.kakao.maps) {
-        console.log("이미 로딩됨");
+        // console.log("이미 로딩됨");
         this.initMap();
       } else {
         console.log("카카오맵 로딩");
@@ -379,44 +394,6 @@ export default {
     },
     meetUp() {
       this.createMeetUpChat();
-      if (this.meetup.title.length === 0) {
-        this.error.title = "제목을 입력해주세요.";
-        return false;
-      }
-      else this.error.title = false;
-
-      if (this.meetup.content.length === 0) {
-        // alert("내용을 작성해주세요.");
-        this.error.content = "내용을 입력해주세요.";
-        return false;
-      }
-      else this.error.content = false;
-
-      if (!this.meetup.location) {
-        this.error.location = "장소를 선택해주세요.";
-        return false;
-      }
-      else this.error.location = false;
-      
-      if (!this.meetup.date) {
-        this.error.date = "날짜를 선택해주세요.";
-        return false;
-      }
-      else this.error.date = false;
-
-      if (!this.meetup.maxPersonnel) {
-        this.error.personnel = "인원을 선택해주세요.";
-        return false;
-      }
-      else this.error.personnel = false;
-
-
-      if (!this.meetup.personalities) {
-        this.error.personalities = "성향을 선택해주세요.";
-        return false;
-      }
-      else this.error.personnel = false;
-
 
       // 밋업 등록 폼 유효성 검사
       if (this.isValidForm()){
@@ -627,6 +604,7 @@ export default {
 </script>
 
 <style>
+* {box-sizing: border-box;}
 .back {
   color: white !important;
 }
@@ -656,13 +634,41 @@ div {
 /* .btn-person{
   margin: 0px;
 } */
-.error-text {
-  margin: 0 0 8px 8px;
-}
 .search-bar{
   margin-top: 8px;
 }
 .size-css {
   overflow: hidden;
 }
+.btns {
+  text-align: center;
+}
+.input-container {
+  display: flex;
+  width: 100%;
+  height: 95%;
+  margin-bottom: 15px;
+}
+
+/* Style the form icons */
+.icon {
+  padding: 10px;
+  background: #FFA500;
+  color: white;
+  min-width: 45px;
+  text-align: center;
+}
+
+/* Style the input fields */
+.input-field {
+  width: 100%;
+  padding: 8px;
+}
+
+.input-field:focus {
+  border: 2px solid #FFA500;
+}
+.btnbtn { 
+  font-size: 2rem; 
+} 
 </style>

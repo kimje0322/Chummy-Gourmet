@@ -2,7 +2,7 @@
   <div id="app">
     <v-app>
       <v-main>
-        <v-card class="overflow-hidden mx-auto" height="667">
+        <v-card class="overflow-hidden mx-auto" >
           <!-- <v-app-bar color="deep-blue accent-4" dense dark>
             <v-toolbar-title style="margin:auto;">돈독한 미식가</v-toolbar-title>
           </v-app-bar>-->
@@ -12,7 +12,7 @@
             class="navbar-fixed-bottom"
             v-if="!$route.meta.navbar"
             scroll-target="#scroll-area-2"
-            hide-on-scroll
+            
             scroll-threshold="500"
 
             absolute
@@ -50,7 +50,6 @@
             v-if="$route.name === 'Home'"
             id="scroll-area-1"
             class="overflow-y-auto"
-            max-height="667"
           >
             <v-container class="home-padding" style="height: 100%;">
               <router-view></router-view>

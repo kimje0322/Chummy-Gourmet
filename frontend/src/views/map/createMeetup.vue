@@ -280,7 +280,7 @@ export default {
         address : '',
         date : '',
         maxPersonnel : '',
-        master : 70,
+        master : '',
         img : '',
         personalities : [],
       },
@@ -339,6 +339,8 @@ export default {
   },
 
   mounted() {
+      this.meetup.master = this.$cookie.get('userId');
+
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(pos => {
           this.targetLocation.lat = pos.coords.latitude;
@@ -509,28 +511,6 @@ export default {
 
                             alert("새로운 채팅방 생성");
                             return;
-
-
-
-
-  // 유저 밋업에 추가할 때 사용할 코드 삭제하지 말 것
-    
-    //  const newRoomRef = window.db.collection('test').where('name','==','테스트').get()
-    //  .then(snapshot =>{
-    //    if(snapshot.empty){
-    //      alert("없다");
-    //    }
-    //    snapshot.forEach(doc=>{
-    //      alert(doc.data().id)
-    //      var id = doc.data().id;
-    //      id.push('56');
-    //      id.push('2');
-    //      alert(id.sort())
-    //      window.db.collection('test').doc(doc.id).set({
-    //        id : id
-    //      },{merge:true});
-    //    })
-    //  })
                           
     },
     

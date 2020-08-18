@@ -45,7 +45,7 @@
               <!-- </router-link> -->
             </v-btn>
 
-            <v-btn @click="gotouserinfo" text color="orange accent-4">
+            <v-btn @click="gotouserinfo" text color="orange">
               <!-- <router-link to="/user/info"> -->
                 <v-icon class="icon-css">fas fa-user</v-icon>
               <!-- </router-link> -->
@@ -77,7 +77,7 @@
           </v-sheet>
           
           <!-- home, login 이외 -->
-          <v-sheet v-if="$route.name !== 'Home'"  id="scroll-area-1" class="overflow-y-auto" max-height="100%">
+          <v-sheet v-if="$route.name !== 'Home'"  class="overflow-y-auto" id="scroll-area-1" max-height="100%">
             <v-container class="nothome" style="height: 100%;">
               <router-view></router-view>
             </v-container>
@@ -169,13 +169,16 @@ export default {
 .home-padding {
   padding: 0px !important;
 }
-/* .icon-css {
-  padding: 0px
+ .icon-css {
+  padding-right: 0px;
+  /* align-content: center; */
 }
 
-.navbar-fixed-bottom {
+/* .navbar-fixed-bottom {
   padding: 15px 5px 0 0;
-} */
-
+} * */
+.v-item-group.v-bottom-navigation--horizontal .v-btn>.v-btn__content>.v-icon {
+  margin-right: 0px !important;
+}
 
 </style>

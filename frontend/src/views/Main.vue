@@ -226,7 +226,11 @@ export default {
       this.close = flag;
     },
     cancelMeetup(){
-      this.$confirm("참여취소 하시겠습니까?").then(() => {
+      if(this.meetup.master == this.userId){
+        this.$alert("밋업주최자는 참여취소가 불가합니다.")
+      }
+      else{
+        this.$confirm("참여취소 하시겠습니까?").then(() => {
       //do something...
         axios
         .delete(
@@ -240,6 +244,7 @@ export default {
           console.log(error.response);
         });
       });
+      }
     },
     moveCreateReview(){
       this.$router.push({ name : 'AddReview', params : this.meetup });

@@ -80,10 +80,12 @@ export default {
                     //있을경우
                     else{
                         snapshot.forEach(doc=>{
+
+                             
                             //데이터 집어넣기
                             room.id = this.data;
                             room.time = Date.now();
-                            room.name = doc.data().name;
+                            // room.name = doc.data().name;
                             room.rid = doc.id;
                          })
                     }
@@ -97,6 +99,7 @@ export default {
                                 this.nickName
                                 this.nick.push(response.data);
                                 room.nickName = response.data;
+                                room.name = response.data;
                            })
                             .catch((error) => {
                                 console.log(error.response);

@@ -153,7 +153,7 @@ export default {
       .then((response) => {
 
         //팔로우 요청이 성공했을때
-            //좋아요 알림 보냄
+            //팔로우 알림 보냄
               console.log(this.mynickname);
                window.db.collection('alarm').doc('follow').collection('messages').add({
                         to : this.anotherId,
@@ -162,7 +162,6 @@ export default {
                         time: Date.now(),
                         confirm : false
                     }).catch(err => {
-                        console.log(err);
                     });
 
       })

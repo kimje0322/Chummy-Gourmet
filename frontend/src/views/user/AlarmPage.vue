@@ -16,10 +16,11 @@
         </div>
       </div>
 
-      <!-- <div>
-        <input type = "text" v-model = "name" placeholder="추가할 채팅방 이름입력">
-        <button @click="addRoom">추가</button>
-      </div> -->
+      <div v-if="alarm.length == 0" class="aligncss"> 
+        <i class="far fa-file-image fa-5x"></i>
+        <h3 class="mt-5">새로운 알림이 없습니다.</h3>
+      </div>
+
   </div>
 </template>
 
@@ -50,7 +51,7 @@ export default {
                  .then(snapshot=>{
                   //없을경우
                       if(snapshot.empty){
-                        console.log("없다");
+                        // console.log("없다");
                         return;
                         }
 

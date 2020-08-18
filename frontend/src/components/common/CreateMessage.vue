@@ -40,12 +40,23 @@ export default {
                 this.newMessage = null;
                 this.errorText = null;
 
+                var a;
+                //this.to가 배열일경우
+                // console.log(Array.isArray(this.to));
+                if(Array.isArray(this.to)){
+                    a = this.to;
+                }
+                //배열이 아닐 경우 배열로 만들어야함.
+                else{
+                    a = [];
+                    a.push(this.to);
+                }
 
-                for(var i = 0;i<this.to.length;i++){
+                for(var i = 0;i<a.length;i++){
                     // console.log(this.myNickName);
                     //새로운 알람을 보낸다.
                     window.db.collection('alarm').doc('chat').collection('messages').add({
-                        to : this.to[i],
+                        to : a[i],
                         from : this.id,
                         message: this.myNickName+"님이 채팅메시지를 보냈습니다.",
                         time: Date.now(),

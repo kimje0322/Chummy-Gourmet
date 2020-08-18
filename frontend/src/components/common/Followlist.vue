@@ -432,6 +432,14 @@ export default {
     font-family: 'Jua', sans-serif;  
   }
 
+   .followListBtn::after {
+    font-style: normal;
+    font-size: 15px !important;
+    color: orange;
+    font-family: 'Jua', sans-serif;  
+  }
+
+
   .followlist{
     margin: 18px;
   }

@@ -250,7 +250,6 @@
               style="position:absolute;top:10px;left:10px;z-index:20;opacity:.8"
               > 
               </v-text-field>
-              <v-btn @click="search" icon><v-icon size="20">mdi-magnify</v-icon></v-btn> 
 
               <!-- <div class="search-box">
                 <input type="text" />

@@ -28,8 +28,8 @@
             <v-card-text v-else>
             
             <!-- 밋업 있을 때 -->
-            <v-container>
-               <v-hover>진행중</v-hover>
+            <v-container v-show="listLen">
+               <v-hover v-if="meetups.length > 0">진행중 밋업</v-hover>
               <v-row dense>
                 <v-col
                   v-for="(meetup, i) in meetups"
@@ -56,7 +56,7 @@
                   </v-card>
                 </v-col>
               </v-row>
-              <v-hover>종료</v-hover>
+              <v-hover v-if="closeMeetups.length > 0">종료 밋업</v-hover>
               <v-row dense>
                 <v-col
                   v-for="(meetup, i) in closeMeetups"
@@ -84,13 +84,11 @@
                 </v-col>
               </v-row>
             </v-container>
-            
-            <!-- 밋업 없을 때 --> 
-            <div v-if="!isNaN(meetups)" style="margin-top:100px;text-align: center;"> 
+             <!-- 밋업 없을 때 --> 
+            <v-container v-show="!listLen" style="margin-top:100px;text-align: center;"> 
               <i class="fab fa-meetup fa-6x"></i>
               <h3 class="mt-5">등록된 Meetup이 없습니다.</h3>
-            </div>
-
+            </v-container>
             </v-card-text>
           </v-card>
         </v-tab-item>
@@ -153,6 +151,7 @@ export default {
       close:false,
       contents: "",
       currentItem: "",
+      listLen : false,
       items: ["Profile", "History", "Message"],
       buttons: [
         {
@@ -173,9 +172,18 @@ export default {
     this.created();
   },
   methods: {
+    isNaN(){
+      alert(this.closeMeetups.length)
+      alert(this.meetups.length)
+      if(this.closeMeetups.length == 0 && this.meetups.length == 0){
+        return true;
+      }
+      else
+        return false;
+    },
     created(){
-      
-      // alert(t)
+      this.meetups = [],
+      this.closeMeetups = []
       this.userId = this.$cookie.get("userId");
     axios
       .get(`${SERVER_URL}/userpage/getuser?userId=`+ this.userId)
@@ -192,6 +200,10 @@ export default {
       )
       .then((response) => {
         let now = new Date();
+        if(response.data.object.length > 0 ){
+          this.listLen = true;
+        }
+        
         for (let i = 0; i <response.data.object.length; i++) {
           let time = new Date(response.data.object[i].date)
           if(time - now > 0){

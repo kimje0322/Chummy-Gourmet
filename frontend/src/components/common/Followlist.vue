@@ -163,6 +163,7 @@ export default {
         text: '',
         followingList:[],
         followerList:[],
+        mynickname :'',
         methods: {
           checkfollow(flag){
               if(flag=="true")
@@ -174,6 +175,16 @@ export default {
     };
   },
   created(){
+    //유저의 닉네임 가져오기
+     axios
+      .post(`${SERVER_URL}/chat/nickname`,[this.$cookie.get('userId')])
+      .then((response) => {
+       this.mynickname = response.data[0];
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+
     this.whenCreated(); 
   },
   methods: {
@@ -316,6 +327,17 @@ export default {
         `${SERVER_URL}/userpage/insertfollowingRequest?followerId=`+user.followerId+`&userId=`+this.userId
       )
       .then((response) => {
+           //팔로우 요청이 성공했을때
+            //팔로우 알림 보냄
+              console.log(this.mynickname);
+               window.db.collection('alarm').doc('follow').collection('messages').add({
+                        to : user.followerId,
+                        from : this.$cookie.get('userId'),
+                        message: this.mynickname+"님이 회원님에게 팔로우 요청을 하였습니다.",
+                        time: Date.now(),
+                        confirm : false
+                    }).catch(err => {
+                    });
       })
       .catch((error) => {
           console.log(error.response);

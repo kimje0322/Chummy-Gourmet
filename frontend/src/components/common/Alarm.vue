@@ -21,6 +21,7 @@ export default {
    this.alarm('chat');
    this.alarm('like');
    this.alarm('comment');
+   this.alarm('follow');
   },
   methods : {
     goAlarmPage(){

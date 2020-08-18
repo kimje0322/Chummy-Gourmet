@@ -40,9 +40,11 @@ export default {
     this.view('chat');
     this.view('like');
     this.view('comment');
+    this.view('follow');
   },
 
   methods:{
+    //type별로 알림목록을 가져온다.
     view(type){
       window.db.collection('alarm').doc(type).collection('messages').where('to', '==', this.$cookie.get('userId')).where('confirm','==',false).get()
                  .then(snapshot=>{
@@ -66,6 +68,7 @@ export default {
                   });
     },
 
+    //클릭했을 때 페이지 변경해주는 함수
     onClick(list){
       if(list.type=='chat'){
         this.$router.push({ path: '/chatroom' });
@@ -94,6 +97,26 @@ export default {
                 post_like : post.post_like, post_userid : post.post_userid, user_img:post.user_img,
                 user_nickname : post.user_nickname, comment:comment , userId : this.userId}});
             })  
+      }
+      else if(list.type =='follow'){
+
+         //팔로우 요청 알림을 모두 읽음으로 변경.
+                      window.db.collection('alarm').doc('follow').collection('messages').where('to','==',this.$cookie.get('userId')).get()
+                      .then(snapshot =>{
+                          if(snapshot.empty) {
+                              console.log('팔로우 요청이 없다.')
+                          }
+
+                          snapshot.forEach(doc =>{
+                             window.db.collection('alarm').doc('follow').collection('messages').doc(doc.id).set({
+                                    confirm : true
+                                },{merge:true}).catch(err => {
+                                    console.log(err);
+                                });
+                          })
+                      })
+
+        this.$router.push({ path: '/user/FollowRequestList' });
       }
     }
   }

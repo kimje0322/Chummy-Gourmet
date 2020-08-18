@@ -372,7 +372,6 @@ export default {
         this.geocoder = new kakao.maps.services.Geocoder();
     },
     meetUp() {
-      this.createMeetUpChat();
       if (this.meetup.title.length === 0) {
         this.error.title = "제목을 입력해주세요.";
         return false;
@@ -460,15 +459,15 @@ export default {
           axios
           .post(`${SERVER_URL}/rest`, newRest)
           .then((response) => {
-              this.selectedRest.id = response.data;
+            this.selectedRest.id = response.data;
               newMeetup.restId = this.selectedRest.id;
 
               // 밋업 객체 DB 등록
               axios
                 .post(`${SERVER_URL}/meetup`, newMeetup)
                 .then((response) => {
-                  this.createMeetUpChat()
                   alert("밋업 등록이 완료됐습니다.");
+                  this.createMeetUpChat()
                   this.$router.push("/map")
                 })
                 .catch((error) => {
@@ -499,7 +498,7 @@ export default {
 
       const newRoomRef = window.db.collection('test').doc();
                             console.log(newRoomRef.id);
-                            window.db.collection('test').doc(newRoomRef.id).collection('test').doc();
+                            // window.db.collection('test').doc(newRoomRef.id).collection('test').doc();
 
                              var res = window.db.collection('test').doc(newRoomRef.id).set({
                                 id :[this.meetup.master],

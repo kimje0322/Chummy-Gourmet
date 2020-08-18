@@ -133,7 +133,7 @@ export default {
             }
             snapshot.forEach(doc=>{
               var id = doc.data().id;
-              if(id.includes(userid)){
+              if(!id.includes(userid)){
                 id.push(userid);
                 id.sort()
               }

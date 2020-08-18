@@ -63,7 +63,7 @@ public class MeetUpController {
 	}
 	
 	//밋업 아이디로 밋업 정보 조회
-	@GetMapping("/meetup/searchByMeetupID/{id}")
+	@GetMapping("/meetup/search/{id}")
 	@ApiOperation(value = "밋업 정보 조회")
 	public Meetup searchByMeetupID(@PathVariable int id) {
 		

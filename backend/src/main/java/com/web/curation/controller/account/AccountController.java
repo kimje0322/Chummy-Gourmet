@@ -147,6 +147,7 @@ public class AccountController {
       // user entity db 저장
       User newUser = new User(request.getUserPwd(), request.getUserEmail(), request.getUserName(),
             request.getUserNickname(), request.getUserPhone(), request.getUserComment());
+      newUser.setUserImg("profile_default.png");
       userDao.save(newUser);
       // user detail entity db 저장
       UserDetail newUserDetail = new UserDetail(newUser.getUserId(), request.getUserGender(), request.getUserAge(),

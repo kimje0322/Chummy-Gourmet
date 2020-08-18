@@ -22,6 +22,7 @@ export default {
    this.alarm('like');
    this.alarm('comment');
    this.alarm('follow');
+   this.alarm('meetup');
   },
   methods : {
     goAlarmPage(){

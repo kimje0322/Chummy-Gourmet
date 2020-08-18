@@ -133,7 +133,7 @@
 
           <!-- 밋업 날짜 -->
           <v-col class="pb-0">
-            <v-menu
+            <v-menu           
               v-model = "menu"
               :close-on-content-click="false"
               :return-value.sync="date"
@@ -182,9 +182,9 @@
                       ampm-in-title
                       width="260px"
                     >
-                   
+                  
                     <v-spacer></v-spacer>
-                    <v-btn text color="primary" @click="menu2 = false">취소</v-btn>
+                    <v-btn text color="black" @click="menu2 = false">취소</v-btn>
                     <v-btn text color="primary" @click="setDate">확인</v-btn>
                   </v-time-picker>
                 </v-menu>

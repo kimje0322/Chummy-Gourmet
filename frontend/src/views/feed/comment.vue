@@ -200,6 +200,7 @@ export default {
       cid : "",
       postuserid:"",
       userid : "",
+      mynickname : ''
     };
   },
   watch: {
@@ -209,6 +210,18 @@ export default {
   },
   mounted() {},
   created() {
+
+    //유저의 닉네임 가져오기
+     axios
+      .post(`${SERVER_URL}/chat/nickname`,[this.$cookie.get('userId')])
+      .then((response) => {
+       this.mynickname = response.data[0];
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+
+
     axios
       .get(
         `${SERVER_URL}/userpage/getuser?userId=${this.$cookie.get("userId")}`
@@ -324,6 +337,22 @@ export default {
               this.postname = this.$route.query.postnickname;
               this.postcontent = this.$route.query.postcontent;
               this.postuserimg = this.$route.query.postuserimg;
+
+              //게시한 유저가 자신이 아닐때만
+            //좋아요 알림 보냄
+            if(this.postuserid != this.$cookie.get('userId')){
+              console.log(this.mynickname);
+               window.db.collection('alarm').doc('comment').collection('messages').add({
+                        to : this.postuserid,
+                        from : this.$cookie.get('userId'),
+                        message: this.mynickname+"님이 회원님의 게시글에 댓글을 작성했습니다.",
+                        time: Date.now(),
+                        postid : this.$route.query.postid,
+                        confirm : false
+                    }).catch(err => {
+                        console.log(err);
+                    });
+            }
             })
             .catch((error) => {
               // console.log(error.response);

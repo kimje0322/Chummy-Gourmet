@@ -124,6 +124,9 @@ export default {
     created(){
       this.userId = this.$cookie.get("userId");
       this.items =[]
+
+     
+
     axios
       .get(
         `${SERVER_URL}/userpage/getfollowingrequest?userId=${this.userId}`

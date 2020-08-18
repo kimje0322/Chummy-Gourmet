@@ -116,12 +116,33 @@ export default {
   },
   methods :{
     acceptRequest(){
+      var userid = this.guestList[this.index].userId;
       axios
       .get(
         `${SERVER_URL}/meetup/acceptMeetupRequest?meetupId=${this.meetupInfo.id}&guestId=${this.guestList[this.index].userId}&requestId=${this.requestList[this.index].id}`
       )
       .then((response) => {
         if(response.data.data == "success"){
+
+            // 유저 밋업에 추가할 때 사용할 코드 삭제하지 말 것
+    
+          const newRoomRef = window.db.collection('test').where('name','==', this.meetupInfo.title).get()
+          .then(snapshot =>{
+            if(snapshot.empty){
+              alert("없다");
+            }
+            snapshot.forEach(doc=>{
+              var id = doc.data().id;
+              if(id.includes(userid)){
+                id.push(userid);
+                id.sort()
+              }
+              window.db.collection('test').doc(doc.id).set({
+                id : id
+              },{merge:true});
+            })
+          })
+
           alert("수락완료");
           this.dialog = false
           this.created();

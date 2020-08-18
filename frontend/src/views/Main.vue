@@ -29,13 +29,41 @@
             
             <!-- 밋업 있을 때 -->
             <v-container>
+               <v-hover>진행중</v-hover>
               <v-row dense>
                 <v-col
                   v-for="(meetup, i) in meetups"
                   :key="i"
                   cols="12"
                 >
-                  <v-card @click="showMenu(meetup)">
+                  <v-card @click="showMenu(meetup, true)">
+                    <div class="d-flex">
+                      <v-avatar
+                      class="ma-3"
+                      size="85"
+                      tile
+                      >
+                        <v-img :src="meetup.img"></v-img>
+                      </v-avatar>
+                      <div>
+                        <v-card-title
+                        class="headline"
+                        v-text="meetup.title"
+                        ></v-card-title>
+                        <v-card-subtitle v-html="meetup.location+'<br>'+meetup.date.slice(0, 16)" ></v-card-subtitle>
+                      </div>
+                    </div>
+                  </v-card>
+                </v-col>
+              </v-row>
+              <v-hover>종료</v-hover>
+              <v-row dense>
+                <v-col
+                  v-for="(meetup, i) in closeMeetups"
+                  :key="i"
+                  cols="12"
+                >
+                  <v-card @click="showMenu(meetup,false)">
                     <div class="d-flex">
                       <v-avatar
                       class="ma-3"
@@ -56,6 +84,7 @@
                 </v-col>
               </v-row>
             </v-container>
+            
             <!-- 밋업 없을 때 --> 
             <div v-if="!isNaN(meetups)" style="margin-top:100px;text-align: center;"> 
               <i class="fab fa-meetup fa-6x"></i>
@@ -79,7 +108,7 @@
         <v-list-item @click="moveCreateReview">
           <v-list-item-title>리뷰작성</v-list-item-title>
         </v-list-item>
-        <v-list-item @click="cancelMeetup">
+        <v-list-item v-show="close" @click="cancelMeetup">
           <v-list-item-title>참여취소</v-list-item-title>
         </v-list-item>
     </v-list>
@@ -117,9 +146,11 @@ export default {
       meetup: "",
       dialog:false,
       // 밋업 전체 데이터
-      meetups: {}, 
+      meetups: [], 
+      closeMeetups:[],
       users: {},
       userId: "",
+      close:false,
       contents: "",
       currentItem: "",
       items: ["Profile", "History", "Message"],
@@ -143,6 +174,8 @@ export default {
   },
   methods: {
     created(){
+      
+      // alert(t)
       this.userId = this.$cookie.get("userId");
     axios
       .get(`${SERVER_URL}/userpage/getuser?userId=`+ this.userId)
@@ -158,16 +191,27 @@ export default {
         `${SERVER_URL}/meetup/list/${this.userId}`
       )
       .then((response) => {
-        this.meetups = response.data.object;
+        let now = new Date();
+        for (let i = 0; i <response.data.object.length; i++) {
+          let time = new Date(response.data.object[i].date)
+          if(time - now > 0){
+            this.meetups.push(response.data.object[i])
+            console.log(this.meetups)
+          }
+          else{
+            this.closeMeetups.push(response.data.object[i])
+          }
+        }
       })
       .catch((error) => {
         console.log(error.response);
         this.meetupData = false;
       });
     },
-    showMenu(item){
+    showMenu(item,flag){
       this.dialog = true;
       this.meetup = item;
+      this.close = flag;
     },
     cancelMeetup(){
       this.$confirm("참여취소 하시겠습니까?").then(() => {

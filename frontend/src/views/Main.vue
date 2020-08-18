@@ -27,40 +27,69 @@
             <!-- profile -->
             <v-card-text v-else>
             
-              <!-- 밋업 있을 때 -->
-                <v-row dense v-if="meetups"> 
-                  <v-col
-                    v-for="(meetup, i) in meetups"
-                    :key="i"
-                    cols="12"
-                  >
-                    <v-card @click="showMenu(meetup)">
-                      <div class="d-flex">
-                        <v-avatar
-                        class="ma-3"
-                        size="85"
-                        tile
-                        >
-                          <v-img :src="meetup.img"></v-img>
-                        </v-avatar>
-                        <div>
-                          <v-card-title
-                          class="headline"
-                          v-text="meetup.title"
-                          ></v-card-title>
-                          <v-card-subtitle v-html="meetup.location+'<br>'+meetup.date.slice(0, 16)" ></v-card-subtitle>
-                        </div>
+            <!-- 밋업 있을 때 -->
+            <v-container v-show="listLen">
+               <v-hover v-if="meetups.length > 0">진행중 밋업</v-hover>
+              <v-row dense>
+                <v-col
+                  v-for="(meetup, i) in meetups"
+                  :key="i"
+                  cols="12"
+                >
+                  <v-card @click="showMenu(meetup, true)">
+                    <div class="d-flex">
+                      <v-avatar
+                      class="ma-3"
+                      size="85"
+                      tile
+                      >
+                        <v-img :src="meetup.img"></v-img>
+                      </v-avatar>
+                      <div>
+                        <v-card-title
+                        class="headline"
+                        v-text="meetup.title"
+                        ></v-card-title>
+                        <v-card-subtitle v-html="meetup.location+'<br>'+meetup.date.slice(0, 16)" ></v-card-subtitle>
                       </div>
+                    </div>
+                  </v-card>
+                </v-col>
+              </v-row>
+              <v-hover v-if="closeMeetups.length > 0">종료 밋업</v-hover>
+              <v-row dense>
+                <v-col
+                  v-for="(meetup, i) in closeMeetups"
+                  :key="i"
+                  cols="12"
+                >
+                  <v-card @click="showMenu(meetup,false)">
+                    <div class="d-flex">
+                      <v-avatar
+                      class="ma-3"
+                      size="85"
+                      tile
+                      >
+                        <v-img :src="meetup.img"></v-img>
+                      </v-avatar>
+                      <div>
+                        <v-card-title
+                        class="headline"
+                        v-text="meetup.title"
+                        ></v-card-title>
+                        <v-card-subtitle v-html="meetup.location+'<br>'+meetup.date.slice(0, 16)" ></v-card-subtitle>
+                      </div>
+                    </div>
                     </v-card>
                   </v-col>
                 </v-row>
-                <!-- 밋업 없을 때 --> 
-                <v-col v-else style="text-align: center; margin-top:30%;"> 
-                  <i class="fab fa-meetup fa-6x"></i>
-                  <h3 class="mt-5" style="font-family: 'Jua', sans-serif;">등록된 Meetup이 없습니다.</h3>
-                </v-col>
-              
-
+               
+            </v-container>
+             <!-- 밋업 없을 때 --> 
+            <v-container v-show="!listLen" style="text-align: center; margin-top:30%;"> 
+              <i class="fab fa-meetup fa-6x"></i>
+              <h3 class="mt-5">등록된 Meetup이 없습니다.</h3>
+            </v-container>
             </v-card-text>
           </v-card>
         </v-tab-item>
@@ -78,7 +107,7 @@
         <v-list-item @click="moveCreateReview">
           <v-list-item-title>리뷰작성</v-list-item-title>
         </v-list-item>
-        <v-list-item @click="cancelMeetup">
+        <v-list-item v-show="close" @click="cancelMeetup">
           <v-list-item-title>참여취소</v-list-item-title>
         </v-list-item>
     </v-list>
@@ -116,11 +145,14 @@ export default {
       meetup: "",
       dialog:false,
       // 밋업 전체 데이터
-      meetups: {}, 
+      meetups: [], 
+      closeMeetups:[],
       users: {},
       userId: "",
+      close:false,
       contents: "",
       currentItem: "",
+      listLen : false,
       items: ["Profile", "History", "Message"],
       buttons: [
         {
@@ -141,7 +173,18 @@ export default {
     this.created();
   },
   methods: {
+    isNaN(){
+      alert(this.closeMeetups.length)
+      alert(this.meetups.length)
+      if(this.closeMeetups.length == 0 && this.meetups.length == 0){
+        return true;
+      }
+      else
+        return false;
+    },
     created(){
+      this.meetups = [],
+      this.closeMeetups = []
       this.userId = this.$cookie.get("userId");
     axios
       .get(`${SERVER_URL}/userpage/getuser?userId=`+ this.userId)
@@ -157,16 +200,31 @@ export default {
         `${SERVER_URL}/meetup/list/${this.userId}`
       )
       .then((response) => {
-        this.meetups = response.data.object;
+        let now = new Date();
+        if(response.data.object.length > 0 ){
+          this.listLen = true;
+        }
+        
+        for (let i = 0; i <response.data.object.length; i++) {
+          let time = new Date(response.data.object[i].date)
+          if(time - now > 0){
+            this.meetups.push(response.data.object[i])
+            console.log(this.meetups)
+          }
+          else{
+            this.closeMeetups.push(response.data.object[i])
+          }
+        }
       })
       .catch((error) => {
         console.log(error.response);
         this.meetupData = false;
       });
     },
-    showMenu(item){
+    showMenu(item,flag){
       this.dialog = true;
       this.meetup = item;
+      this.close = flag;
     },
     cancelMeetup(){
       this.$confirm("참여취소 하시겠습니까?").then(() => {

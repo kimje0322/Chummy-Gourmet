@@ -1,7 +1,6 @@
 
 <template>
   <div class="map_wrap_1">
-
         <!-- SPEED DIAL -->
         <v-speed-dial
           v-model="fab"
@@ -29,8 +28,8 @@
           </v-btn>
 
           <!-- 밋업 생성 페이지 이동 버튼 -->
-          <v-btn fab dark small color="green">
-              <v-icon color="white" @click="$router.push('/map/createMeetup')">mdi-pencil</v-icon>
+          <v-btn fab dark small color="green" @click="$router.push('/map/createMeetup')">
+              <v-icon color="white" >mdi-pencil</v-icon>
           </v-btn>
 
           <!-- 밋업 필터링 버튼 -->
@@ -53,6 +52,15 @@
             >
             <!-- POP OVER -->
               <v-card class="mx-auto">
+                <v-list color="">
+                  <v-list-item>
+                    <v-list-content>
+                      <v-list-item-title class="text-h6">밋업 필터</v-list-item-title>
+                      <v-list-item-subtitle>취향에 맞게 밋업을 검색해보세요 :)</v-list-item-subtitle>
+                    </v-list-content>
+                  </v-list-item>
+                </v-list>
+                <v-divider class="my-0"></v-divider>
                 <v-list>
                   <!-- 선호 음식 -->
                   <v-list-item>
@@ -241,13 +249,12 @@
     <div id="map1" style="position:absolute">map</div>
     <!-- <div id="menu_wrap" class="bg_white"> -->
         <!-- <div class="option"> -->
-            <div
-            >
+            <div>
               <v-text-field @keyup.enter="search" v-model="keyword"
               placeholder="지역을 입력하세요.."
               append-icon="mdi-magnify"
               background-color="white"
-              solo rounded
+              solo rounded clearable
               style="position:absolute; left:10px; top:10px; z-index:20; opacity:.8;"
               > 
               </v-text-field>
@@ -257,6 +264,27 @@
                 <span></span>
               </div> -->
             </div>
+
+
+            <!-- snackbar -->
+             <v-snackbar
+              v-model="snackbar"
+              :color="snackbarColor"
+              timeout="3000"
+            >
+              {{snackbarText}}
+
+              <template v-slot:action="{ attrs }">
+                <v-btn
+                  dark
+                  text
+                  v-bind="attrs"
+                  @click="snackbar = false"
+                >
+                  닫기
+                </v-btn>
+              </template>
+            </v-snackbar>
         <!-- </div> -->
     <!-- </div> -->
     <div class="custom_zoomcontrol radius_border">
@@ -313,6 +341,10 @@ export default {
 
       menu: false,
       fab : false,
+
+      snackbar : false,
+      snackbarText : '',
+      snackbarColor : '',
     };
   },
   computed: {
@@ -562,10 +594,17 @@ export default {
             // 정상적으로 검색이 완료됐으면 
             if (status === kakao.maps.services.Status.OK) {
                 var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
+                this.snackbarText = "[ " + this.keyword + " ] 으로 이동합니다 :)";
+                this.snackbarColor = "info";
+                this.snackbar = true;
                 // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
                 this.map.setCenter(coords);
-            } 
+            } else{
+              this.snackbarText = "없는 지역이예요.. 다시 확인해주세요 :(";
+              this.snackbarColor = 'error';
+              this.snackbar = true;
+              
+            }
         });    
     }
   }

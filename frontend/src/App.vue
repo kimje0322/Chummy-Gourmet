@@ -33,7 +33,7 @@
             </v-btn>
           </v-bottom-navigation>
 
-          <v-container class="pa-0 mx-auto" style="background-color:bisque;">
+          <v-container class="pa-0 mx-auto" style="max-width:960px; max-height:959px;">
             <router-view></router-view>
           </v-container>
 

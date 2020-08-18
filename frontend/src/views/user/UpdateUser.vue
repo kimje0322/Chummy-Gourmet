@@ -73,6 +73,7 @@
           :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" 
           v-model="userPwd"
           label="비밀번호"
+          :disabled="show"
           ref="userPwd"
         ></v-text-field>
       </v-col>
@@ -127,6 +128,7 @@ export default {
       error: {
         nickName: true,
       },
+      show : false,
       show1: false,
       user : {},
       userNickname : "",
@@ -241,6 +243,9 @@ export default {
         this.user = response.data;
         this.userNickname = this.user.userNickname;
         this.userPwd = this.user.userPWd;
+        if(this.userPwd == "google" || this.userPwd == "kakao"){
+          this.show = true;
+        }
         this.userComment = this.user.userComment;
         this.userImg = this.user.userImg;
         this.userId = this.$cookie.get("userId");

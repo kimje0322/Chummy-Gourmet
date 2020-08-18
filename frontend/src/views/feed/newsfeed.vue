@@ -11,33 +11,36 @@
     </v-toolbar>
 
       <!-- 피드 -->
-     <v-card class="mx-auto" tile flat>
+     <v-card
+     class="mx-auto" tile flat v-for="(lst, i) in postlst" :key="i">
         <v-list-item>
           <!-- 유저 프로필 사진-->
-          <v-list-item-avatar color="grey">
+          <v-list-item-avatar style="cursor:pointer;" @click="gotoProfile(lst)">
             <img
-              @click="gotoProfile(lst)"
-              src="https://i3b302.p.ssafy.io:8080/img/user?imgname=profile_default.png"
+              :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+lst.user_img"
             />
           </v-list-item-avatar>
 
           <!-- 유저 닉네임 -->
           <v-list-item-content>
               <v-list-item-title class="font-weight-bold">
-                유저 닉네임
+                <span style="cursor:pointer;" @click="gotoProfile(lst)">{{lst.usernickname}}</span>
               </v-list-item-title>
           </v-list-item-content>
 
-          <!-- 수정/삭제 버튼 -->
-          <v-list-item-icon v-if="lst.postuserid==userid">
-              <v-btn-group class="float-right">
+
+          <!-- 수정/삭제 -->
+          <v-list-item-icon class="float-right" v-if="lst.postuserid==userid">
+
+                <!-- 수정 버튼 -->
                 <v-btn icon small @click="onRevise(lst)">
-                  <v-icon>square-edit-outline</v-icon>
+                  <v-icon>mdi-square-edit-outline</v-icon>
                 </v-btn>
+
+                <!-- 삭제 버튼 -->
                 <v-btn icon small @click.stop="del(lst.postid)">
                   <v-icon>mdi-trash-can-outline</v-icon>
                 </v-btn>
-              </v-btn-group>
               <v-dialog dark v-model="dialog" max-width="300">
                 <v-list>
                   게시글을 삭제하시겠습니까?
@@ -45,56 +48,85 @@
                     v-for="(item, index) in items"
                     :key="index"
                     @click="doit(item)"
-                    
                   >
                     <v-list-item-title>{{ item.title }}</v-list-item-title>
                   </v-list-item>
                 </v-list>
               </v-dialog>
-
           </v-list-item-icon>
         </v-list-item>
 
         <!-- 피드 이미지 -->
         <v-img
-          src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg"
-          min-height="300" max-height="300"
+          :src="`https://i3b302.p.ssafy.io:8080/img/post?imgname=`+lst.postimgurl"
+          min-height="300" max-height="450"
         ></v-img>
 
         <!-- 좋아요/댓글/DM 버튼 -->
         <v-card-text class="pt-2 pb-0">
-          <v-btn icon>
-            <v-icon>mdi-heart-outline</v-icon>
+          
+          <!-- 좋아요 -->
+          <v-btn v-if="likelist.includes(lst.postid*1)"
+          icon @click="unLike(lst, i)"
+          >
+            <v-icon color="red">mdi-heart</v-icon>
           </v-btn>
-          <v-btn icon>
+          <v-btn v-else icon @click="onLike(lst, i)">
+            <v-icon color="">mdi-heart-outline</v-icon>
+          </v-btn>
+
+
+          <!-- 댓글 -->
+          <v-btn icon
+            @click="onComment(lst.postid, lst.usernickname, lst.postcontent,lst.user_img,lst.postuserid)"
+          >
             <v-icon>mdi-chat-processing-outline</v-icon>
           </v-btn>
-          <v-btn icon> 
-            <v-icon>mdi-send-outline</v-icon>
-          </v-btn>
+
+          <!-- DM -->
+          <CreateChat :postuserid="lst.postuserid" />
         </v-card-text>
 
         <!-- 좋아요 갯수/컨텐츠/댓글보기/시간 -->
         <v-card-text class="pt-0 pb-8">
-          <div class="font-weight-bold">좋아요 0개</div>
-          <div class="black--text"><span class="mr-2 font-weight-bold">닉네임</span>컨텐츠</div>
-          <div>댓글 4개 모두 보기</div>
-          <div>21 hours ago</div>
-        </v-card-text>
+          <!-- 좋아요 갯수-->
+          <div class="font-weight-bold">좋아요 {{lst.postlike}}개</div>
 
+          <!-- 컨텐츠 -->
+          <a class="black--text">
+            <span class="mr-2 font-weight-bold">{{lst.usernickname}}</span>{{ lst.postcontent }} {{lst.postid}}
+          </a>
+
+          <!-- 댓글보기 -->
+          <div v-if="commentlst[i][0] > 0">
+            <span class="grey--text font-weight-medium" @click="onComment(lst.postid, lst.usernickname, lst.postcontent, lst.user_img, lst.postuserid)">  
+              댓글 {{commentlst[i][0]}}개 모두 보기
+            </span>
+          </div>
+
+          <!-- 시간 -->
+          <div class="grey--text text-caption">{{ lst.postdate | moment("from", "now") }}</div>
+        </v-card-text>
       </v-card>
 
+      <div v-if="postlst.length==0" class="nofeed" style="text-align: center;">
+        <i class="far fa-images fa-5x"></i>
+        <p style="font-size:1.1rem; margin-top:15px">다른 사람을 팔로우하면 <br>상대방의 피드를 확인할 수 있습니다.</p>
+        <router-link to="/SearchUser"><v-btn color="warning" style="width: 60%">유저 보기</v-btn></router-link>
+      </div>
 
-      <!-- 피드 리스트 -->
-      <!-- <div style="flex-direction: column; padding-bottom: 5600px; padding-top: 0px"> -->
+
+<!--=======================================================================-->
+<!-- 
+      // 피드 리스트 
       <div style="">
         <article v-for="(lst, i) in postlst" :key="i">
-          <!-- 피드 상단바 -->
+          // 피드 상단바 
           <div role="button" tabindex="-1">
 
             <div class="hc1 hc2" style="postion: relative; padding-right: 17px;">
 
-             <!-- 유저 프로필 사진-->   
+             // 유저 프로필 사진  
               <div class="hc-d1" tabindex="-1">
                 <canvas
                   height="84"
@@ -110,10 +142,10 @@
                 </a>
               </div>
 
-              <!-- 유저 아이디 및 수정/삭제 버튼 -->
+              // 유저 아이디 및 수정/삭제 버튼
               <div class="pf">
 
-                    <!-- 유저 아이디 -->
+                    // 유저 아이디
                     <a 
                       @click="gotoProfile(lst)"
                       class="pf-n-a"
@@ -122,7 +154,7 @@
                     >{{lst.usernickname}}</a>
                     
 
-                    <!-- 게시글 삭제 버튼 -->
+                    // 게시글 삭제 버튼 
                     <div v-if="lst.postuserid  == userid" style="float: right; ">
                       <button @click.stop="del(lst.postid)">
                         <div style="padding: 2px; width: 24px; height: 24px;">
@@ -144,7 +176,7 @@
                       </v-dialog>
                     </div>
 
-                    <!-- 게시글 수정 버튼 -->
+                    // 게시글 수정 버튼 
                     <div
                       v-if="lst.postuserid  == userid"
                       style="float: right; margin-right: 0px; margin-left: 167px;"
@@ -161,7 +193,7 @@
           </div>
 
 
-          <!-- 피드 컨텐츠 -->
+          // 피드 컨텐츠 
           <div class="fc">
             <div class="fc-frame" tabindex="0">
               <div class="fc-fr">
@@ -174,11 +206,11 @@
           </div>
 
 
-          <!-- 피드 하단바-->
+          // 피드 하단바
           <div class="fb">
             <section class="func">
 
-              <!-- 좋아요 -->
+              // 좋아요 
               <span v-if="likelist.includes(lst.postid*1)" class="heart" @click="unLike(lst, i)">
                 <button class="heart-btn">
                   <div style="border: 0">
@@ -203,7 +235,7 @@
                 </button>
               </span>
 
-              <!-- 댓글 -->
+              // 댓글 
               <span style="display: inline-block;">
                 <button
                   @click="onComment(lst.postid, lst.usernickname, lst.postcontent,lst.user_img,lst.postuserid)"
@@ -218,12 +250,12 @@
                 </button>
               </span>
 
-              <!-- DM -->
+              // DM
               <CreateChat :postuserid="lst.postuserid" />
             </section>
 
 
-            <!-- 좋아요 갯수 --> 
+            // 좋아요 갯수 
             <section style="height: 17.6px; margin-bottom: 8px;">
               <div style="flex: 1 1 auto;">
                 <p style="font-weight: 600;">
@@ -234,7 +266,7 @@
               </div>
             </section>
 
-            <!-- 댓글 -->
+            // 댓글 
             <div style="margin-bottom: 4px;">
               <div>
                 <div>
@@ -268,7 +300,7 @@
         <i class="far fa-images fa-5x"></i>
         <p style="font-size:1.1rem; margin-top:15px">다른 사람을 팔로우하면 <br>상대방의 피드를 확인할 수 있습니다.</p>
         <router-link to="/SearchUser"><v-btn color="warning" style="width: 60%">유저 보기</v-btn></router-link>
-      </div>
+      </div> -->
 
   </div>
 </template>
@@ -329,8 +361,6 @@ export default {
         console.log(response);
         var posts = response.data.data;
         var comments = response.data.comment;
-        // alert(this.postlst.length);
-        // console.log(posts);
         posts.sort((a, b) => {
           return -1 * (a.postid - b.postid);
         });
@@ -575,65 +605,25 @@ export default {
 </script>
 
 <style scoped>
-/* div {
-  -webkit-box-align: stretch;
-  align-items: stretch;
-  border: 0 solid black;
-  box-sizing: border-box;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  flex-direction: column;
-  flex-shrink: 0;
-  margin: 0;
-  padding: 0;
-  position: relative;
-} */
 
-/* .heart-div {
-  -webkit-box-align: center;
-  align-items: center;
-  -webkit-box-pack: center;
-  justify-content: center;
-  position: relative;
-} */
+/* .heart-btn {
 
-.heart-btn {
-  /* -webkit-box-align: center; */
-  /* align-items: center; */
-  /* background: 0 0; */
-  /* border: 0; */
-  /* cursor: pointer; */
-  /* display: flex; */
-  /* -webkit-box-pack: center; */
-  /* justify-content: center; */
   padding: 6px 4px 8px 6px;
 }
 
 .heart {
-  /* display: inline-block; */
+
   margin: 0 0 0 -4px;
   padding: 0;
   border: 0;
-  /* vertical-align: baseline; */
-  /* -webkit-box-direction: normal; */
 }
 
 .func {
   margin-top: 4px;
-  /* -webkit-box-orient: horizontal; */
-  /* -webkit-box-direction: normal; */
-  /* flex-direction: row; */
-  /* -webkit-box-align: stretch; */
-  /* align-items: stretch; */
   border: 0 solid black;
-  /* display: flex; */
-  /* box-sizing: border-box; */
   display: flex;
-  /* flex-shrink: 0; */
   margin: 0;
   padding: 0;
-  /* position: relative; */
 }
 
 .fb {
@@ -642,25 +632,19 @@ export default {
   align-items: stretch;
   border: 0 solid black;
   box-sizing: border-box;
-  /* display: flex; */
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   flex-direction: column;
-  /* flex-shrink: 0; */
   margin: 0;
   position: relative;
 }
 
 .fc {
-  /* -webkit-box-align: stretch; */
-  /* align-items: stretch; */
   display: flex;
   border: 0 solid black;
-  /* box-sizing: border-box; */
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   flex-direction: column;
-  /* flex-shrink: 0; */
   margin: 0;
   padding: 0;
   position: relative;
@@ -684,7 +668,6 @@ export default {
   -webkit-box-align: center;
   align-items: center;
   align-self: center;
-  /* display: block; */
   float: left;
   -webkit-box-flex: 0;
   flex: none;
@@ -697,8 +680,6 @@ export default {
   border-radius: 50%;
   box-sizing: border-box;
   display: block;
-  /* float: left; */
-  /* padding: 12px; */
   -webkit-box-flex: 0;
   flex: 0 0 auto;
   overflow: hidden;
@@ -713,24 +694,15 @@ export default {
   -webkit-box-aligh: start;
   align-items: flex-start;
   display: flex;
-  /* float: left; */
   -webkit-box-flex: 1;
   flex-grow: 1;
   flex-shrink: 1;
   margin-left: 12px;
-  /* padding: 12px; */
   overflow: hidden;
 }
 
 .pf-n {
-  /* -webkit-box-align: center; */
-  /* align-items: center; */
-  /* -webkit-box-orient: horizontal; */
   -webkit-box-direction: normal;
-  /* flex-direction: row; */
-  /* -webkit-box-flex: 1; */
-  /* flex-grow: 1; */
-  /* flex-shrink: 1; */
   max-width: 100%;
   overflow: hidden;
   padding: 2px;
@@ -781,12 +753,8 @@ export default {
 }
 
 .fc-fr {
-  /* padding-bottom: 125%; */
   display: block;
-  /* overflow: hidden; */
-  /* align-items: stretch; */
   border: 0 solid black;
-  /* box-sizing: border-box; */
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   flex-direction: column;
@@ -796,7 +764,7 @@ export default {
   position: relative;
 }
 
-/* div {
+div {
   -webkit-box-align: stretch;
   align-items: stretch;
   border: 0 solid black;
@@ -809,10 +777,10 @@ export default {
   margin: 0;
   padding: 0;
   position: relative;
-} */
+}
 
 .nofeed {
   margin: 120px 0 0 0;
   text-align: center;
-}
+} */
 </style>

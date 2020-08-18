@@ -1,8 +1,11 @@
 <template>
   <div>
-    <v-toolbar dark>
-      <!-- 중앙정렬 하기 위해 2개씀 -->
-      <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
+    <!-- 상단 툴바 -->
+    <v-toolbar class="mb-1" dense elevation="1">
+      <v-icon @click="$router.go(-1)">
+        mdi-arrow-left
+      </v-icon>
+      <v-spacer></v-spacer>
       <p class="my-auto">음식점 검색</p>
       <v-spacer></v-spacer>
     </v-toolbar>

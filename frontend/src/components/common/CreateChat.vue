@@ -1,16 +1,16 @@
 <template>
-    <div>
-    <span style="display: inline-block;">
-                    <button @click="onClick" style="background: 0 0; border: 0; display: flex; padding: 8px;">
-                    <div>
-                        <i
-                        style="display: block; position: relative; height: 24px; width: 24px;"
+    <!-- <div> -->
+    <!-- <span style="display: inline-block;"> -->
+                    <v-btn  icon @click="onClick">
+                    <!-- <div> -->
+                        <i 
+                        style=" height: 19px; width: 19px;"
                         class="far fa-paper-plane"
                         ></i>
-                    </div>
-                    </button>
-                </span>
-    </div>
+                    <!-- </div> -->
+                    </v-btn>
+                <!-- </span> -->
+    <!-- </div> -->
 </template>
 
 <script>

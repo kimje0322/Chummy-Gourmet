@@ -259,6 +259,7 @@ export default {
           password: this.password,
           nickName: this.nickName,
           name: this.name,
+          phone:this.phone
         };
 
         // 현재 페이지에서 입력받은 정보를 params에 넣어서 다음 페이지로 이동

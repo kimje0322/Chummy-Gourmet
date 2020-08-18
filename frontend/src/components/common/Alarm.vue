@@ -18,11 +18,21 @@ export default {
     }
   },
   created(){
-    // console.log('문제가있다.');
-     window.db.collection('alarm').doc('chat').collection('messages').where('confirm','==',false).onSnapshot(snapshot=>{
+   this.alarm('chat');
+   this.alarm('like');
+   this.alarm('comment');
+   this.alarm('follow');
+   this.alarm('meetup');
+  },
+  methods : {
+    goAlarmPage(){
+      this.$router.push({ path: '/user/alarm' });
+    },
+    alarm(data){
+      window.db.collection('alarm').doc(data).collection('messages').where('confirm','==',false).where('to','==',this.$cookie.get('userId')).onSnapshot(snapshot=>{
                   snapshot.docChanges().forEach(change =>{
                     if (change.type == 'added'){
-                    //   console.log(change.doc.data());
+                      console.log(change.doc.data());
                       var doc = change.doc;
 
                       console.log(doc.data());
@@ -31,11 +41,8 @@ export default {
                     }
                   })
                 })
-  },
-  methods : {
-    goAlarmPage(){
-      this.$router.push({ path: '/user/alarm' });
-    }
+
+    },
   }
 
 }

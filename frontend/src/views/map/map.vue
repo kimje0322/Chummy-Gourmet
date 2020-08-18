@@ -242,18 +242,19 @@
     <!-- <div id="menu_wrap" class="bg_white"> -->
         <!-- <div class="option"> -->
             <div>
-              <!-- <input @keyup.enter="search"  v-model="keyword" type="text" placeholder="입력창"> 
-              <v-btn @click="search" icon><v-icon size="20">mdi-magnify</v-icon></v-btn>  -->
-<form action="">
-  <input type="search">
-  <i class="fa fa-search"></i>
-</form>
+              <v-text-field @keyup.enter="search" v-model="keyword"
+              placeholder="지역을 입력하세요.."
+              append-icon="mdi-magnify"
+              background-color="white"
+              solo rounded 
+              style="position:absolute;top:10px;left:10px;z-index:20;opacity:.8"
+              > 
+              </v-text-field>
 
-        <v-text-field style="z-index:30; top:10px; left:30px;"
-        append-icon="mdi-heart" absolute>
-          
-          
-        </v-text-field>
+              <!-- <div class="search-box">
+                <input type="text" />
+                <span></span>
+              </div> -->
             </div>
         <!-- </div> -->
     <!-- </div> -->
@@ -643,69 +644,6 @@ export default {
 ._info .link {color: #5085BB;}
 
 
-
-
-/* form{
-    position: absolute;
-    top: 0;
-    left: 0;
-    margin : 30px 10px;
-    transform: translate(0,-50%);
-    transition: all .4s;
-    width: 50px;
-    height: 50px;
-    background: white;
-    box-sizing: border-box;
-    border-radius: 50px;
-    border: 4px solid white;
-    padding: 5px;
-    opacity: .8;
-    z-index: 10;
-}
-
-input{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;;
-    height: 42.5px;
-    line-height: 30px;
-    outline: 0;
-    border: 0;
-    display: none;
-    font-size: 1em;
-    border-radius: 20px;
-    padding: 0 20px;
-}
-
-.fa{
-    box-sizing: border-box;
-    padding: 10px;
-    width: 42.5px;
-    height: 42.5px;
-    position: absolute;
-    top: 0;
-    right: 0;
-    border-radius: 50%;
-    color: #07051a;
-    text-align: center;
-    font-size: 1.2em;
-    transition: all 1s;
-}
-
-form:hover{
-    width: 250px;
-    cursor: pointer;
-}
-
-form:hover input{
-    display: block;
-}
-
-form:hover .fa{
-    background: #07051a;
-    color: white;
-} */
 
 
 

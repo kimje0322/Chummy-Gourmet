@@ -108,7 +108,7 @@ export default {
       },
       isSubmit: false,
       component: this,
-      checked:false
+      checked:true
     };
   },
   created() {

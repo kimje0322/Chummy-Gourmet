@@ -1,32 +1,32 @@
 <template>
   <v-app>
-    <v-toolbar-title >
-      <v-toolbar dense>
-      <v-icon @click="$router.go(-1)">
+    <v-app-bar
+      absolute
+      color="white"
+      elevate-on-scroll
+      scroll-target="#scrolling-techniques-7"
+    >
+    <v-icon @click="$router.go(-1)">
         mdi-arrow-left
       </v-icon>
-      <v-spacer></v-spacer>
-      <p class="my-auto text-center">유저검색</p>
-      <v-spacer></v-spacer>
-      </v-toolbar>
-    </v-toolbar-title>
-    
-    <!-- 팔로워 -->
+    <v-spacer></v-spacer>
+    <v-text-field 
+      @keyup="onSearchUser"
+      v-model="searchUser"
+      label="검색"
+      hide-details
+      solo
+      autofocus
+    ></v-text-field> 
+    <v-spacer></v-spacer>
+    </v-app-bar>
+    <br><br>
+    <v-sheet
+      id="scrolling-techniques-7"
+      class="overflow-y-auto"
+      max-height="600"
+    >
         <v-list nav dense >
-        
-          <!-- 팔로워 검색바 -->
-          <v-row>
-            <v-col class="search-bar">
-            <v-text-field 
-              @keyup="onSearchUser"
-              v-model="searchUser"
-              label="검색"
-              :append-icon="'mdi-account-search-outline'"
-              hide-details
-              solo
-            ></v-text-field>             
-            </v-col>
-          </v-row>
             <v-skeleton-loader
                 ref="skeleton"
                 type="list-item-avatar"
@@ -53,21 +53,21 @@
                 <!-- <v-list-item-title @click="gotoProfile(user)" v-text="user.UserNickname"></v-list-item-title> -->
                 </v-list-item-content>
 
-                <v-btn color="orange"  @click="onFollow(user,i)" v-if="user.followerFollowing === 'false'">
+                <v-btn outlined color="orange"  @click="onFollow(user,i)" v-if="user.followerFollowing === 'false'">
                     팔로우
                 </v-btn>
                 
-                <v-btn depressed  @click="deleteFollowRequest(user,i)" v-else-if="user.followerFollowing === 'doing'">
+                <v-btn depressed color="white" @click="deleteFollowRequest(user,i)" v-else-if="user.followerFollowing === 'doing'">
                     요청중
                 </v-btn>
 
-                <v-btn depressed @click="unFollow(user,i,'followerlist')" v-else>
+                <v-btn depressed color="white" @click="unFollow(user,i,'followerlist')" v-else>
                     팔로잉
                 </v-btn>
 
             </v-list-item>
         </v-list>
-
+    </v-sheet>
   </v-app>
 </template>
 
@@ -87,6 +87,7 @@ export default {
       userImg:"",
       searchUser:"",
       show:true,
+      mynickname :''
     };
   },
   methods :{
@@ -144,6 +145,17 @@ export default {
         `${SERVER_URL}/userpage/insertfollowingRequest?followerId=`+user.UserId+`&userId=`+this.userId
       )
       .then((response) => {
+        //팔로우 요청이 성공했을때
+            //팔로우 알림 보냄
+              console.log(this.mynickname);
+               window.db.collection('alarm').doc('follow').collection('messages').add({
+                        to : user.UserId,
+                        from : this.$cookie.get('userId'),
+                        message: this.mynickname+"님이 회원님에게 팔로우 요청을 하였습니다.",
+                        time: Date.now(),
+                        confirm : false
+                    }).catch(err => {
+                    });
       })
       .catch((error) => {
           console.log(error.response);
@@ -163,6 +175,17 @@ export default {
         });
     },
     created(){
+
+     //유저의 닉네임 가져오기
+     axios
+      .post(`${SERVER_URL}/chat/nickname`,[this.$cookie.get('userId')])
+      .then((response) => {
+       this.mynickname = response.data[0];
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+
       this.userId = this.$cookie.get("userId");
       this.items =[]
     axios
@@ -181,7 +204,6 @@ export default {
               followerFollowing : response.data[i].followerFollowing
             })
           }
-          
         }
         this.show = false;
       })

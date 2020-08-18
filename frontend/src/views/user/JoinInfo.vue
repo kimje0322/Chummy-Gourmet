@@ -404,10 +404,10 @@ export default {
       if(!this.isVaildJoinInfo()){
         return;
       }
-      if(Object.keys(this.$route.params.constructor).length == 0){
-        alert("가입실패");
-        return;
-      }
+      // if(Object.keys(this.$route.params.constructor).length == 0){
+      //   alert("1번가입실패");
+      //   return;
+      // }
       
       var newUser = {
         userEmail: this.$route.params.email,
@@ -419,7 +419,7 @@ export default {
         userFavorite: this.checkedFoods,
         userPersonality: this.checkedPersonalities,
         userInterest: this.checkedInterests,
-        userPhone: "01000000000",
+        userPhone: this.$route.params.phone,
       };
       axios
         .post(
@@ -433,11 +433,11 @@ export default {
             alert("가입성공");
             this.$router.push("/login");
           } else {
-            alert("가입실패");
+            alert("엑시오스갓다와서실패");
           }
         })
         .catch((error) => {
-          alert("가입실패");
+          alert("엑시오스못가고실패");
           console.log(error.response);
         });
       }

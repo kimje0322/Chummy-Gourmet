@@ -41,6 +41,12 @@ public interface PostDao extends JpaRepository<Post, String> {
 			+ "order by post_date desc", nativeQuery = true)
 	List<Map<String, Object>> selectAllByUserid(int userid);
 
+	// 포스트id로 포스트 상세 페이지로 이동할수 있는 정보 출력
+	@Query(value = "select post_id,post_userid, post_date, post_content, post_img_url,post_like,post_update_date,user_id,user_nickname,user_img "
+			+ "from post a " + "inner join user b on a.post_userid = b.user_id "
+			+ "where post_id = :postid ", nativeQuery = true)
+	Map<String, Object> selectOneByPostId(int postid);
+
 	// 좋아요 입력
 	@Query(value = "insert into post_like value(:userid,:postid)", nativeQuery = true)
 	void insertPostLike(String userid, String postid);

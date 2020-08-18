@@ -303,7 +303,7 @@ export default {
         address : '',
         date : '',
         maxPersonnel : '',
-        master : 70,
+        master : '',
         img : '',
         personalities : [],
       },
@@ -362,6 +362,8 @@ export default {
   // },
 
   mounted() {
+      this.meetup.master = this.$cookie.get('userId');
+
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(pos => {
           this.targetLocation.lat = pos.coords.latitude;
@@ -443,15 +445,15 @@ export default {
           axios
           .post(`${SERVER_URL}/rest`, newRest)
           .then((response) => {
-              this.selectedRest.id = response.data;
+            this.selectedRest.id = response.data;
               newMeetup.restId = this.selectedRest.id;
 
               // 밋업 객체 DB 등록
               axios
                 .post(`${SERVER_URL}/meetup`, newMeetup)
                 .then((response) => {
-                  this.createMeetUpChat()
                   alert("밋업 등록이 완료됐습니다.");
+                  this.createMeetUpChat()
                   this.$router.push("/map")
                 })
                 .catch((error) => {
@@ -482,7 +484,7 @@ export default {
 
       const newRoomRef = window.db.collection('test').doc();
                             console.log(newRoomRef.id);
-                            window.db.collection('test').doc(newRoomRef.id).collection('test').doc();
+                            // window.db.collection('test').doc(newRoomRef.id).collection('test').doc();
 
                              var res = window.db.collection('test').doc(newRoomRef.id).set({
                                 id :[this.meetup.master],
@@ -494,28 +496,6 @@ export default {
 
                             alert("새로운 채팅방 생성");
                             return;
-
-
-
-
-  // 유저 밋업에 추가할 때 사용할 코드 삭제하지 말 것
-    
-    //  const newRoomRef = window.db.collection('test').where('name','==','테스트').get()
-    //  .then(snapshot =>{
-    //    if(snapshot.empty){
-    //      alert("없다");
-    //    }
-    //    snapshot.forEach(doc=>{
-    //      alert(doc.data().id)
-    //      var id = doc.data().id;
-    //      id.push('56');
-    //      id.push('2');
-    //      alert(id.sort())
-    //      window.db.collection('test').doc(doc.id).set({
-    //        id : id
-    //      },{merge:true});
-    //    })
-    //  })
                           
     },
     

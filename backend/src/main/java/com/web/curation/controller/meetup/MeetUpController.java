@@ -63,7 +63,7 @@ public class MeetUpController {
 	}
 	
 	//밋업 아이디로 밋업 정보 조회
-	@GetMapping("/meetup/searchByMeetupID/{id}")
+	@GetMapping("/meetup/search/{id}")
 	@ApiOperation(value = "밋업 정보 조회")
 	public Meetup searchByMeetupID(@PathVariable int id) {
 		
@@ -238,13 +238,14 @@ public class MeetUpController {
 	@GetMapping("/meetup/acceptMeetupRequest")
 	@ApiOperation(value = "밋업요청한것을 수락해줌")
 	public Object acceptMeetupRequest(@RequestParam(required = true) final String meetupId,
+			@RequestParam(required = true) final String requestId,
 			@RequestParam(required = true) final String guestId) {
 
 		ArrayList<User> userList = new ArrayList<>();
 		final BasicResponse result = new BasicResponse();
 		try {
 			// 밋업요청리스트에서 지우고
-			meetupRequestDao.deleteById(meetupId);
+			meetupRequestDao.deleteById(requestId);
 			// 밋업참석리스트에 저장 및 숫자 증가
 			meetupDao.save(Integer.parseInt(meetupId), Integer.parseInt(guestId));
 			meetupDao.personnelUp(Integer.parseInt(meetupId));

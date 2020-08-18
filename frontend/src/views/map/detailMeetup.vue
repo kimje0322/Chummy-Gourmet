@@ -136,9 +136,20 @@ export default {
       text : '참석 신청',
       isGuest : false,
       isRequest : false,
+      mynickname : ''
     }
   },
   created() {
+     //유저의 닉네임 가져오기
+     axios
+      .post(`${SERVER_URL}/chat/nickname`,[this.$cookie.get('userId')])
+      .then((response) => {
+       this.mynickname = response.data[0];
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+
     var meetupId = this.$route.query.meetupId;
     
     /* 밋업 정보 불러오기 */
@@ -217,7 +228,19 @@ export default {
         // guestId : '70',
         requestMessage : this.requestMessage,
       };
-      console.log(request);
+
+       window.db.collection('alarm').doc('meetup').collection('messages').add({
+                        to : request.hostId,
+                        from : this.$cookie.get('userId'),
+                        message: this.mynickname+"님이 "+this.meetup.title+"밋업에 참가요청을 보냈습니다.",
+                        time: Date.now(),
+                        meetupid : request.meetupId,
+                        confirm : false
+                    }).catch(err => {
+                        console.log(err);
+                    });
+
+      // console.log(request);
       axios
       .post(`${SERVER_URL}/meetup/request`, request)
       .then((response) => {

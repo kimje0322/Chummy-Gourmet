@@ -61,7 +61,7 @@ export default {
                         var data = doc.data();
                          data.rid = doc.id;
                          data.type = type;
-                         console.log('data',data)
+                        //  console.log('data',data)
                          this.alarm.push(data);
                        })
                   })

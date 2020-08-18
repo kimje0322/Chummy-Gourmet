@@ -114,7 +114,7 @@
           <div class="fc">
             <div class="fc-frame" tabindex="0">
               <div class="fc-fr">
-                <img
+                <v-img min-height="300" max-height="300"
                   :src="`https://i3b302.p.ssafy.io:8080/img/post?imgname=`+lst.postimgurl"
                   class="fc-img"
                 />

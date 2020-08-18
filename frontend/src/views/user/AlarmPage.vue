@@ -42,6 +42,7 @@ export default {
     this.view('like');
     this.view('comment');
     this.view('follow');
+    this.view('meetup');
   },
 
   methods:{
@@ -118,6 +119,23 @@ export default {
                       })
 
         this.$router.push({ path: '/user/FollowRequestList' });
+      }
+      else if(list.type == 'meetup'){
+         //팔로우 요청 알림을 모두 읽음으로 변경.
+                      window.db.collection('alarm').doc('meetup').collection('messages').where('to','==',this.$cookie.get('userId')).get()
+                      .then(snapshot =>{
+                          if(snapshot.empty) {
+                              console.log('팔로우 요청이 없다.')
+                          }
+                          snapshot.forEach(doc =>{
+                             window.db.collection('alarm').doc('meetup').collection('messages').doc(doc.id).set({
+                                    confirm : true
+                                },{merge:true}).catch(err => {
+                                    console.log(err);
+                                });
+                          })
+                      })
+            this.$router.push({ path: '/meetup/add' });
       }
     }
   }

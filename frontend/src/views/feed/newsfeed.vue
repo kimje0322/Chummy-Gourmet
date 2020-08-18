@@ -132,7 +132,7 @@
                       <v-icon
                         style="display: block; position: relative; height: 24px; width: 24px; color: red;"
                       >mdi-heart</v-icon>
-                      <!-- <i
+                      <!-- <i2
                         style="display: block; position: relative; height: 24px; width: 24px; color: red;"
                         class="fas fa-heart"
                       ></i>-->

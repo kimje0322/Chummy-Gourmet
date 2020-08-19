@@ -129,7 +129,7 @@ export default {
           const newRoomRef = window.db.collection('test').where('name','==', this.meetupInfo.title).get()
           .then(snapshot =>{
             if(snapshot.empty){
-              alert("없다");
+              // alert("없다");
             }
             snapshot.forEach(doc=>{
               var id = doc.data().id;

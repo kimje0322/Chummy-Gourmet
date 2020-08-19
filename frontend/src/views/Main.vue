@@ -1,7 +1,6 @@
 <template>
   <v-app class="mypage">
     <!-- 상단 -->
-      <Alarm></Alarm>
     <v-toolbar-title>
       <Top></Top>
       <Topsub :proptoTopsub="users"></Topsub>
@@ -124,7 +123,6 @@ import Topsub from "../components/common/Topsub";
 import Message from "../components/common/Message";
 import History from "../components/common/History";
 
-import Alarm from "../components/common/Alarm";
 
 import "../assets/css/components.scss";
 import axios from "axios";
@@ -140,7 +138,6 @@ export default {
     Topsub,
     Message,
     History,
-    Alarm
   },
   
   data: () => {

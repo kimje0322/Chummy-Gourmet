@@ -8,12 +8,16 @@
     </v-toolbar>
       <div v-for="(list, i) in alarm" :key="i"> 
         <div>
-            <br><br>
-            <input style="width : 80%; border : 1px solid" readonly :value="list.message"/>
-            <v-btn height="48px" width="8%" style="float : right;" class="btn btn-primary" @click="onClick(list)">확인</v-btn>
+          <v-list-item-avatar style="cursor:pointer;" @click="gotoProfile(lst)">
+            <img
+              :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+list.img"
+            />
+          </v-list-item-avatar>
+            {{list.message}}
+            <v-btn style="float : right;" class="btn btn-primary" @click="onClick(list)">확인</v-btn>
             <br>
-            {{ list.time | moment("from","now")}}
         </div>
+            {{ list.time | moment("from","now")}}
       </div>
 
       <div v-if="alarm.length == 0" class="aligncss"> 
@@ -61,8 +65,22 @@ export default {
                         var data = doc.data();
                          data.rid = doc.id;
                          data.type = type;
-                        //  console.log('data',data)
-                         this.alarm.push(data);
+                         var img ='';
+                        //axios로 id배열 보내서 프로필이미지 배열로 바꿔온다.
+                          axios
+                            .post(
+                                `${SERVER_URL}/userpage/getuserpost`,[data.from]
+                            )
+                            .then((response) => {
+                                // console.log('응답',response);
+                              // console.log('data',data)
+                              data.img = response.data[0]
+                              this.alarm.push(data);
+                           })
+                            .catch((error) => {
+                                console.log(error.response);
+                            });
+
                        })
                   })
                   .catch(err => {
@@ -92,8 +110,8 @@ export default {
             .then((response) => {
                 var post = response.data.data
                 var comment = response.data.comment;
-                console.log(post.post_content);
-                console.log(comment);
+                // console.log(post.post_content);
+                // console.log(comment);
                this.$router.push({name :'PostDetail', query: {post_content: post.post_content
                 ,post_id : post.post_id, post_img_url : post.post_img_url,
                 post_like : post.post_like, post_userid : post.post_userid, user_img:post.user_img,
@@ -106,14 +124,14 @@ export default {
                       window.db.collection('alarm').doc('follow').collection('messages').where('to','==',this.$cookie.get('userId')).get()
                       .then(snapshot =>{
                           if(snapshot.empty) {
-                              console.log('팔로우 요청이 없다.')
+                              // console.log('팔로우 요청이 없다.')
                           }
 
                           snapshot.forEach(doc =>{
                              window.db.collection('alarm').doc('follow').collection('messages').doc(doc.id).set({
                                     confirm : true
                                 },{merge:true}).catch(err => {
-                                    console.log(err);
+                                    // console.log(err);
                                 });
                           })
                       })
@@ -125,13 +143,13 @@ export default {
                       window.db.collection('alarm').doc('meetup').collection('messages').where('to','==',this.$cookie.get('userId')).get()
                       .then(snapshot =>{
                           if(snapshot.empty) {
-                              console.log('팔로우 요청이 없다.')
+                              // console.log('팔로우 요청이 없다.')
                           }
                           snapshot.forEach(doc =>{
                              window.db.collection('alarm').doc('meetup').collection('messages').doc(doc.id).set({
                                     confirm : true
                                 },{merge:true}).catch(err => {
-                                    console.log(err);
+                                    // console.log(err);
                                 });
                           })
                       })

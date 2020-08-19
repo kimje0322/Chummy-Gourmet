@@ -1,14 +1,16 @@
 <template>
-  <div class="pa-0 ma-0 mx-auto" id="app" style="max-width:960px;max-height:959px;">
+  <div class="pa-0 ma-0 mx-auto" id="app" style="max-width:960px;">
     <v-app>
       <!-- <v-main class="ma-0 pa-0"> -->
           <v-bottom-navigation
             v-if="!$route.meta.navbar"
             hide-on-scroll
-            absolute
+            fixed
             min-width="360"
             max-width="960"
             color="white"
+            class="pa-0"
+            style="left: 50%;transform: translateX(-50%);"
             grow
           >
             <v-btn class="pl-7" @click="gotomap" text color="orange accent-4">
@@ -19,9 +21,8 @@
                 <v-icon>mdi-history</v-icon>
             </v-btn>
 
-            <v-btn @click="gotofeedadd" text color="orange accent-4">
-                <v-icon>fas fa-plus</v-icon>
-            </v-btn>
+
+            <Alram></Alram>
 
             <v-btn @click="gotocurator" text color="orange accent-4">
                 <v-icon>mdi-magnify</v-icon>
@@ -32,7 +33,7 @@
             </v-btn>
           </v-bottom-navigation>
 
-          <v-container class="pa-0 mx-auto overflow-y-auto" style="width:100%;height:620px;max-width:960px;max-height:959px;min-width:360px;min-height:650px;"
+          <v-container class="pa-0 mx-auto overflow-y-auto" style="width:100%;max-width:960px;height:667px;min-width:360px;min-height:667px;"
             id="scroll-area-1"
           >
             <router-view></router-view>
@@ -48,9 +49,13 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 import "./components/css/style.scss";
 import axios from "axios";
 import router from "@/routes";
+import Alram from "./components/common/Alarm";
 
 export default {
   name: "app",
+  components :{
+    Alram
+  },
   methods: {
     gotomap() {
       router.push({ path: '/map' }).catch(()=>{});

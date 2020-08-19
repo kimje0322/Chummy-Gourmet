@@ -1,9 +1,10 @@
 <template>
-  <div>
-    <v-btn @click="goAlarmPage">
-         <p >{{this.count}}</p>
-    </v-btn>
-  </div>
+     <v-btn @click="goAlarmPage" text color="orange accent-4">
+       <v-badge v-model="show" color="indigo">
+                <span slot="badge">{{count}}</span>
+                <v-icon>mdi-bell</v-icon>
+        </v-badge>
+     </v-btn>
 </template>
 
 <script>

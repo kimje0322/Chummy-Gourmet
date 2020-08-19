@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-app class="mypage">
     <!-- 상단 -->
       <Alarm></Alarm>
     <v-toolbar-title>
@@ -23,7 +23,7 @@
             <!-- dm -->
             <Message v-if="item=='Message'" v-bind:userId="userId"></Message>
             <!-- history -->
-            <History v-else-if="item=='History'" :proptoTopsub="users" ></History>
+            <History :proptoTopsub="users" v-else-if="item=='History'"></History>
             <!-- profile -->
             <v-card-text v-else>
             
@@ -83,37 +83,9 @@
                   </v-card>
                 </v-col>
               </v-row>
-              <v-hover v-if="closeMeetups.length > 0">종료 밋업</v-hover>
-              <v-row dense>
-                <v-col
-                  v-for="(meetup, i) in closeMeetups"
-                  :key="i"
-                  cols="12"
-                >
-                  <v-card @click="showMenu(meetup,false)">
-                    <div class="d-flex">
-                      <v-avatar
-                      class="ma-3"
-                      size="85"
-                      tile
-                      >
-                        <v-img :src="meetup.img"></v-img>
-                      </v-avatar>
-                      <div>
-                        <v-card-title
-                        class="headline"
-                        v-text="meetup.title"
-                        ></v-card-title>
-                        <v-card-subtitle v-html="meetup.location+'<br>'+meetup.date.slice(0, 16)" ></v-card-subtitle>
-                      </div>
-                    </div>
-                    </v-card>
-                  </v-col>
-                </v-row>
-               
             </v-container>
              <!-- 밋업 없을 때 --> 
-            <v-container v-show="!listLen" style="text-align: center; margin-top:30%;"> 
+            <v-container v-show="!listLen" style="margin-top:100px;text-align: center;"> 
               <i class="fab fa-meetup fa-6x"></i>
               <h3 class="mt-5">등록된 Meetup이 없습니다.</h3>
             </v-container>
@@ -142,7 +114,7 @@
         </v-list-item>
     </v-list>
     </v-dialog>
-  </div>
+  </v-app>
 </template>
 
 
@@ -297,7 +269,6 @@ export default {
           // 리뷰들 있을때
           else{
             let flag = false;
-            // console.log(response.data)
             let reviewList = response.data.object;
             // 반복 돌면서 마스터가 작성한 리뷰가 있냐?확인
             for (let i = 0; i < reviewList.length; i++) {
@@ -334,7 +305,6 @@ export default {
           // 리뷰들 있을때
           else{
             let flag = false;
-            // console.log(response.data)
             let reviewList = response.data.object;
             // 반복 돌면서 마스터가 작성한 리뷰가 있냐?확인
             for (let i = 0; i < reviewList.length; i++) {
@@ -360,7 +330,6 @@ export default {
     },
     // 리뷰작성페이지로 이동
     moveCreateReview(){
-      console.log(this.meetup)
       //내가 해당 밋업 마스터가 아닐때
       if(this.meetup.master != this.userId){
         this.$alert("밋업 호스트만 작성가능합니다");
@@ -373,13 +342,11 @@ export default {
         .then((response) => {
           // 리뷰가 하나도 없을때 리뷰 작성하러 이동
           if(!response.data.object){
-            this.$alert("리뷰 작성 페이지로 이동합니다")
             this.$router.push({ name : 'AddReview', params : this.meetup });
           }
           // 리뷰들 데이터가 존재할때
           else{
             let flag = false;
-            // console.log(response.data)
             let reviewList = response.data.object;
             // 반복 돌면서 나(마스터)가 작성한 리뷰가 있냐?확인
             for (let i = 0; i < reviewList.length; i++) {
@@ -414,6 +381,9 @@ export default {
 
 
 <style>
+.container nothome {
+  padding: 0px !important;
+}
 
 .meetup-title {
   font-size: 22px;
@@ -421,5 +391,8 @@ export default {
 
 .text-meetup {
   text-align: center;
+}
+.mt-5 {
+  font-family: 'Jua', sans-serif;
 }
 </style>

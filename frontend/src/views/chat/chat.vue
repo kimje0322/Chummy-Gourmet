@@ -19,11 +19,21 @@
                 <div class="messages" v-chat-scroll="{always: false, smooth: true}">
                     <div v-for="(message,i) in messages" :key="i">
                         <div v-if="message.userid == userid" style="text-align : right">
+                            <v-list-item-avatar style="cursor:pointer;" @click="gotoProfile(lst)">
+                                <img
+                                :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+message.img"
+                                />
+                            </v-list-item-avatar>
                              <span class="text-info">[{{ message.nickname }}]: </span>
                             <span>{{message.message}}</span>
                             <span class="text-secondary time">{{message.time}}</span>
                         </div>
                         <div v-else style = "text-align : left">
+                            <v-list-item-avatar style="cursor:pointer;" @click="gotoProfile(lst)">
+                                <img
+                                :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+message.img"
+                                />
+                            </v-list-item-avatar>
                             <span class="text-info">[{{ message.nickname }}]: </span>
                             <span>{{message.message}}</span>
                             <span class="text-secondary time">{{message.time}}</span>
@@ -32,7 +42,7 @@
                 </div>
             </div>
             <div class="card-action">
-                <CreateMessage :id="userid" :rid="this.room.rid" :to="this.room.to" :myNickName="this.myNickName" />
+                <CreateMessage :id="userid" :rid="this.room.rid" :to="this.room.to" :myNickName="this.myNickName" :roomName="this.room.name" />
             </div>
         </div>
     </div>
@@ -62,17 +72,17 @@ export default {
             messages : [],
             userid : this.$cookie.get('userId'),
             // to : []
-            myNickName : ''
+            myNickName : '',
+            userImg :[],
 
         }
     },
     created(){
-        
+                this.getimg();
               var confirmChat = confirm("대화하시겠습니까?");
                 if(confirmChat == false){
                     this.$router.go(-1);
                 }
-                //  console.log(this.room)
               this.view(this.room);
 
                     //접속한 방의 알림을 모두 읽음으로 변경.
@@ -91,6 +101,8 @@ export default {
                           })
                       })
 
+                 
+
               //내 닉네임 구하는 부분
                axios
                             .post(
@@ -104,11 +116,26 @@ export default {
 
                             })
 
-    
             },
     methods:{
+        getimg(){
+                 //axios로 id배열 보내서 프로필이미지 배열로 바꿔온다.
+                          axios
+                            .post(
+                                `${SERVER_URL}/userpage/getuserpost`,this.room.id
+                            )
+                            .then((response) => {
+                                console.log('응답',response);
+                                this.userImg = response.data;
+                           })
+                            .catch((error) => {
+                                console.log(error.response);
+                            });
+        },
         view(room){
+            console.log('이미지',this.userImg);
              window.db.collection('test').doc(this.room.rid).collection('messages').orderBy('time').onSnapshot(snapshot=>{
+                    
                   snapshot.docChanges().forEach(change =>{
                     if (change.type == 'added'){
                     //   console.log(change.doc.data());
@@ -129,11 +156,14 @@ export default {
                     //   console.log(this.room.nickName[num])
                     //   console.log(this.room.nickName)
 
+                    
+
                       var ms ={
                         message : doc.data().message,
                         nickname : this.room.nickName[num],
                         time : moment(doc.data().time).format('LLL'),
                         userid : doc.data().from,
+                        img : this.room.img[num]
                         // to : to
                       }
                     //   console.log('ms');

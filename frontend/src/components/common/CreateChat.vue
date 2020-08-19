@@ -115,9 +115,21 @@ export default {
         },
         goChat(room){
             //데이터 넣고 채팅방으로 이동
-            console.log("함수이동 ");
-            console.log(room)
-            this.$router.push({name: 'Chat', params: {room: room}});
+            // console.log("함수이동 ");
+            // console.log(room)
+
+            axios
+                            .post(
+                                `${SERVER_URL}/userpage/getuserpost`,room.id
+                            )
+                            .then((response) => {
+                                // console.log('응답',response);
+                                room.img = response.data;
+                                this.$router.push({name: 'Chat', params: {room: room}});
+                           })
+                            .catch((error) => {
+                                console.log(error.response);
+                            });
         }
     }
 }

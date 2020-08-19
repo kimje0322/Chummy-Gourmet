@@ -6,7 +6,7 @@
     </v-toolbar-title>
     <!-- 가운데 부분 -->
     <v-sheet  id="scrolling-techniques"
-      class="overflow-y-auto"
+      class="overflow-y-auto mb-12"
       max-height="600" >
       <!-- tab view -->
       <v-tabs fixed-tabs v-model="currentItem" slider-color="orange">
@@ -455,7 +455,11 @@ export default {
     margin: 70px 0 20px 140px;
     align-items: center;
   }
+  
+  .v-application a{
+    color: orange ;
+  }
   .pf-n-a{
-    color: black !important;
+    color: rgb(97, 94, 94) !important;
   }
 </style>

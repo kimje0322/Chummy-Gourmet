@@ -8,11 +8,11 @@
     <!-- 가운데 부분 -->
     <div>
       <!-- tab view -->
-      <v-tabs v-model="currentItem" fixed-tabs slider-color="orange">
+      <v-tabs color="orange" v-model="currentItem" fixed-tabs slider-color="orange">
         <v-tab @click="setItem(item)" v-for="item in items" :key="item" :href="'#tab-' + item">
-          <v-icon class="main-btn" v-if="item=='Profile'" >mdi-account-box</v-icon>
-          <v-icon class="main-btn" v-if="item=='History'">fas fa-list</v-icon>
-          <v-icon class="main-btn" v-if="item=='Message'">mdi-folder</v-icon>
+          <v-icon v-if="item=='Profile'" >mdi-account-box</v-icon>
+          <v-icon v-if="item=='History'">fas fa-list</v-icon>
+          <v-icon v-if="item=='Message'">mdi-folder</v-icon>
         </v-tab>
       </v-tabs>
 
@@ -142,6 +142,7 @@ export default {
   
   data: () => {
     return {
+      tabColor: "",
       meetup: "",
       dialog:false,
       // 밋업 전체 데이터
@@ -210,7 +211,7 @@ export default {
           let time = new Date(response.data.object[i].date)
           if(time - now > 0){
             this.meetups.push(response.data.object[i])
-            console.log(this.meetups)
+            // console.log(this.meetups)
           }
           else{
             this.closeMeetups.push(response.data.object[i])
@@ -390,9 +391,6 @@ export default {
   text-align: center;
 }
 
-.v-application a{
-  color: orange !important;
-}
 
 
 </style>

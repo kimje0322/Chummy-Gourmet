@@ -65,7 +65,7 @@
                     요청중
                 </v-btn>
 
-                <v-btn depressed color="white" @click="unFollow(user,i,'followerlist')" v-else>
+                <v-btn outlined color="grey" @click="unFollow(user,i,'followerlist')" v-else>
                     팔로잉
                 </v-btn>
 
@@ -225,5 +225,8 @@ export default {
 <style scoped>
   .follow-lsit {
     width: 100px
+  }
+  .pf-n-a{
+    color: rgb(97, 94, 94) !important;
   }
 </style>

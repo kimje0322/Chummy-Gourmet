@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-toolbar dense elevation="1">
+    <v-toolbar class="" dense elevation="1">
       <v-icon @click="$router.go(-1)">
         mdi-arrow-left
       </v-icon>
@@ -9,8 +9,7 @@
       <v-spacer></v-spacer>
     </v-toolbar>
 
-    <v-container style="background-color:">
-      <div class="user">
+      <div class="pa-sm-4 pa-md-6 pa-lg-12">
         <v-col class="text-center">
           <img class="my-8" src="../../assets/images/logo.png" alt style="width:30%;" />
         </v-col>
@@ -66,7 +65,6 @@
         </v-col>
         </v-form>
       </div>
-    </v-container>
   </div>
 </template>
 

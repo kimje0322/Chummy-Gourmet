@@ -1,9 +1,16 @@
 <template>
   <section class="user join">
-    <v-app>
-      <v-toolbar-title>
+        <!-- 상단 툴바 -->
+        <v-toolbar class="mb-1" dense elevation="1">
+          <v-icon @click="$router.go(-1)">
+            mdi-arrow-left
+          </v-icon>
+          <v-spacer></v-spacer>
+          <p class="my-auto">피드 작성</p>
+          <v-spacer></v-spacer>
+        </v-toolbar>
+      <!-- <v-toolbar-title>
         <v-toolbar dark>
-          <!-- <a @click="$router.go(-1)"> -->
           <a @click="back">
             <i class="fas fa-chevron-left back"></i>
           </a>
@@ -20,8 +27,6 @@
           <p class="my-auto">Posting</p>
           <v-spacer></v-spacer>
           <v-spacer></v-spacer>
-          <!-- {{ this.userpage1 }}
-          {{ this.revise}} -->
           <div v-if="userpage1" @click="reviseAll()">
             <i class="fas fa-check"></i>
           </div>
@@ -31,9 +36,8 @@
           <div v-else @click="addImg">
             <i class="fas fa-check"></i>
           </div>
-          <!-- <a @click="addImg"></a> -->
         </v-toolbar>
-      </v-toolbar-title>
+      </v-toolbar-title> -->
 
       <div>
         <!-- <p>{{this.postuserid}}</p> -->
@@ -93,7 +97,6 @@
         <!-- <v-btn type="button" @click="onClickImageUpload">이미지 업로드</v-btn> -->
         <!-- <v-btn @click="addImg">입력</v-btn> -->
       </div>
-    </v-app>
   </section>
 </template>
 

@@ -1,11 +1,16 @@
 <template>
    <div>
-       <v-toolbar dark>
-      <!-- 중앙정렬 하기 위해 2개씀 -->
-      <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
-      <p class="my-auto">알람</p>
+
+      <!-- 상단 툴바 -->
+    <v-toolbar class="mb-1" dense elevation="1">
+      <v-icon @click="$router.go(-1)">
+        mdi-arrow-left
+      </v-icon>
+      <v-spacer></v-spacer>
+      <p class="my-auto">알림센터</p>
       <v-spacer></v-spacer>
     </v-toolbar>
+
       <div v-for="(list, i) in alarm" :key="i"> 
         <div>
           <v-list-item-avatar style="cursor:pointer;" @click="gotoProfile(lst)">
@@ -52,7 +57,7 @@ export default {
   methods:{
     //type별로 알림목록을 가져온다.
     view(type){
-      window.db.collection('alarm').doc(type).collection('messages').where('to', '==', this.$cookie.get('userId')).where('confirm','==',false).get()
+      window.db.collection('alarm').doc(type).collection('messages').where('to', '==', this.$cookie.get('userId')).where('confirm','==',false).orderBy('time','desc').get()
                  .then(snapshot=>{
                   //없을경우
                       if(snapshot.empty){

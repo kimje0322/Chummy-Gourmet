@@ -21,7 +21,6 @@
       
       <!-- dialog -->
       <v-dialog
-        dark
         v-model="dialog"
         max-width="190"
         >

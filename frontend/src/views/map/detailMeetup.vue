@@ -199,16 +199,22 @@ export default {
       })
     },
     cancleMeetup(){
-      var meetupId = this.$route.query.meetupId;
-      axios
-      .delete(`${SERVER_URL}/meetup?meetupId=${meetupId}&userId=${this.$cookie.get("userId")}`)
-      .then((response) => {
-        this.isGuest = false;
-        this.isRequest = false;
-        this.text = "참석 신청";
-        this.init();
-        alert("밋업 참석이 취소되었습니다.");
-      })  
+      console.log(this.meetup)
+      if(this.meetup.master == this.$cookie.get("userId")){
+        this.$alert("밋업주최자는 참여취소가 불가합니다.")
+      }
+      else{
+        var meetupId = this.$route.query.meetupId;
+        axios
+        .delete(`${SERVER_URL}/meetup?meetupId=${meetupId}&userId=${this.$cookie.get("userId")}`)
+        .then((response) => {
+          this.isGuest = false;
+          this.isRequest = false;
+          this.text = "참석 신청";
+          this.init();
+          alert("밋업 참석이 취소되었습니다.");
+        })  
+      }
     },
     cancleRequestMeetup(){
       console.log(this.isRequest)

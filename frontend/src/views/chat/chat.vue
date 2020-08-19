@@ -42,7 +42,7 @@
                 </div>
             </div>
             <div class="card-action">
-                <CreateMessage :id="userid" :rid="this.room.rid" :to="this.room.to" :myNickName="this.myNickName" />
+                <CreateMessage :id="userid" :rid="this.room.rid" :to="this.room.to" :myNickName="this.myNickName" :roomName="this.room.name" />
             </div>
         </div>
     </div>

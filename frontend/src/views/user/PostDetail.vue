@@ -2,14 +2,12 @@
   <section class="user join">
     <v-app>
       <v-toolbar-title>
-        <v-toolbar dark>
-          <a @click="$router.go(-1)">
-            <i class="fas fa-chevron-left back"></i>
-          </a>
-          <v-spacer></v-spacer>
+        <v-toolbar class="mb-1" dense elevation="1">
+          <v-icon @click="$router.go(-1)">
+            mdi-arrow-left
+          </v-icon>
           <v-spacer></v-spacer>
           <p class="my-auto">게시물</p>
-          <v-spacer></v-spacer>
           <v-spacer></v-spacer>
         </v-toolbar>
       </v-toolbar-title>

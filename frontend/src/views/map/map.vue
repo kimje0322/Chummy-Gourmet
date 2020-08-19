@@ -590,7 +590,12 @@ export default {
   border: 1px solid #919191;
   border-radius: 5px;
 }
+/* .v-application .blue.darken-2 {
+  background-color: #ff9800 !important;
+} */
 .custom_zoomcontrol {
+  border: none;
+  margin-right: 7px;
   position: absolute;
   top: 520px;
   right: 10px;

@@ -214,7 +214,7 @@
                     </a>
                   </div>
                 </div>
-                <div>{{ lst.postdate | moment("from", "now") }}</div>
+                <div style="padding-left: 5px; margin-top: 4px;"><span style="font-size: 13px; color: #8e8e8e;">{{ lst.postdate | moment("from", "now") }}</span></div>
               </div>
             </div>
             <!-- <p>{{ lst.postcontent }}</p> -->

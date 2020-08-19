@@ -10,6 +10,8 @@
       <v-spacer></v-spacer>
     </v-toolbar>
 
+
+    <div scroll-target="#scroll-area-1">
       <!-- 피드 -->
      <v-card
      class="mx-auto" tile flat v-for="(lst, i) in postlst" :key="i">
@@ -301,6 +303,7 @@
         <p style="font-size:1.1rem; margin-top:15px">다른 사람을 팔로우하면 <br>상대방의 피드를 확인할 수 있습니다.</p>
         <router-link to="/SearchUser"><v-btn color="warning" style="width: 60%">유저 보기</v-btn></router-link>
       </div> -->
+    </div>
 
   </div>
 </template>

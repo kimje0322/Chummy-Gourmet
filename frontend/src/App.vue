@@ -21,9 +21,8 @@
                 <v-icon>mdi-history</v-icon>
             </v-btn>
 
-            <v-btn @click="gotofeedadd" text color="orange accent-4">
-                <v-icon>fas fa-plus</v-icon>
-            </v-btn>
+
+            <Alram></Alram>
 
             <v-btn @click="gotocurator" text color="orange accent-4">
                 <v-icon>mdi-magnify</v-icon>
@@ -50,9 +49,13 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 import "./components/css/style.scss";
 import axios from "axios";
 import router from "@/routes";
+import Alram from "./components/common/Alarm";
 
 export default {
   name: "app",
+  components :{
+    Alram
+  },
   methods: {
     gotomap() {
       router.push({ path: '/map' }).catch(()=>{});

@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <!-- Profile -->
-    <v-toolbar dense>
+    <v-toolbar class="mb-1" dense elevation="1">
       <v-icon @click="$router.go(-1)">
         mdi-arrow-left
       </v-icon>
@@ -9,8 +9,10 @@
       <p class="my-auto text-center">프로필</p>
       <v-spacer></v-spacer>
     </v-toolbar>
+
     <!-- 매너온도/팔로워/팔로잉 -->
-    <v-toolbar > 
+    <v-layout>
+    <v-toolbar flat> 
       <v-list-item-avatar>
         <v-img :src="this.userImg"></v-img>
       </v-list-item-avatar>
@@ -56,6 +58,7 @@
       <v-spacer></v-spacer>
       <CreateChat :postuserid="this.anotherId" />
     </v-toolbar>
+    </v-layout>
     <v-container>
   <v-layout class="entireClass">
       <v-row>

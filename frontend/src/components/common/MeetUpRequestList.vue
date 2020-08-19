@@ -1,7 +1,7 @@
 <template>
   <v-app>
      <v-toolbar-title >
-      <v-toolbar dense>
+      <v-toolbar class="mb-1" dense elevation="1">
       <v-icon @click="$router.go(-1)">
         mdi-arrow-left
       </v-icon>
@@ -129,7 +129,7 @@ export default {
           const newRoomRef = window.db.collection('test').where('name','==', this.meetupInfo.title).get()
           .then(snapshot =>{
             if(snapshot.empty){
-              alert("없다");
+              // alert("없다");
             }
             snapshot.forEach(doc=>{
               var id = doc.data().id;

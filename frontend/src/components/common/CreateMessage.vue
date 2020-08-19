@@ -18,7 +18,7 @@
 
 export default {
     name: 'CreateMessage',
-    props: ['id','rid','to','myNickName'],
+    props: ['id','rid','to','myNickName','roomName'],
     data() {
         return {
             newMessage: null,
@@ -37,10 +37,14 @@ export default {
                 }).catch(err => {
                     console.log(err);
                 });
+                window.db.collection('test').doc(this.rid).set({
+                    update: Date.now()
+                },{merge : true})
                 this.newMessage = null;
                 this.errorText = null;
 
                 var a;
+                    var message = '';
                 //this.to가 배열일경우
                 // console.log(Array.isArray(this.to));
                 if(Array.isArray(this.to)){
@@ -51,6 +55,12 @@ export default {
                     a = [];
                     a.push(this.to);
                 }
+                if(a.length == 1){
+                    message = this.myNickName + "님이 1대1 메시지를 보냈습니다.";
+                }
+                else{
+                    message = this.myNickName + "님이 " + this.roomName + " 에서 메시지를 보냈습니다.";
+                }
 
                 for(var i = 0;i<a.length;i++){
                     // console.log(this.myNickName);
@@ -58,7 +68,7 @@ export default {
                     window.db.collection('alarm').doc('chat').collection('messages').add({
                         to : a[i],
                         from : this.id,
-                        message: this.myNickName+"님이 채팅메시지를 보냈습니다.",
+                        message: message,
                         time: Date.now(),
                         roomid : this.rid,
                         confirm : false

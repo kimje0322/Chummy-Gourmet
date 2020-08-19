@@ -107,7 +107,18 @@ export default {
     methods:{
         chatGo(room){
             // console.log(room);
-            this.$router.push({name: 'Chat', params: {room: room}});
+            axios
+                            .post(
+                                `${SERVER_URL}/userpage/getuserpost`,room.id
+                            )
+                            .then((response) => {
+                                // console.log('응답',response);
+                                room.img = response.data;
+                                this.$router.push({name: 'Chat', params: {room: room}});
+                           })
+                            .catch((error) => {
+                                console.log(error.response);
+                            });
         },
         addRoom(){
              if (this.name) {

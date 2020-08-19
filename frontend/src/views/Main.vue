@@ -10,8 +10,8 @@
     <div>
       <!-- tab view -->
       <v-tabs v-model="currentItem" fixed-tabs slider-color="orange">
-        <v-tab v-for="item in items" :key="item" :href="'#tab-' + item">
-          <v-icon v-if="item=='Profile'">mdi-account-box</v-icon>
+        <v-tab @click="setItem(item)" v-for="item in items" :key="item" :href="'#tab-' + item">
+          <v-icon v-if="item=='Profile'" >mdi-account-box</v-icon>
           <v-icon v-if="item=='History'">fas fa-list</v-icon>
           <v-icon v-if="item=='Message'">mdi-folder</v-icon>
         </v-tab>
@@ -103,8 +103,11 @@
         <v-list-item @click="moveMeetupDetail">
           <v-list-item-title>밋업상세보기</v-list-item-title>
         </v-list-item>
-        <v-list-item @click="moveCreateReview">
+        <v-list-item v-show="!close" @click="moveCreateReview">
           <v-list-item-title>리뷰작성</v-list-item-title>
+        </v-list-item>
+        <v-list-item v-show="!close" @click="moveCreateReviewComment">
+          <v-list-item-title>리뷰댓글</v-list-item-title>
         </v-list-item>
         <v-list-item v-show="close" @click="cancelMeetup">
           <v-list-item-title>참여취소</v-list-item-title>
@@ -125,6 +128,7 @@ import Alarm from "../components/common/Alarm";
 
 import "../assets/css/components.scss";
 import axios from "axios";
+import router from "@/routes";
 
 const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 // const SERVER_URL = "https://localhost:8080";
@@ -172,9 +176,10 @@ export default {
     this.created();
   },
   methods: {
+    setItem(item){
+      this.currentItem = "tab-"+item;
+    },
     isNaN(){
-      alert(this.closeMeetups.length)
-      alert(this.meetups.length)
       if(this.closeMeetups.length == 0 && this.meetups.length == 0){
         return true;
       }
@@ -246,8 +251,131 @@ export default {
       });
       }
     },
+    // 리뷰댓글 작성페이지 이동
+    moveCreateReviewComment(){
+      let flag = false;
+      //내가 해당 밋업 마스터가 아닐때
+      if(this.meetup.master != this.userId){
+        // 마스터가 쓴 리뷰 있나 검사
+        axios
+        .get(
+          `${SERVER_URL}/rest/review/${this.meetup.restId}`
+        )
+        .then((response) => {
+          // 리뷰가 하나도 없을때
+          if(!response.data.object){
+            this.$alert("밋업 호스트가 작성한 리뷰가 없습니다.")
+          }
+          // 리뷰들 있을때
+          else{
+            let flag = false;
+            // console.log(response.data)
+            let reviewList = response.data.object;
+            // 반복 돌면서 마스터가 작성한 리뷰가 있냐?확인
+            for (let i = 0; i < reviewList.length; i++) {
+                // 해당 밋업의 방장이 작성한 리뷰가 있다
+                if(reviewList[i].writer == this.meetup.master &&
+                    reviewList[i].meetupId == this.meetup.id){
+                    // 그 리뷰 페이지로 이동하자
+                    router.push({name : "ReviewDetail", params : { review : reviewList[i]}});
+                    flag = true;
+                    break;
+                }         
+            }
+            // 반복돌면서 검사했는데 마스터가 작성한 리뷰가 없었네?
+            if(!flag){
+              this.$alert("밋업 호스트가 작성한 리뷰가 없습니다.")
+            }
+          }
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
+      }
+      // 내가 밋업 마스터일때
+      else{
+        axios
+        .get(
+          `${SERVER_URL}/rest/review/${this.meetup.restId}`
+        )
+        .then((response) => {
+          // 리뷰가 하나도 없을때
+          if(!response.data.object){
+            this.$alert("밋업 호스트님 리뷰를 작성해주세요")
+          }
+          // 리뷰들 있을때
+          else{
+            let flag = false;
+            // console.log(response.data)
+            let reviewList = response.data.object;
+            // 반복 돌면서 마스터가 작성한 리뷰가 있냐?확인
+            for (let i = 0; i < reviewList.length; i++) {
+                // 해당 밋업의 방장이 작성한 리뷰가 있다
+                if(reviewList[i].writer == this.meetup.master &&
+                    reviewList[i].meetupId == this.meetup.id){
+                    // 그 리뷰 페이지로 이동하자
+                    router.push({name : "ReviewDetail", params : { review : reviewList[i]}});
+                    flag = true;
+                    break;
+                }         
+            }
+            // 반복돌면서 검사했는데 마스터가 작성한 리뷰가 없었네?
+            if(!flag){
+              this.$alert("밋업 호스트님 리뷰를 작성해주세여")
+            }
+          }
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
+      }
+    },
+    // 리뷰작성페이지로 이동
     moveCreateReview(){
-      this.$router.push({ name : 'AddReview', params : this.meetup });
+      console.log(this.meetup)
+      //내가 해당 밋업 마스터가 아닐때
+      if(this.meetup.master != this.userId){
+        this.$alert("밋업 호스트만 작성가능합니다");
+      }
+      else{
+        axios
+        .get(
+          `${SERVER_URL}/rest/review/${this.meetup.restId}`
+        )
+        .then((response) => {
+          // 리뷰가 하나도 없을때 리뷰 작성하러 이동
+          if(!response.data.object){
+            this.$alert("리뷰 작성 페이지로 이동합니다")
+            this.$router.push({ name : 'AddReview', params : this.meetup });
+          }
+          // 리뷰들 데이터가 존재할때
+          else{
+            let flag = false;
+            // console.log(response.data)
+            let reviewList = response.data.object;
+            // 반복 돌면서 나(마스터)가 작성한 리뷰가 있냐?확인
+            for (let i = 0; i < reviewList.length; i++) {
+                // 해당 밋업의 방장(나)이 작성한 리뷰가 있다
+                if(reviewList[i].writer == this.meetup.master &&
+                    reviewList[i].meetupId == this.meetup.id){
+                    // 그 리뷰 페이지로 이동하자
+                    this.$alert("사용자(밋업 호스트님)께서 작성한 리뷰가 존재합니다.")
+                    router.push({name : "ReviewDetail", params : { review : reviewList[i]}});
+                    flag = true;
+                    break;
+                }         
+            }
+            // 반복돌면서 검사했는데 마스터(나)가 작성한 리뷰가 없었네?
+            if(!flag){
+              this.$alert("리뷰 작성 페이지로 이동합니다")
+              this.$router.push({ name : 'AddReview', params : this.meetup });
+            }
+          }
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
+      }
     },
     moveMeetupDetail(){
       this.$router.push('/map/detailMeetup?meetupId='+this.meetup.id);

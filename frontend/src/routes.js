@@ -208,9 +208,7 @@ export default new VueRouter({
             path: '/map/createMeetup',
             name: 'CreateMeetup',
             component: CreateMeetup,
-            meta: {
-                navbar: true
-            }
+
         },
         {
             path: '/map/detailMeetup',

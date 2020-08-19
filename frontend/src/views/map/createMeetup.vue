@@ -23,6 +23,9 @@
       <v-spacer></v-spacer>
       <p class="my-auto text-center">MeetUp</p>
       <v-spacer></v-spacer>
+      <a @click="meetUp">
+          <i class="fas fa-check"></i>
+      </a>
     </v-toolbar>
       <br />
 
@@ -264,10 +267,10 @@
           </v-form>
       </div>
 
-      <div class="mt-8 mb-5 btns">
+      <!-- <div class="mt-8 mb-5 btns">
         <v-btn color="grey white--text" @click="$router.go(-1)" value="center">취소</v-btn>
         <v-btn color="warning" value="right" class="ml-3" @click="meetUp">생성</v-btn>
-      </div>
+      </div> -->
 
     <!-- </v-app> -->
   </div>

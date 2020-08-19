@@ -2,7 +2,7 @@
   <div id="app">
     <v-app>
       <v-main>
-        <v-card class="overflow-hidden mx-auto" >
+        <v-card class="overflow-hidden mx-auto" style="heigth: 667px">
           <!-- <v-app-bar color="deep-blue accent-4" dense dark>
             <v-toolbar-title style="margin:auto;">돈독한 미식가</v-toolbar-title>
           </v-app-bar>-->
@@ -57,7 +57,7 @@
           </v-sheet>
           
           <!-- home, login 이외 -->
-          <v-sheet v-if="$route.name !== 'Home'"  id="scroll-area-1" class="overflow-y-auto" max-height="100%">
+          <v-sheet v-if="$route.name !== 'Home'"  id="scroll-area-1" class="overflow-y-auto" height="667px">
             <v-container class="nothome" style="height: 100%;">
               <router-view></router-view>
             </v-container>

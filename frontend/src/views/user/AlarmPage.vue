@@ -32,8 +32,8 @@
 import moment from 'moment';
 
 import axios from "axios";
-// const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-const SERVER_URL = "https://localhost:8080";
+const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "https://localhost:8080";
 
 export default {
   data(){

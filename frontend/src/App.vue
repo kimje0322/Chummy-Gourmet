@@ -1,39 +1,40 @@
 <template>
-  <div class="pa-0 ma-0 mx-auto" id="app" style="max-width:960px; max-height:959px;">
+  <div class="pa-0 ma-0 mx-auto" id="app" style="max-width:960px;max-height:959px;">
     <v-app>
       <!-- <v-main class="ma-0 pa-0"> -->
           <v-bottom-navigation
-            class="navbar-fixed-bottom"
             v-if="!$route.meta.navbar"
-            scroll-target="#scroll-area-2"
             hide-on-scroll
             absolute
+            min-width="360"
+            max-width="960"
             color="white"
-            horizontal
             grow
           >
-            <v-btn class="nav-btn" @click="gotomap" text color="orange accent-4">
-                <v-icon class="icon-css">mdi-map-marker-radius</v-icon>
+            <v-btn class="pl-7" @click="gotomap" text color="orange accent-4">
+                <v-icon>mdi-map-marker-radius</v-icon>
             </v-btn>
 
             <v-btn @click="gotonewsfeed" text color="orange accent-4">
-                <v-icon class="icon-css">mdi-history</v-icon>
+                <v-icon>mdi-history</v-icon>
             </v-btn>
 
             <v-btn @click="gotofeedadd" text color="orange accent-4">
-                <v-icon class="icon-css">fas fa-plus</v-icon>
+                <v-icon>fas fa-plus</v-icon>
             </v-btn>
 
             <v-btn @click="gotocurator" text color="orange accent-4">
-                <v-icon class="icon-css">mdi-magnify</v-icon>
+                <v-icon>mdi-magnify</v-icon>
             </v-btn>
 
-            <v-btn @click="gotouserinfo" text color="orange accent-4">
-                <v-icon class="icon-css">fas fa-user</v-icon>
+            <v-btn class="pr-10" @click="gotouserinfo" text color="orange accent-4">
+                <v-icon>fas fa-user</v-icon>
             </v-btn>
           </v-bottom-navigation>
 
-          <v-container class="pa-0 mx-auto" style="max-width:960px; max-height:959px;">
+          <v-container class="pa-0 mx-auto overflow-y-auto" style="width:100%;height:620px;max-width:960px;max-height:959px;min-width:360px;min-height:650px;"
+            id="scroll-area-1"
+          >
             <router-view></router-view>
           </v-container>
 

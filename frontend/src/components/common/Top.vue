@@ -157,9 +157,6 @@ export default {
 };
 </script>
 <style>
-  .my-auto {
-      font-family: 'Jua', sans-serif;
-  }
   .fa-chevron-left {
     color: white; 
     margin-left: 7px;

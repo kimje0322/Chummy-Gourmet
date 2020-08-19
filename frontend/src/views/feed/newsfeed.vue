@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="max-width:960px;">
     <!-- 상단 툴바 -->
     <v-toolbar class="mb-1" dense elevation="1">
       <v-icon @click="$router.go(-1)">
@@ -11,7 +11,7 @@
     </v-toolbar>
 
 
-    <div scroll-target="#scroll-area-1">
+    <div style="" scroll-target="#scroll-area-1">
       <!-- 피드 -->
      <v-card
      class="mx-auto" tile flat v-for="(lst, i) in postlst" :key="i">
@@ -61,7 +61,7 @@
         <!-- 피드 이미지 -->
         <v-img
           :src="`https://i3b302.p.ssafy.io:8080/img/post?imgname=`+lst.postimgurl"
-          min-height="300" max-height="450"
+          min-height="300" max-height="450" 
         ></v-img>
 
         <!-- 좋아요/댓글/DM 버튼 -->
@@ -116,7 +116,8 @@
         <p style="font-size:1.1rem; margin-top:15px">다른 사람을 팔로우하면 <br>상대방의 피드를 확인할 수 있습니다.</p>
         <router-link to="/SearchUser"><v-btn color="warning" style="width: 60%">유저 보기</v-btn></router-link>
       </div>
-
+    </div>
+  </div>
 
 <!--=======================================================================-->
 <!-- 
@@ -303,9 +304,6 @@
         <p style="font-size:1.1rem; margin-top:15px">다른 사람을 팔로우하면 <br>상대방의 피드를 확인할 수 있습니다.</p>
         <router-link to="/SearchUser"><v-btn color="warning" style="width: 60%">유저 보기</v-btn></router-link>
       </div> -->
-    </div>
-
-  </div>
 </template>
 
 <script>

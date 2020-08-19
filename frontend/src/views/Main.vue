@@ -10,9 +10,9 @@
       <!-- tab view -->
       <v-tabs v-model="currentItem" fixed-tabs slider-color="orange">
         <v-tab @click="setItem(item)" v-for="item in items" :key="item" :href="'#tab-' + item">
-          <v-icon v-if="item=='Profile'" >mdi-account-box</v-icon>
-          <v-icon v-if="item=='History'">fas fa-list</v-icon>
-          <v-icon v-if="item=='Message'">mdi-folder</v-icon>
+          <v-icon class="main-btn" v-if="item=='Profile'" >mdi-account-box</v-icon>
+          <v-icon class="main-btn" v-if="item=='History'">fas fa-list</v-icon>
+          <v-icon class="main-btn" v-if="item=='Message'">mdi-folder</v-icon>
         </v-tab>
       </v-tabs>
 
@@ -391,7 +391,8 @@ export default {
 }
 
 .v-application a{
-  color: orange;
+  color: orange !important;
 }
+
 
 </style>

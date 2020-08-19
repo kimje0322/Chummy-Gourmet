@@ -455,7 +455,7 @@ export default {
     margin: 70px 0 20px 140px;
     align-items: center;
   }
-  .v-application a{
-  color: orange;
-}
+  .pf-n-a{
+    color: black !important;
+  }
 </style>

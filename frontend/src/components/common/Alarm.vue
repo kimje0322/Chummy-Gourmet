@@ -40,6 +40,13 @@ export default {
                       this.count++;
 
                     }
+                    if (change.type === 'modified') {
+                      // console.log('Modified city: ', change.doc.data());
+                      this.count--;
+                    }
+                     if (change.type === 'removed') {
+                      this.count--;
+                    }
                   })
                 })
 

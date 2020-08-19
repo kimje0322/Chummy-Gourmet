@@ -66,7 +66,7 @@
                     요청중
                 </v-btn>
 
-                <v-btn color="white" depressed @click="unFollow(user,i,'followerlist')" v-else>
+                <v-btn outlined color="grey" depressed @click="unFollow(user,i,'followerlist')" v-else>
                     팔로잉
                 </v-btn>
             </v-list-item>
@@ -455,4 +455,7 @@ export default {
     margin: 70px 0 20px 140px;
     align-items: center;
   }
+  .v-application a{
+  color: orange;
+}
 </style>

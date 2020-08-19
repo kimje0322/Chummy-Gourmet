@@ -280,7 +280,7 @@ export default {
 </script>
 
 
-<style>
+<style scoped>
 
 .meetup-title {
   font-size: 22px;
@@ -289,4 +289,9 @@ export default {
 .text-meetup {
   text-align: center;
 }
+
+.v-application a{
+  color: orange;
+}
+
 </style>

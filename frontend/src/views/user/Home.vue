@@ -1,5 +1,8 @@
 <template>
-  <div class="mx-auto"       style="position: absolute;
+<div id="app">
+  <div       
+        style="position: absolute;
+            background-color: #FFD180;
             top: 40%;
             left: 50%;
             transform: translate(-50%, -40%);">
@@ -12,7 +15,7 @@
           style="margin-top:35%;"
           justify="center"
         >
-        <v-btn-toggle background-color="#FFD180">
+        <v-btn-toggle style="background-color: #FFD180;">
             <router-link to="/user/join">
               <v-btn  class="ma-2" color="orange accent-2 white--text">회원가입</v-btn>
             </router-link>
@@ -23,32 +26,28 @@
         </v-row>
       </div>
   </div>
+  </div>
 </template>
 
 <script>
-// import "../../components/css/home.scss";
+import "../../components/css/home.scss";
 export default {};
 </script>
 
 <style scoped>
+#app {
+  background-color: #FFD180;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
 .home-btns {
   margin: 85px 0 0 0;
   text-align: center;
 }
 .join-btn {
   margin-right: 10px;
-  /* border-width: 2px;
-    border-color: black; */
 }
 
-.img-css {
-  /* display: block;
-  margin-top: 100px;
-  margin-left: auto;
-  margin-right: auto; */
-}
-
-#app{
-  
-}
 </style>

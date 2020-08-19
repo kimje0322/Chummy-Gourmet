@@ -10,22 +10,26 @@
         mdi-arrow-left
       </v-icon>
     <v-spacer></v-spacer>
-    <v-text-field 
-      @keyup="onSearchUser"
-      v-model="searchUser"
-      label="검색"
-      hide-details
-      solo
-      autofocus
-    ></v-text-field> 
+    <p class="my-auto text-center">유저 검색</p>
     <v-spacer></v-spacer>
     </v-app-bar>
-    <br><br>
+ 
     <v-sheet
       id="scrolling-techniques-7"
-      class="overflow-y-auto"
+      class="overflow-y-auto mt-15 mb-15"
       max-height="600"
     >
+
+      <v-text-field
+        class="m-3"
+        @keyup="onSearchUser"
+        v-model="searchUser"
+        label="검색"
+        :append-icon="'mdi-account-search-outline'"
+        hide-details
+        solo
+      ></v-text-field>         
+
         <v-list nav dense >
             <v-skeleton-loader
                 ref="skeleton"

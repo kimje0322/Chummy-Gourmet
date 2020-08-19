@@ -1,5 +1,5 @@
 <template>
-  <v-app class="mypage">
+  <div>
     <!-- 상단 -->
       <Alarm></Alarm>
     <v-toolbar-title>
@@ -23,7 +23,7 @@
             <!-- dm -->
             <Message v-if="item=='Message'" v-bind:userId="userId"></Message>
             <!-- history -->
-            <History :proptoTopsub="users" v-else-if="item=='History'"></History>
+            <History v-else-if="item=='History'" :proptoTopsub="users" ></History>
             <!-- profile -->
             <v-card-text v-else>
             
@@ -83,9 +83,37 @@
                   </v-card>
                 </v-col>
               </v-row>
+              <v-hover v-if="closeMeetups.length > 0">종료 밋업</v-hover>
+              <v-row dense>
+                <v-col
+                  v-for="(meetup, i) in closeMeetups"
+                  :key="i"
+                  cols="12"
+                >
+                  <v-card @click="showMenu(meetup,false)">
+                    <div class="d-flex">
+                      <v-avatar
+                      class="ma-3"
+                      size="85"
+                      tile
+                      >
+                        <v-img :src="meetup.img"></v-img>
+                      </v-avatar>
+                      <div>
+                        <v-card-title
+                        class="headline"
+                        v-text="meetup.title"
+                        ></v-card-title>
+                        <v-card-subtitle v-html="meetup.location+'<br>'+meetup.date.slice(0, 16)" ></v-card-subtitle>
+                      </div>
+                    </div>
+                    </v-card>
+                  </v-col>
+                </v-row>
+               
             </v-container>
              <!-- 밋업 없을 때 --> 
-            <v-container v-show="!listLen" style="margin-top:100px;text-align: center;"> 
+            <v-container v-show="!listLen" style="text-align: center; margin-top:30%;"> 
               <i class="fab fa-meetup fa-6x"></i>
               <h3 class="mt-5">등록된 Meetup이 없습니다.</h3>
             </v-container>
@@ -111,7 +139,7 @@
         </v-list-item>
     </v-list>
     </v-dialog>
-  </v-app>
+  </div>
 </template>
 
 
@@ -253,9 +281,6 @@ export default {
 
 
 <style>
-.container nothome {
-  padding: 0px !important;
-}
 
 .meetup-title {
   font-size: 22px;
@@ -263,8 +288,5 @@ export default {
 
 .text-meetup {
   text-align: center;
-}
-.mt-5 {
-  font-family: 'Jua', sans-serif;
 }
 </style>

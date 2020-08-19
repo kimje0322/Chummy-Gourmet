@@ -1,26 +1,17 @@
 <template>
-  <div id="app">
+  <div class="pa-0 ma-0 mx-auto" id="app" style="max-width:960px;max-height:959px;">
     <v-app>
-      <v-main>
-        <v-card class="overflow-hidden mx-auto" style="heigth: 667px">
-          <!-- <v-app-bar color="deep-blue accent-4" dense dark>
-            <v-toolbar-title style="margin:auto;">돈독한 미식가</v-toolbar-title>
-          </v-app-bar>-->
-          <!-- class="navbar-static-bottom" -->
-          
+      <!-- <v-main class="ma-0 pa-0"> -->
           <v-bottom-navigation
-            class="navbar-fixed-bottom"
             v-if="!$route.meta.navbar"
-            scroll-target="#scroll-area-2"
-            
-            scroll-threshold="500"
-
+            hide-on-scroll
             absolute
+            min-width="360"
+            max-width="960"
             color="white"
-            horizontal
+            grow
           >
-            <v-btn class="nav-btn" @click="gotomap" text color="orange accent-4">
-                <!-- <v-icon>fas fa-search</v-icon> -->
+            <v-btn class="pl-7" @click="gotomap" text color="orange accent-4">
                 <v-icon>mdi-map-marker-radius</v-icon>
             </v-btn>
 
@@ -29,42 +20,25 @@
             </v-btn>
 
             <v-btn @click="gotofeedadd" text color="orange accent-4">
-              <!-- <input ref="imageInput" type="file" hidden @change="onChangeImages"> -->
-              <!-- <v-btn type="button" @click="onClickImageUpload"> -->
-              <!-- </v-btn> -->  
                 <v-icon>fas fa-plus</v-icon>
             </v-btn>
 
             <v-btn @click="gotocurator" text color="orange accent-4">
-                <!-- <v-icon>fas fa-list</v-icon> -->
                 <v-icon>mdi-magnify</v-icon>
             </v-btn>
 
-            <v-btn @click="gotouserinfo" text color="orange accent-4">
+            <v-btn class="pr-10" @click="gotouserinfo" text color="orange accent-4">
                 <v-icon>fas fa-user</v-icon>
             </v-btn>
           </v-bottom-navigation>
 
-          <!-- home -->
-          <v-sheet
-            v-if="$route.name === 'Home'"
+          <v-container class="pa-0 mx-auto overflow-y-auto" style="width:100%;height:620px;max-width:960px;max-height:959px;min-width:360px;min-height:650px;"
             id="scroll-area-1"
-            class="overflow-y-auto"
           >
-            <v-container class="home-padding" style="height: 100%;">
-              <router-view></router-view>
-            </v-container>
-          </v-sheet>
-          
-          <!-- home, login 이외 -->
-          <v-sheet v-if="$route.name !== 'Home'"  id="scroll-area-1" class="overflow-y-auto" height="667px">
-            <v-container class="nothome" style="height: 100%;">
-              <router-view></router-view>
-            </v-container>
-          </v-sheet>
-          
-        </v-card>
-      </v-main>
+            <router-view></router-view>
+          </v-container>
+
+      <!-- </v-main> -->
     </v-app>
   </div>
 </template>
@@ -146,35 +120,5 @@ export default {
 </script>
 
 <style>
- #app {
-  min-height: 100%; 
-  position: relative;
-} 
-.navbar-fixed-bottom {
-  padding-left: 12px;
-  position: absolute;
-  bottom: 0;
-} 
-.home-padding {
-  padding: 0px !important;
-}
-
-/* .nav-bar {
-  overflow: hidden;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;  
-  height: 75px;
-  padding: 0.5rem;
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-} */
-
-/* .nav-css{
-  height: 100%;
-} */
 
 </style>

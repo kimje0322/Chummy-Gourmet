@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <div>
     <v-toolbar dense>
       <v-icon @click="$router.go(-1)">
         mdi-arrow-left
@@ -271,7 +271,7 @@
       </ul>
     </div>
   </div>
-  </v-app>
+  </div>
 </template>
 
 <script>

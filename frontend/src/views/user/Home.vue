@@ -1,15 +1,28 @@
 <template>
-  <v-app id="app">
-    <div class="user" id="home">
-    <img class="img-css" src="../../assets/images/background1.png" width="55%" alt="back">
-    <!-- <v-parallax src="../../assets/images/home-img.png" width="500"></v-parallax> -->
-    
-      <div class="home-btns">
-        <router-link to="/user/join"><v-btn color="orange accent-2 white--text" class="join-btn">회원가입</v-btn></router-link>
-        <router-link to="/login"><v-btn color="orange accent-2 white--text">로그인</v-btn></router-link>
+  <div class="mx-auto"       style="position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -40%);">
+      <div class="text-center">
+        <img src="../../assets/images/background1.png" width="100%" alt="back">
       </div>
-    </div>
-  </v-app>
+
+      <div>
+        <v-row
+          style="margin-top:35%;"
+          justify="center"
+        >
+        <v-btn-toggle background-color="#FFD180">
+            <router-link to="/user/join">
+              <v-btn  class="ma-2" color="orange accent-2 white--text">회원가입</v-btn>
+            </router-link>
+            <router-link to="/login">
+              <v-btn class="ma-2"  color="orange accent-2 white--text">로그인</v-btn>
+            </router-link>
+        </v-btn-toggle>
+        </v-row>
+      </div>
+  </div>
 </template>
 
 <script>
@@ -29,13 +42,13 @@ export default {};
 }
 
 .img-css {
-  display: block;
+  /* display: block;
   margin-top: 100px;
   margin-left: auto;
-  margin-right: auto;
+  margin-right: auto; */
 }
 
 #app{
-  background-color: #FFD180
+  
 }
 </style>

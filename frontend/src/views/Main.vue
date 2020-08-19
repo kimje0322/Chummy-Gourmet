@@ -80,6 +80,33 @@
                         <v-card-subtitle v-html="meetup.location+'<br>'+meetup.date.slice(0, 16)" ></v-card-subtitle>
                       </div>
                     </div>
+                  </v-card>
+                </v-col>
+              </v-row>
+              <v-hover v-if="closeMeetups.length > 0">종료 밋업</v-hover>
+              <v-row dense>
+                <v-col
+                  v-for="(meetup, i) in closeMeetups"
+                  :key="i"
+                  cols="12"
+                >
+                  <v-card @click="showMenu(meetup,false)">
+                    <div class="d-flex">
+                      <v-avatar
+                      class="ma-3"
+                      size="85"
+                      tile
+                      >
+                        <v-img :src="meetup.img"></v-img>
+                      </v-avatar>
+                      <div>
+                        <v-card-title
+                        class="headline"
+                        v-text="meetup.title"
+                        ></v-card-title>
+                        <v-card-subtitle v-html="meetup.location+'<br>'+meetup.date.slice(0, 16)" ></v-card-subtitle>
+                      </div>
+                    </div>
                     </v-card>
                   </v-col>
                 </v-row>

@@ -11,6 +11,7 @@
       </v-icon>
     <v-spacer></v-spacer>
     <v-text-field 
+      flat
       @keyup="onSearchUser"
       v-model="searchUser"
       label="검색"

@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-toolbar-title >
-      <v-toolbar dense>
+      <v-toolbar class="mb-1" dense elevation="1">
       <v-icon @click="$router.go(-1)">
         mdi-arrow-left
       </v-icon>
@@ -45,7 +45,6 @@
 
     <v-layout>
    <v-main>
-
     <v-col class="pb-0">
           <v-text-field
             outlined hide-details="auto" 
@@ -106,7 +105,6 @@
                 clearable
               ></v-text-field>
         </v-col>
-
     </v-main>
     </v-layout>
     </div>

@@ -1,7 +1,7 @@
 <template>
 
   <div class="user join">
-    <v-bottom-navigation
+    <!-- <v-bottom-navigation
       scroll-target="#scroll-area-2"
       hide-on-scroll
       scroll-threshold="500"
@@ -16,21 +16,18 @@
           <v-btn  v-else-if="isRequest" @click="cancleRequestMeetup">{{text}}</v-btn>
           <v-btn  v-else @click="requestDialog = true">{{text}}</v-btn>
       </v-btn-toggle>
-    </v-bottom-navigation>
+    </v-bottom-navigation> -->
 
       <v-toolbar-title>
-        <v-toolbar dark>
-          <a @click="$router.go(-1)">
-            <i class="fas fa-chevron-left back"></i>
-          </a>
-          <v-spacer></v-spacer>
+        <v-toolbar class="mb-1" dense elevation="1">
+          <v-icon @click="$router.go(-1)">
+            mdi-arrow-left
+          </v-icon>
           <v-spacer></v-spacer>
           <p class="my-auto">Meet Up</p>
           <v-spacer></v-spacer>
-          <v-spacer></v-spacer>
         </v-toolbar>
       </v-toolbar-title>
-      <br />
 
     <GoChatForMeetUp :meetup ="meetup" />
       <!-- 입력 폼 -->
@@ -74,6 +71,12 @@
           solo multiple chips readonly
         >
         </v-combobox>
+
+        <v-btn block text color="orange" v-if="isGuest" @click="cancleMeetup">{{text}}</v-btn>
+        <v-btn block text color="orange" v-else-if="meetup.curPersonnel==meetup.maxPersonnel" disabled>{{text}}</v-btn>
+        <v-btn block text color="orange" v-else-if="isRequest" @click="cancleRequestMeetup">{{text}}</v-btn>
+        <v-btn block text color="orange" v-else @click="requestDialog = true">{{text}}</v-btn>
+      
       </div>
 
 

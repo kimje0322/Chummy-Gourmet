@@ -38,7 +38,7 @@
           </v-list-item>
         </v-list>
         <v-list v-else>
-          <h4 class="noInterest">
+          <h4 class="noInterest px-3">
             <!-- <i class="far fa-surprise"></i>
             <span style="margin: 0 1px"></span> -->
             등록된 관심사가 없습니다.

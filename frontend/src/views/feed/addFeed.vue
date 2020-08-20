@@ -2,7 +2,7 @@
             <v-card flat tile>
               <!-- 피드 작성 상단 툴바 -->
               <v-toolbar dense elevation="1">
-                <v-icon @click="$router.go(-1)">
+                <v-icon @click="close">
                   mdi-arrow-left
                 </v-icon>
                 <v-spacer></v-spacer>

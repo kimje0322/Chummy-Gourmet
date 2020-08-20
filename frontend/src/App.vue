@@ -28,42 +28,18 @@
                 <v-icon>mdi-magnify</v-icon>
             </v-btn>
 
-<<<<<<< HEAD
-            <v-btn @click="gotouserinfo" text color="orange">
-              <!-- <router-link to="/user/info"> -->
-                <v-icon class="icon-css">fas fa-user</v-icon>
-              <!-- </router-link> -->
-=======
             <v-btn class="pr-10" @click="gotouserinfo" text color="orange accent-4">
                 <v-icon>fas fa-user</v-icon>
->>>>>>> 7135b2215c7c6468ec3f64627f05471c5cb0afd4
             </v-btn>
           </v-bottom-navigation>
 
 
           <v-container class="pa-0 mx-auto overflow-y-auto" style="width:100%;max-width:960px;height:667px;min-width:360px;"
           >
-<<<<<<< HEAD
-            <v-container class="home-padding" style="height: 100%;">
-              <router-view></router-view>
-            </v-container>
-          </v-sheet>
-          
-          <!-- home, login 이외 -->
-          <v-sheet v-if="$route.name !== 'Home'"  class="overflow-y-auto" id="scroll-area-1" max-height="100%">
-            <v-container class="nothome" style="height: 100%;">
-              <router-view></router-view>
-            </v-container>
-          </v-sheet>
-          
-        </v-card>
-      </v-main>
-=======
             <router-view></router-view>
           </v-container>
 
       <!-- </v-main> -->
->>>>>>> 7135b2215c7c6468ec3f64627f05471c5cb0afd4
     </v-app>
   </div>
 </template>
@@ -149,22 +125,5 @@ export default {
 </script>
 
 <style>
-<<<<<<< HEAD
-.home-padding {
-  padding: 0px !important;
-}
- .icon-css {
-  padding-right: 0px;
-  /* align-content: center; */
-}
-
-/* .navbar-fixed-bottom {
-  padding: 15px 5px 0 0;
-} * */
-.v-item-group.v-bottom-navigation--horizontal .v-btn>.v-btn__content>.v-icon {
-  margin-right: 0px !important;
-}
-=======
->>>>>>> 7135b2215c7c6468ec3f64627f05471c5cb0afd4
 
 </style>

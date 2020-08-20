@@ -112,7 +112,7 @@
 
           <!-- 컨텐츠 -->
           <a class="black--text">
-            <span class="mr-2 font-weight-bold">{{lst.usernickname}}</span>{{ lst.postcontent }} {{lst.postid}}
+            <span class="mr-2 font-weight-bold">{{lst.usernickname}}</span>{{ lst.postcontent }}
           </a>
 
           <!-- 댓글보기 -->
@@ -122,53 +122,10 @@
             </span>
           </div>
 
-<<<<<<< HEAD
-              </span>-->
-            </section>
-
-            <section style="height: 17.6px; margin-bottom: 8px;">
-              <div style="flex: 1 1 auto;">
-                <p style="font-weight: 600;">
-                  좋아요
-                  <span>{{ lst.postlike }}</span>
-                  개
-                </p>
-              </div>
-            </section>
-            <div style="margin-bottom: 4px;">
-              <div>
-                <div>
-                  <div>
-                    <a
-                      style="text-decoration: none; font-weight: 600; font-size: 14px; padding-left: 5px; padding-right: 5px;color: rgba(var(--i1d,38,38,38),1)"
-                    >{{lst.usernickname}}</a>
-                    <span>{{ lst.postcontent }} {{lst.postid}}</span>
-                  </div>
-                </div>
-                <div>
-                  <div v-if="commentlst[i][0] > 0" style="marign-bottom: 4px; padding-left: 5px;">
-                    <a
-                      style="font-size: 14px; font-weight: 400; color: #8e8e8e;"
-                      @click="onComment(lst.postid, lst.usernickname, lst.postcontent, lst.user_img, lst.postuserid)"
-                    >
-                      댓글
-                      <span>{{commentlst[i][0]}}</span>개 모두 보기
-                    </a>
-                  </div>
-                </div>
-                <div style="padding-left: 5px; margin-top: 4px;"><span style="font-size: 13px; color: #8e8e8e;">{{ lst.postdate | moment("from", "now") }}</span></div>
-              </div>
-            </div>
-            <!-- <p>{{ lst.postcontent }}</p> -->
-          </div>
-        </article>
-      </div>
-=======
           <!-- 시간 -->
           <div class="grey--text text-caption">{{ lst.postdate | moment("from", "now") }}</div>
         </v-card-text>
       </v-card>
->>>>>>> 7135b2215c7c6468ec3f64627f05471c5cb0afd4
 
       <div v-if="postlst.length==0" class="nofeed" style="text-align: center;">
         <i class="far fa-images fa-5x"></i>

@@ -507,7 +507,7 @@ export default {
 
               var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
               this.meetups.forEach(meetup => {
-                console.log(meetup)
+                // console.log(meetup)
                 geocoder.addressSearch(meetup.address, (result, status) => {
                     if (status === kakao.maps.services.Status.OK) {
                         var coords = new kakao.maps.LatLng(result[0].y, result[0].x);

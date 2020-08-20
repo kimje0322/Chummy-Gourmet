@@ -1,16 +1,20 @@
 <template>
   <v-app>
     <v-toolbar-title >
-      <v-toolbar dark>
-        <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
-        <v-spacer></v-spacer>
-        <p class="my-auto">프로필 수정</p>
-        <v-spacer></v-spacer>
-        <v-spacer></v-spacer>
-      </v-toolbar>
+      <v-toolbar class="mb-1" dense elevation="1">
+      <v-icon @click="$router.go(-1)">
+        mdi-arrow-left
+      </v-icon>
+      <v-spacer></v-spacer>
+      <p class="my-auto text-center">프로필 수정</p>
+      <v-spacer></v-spacer>
+      <a @click="checkForm">
+          <i class="fas fa-check"></i>
+        </a>
+    </v-toolbar>
     </v-toolbar-title>
     
-    <div class="entireClass">
+    <div class="entireClass mb-12">
     <v-layout row>
       <v-flex xs4 order-md2 order-xs1>
       </v-flex>
@@ -20,15 +24,12 @@
             v-if="viewImg" :src="viewImg">
           </v-img>
         </v-avatar>
-        
       </v-flex>
       <v-flex xs4 order-md1 order-xs3>
       </v-flex>
     </v-layout>
-    
-
-    <v-layout row>
-      <v-flex xs3 order-md2 order-xs1>
+    <v-layout>
+       <v-flex xs3 order-md2 order-xs1>
       </v-flex>
       <v-flex xs6 order-md3 order-xs2 class="update-buttons">
         <v-btn small type="button" class="mr-2" @click="onClickImageChange" >수정</v-btn>
@@ -38,89 +39,69 @@
       <v-flex xs3 order-md1 order-xs3>
       </v-flex>
     </v-layout>
-
-    <v-layout>
-    <v-content>
-
-      <v-text-field
-        style="border-bottom-width: 15px;
-        margin: 7px 0 10px 0px;"
-        color="dark"
-        v-model="user.userName"
-        label="Name"       
-        disabled
-        hide-details
-        readonly
-        outlined
-        >
-      </v-text-field >
-
-      <v-text-field
-        color="dark"
+    <v-layout row>
+   <v-main>
+    <v-col class="pb-0">
+          <v-text-field
+            outlined hide-details="auto" 
+            v-model="user.userName" 
+            disabled
+            label="이름"
+            clearable
+          ></v-text-field>
+      </v-col>
+      <v-col class="pb-0">
+        <v-text-field
+        outlined hide-details="auto" 
         v-model="userNickname"
-        label="Nickname"
-        hide-details
-        outlined
-        >
-      </v-text-field >
-      
-      <v-text-field 
-        color="dark"
-        style="border-bottom-width: 15px;
-        margin: 7px 0 10px 0px;"
-        v-model="userPwd"
-        :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" 
-        :type="show1 ? 'text' : 'password'"
-        @click:append="show1 = !show1"
-        label="Password" 
-        hide-details
-        outlined
-        >
-      </v-text-field>
+        label="닉네임"
+        clearable
+        ref="userNickname"
+        >          
+        </v-text-field>
+      </v-col>
 
-      <v-text-field
-        style="border-bottom-width: 15px;
-        margin: 7px 0 10px 0px;"
-        color="dark"
-        v-model="user.userEmail"
-        label="Email"       
-        disabled
-        hide-details
-        readonly
-        outlined
-        >
-      </v-text-field >
+      <v-col class="pb-0">
+        <v-text-field
+          outlined hide-details="auto" 
+          type="password"
+          :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" 
+          v-model="userPwd"
+          label="비밀번호"
+          :disabled="show"
+          ref="userPwd"
+        ></v-text-field>
+      </v-col>
 
-      <v-text-field
-        style="border-bottom-width: 15px;
-        margin: 7px 0 10px 0px;"
-        color="dark"
-        v-model="user.userPhone"
-        label="Phone"       
-        disabled
-        hide-details
-        readonly
-        outlined
-        >
-      </v-text-field >
+        <v-col class="pb-0">
+               <v-text-field
+                outlined hide-details="auto" 
+                v-model="user.userEmail"
+                label="이메일"
+                disabled
+                clearable
+              ></v-text-field>
+        </v-col>
 
-      <v-text-field 
-        style="border-bottom-width: 15px;
-        margin: 7px 0 10px 0px;"
-        color="dark"
-        v-model="userComment" 
-        label="Comment" 
-        hide-details
-        outlined>
-      </v-text-field>
+        <v-col class="pb-0">
+               <v-text-field
+                outlined hide-details="auto" 
+                v-model="user.userPhone"
+                label="연락처"
+                disabled
+                clearable
+              ></v-text-field>
+        </v-col>
 
-      <v-btn
-        block dark
-        @click="checkForm"
-      >
-        프로필 수정
-      </v-btn>
-    </v-content>
+        <v-col class="pb-0">
+               <v-text-field
+                outlined hide-details="auto" 
+                v-model="userComment"
+                label="코멘트"
+                clearable
+              ></v-text-field>
+        </v-col>
+    </v-main>
     </v-layout>
     </div>
   </v-app>
@@ -141,6 +122,7 @@ export default {
       error: {
         nickName: true,
       },
+      show : false,
       show1: false,
       user : {},
       userNickname : "",
@@ -174,7 +156,6 @@ export default {
 
       .then((response) => {
         this.userImg = response.data;
-        console.log(this.userImg);
         this.addImg();
       })
 
@@ -208,10 +189,14 @@ export default {
       this.updateUser();
     },
     updateUser (){
-      if (this.userNickname.length < 1)
+      if (this.userNickname.length < 1){
+        this.$refs.userNickname.focus()
         this.$alert("닉네임을 입력해주세요.");
-      else if (this.userPwd.length > 0 && !this.passwordSchema.validate(this.userPwd))
+      }
+      else if (this.userPwd.length > 0 && !this.passwordSchema.validate(this.userPwd) && !this.show){
+        this.$refs.userPwd.focus()
         this.$alert("영문,숫자 포함 8 자리이상이어야 합니다.");
+      }
       else{
         axios
         .put(
@@ -219,6 +204,7 @@ export default {
         )
         .then((response) => {
           if(response.data.data == "isExistNickname"){
+            this.$refs.userNickname.focus()
             this.$alert("사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.");
           }
           else{
@@ -248,15 +234,16 @@ export default {
         `${SERVER_URL}/userpage/getuser?userId=${this.$cookie.get("userId")}`
       )
       .then((response) => {
-        console.log(response.data);
         this.user = response.data;
         this.userNickname = this.user.userNickname;
         this.userPwd = this.user.userPWd;
+        if(this.userPwd == "google" || this.userPwd == "kakao"){
+          this.show = true;
+        }
         this.userComment = this.user.userComment;
         this.userImg = this.user.userImg;
         this.userId = this.$cookie.get("userId");
         this.viewImg = SERVER_URL+"/img/user?imgname="+this.userImg;
-        console.log("userImg : "+this.viewImg);
       })
       .catch((error) => {
         console.log(error.response);
@@ -266,9 +253,6 @@ export default {
 </script>
 
 <style scoped>
-  .my-auto {
-      font-family: 'Jua', sans-serif;
-  }
   .fa-chevron-left {
     color: white; 
     margin-left: 7px;

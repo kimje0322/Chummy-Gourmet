@@ -1,15 +1,15 @@
 <template>
   <v-app>
     <v-toolbar-title >
-      <v-toolbar dark>
-        <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
-        <v-spacer></v-spacer>
-        <p class="my-auto">팔로우 요청</p>
-        <v-spacer></v-spacer>
-        <v-spacer></v-spacer>
-      </v-toolbar>
+      <v-toolbar class="mb-1" dense elevation="1">
+      <v-icon @click="$router.go(-1)">
+        mdi-arrow-left
+      </v-icon>
+      <v-spacer></v-spacer>
+      <p class="my-auto text-center">팔로우 요청</p>
+      <v-spacer></v-spacer>
+    </v-toolbar>
     </v-toolbar-title>
-    
     
     <div v-if="items.length > 0">
     <v-list subheader>
@@ -26,17 +26,23 @@
         </v-list-item-avatar>
 
         <v-list-item-content @click="showUser(item)">
-          <v-list-item-title>{{item.followingRequestNickname}}</v-list-item-title>
+          <a
+          class="pf-n-a"
+          tabindex="0"
+          style="color: black; font-weight: 600;" 
+          >
+            {{item.followingRequestNickname}}
+          </a>
         </v-list-item-content>
 
         <v-list-item-icon @click="acceptFollowing(item.followingRequestId)">
-          <v-btn color="info">
+          <v-btn outlined color="info">
             수락
           </v-btn>
         </v-list-item-icon>
 
         <v-list-item-icon @click="deleteFollowing(item.followingRequestId)">
-          <v-btn color="error">
+          <v-btn outlined color="error">
             거절
           </v-btn>
         </v-list-item-icon>
@@ -45,8 +51,9 @@
     </v-list>
     </div>
 
-    <div v-else>
-      <h3>팔로우 요청이 없습니다.</h3>
+    <div v-else class="aligncss">
+      <i class="fas fa-users fa-5x"></i>
+      <h3 class="mt-5">팔로우 요청이 없습니다.</h3>
     </div>
   
 
@@ -117,6 +124,9 @@ export default {
     created(){
       this.userId = this.$cookie.get("userId");
       this.items =[]
+
+     
+
     axios
       .get(
         `${SERVER_URL}/userpage/getfollowingrequest?userId=${this.userId}`
@@ -146,13 +156,24 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
   .follow-lsit {
     width: 100px
   }
 
-  h3 {
+  /* h3 {
     margin: 60px;
     text-align: center;
+  } */
+  .aligncss {
+    margin: 100px 0 0 0;
+    color: rgba(0,0,0,.6);
+    width: 100%;
+    text-align: center;
   }
+   .pf-n-a{
+    color: rgb(97, 94, 94) !important;
+  }
+
+
 </style>

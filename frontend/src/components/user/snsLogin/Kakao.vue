@@ -1,6 +1,6 @@
 <template>
-    <div id="kakao-login">
-        <button @click="onClick">
+    <div id="kakao-login" class="kakao-login" @click="onClick">
+        <button >
             <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" viewBox="0 0 55 55">
                 <g id="그룹_247" data-name="그룹 247" transform="translate(-237 -406)">
                     <g id="구성_요소_2" data-name="구성 요소 2" transform="translate(237 406)">
@@ -43,6 +43,7 @@ export default {
     },
     methods: {
         onClick(){
+            console.log('카카오의로그인이 왜 실행돼 씹ㄴ')
          // console.log(window.Kakao);
                 window.Kakao.Auth.login({
                     scope : 'account_email, profile',
@@ -50,6 +51,7 @@ export default {
                 });
         },
         join(){
+            
             // console.log(authObj);
                 window.Kakao.API.request({
                     url:'/v2/user/me',
@@ -67,31 +69,32 @@ export default {
                          axios.get(`${SERVER_URL}/account/signup/valid?nickname=${userInfo.userNickname}&email=${userInfo.userEmail}`)
                         .then((response)=>{
                             //이메일 닉네임 유효성 검사 성공
-                            console.log("여기인가요?");
-                            console.log(response);
                             if(response.data.status){
                                 //카카오 계정으로 등록
                                 axios.post(`${SERVER_URL}/account/apisignup`,userInfo)
                                 .then(res => {
-                                  console.log("성공");
+                                //   console.log("성공");
                                   alert("가입되었습니다. 다시로그인해주세요");
                                 })
                                 .catch(err => {
-                                    console.log("실패");
+                                    // console.log("실패");
                                 })
                             }
                             else{
-                                console.log("로그인하기");
+                                //로그인 오류메세지 넘겨주기,여기부터다시시작
+                                //이메일 닉네임이 이미 있을경우
+                                //로그인 작업을 처리한 후 쿠키에 넣어준다
+                                // console.log("로그인하기");
                                 this.login(userInfo);
                             }
 
                         }).catch((e)=>{
-                            //이메일 닉네임이 이미 있을경우
-                            //로그인 작업을 처리한 후 쿠키에 넣어준다
-                            console.log("실패 ");
+                            //에러메시지 출력
+                            console.log(e);
+                            // console.log("이미 가입되어있는 이메일입니다.");
                         });
 
-                        console.log(userInfo);
+                        // console.log(userInfo);
                         // alert("로그인 성공!");
                         // this.$bvModal.hide("bv-modal-example");
                     },
@@ -103,16 +106,12 @@ export default {
         },
         
         login(userInfo){
-            console.log("여기까지?");
             axios
         .get(
           `${SERVER_URL}/account/login?email=${userInfo.userEmail}&password=kakao`
         )
 
         .then((response) => {
-          console.log("로그인페이지");
-          console.log(response.data);
-
           this.$cookie.set("accesstoken", response.data, 1);
           this.$cookie.set("userId", response.data.object.userId, 1);
           this.$cookie.set("useremail",userInfo.userEmail,1);
@@ -120,8 +119,8 @@ export default {
         })
 
         .catch((error) => {
-          console.log(error.response);
-          alert("로그인 실패");
+        //   console.log(error.response);
+          alert("소셜회원은 회원가입한 소셜 로그인으로, 홈페이지 회원은 홈페이지 로그인으로 로그인 해 주세요");
         });
         }
     },

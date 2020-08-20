@@ -1,7 +1,15 @@
 <template>
   <v-card elevation="24" max-width="444" class="mx-auto">
-    <v-system-bar lights-out></v-system-bar>
-
+    <v-toolbar-title>
+        <v-toolbar class="mb-1" dense elevation="1">
+          <v-icon @click="$router.go(-1)">
+            mdi-arrow-left
+          </v-icon>
+          <v-spacer></v-spacer>
+          <p class="my-auto">음식점 상세보기</p>
+          <v-spacer></v-spacer>
+        </v-toolbar>
+      </v-toolbar-title>
     <v-carousel
       :continuous="false"
       show-arrows
@@ -68,7 +76,7 @@
         </div>
       </v-expand-transition>
 
-      <v-list three-line>
+      <v-list two-line>
         <template v-for="(review, index) in reviews">
           <v-divider :key="index"></v-divider>
           <v-subheader v-if="review.header" :key="review.header" v-text="review.header"></v-subheader>
@@ -76,7 +84,7 @@
           <v-list-item v-else :key="review.title" @click="moveReviewDetail(review)">
 
             <v-list-item-avatar>
-              <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg"></v-img>
+              <v-img :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+reviewWriterImg[index]"></v-img>
             </v-list-item-avatar>
 
             <v-list-item-content>
@@ -84,10 +92,11 @@
                 {{review.title}}
               </v-list-item-title>
               <v-list-item-subtitle>
-                <span class="text--primary" v-for="(member, index) in members[index]" :key="index">
+                {{review.content}}
+                <!-- <span class="text--primary" v-for="(member, index) in members[index]" :key="index">
                   <span class="blue--text" v-if="index == 0">@{{member}} </span>
                   <span v-else>@{{member}} </span>
-                </span>
+                </span> -->
                 <span class="text-caption grey--text text--lighten-1" style="float:right;" v-text="review.date"></span>
                 <!-- &mdash; {{review.content}} -->
               </v-list-item-subtitle>
@@ -96,6 +105,7 @@
         </template>
       </v-list>
     </v-list>
+  <br><br>
   </v-card>
 </template>
 
@@ -105,35 +115,54 @@ import router from "@/routes";
 
 
 const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
-// const SERVER_URL = "http://localhost:8080";
+// const SERVER_URL = "https://localhost:8080";
 
 export default {
   data() {
     return {
       cycle: false,
       show: false,
-      restaurant: this.$route.params,
+      restaurant: this.$route.query,
       reviews: [],
       members : [],
+      reviewWriterId : [],
+      reviewWriterImg :[]
     };
   },
   created() {
-    console.log(this.restaurant);
     axios
-        .get(`${SERVER_URL}/review/search?id=${this.restaurant.id}`)
+        .get(`${SERVER_URL}/rest/review/${this.restaurant.id}`)
         .then((response) => {
-          console.log(response.data);
-          this.reviews = response.data.review;
-          this.members = response.data.member;
+          this.reviews = response.data.object;
+          // this.reviews = response.data.review;
+          // this.members = response.data.member;
+
+          //이미지 가져오기
+          for(var i = 0 ; i<this.reviews.length;i++){
+            this.reviewWriterId.push(this.reviews[i].writer);
+          }
+    
+           axios.post(
+                    `${SERVER_URL}/userpage/getuserpost`,this.reviewWriterId
+                )
+                .then((response) => {
+                    // console.log('응답',response);
+                   this.reviewWriterImg = response.data;
+              })
+                .catch((error) => {
+                    console.log(error.response);
+                });
           
         })
         .catch((error) => {
           console.log(error.response);
         });
+      
+
   },
   methods : {
-    moveReviewDetail(review, member) {
-      router.push({name : "ReviewDetail", params : { review : review, members : member }});
+    moveReviewDetail(review) {
+      router.push({name : "ReviewDetail", params : { review : review }});
     }
   }
 };

@@ -1,16 +1,16 @@
 <template>
-    <div>
-    <span style="display: inline-block;">
-                    <button @click="onClick" style="background: 0 0; border: 0; display: flex; padding: 8px;">
-                    <div>
-                        <i
-                        style="display: block; position: relative; height: 24px; width: 24px;"
+    <!-- <div> -->
+    <!-- <span style="display: inline-block;"> -->
+                    <v-btn  icon @click="onClick">
+                    <!-- <div> -->
+                        <i 
+                        style=" height: 19px; width: 19px;"
                         class="far fa-paper-plane"
                         ></i>
-                    </div>
-                    </button>
-                </span>
-    </div>
+                    <!-- </div> -->
+                    </v-btn>
+                <!-- </span> -->
+    <!-- </div> -->
 </template>
 
 <script>
@@ -32,9 +32,9 @@ export default {
     },
     methods:{
         onClick(){
-            console.log("hello");
-            console.log(this.postuserid);
-            console.log(this.userid);
+            // console.log("hello");
+            // console.log(this.postuserid);
+            // console.log(this.userid);
 
             //클릭한 아이디 둘로 배열을 만든다 (정렬해서)
             if(this.postuserid==this.userid){
@@ -42,17 +42,17 @@ export default {
                 return;
             }
             else if(parseInt(this.postuserid)>parseInt(this.userid)){
-                console.log("pustuserid가 더 크다")
+                // console.log("pustuserid가 더 크다")
                 this.data = [this.userid,this.postuserid];
             }
             else{
-                console.log("userid가 더 크다.");
+                // console.log("userid가 더 크다.");
                 this.data = [this.postuserid,this.userid];
             }
-                console.log(this.data);
+                // console.log(this.data);
 
             //동일한 채팅방이 있는지 검사한다.
-            window.db.collection('test').where('id', '==', this.data).get()
+            window.db.collection('test').where('id', '==', this.data).where('name','==','Room').get()
                  .then(snapshot=>{
                   //없을경우
                     var room = {};
@@ -73,18 +73,21 @@ export default {
                                 console.log(err);
                             })
 
-                            alert("새로운 채팅방 생성");
+                            alert("새로운 채팅방 생성완료 다시 요청해주세요");
                             return;
                         }
 
                     //있을경우
                     else{
                         snapshot.forEach(doc=>{
+
+                             
                             //데이터 집어넣기
                             room.id = this.data;
                             room.time = Date.now();
-                            room.name = doc.data().name;
+                            // room.name = doc.data().name;
                             room.rid = doc.id;
+                            room.to = this.postuserid;
                          })
                     }
 
@@ -97,6 +100,7 @@ export default {
                                 this.nickName
                                 this.nick.push(response.data);
                                 room.nickName = response.data;
+                                room.name = response.data;
                            })
                             .catch((error) => {
                                 console.log(error.response);
@@ -111,9 +115,21 @@ export default {
         },
         goChat(room){
             //데이터 넣고 채팅방으로 이동
-            console.log("함수이동 ");
-            console.log(room)
-            this.$router.push({name: 'Chat', params: {room: room}});
+            // console.log("함수이동 ");
+            // console.log(room)
+
+            axios
+                            .post(
+                                `${SERVER_URL}/userpage/getuserpost`,room.id
+                            )
+                            .then((response) => {
+                                // console.log('응답',response);
+                                room.img = response.data;
+                                this.$router.push({name: 'Chat', params: {room: room}});
+                           })
+                            .catch((error) => {
+                                console.log(error.response);
+                            });
         }
     }
 }

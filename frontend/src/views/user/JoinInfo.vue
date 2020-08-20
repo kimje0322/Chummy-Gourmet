@@ -1,15 +1,17 @@
 <template>
   <div>
-    <v-toolbar dark>
-      <!-- 중앙정렬 하기 위해 2개씀 -->
-      <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
+    <v-toolbar dense elevation="1">
+      <v-icon @click="$router.go(-1)">
+        mdi-arrow-left
+      </v-icon>
+      <v-spacer></v-spacer>
       <p class="my-auto">추가정보 입력</p>
       <v-spacer></v-spacer>
     </v-toolbar>
     <div class="entire">
     <!-- <button @click="getCheckedlists">체크된 정보</button> -->
     <!-- 성별 -->
-    <div class="label-with-input">
+    <div ref="test" class="label-with-input mb-0">
       <label class="userInfo">성별</label>
 
       <ul class="select-gender">
@@ -25,7 +27,7 @@
       </ul>
     </div>
     <!-- 나이 -->
-    <div class="label-with-input">
+    <div class="label-with-input mb-0">
       <label class="userInfo">나이</label>
       <ul class="select-gender">
         <li>
@@ -57,7 +59,7 @@
     </div>
 
     <!-- 선호 음식 -->
-    <div class="label-with-input">
+    <div class="label-with-input mb-0">
       <label class="userInfo">선호음식</label>
       <ul class="select-many">
         <li>
@@ -107,7 +109,7 @@
     </div>
 
     <!-- personality -->
-    <div class="label-with-input">
+    <div class="label-with-input mb-0">
       <label class="userInfo">성격</label>
       <ul class="select-many">
         <li>
@@ -235,7 +237,7 @@
     </div>
 
     <!-- interest -->
-    <div class="label-with-input">
+    <div class="label-with-input mb-6">
       <label class="userInfo">관심사</label>
       <ul class="select-many-interest">
         <li>
@@ -313,9 +315,7 @@
         <div class="error-text" v-if="error.interests">{{error.interests}}</div>
       </ul>
     </div>
-    <v-btn color="warning" class="next-btn" @click="signUp">
-      <h4>제출</h4>
-    </v-btn>
+    <v-btn color="orange lighten-1" block class="text-white" @click="signUp">다음</v-btn>
     </div>
   </div>
 </template>
@@ -323,6 +323,7 @@
 <script>
 import axios from "axios";
 const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
+// const SERVER_URL = "https://localhost:8080";
 
 export default {
   name: "JoinInfo",
@@ -369,17 +370,24 @@ export default {
   },
   methods: {
     isVaildJoinInfo() {
-      
       if (this.checkedGender == "") {
         this.error.gender = "성별을 선택해주세요.";
+        this.$refs.test.scrollIntoView();
+        // this.$vuetify.goTo(this.$refs.test, {
+        //   duration: 400,
+        //   offset: -10,
+        //   easing: 'easeInOutCubic'
+        // })
         return false;
       }
       if (this.checkedAge == "") {
         this.error.age = "연령을 선택해주세요.";
+        this.$refs.test.scrollIntoView();
         return false;
       }
       if (this.checkedFoods.length < 1){
         this.error.foods = "선호음식을 1개 이상 선택해주세요.";
+        this.$refs.test.scrollIntoView();
         return false;
       }
       if (this.checkedPersonalities.length < 1){
@@ -393,41 +401,47 @@ export default {
       return true;
     },
     signUp() {
-      if(this.isVaildJoinInfo()){
-        var newUser = {
-          userEmail: this.$route.params.email,
-          userName: this.$route.params.name,
-          userPwd: this.$route.params.password,
-          userNickname: this.$route.params.nickName,
-          userGender: this.checkedGender,
-          userAge: this.checkedAge,
-          userFavorite: this.checkedFoods,
-          userPersonality: this.checkedPersonalities,
-          userInterest: this.checkedInterests,
-          userPhone: "01000000000",
-        };
-        axios
-          .post(
-            `${SERVER_URL}/account/signup/`, newUser
-            // `http://localhost:8080/account/signup/`, newUser
-          )
-          .then((response) => {
-            var data = response.data.data;
-  
-            if (data == "success") {
-              alert("가입성공");
-              this.$router.push("/login");
-            } else {
-              alert("가입실패");
-            }
-          })
-          .catch((error) => {
-            alert("가입실패");
-            console.log(error.response);
-          });
+      if(!this.isVaildJoinInfo()){
+        return;
+      }
+      // if(Object.keys(this.$route.params.constructor).length == 0){
+      //   alert("1번가입실패");
+      //   return;
+      // }
+      
+      var newUser = {
+        userEmail: this.$route.params.email,
+        userName: this.$route.params.name,
+        userPwd: this.$route.params.password,
+        userNickname: this.$route.params.nickName,
+        userGender: this.checkedGender,
+        userAge: this.checkedAge,
+        userFavorite: this.checkedFoods,
+        userPersonality: this.checkedPersonalities,
+        userInterest: this.checkedInterests,
+        userPhone: this.$route.params.phone,
+      };
+      axios
+        .post(
+          `${SERVER_URL}/account/signup/`, newUser
+          // `http://localhost:8080/account/signup/`, newUser
+        )
+        .then((response) => {
+          var data = response.data.data;
+
+          if (data == "success") {
+            alert("가입성공");
+            this.$router.push("/login");
+          } else {
+            alert("엑시오스갓다와서실패");
+          }
+        })
+        .catch((error) => {
+          alert("엑시오스못가고실패");
+          console.log(error.response);
+        });
       }
     },
-  },
 };
 </script>
 
@@ -458,12 +472,6 @@ img {
   border-radius: 100px;
 }
 
-.next-btn {
-  margin: 20px 20px;
-  height: 200px;
-  width: 85%;
-  text-align: center;
-}
 
 .submitbtn {
   color: white;

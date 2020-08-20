@@ -47,8 +47,23 @@ public interface UserDao extends JpaRepository<User, String> {
 	@Query(value ="update user set user_img = :user_img where user_id = :user_id",nativeQuery = true)
 	void setUserImgByUserId(String user_img,String user_id);
 	
+	//userid로 해당 유저 닉네임 리턴
 	@Query(value = "select user_nickname from user where user_id = :object",nativeQuery = true)
 	String selectUserNickNameByUserId(Object object);
+	
+	//userid로 해당 유저 img 리턴
+	@Query(value = "select user_img from user where user_id = :object",nativeQuery = true)
+	String selectUserImgByUserId(Object object);
+	
+	// MEETUP ID로 해당 밋업에 참가한 유저 리스트 반환
+	@Query(value = "SELECT * FROM user WHERE user_id IN (SELECT meetup_member FROM meetup_member WHERE meetup_id = :meetupId)" ,nativeQuery = true)
+	Optional<List<User>> findMembersByMeetupId(int meetupId);
+
+	
+	// MEETUP ID로 해당 밋업에 참가 신청 중인 유저 리스트 반환
+	@Query(value = "SELECT * FROM user WHERE user_id IN (SELECT guest_id FROM meetup_request WHERE meetup_id = :meetupId)" ,nativeQuery = true)
+	Optional<List<User>> findAllByMeetupId(int meetupId);
+
 	
 }
 

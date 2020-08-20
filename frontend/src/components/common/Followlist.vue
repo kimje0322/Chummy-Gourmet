@@ -5,9 +5,11 @@
       <Top></Top>
     </v-toolbar-title>
     <!-- 가운데 부분 -->
-    <div>
+    <v-sheet  id="scrolling-techniques"
+      class="overflow-y-auto mb-12"
+      >
       <!-- tab view -->
-      <v-tabs dark v-model="currentItem" fixed-tabs slider-color="grey">
+      <v-tabs fixed-tabs v-model="currentItem" slider-color="orange">
       <v-tab class="follow-list" v-for="item in items" :key="item" :href="'#tab-' + item">
         <v-icon class="followListBtn" v-if="item=='follower'">팔로워</v-icon>
         <v-icon class="followListBtn" v-if="item=='following'">팔로잉</v-icon>
@@ -16,10 +18,10 @@
 
     <v-tabs-items v-model="currentItem">
       <v-tab-item v-for="item in items" :key="item" :value="'tab-' + item">
-        <v-card flat>
+        <v-card class="text-center" flat min-height="600">
           
         <!-- 팔로워 -->
-        <v-list nav dense  v-if="item=='follower'">
+        <v-list nav dense v-if="item=='follower'">
         <!-- 팔로워 존재하면  -->
           <!-- 팔로워 검색바 -->
           <v-row>
@@ -44,35 +46,42 @@
                 </v-list-item-avatar>
                 
                 <v-list-item-content>
-                <v-list-item-title @click="gotoProfile(user)" v-text="user.followerNickname"></v-list-item-title>
+                <a
+                class="pf-n-a"
+                tabindex="0"
+                style="color: black; font-weight: 600;" 
+                @click="gotoProfile(user)"
+                >
+                  {{user.followerNickname}}
+                </a>
                 <!-- 이름 표기 -->
                 <!-- <v-list-item-title v-text="user.followingName"></v-list-item-title> -->
                 </v-list-item-content>
 
-                <v-btn color="primary"  @click="onFollow(user,i)" v-if="user.followerFollowing === 'false'">
+                <v-btn outlined color="orange"  @click="onFollow(user,i)" v-if="user.followerFollowing === 'false'">
                     팔로우
                 </v-btn>
                 
-                <v-btn depressed  @click="deleteFollowRequest(user,i)" v-else-if="user.followerFollowing === 'doing'">
+                <v-btn color="white" depressed  @click="deleteFollowRequest(user,i)" v-else-if="user.followerFollowing === 'doing'">
                     요청중
                 </v-btn>
 
-                <v-btn depressed @click="unFollow(user,i,'followerlist')" v-else>
+                <v-btn outlined color="grey" depressed @click="unFollow(user,i,'followerlist')" v-else>
                     팔로잉
                 </v-btn>
             </v-list-item>
         <!-- 팔로워 존재하지 않으면 -->
-        <div v-if="followerList.length == 0">
-          <i class="fas fa-user-plus fa-6x"></i>
-          <div class="text-css">
-            <h1>팔로워</h1>
+        <div style="margin-top:30%;" v-if="followerList.length == 0">
+          <v-icon class="ml-n6" size="100" color="grey darken-2">mdi-account-plus</v-icon>
+          <div class="">
+            <h2 class="font-weight-bold">팔로워</h2>
             <p>회원님을 팔로우하는 모든 사람이 표시됩니다.</p>
           </div>
         </div>
         </v-list>
 
         <!-- 팔로잉 -->
-        <v-list nav dense v-else>
+        <v-list nav dense v-else min-height="600">
         <!-- 팔로잉 존재하면  -->
           <!-- 팔로잉 검색바 -->
           <v-row>
@@ -97,18 +106,25 @@
             </v-list-item-avatar>
 
             <v-list-item-content>
-            <v-list-item-title @click="gotoProfile(user)" v-text="user.followingNickname"></v-list-item-title>
+            <a
+            class="pf-n-a"
+            tabindex="0"
+            style="color: black; font-weight: 600;" 
+            @click="gotoProfile(user)"
+            >
+              {{user.followingNickname}}
+            </a>
             </v-list-item-content>
 
-            <v-btn depressed @click="unFollow(user,i,'followinglist')">
+            <v-btn outlined color="grey" depressed @click="unFollow(user,i,'followinglist')">
                 팔로잉
             </v-btn>
           </v-list-item>
 
-          <div v-if="followingList.length == 0">
-            <i class="fas fa-user-plus fa-6x"></i>
-            <div class="text-css">
-              <h1>팔로잉</h1>
+          <div v-if="followingList.length == 0" style="margin-top:30%;">
+            <v-icon class="ml-n6" size="100" color="grey darken-2">mdi-account-plus</v-icon>
+            <div class="">
+              <h2 class="font-weight-bold">팔로잉</h2>
               <p>회원님이 팔로우하는 모든 사람이 표시됩니다.</p>
             </div>
           </div>
@@ -117,7 +133,7 @@
       </v-tab-item>
     </v-tabs-items>
 
-    </div>
+    </v-sheet>
   </v-app>
 </template>
 
@@ -147,6 +163,7 @@ export default {
         text: '',
         followingList:[],
         followerList:[],
+        mynickname :'',
         methods: {
           checkfollow(flag){
               if(flag=="true")
@@ -158,6 +175,16 @@ export default {
     };
   },
   created(){
+    //유저의 닉네임 가져오기
+     axios
+      .post(`${SERVER_URL}/chat/nickname`,[this.$cookie.get('userId')])
+      .then((response) => {
+       this.mynickname = response.data[0];
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+
     this.whenCreated(); 
   },
   methods: {
@@ -288,7 +315,6 @@ export default {
             `${SERVER_URL}/userpage/deletefollowingRequest?anotherId=`+this.anotherId+`&userId=`+this.userId
           )
           .then((response) => {
-            console.log('팔로우취소완료')
           })
           .catch((error) => {
             console.log(error.response);
@@ -301,7 +327,17 @@ export default {
         `${SERVER_URL}/userpage/insertfollowingRequest?followerId=`+user.followerId+`&userId=`+this.userId
       )
       .then((response) => {
-        console.log('팔로우성공')
+           //팔로우 요청이 성공했을때
+            //팔로우 알림 보냄
+              console.log(this.mynickname);
+               window.db.collection('alarm').doc('follow').collection('messages').add({
+                        to : user.followerId,
+                        from : this.$cookie.get('userId'),
+                        message: this.mynickname+"님이 회원님에게 팔로우 요청을 하였습니다.",
+                        time: Date.now(),
+                        confirm : false
+                    }).catch(err => {
+                    });
       })
       .catch((error) => {
           console.log(error.response);
@@ -396,6 +432,14 @@ export default {
     font-family: 'Jua', sans-serif;  
   }
 
+   .followListBtn::after {
+    font-style: normal;
+    font-size: 15px !important;
+    color: orange;
+    font-family: 'Jua', sans-serif;  
+  }
+
+
   .followlist{
     margin: 18px;
   }
@@ -403,10 +447,19 @@ export default {
     width: 12px;
   }
   .text-css {
+    color: rgba(0,0,0,.6);
     text-align: center;
   }
-  .fa-user-plus {
+  /* .fa-user-plus {
+    color: rgba(0,0,0,.6);
     margin: 70px 0 20px 140px;
     align-items: center;
+  }
+   */
+  .v-application a{
+    color: orange ;
+  }
+  .pf-n-a{
+    color: rgb(97, 94, 94) !important;
   }
 </style>

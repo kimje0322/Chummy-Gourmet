@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <v-toolbar dark>
+    <v-toolbar dense flat>
       <v-list-item-avatar>
         <v-img :src="'https://i3b302.p.ssafy.io:8080/img/user?imgname='+proptoTopsub.userImg"></v-img>
       </v-list-item-avatar>
@@ -9,9 +9,9 @@
 
       <!-- <v-btn><br>매너온도</v-btn> -->
       <v-spacer></v-spacer>
-        <v-btn @click="getFollowers" depressed>{{proptoTopsub.followerCount}}<br>팔로워</v-btn>
+        <v-btn color="white" @click="getFollowers" depressed>{{proptoTopsub.followerCount}}<br>팔로워</v-btn>
       <v-spacer></v-spacer>
-        <v-btn @click="getFollowings" depressed>{{proptoTopsub.followingCount}} <br>팔로잉</v-btn>
+        <v-btn color="white" @click="getFollowings" depressed>{{proptoTopsub.followingCount}} <br>팔로잉</v-btn>
       <v-spacer></v-spacer>
     </v-toolbar>
   </v-layout>

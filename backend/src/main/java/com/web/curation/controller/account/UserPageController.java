@@ -55,11 +55,8 @@ public class UserPageController {
 	@Autowired
 	UserDetailDao userDetailDao;
 
-
 	@Autowired
 	PostDao postDao;
-
-	
 
 	// 밋업에 대한 참가자들 가져오기
 	@GetMapping("/userpage/getMeetupMember")
@@ -185,8 +182,8 @@ public class UserPageController {
 				map.put("followerPhone", user.getUserPhone());
 				map.put("followerComment", user.getUserComment());
 				map.put("followerImg", user.getUserImg());
-				
-				String result = getfollowerfollowing(userId,followeruserId);
+
+				String result = getfollowerfollowing(userId, followeruserId);
 				map.put("followerFollowing", result);
 				userList.add(map);
 			}
@@ -205,7 +202,7 @@ public class UserPageController {
 						map.put("followerComment", user.get().getUserComment());
 						map.put("followerImg", user.get().getUserImg());
 
-						String result = getfollowerfollowing(userId,followeruserId);
+						String result = getfollowerfollowing(userId, followeruserId);
 						map.put("followerFollowing", result);
 						userList.add(map);
 					}
@@ -215,6 +212,7 @@ public class UserPageController {
 		}
 		return userList;
 	}
+
 	// 내가 상대방 유저의 팔로잉 상태 확인
 	@GetMapping("/userpage/getfollowerfollowing")
 	@ApiOperation(value = "[유저페이지] 내가 상대방 유저의 팔로잉 상태 확인")
@@ -223,7 +221,7 @@ public class UserPageController {
 		// 내가 팔로잉 중이냐
 		int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, followeruserId);
 		// 내가 요청중이냐
-		int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(followeruserId, userId);
+		int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, followeruserId);
 
 		// 내가 팔로잉 중임
 		if (ans1 > 0) {
@@ -236,7 +234,7 @@ public class UserPageController {
 			return "false";
 		}
 	}
-	
+
 	// 사용자의 유저 추가정보 업데이트
 	@PutMapping("/userpage/putuserInfo")
 	@ApiOperation(value = "[유저페이지] 사용자의 유저추가정보 업데이트")
@@ -404,20 +402,9 @@ public class UserPageController {
 			map.put("followingRequestPhone", user.getUserPhone());
 			map.put("followingRequestComment", user.getUserComment());
 			map.put("followingRequestUserImg", user.getUserImg());
-			// 내가 팔로잉 중이냐
-			int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, followingrequestuserId);
-			// 내가 요청중이냐
-			int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, followingrequestuserId);
-			// 내가 팔로잉 중임
-			if (ans1 > 0) {
-				map.put("followerFollowing", "true");
-			}
-			// 내가 요청중임
-			else if (ans2 > 0) {
-				map.put("followerFollowing", "doing");
-			} else {
-				map.put("followerFollowing", "false");
-			}
+
+			String result = getfollowerfollowing(userId, followingrequestuserId);
+			map.put("followerFollowing", result);
 			userList.add(map);
 		}
 
@@ -520,11 +507,46 @@ public class UserPageController {
 
 		return data;
 	}
+
+	@PostMapping("/userpage/getuserpost")
+	@ApiOperation(value = "[유저]유저id 배열로 유저 img 배열 리턴")
+	public List<Object> getuserimg(@RequestBody(required = true) List<Object> data) {
+		System.out.println(data);
+		System.out.println(data.size());
+		
+		List<Object> img= new ArrayList<Object>();
+		
+		for(int i = 0 ; i<data.size();i++) {
+			img.add(userdao.selectUserImgByUserId(data.get(i)));
+		}
+		
+		System.out.println(img);
+		
+		return img;
+	}
+
 	
+	@GetMapping("/userpage/getpost")
+	@ApiOperation(value = "[게시글] 게시글번호로 게시글 정보 가져오기")
+	public Map<String, Object> getpost(@RequestParam(required = true) final String postId) {
+		Map<String, Object> post = new HashMap<String, Object>();
+		post = postDao.selectOneByPostId(Integer.parseInt(postId));
+		System.out.println(post);
+		int commentcount = 0;
+		commentcount = postDao.selectAllCommentByPostId(post.get("post_id").toString());
+
+		Map<String, Object> data = new HashMap<String, Object>();
+
+		data.put("data", post);
+		data.put("comment", commentcount);
+
+		return data;
+	}
+
 	@GetMapping("/userpage/getalluser")
 	@ApiOperation(value = "모든 사용자 정보 가져오기")
 	public Object getalluser(@RequestParam(required = true) final String userId,
-			@RequestParam(required = true) final String searchName){
+			@RequestParam(required = true) final String searchName) {
 		// 팔로워유저 Id리스트
 		ArrayList<String> List = userPageDao.getAllUser(userId);
 		// user리스트
@@ -542,20 +564,9 @@ public class UserPageController {
 				map.put("UserPhone", user.getUserPhone());
 				map.put("UserComment", user.getUserComment());
 				map.put("UserImg", user.getUserImg());
-				// 내가 팔로잉 중이냐
-				int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, anotherId);
-				// 내가 요청중이냐
-				int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, anotherId);
-				// 내가 팔로잉 중임
-				if (ans1 > 0) {
-					map.put("followerFollowing", "true");
-				}
-				// 내가 요청중임
-				else if (ans2 > 0) {
-					map.put("followerFollowing", "doing");
-				} else {
-					map.put("followerFollowing", "false");
-				}
+
+				String result = getfollowerfollowing(userId, anotherId);
+				map.put("followerFollowing", result);
 				userList.add(map);
 			}
 			// 유저 검색을 한 경우
@@ -571,20 +582,9 @@ public class UserPageController {
 					map.put("UserPhone", user.get().getUserPhone());
 					map.put("UserComment", user.get().getUserComment());
 					map.put("UserImg", user.get().getUserImg());
-					// 내가 팔로잉 중이냐
-					int ans1 = userPageDao.getFollowingCountByUserIdByUserFollowing(userId, anotherId);
-					// 내가 요청중이냐
-					int ans2 = userPageDao.getFollowingRequestCountByUserIdByUserFollowing(userId, anotherId);
-					// 내가 팔로잉 중임
-					if (ans1 > 0) {
-						map.put("followerFollowing", "true");
-					}
-					// 내가 요청중임
-					else if (ans2 > 0) {
-						map.put("followerFollowing", "doing");
-					} else {
-						map.put("followerFollowing", "false");
-					}
+
+					String result = getfollowerfollowing(userId, anotherId);
+					map.put("followerFollowing", result);
 					userList.add(map);
 				}
 			}

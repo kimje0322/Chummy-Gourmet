@@ -47,12 +47,15 @@ public class Meetup {
 	private String personalities;
 	@Column(name = "meetup_category")
 	private String category;
+	@Column(name = "meetup_rest_id")
+	private String restId;
 
 	public Meetup() {
 	}
 
 	public Meetup(String master, String title, String content, String location, String address, String date,
-			String curPersonnel, String maxPersonnel, String img, String personalities, String category) {
+			String curPersonnel, String maxPersonnel, String img, String personalities, String category,
+			String restId) {
 		super();
 		this.master = master;
 		this.title = title;
@@ -65,6 +68,7 @@ public class Meetup {
 		this.img = img;
 		this.personalities = personalities;
 		this.category = category;
+		this.restId = restId;
 	}
 
 	public String getId() {
@@ -171,12 +175,20 @@ public class Meetup {
 		this.category = category;
 	}
 
+	public String getRestId() {
+		return restId;
+	}
+
+	public void setRestId(String restId) {
+		this.restId = restId;
+	}
+
 	@Override
 	public String toString() {
 		return "Meetup [id=" + id + ", master=" + master + ", title=" + title + ", content=" + content + ", location="
 				+ location + ", address=" + address + ", date=" + date + ", curPersonnel=" + curPersonnel
 				+ ", maxPersonnel=" + maxPersonnel + ", createDate=" + createDate + ", img=" + img + ", personalities="
-				+ personalities + ", category=" + category + "]";
+				+ personalities + ", category=" + category + ", restId=" + restId + "]";
 	}
 
 }

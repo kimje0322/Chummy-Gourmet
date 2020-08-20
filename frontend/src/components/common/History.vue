@@ -1,4 +1,5 @@
 <template>
+    <v-container>
   <v-layout class="entireClass">
     <v-row>
       <v-col v-for="(lst,i) in postlst" :key="i" class="d-flex child-flex" cols="4">
@@ -23,13 +24,21 @@
         </v-col>
   
     <!-- 피드 없을 때 -->
-    <div v-if="postlst.length == 0" class="aligncss"> 
-      <i class="far fa-file-image fa-5x"></i>
-      <h3 class="mt-5">등록된 게시물이 없습니다.</h3>
-    </div>
+
+    <!-- <div v-show="!listLen" style="margin-top:40%;text-align:center;"> 
+      <i class="fab fa-meetup fa-6x"></i>
+      <h3 class="mt-5 font-weight-bold">등록된 Meetup이 없습니다.</h3>
+    </div> -->
+
       </v-row>
+
     
   </v-layout>
+    <div v-if="postlst.length == 0" class="text-center" style="margin-top:40%;"> 
+      <v-icon size="80" color="grey darken-2">mdi-file-image-outline</v-icon>
+      <div class="mt-5 h6 font-weight-bold">등록된 게시물이 없습니다.</div>
+    </div>
+  </v-container>
 </template>
 
 
@@ -39,29 +48,24 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 // const SERVER_URL = "https://localhost:8080";
 
   export default {
-    props:{
-      proptoTopsub: {
-        type : Object
-      },
-    },
+    props:['userId'],
     data () {
       return {
         items: [],
-        userId : "",
         postlst: [],
         commentlst :[]
       }
     },
     methods:{
       detailInfo(post,comment) {
+        // console.log(post)
         this.$router.push({name :'PostDetail', query: {post_content: post.post_content
         ,post_id : post.post_id, post_img_url : post.post_img_url,
         post_like : post.post_like, post_userid : post.post_userid, user_img:post.user_img,
-        user_nickname : post.user_nickname, comment:comment , userId : this.userId}});
+        user_nickname : post.user_nickname, comment:comment , userId : this.userId, post_date: post.post_date}});
       },
     },
     created(){
-      this.userId = this.proptoTopsub.userId
       axios
         .get(`${SERVER_URL}/userpage/getuserpost?userId=`+this.userId)
         .then((response) => {
@@ -78,7 +82,7 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
     padding: 20px;
   } */
   .aligncss {
-    margin: 70px 0 0 0;
+    margin: 100px 0 0 0;
     color: rgba(0,0,0,.6);
     width: 100%;
     text-align: center;

@@ -22,6 +22,7 @@
             clearable
           ></v-text-field>
         </v-col>
+        
         <v-col class="pb-0">
           <v-text-field
             :rules="[() => !!email || '이메일을 입력해주세요', rules.email]"
@@ -50,17 +51,6 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 
 export default {
   name: "FindPw",
-  watch: {
-    name: function () {
-      if (this.name.length < 1) this.error.name = "이름 입력해주세요.";
-      else this.error.name = false;
-    },
-    email: function (v) {
-      if (this.email.length > 0 && !EmailValidator.validate(this.email))
-        this.error.email = "이메일 형식이 아닙니다.";
-      else this.error.email = false;
-    },
-  },
   methods: {
     checkFormAndFindpw() {
       // 전체 폼 체크(형식)
@@ -74,7 +64,7 @@ export default {
         this.error.name = "이름 입력해주세요.";
         return;
       }
-      else this.error.name = false;
+      else this.error.name = '';
     
       if(this.email.length < 1){
         this.error.email = "이메일을 입력해주세요.";
@@ -84,7 +74,7 @@ export default {
         this.error.email = "이메일 형식이 아닙니다.";
         return;
       }
-      else this.error.email = false;
+      else this.error.email = '';
     },
     isValidForm() {
       for (let key in this.error) {
@@ -98,7 +88,6 @@ export default {
         userEmail : this.email,
         userName : this.name
       };
-      console.log(userData);
       axios.post(`${SERVER_URL}/account/checkUser`, userData)
         .then(res => {
           // isNotExistName / isNotExistEmail / success  
@@ -126,26 +115,16 @@ export default {
       email: "",
       phone: "",
       error: {
-        name: false,
-        email: false,
-        // phone: false,
+        name: '',
+        email: '',
       },
        // 유효성 검사를 위한 rule
       rules: {
         nickName : () => {
-          if(this.error.nickName)
+          if(this.email.length > 0)
             return true;
           else 
             return false;
-        },
-        password : value =>{
-          const pattern = /^[A-Za-z0-9+]{8,}$/; 
-          var checkNum = value.search(/[0-9]/g);
-          var checkEng = value.search(/[a-z]/ig);
-          if(checkNum < 0 || checkEng < 0 || !pattern.test(value))
-            return "영문,숫자 포함 8 자리이상이어야 합니다.";
-          else
-            return true;
         },
         email: value => {
           const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/

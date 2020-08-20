@@ -14,17 +14,15 @@
       </v-toolbar-title>
       <!-- <p>{{ lst.postid }}</p> -->
       
-      <div style="" scroll-target="#scroll-area-1">
+      <div scroll-target="#scroll-area-1">
 
 
       <!-- 피드 -->
-     <v-card
-     class="mx-auto" tile flat>
+     <v-card class="pb-10" tile flat>
         <v-list-item>
           <!-- 유저 프로필 사진-->
           <v-list-item-avatar style="cursor:pointer;" @click="gotoProfile(lst)">
             <img
-                style="height: 100%; width: 100%;"
                 :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+this.postlst.user_img"
               />
 
@@ -84,7 +82,6 @@
         <!-- 피드 이미지 -->
         <v-img
           :src="`https://i3b302.p.ssafy.io:8080/img/post?imgname=`+postlst.post_img_url"
-          min-height="300" max-height="450" 
         ></v-img>
 
         <!-- 좋아요/댓글 버튼 -->

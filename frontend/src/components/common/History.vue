@@ -1,5 +1,4 @@
 <template>
-  <v-app>
     <v-container>
   <v-layout class="entireClass">
     <v-row>
@@ -25,14 +24,21 @@
         </v-col>
   
     <!-- 피드 없을 때 -->
-    <div v-if="postlst.length == 0" class="aligncss"> 
-      <i class="far fa-file-image fa-5x"></i>
-      <h3 class="mt-5">등록된 게시물이 없습니다.</h3>
-    </div>
+
+    <!-- <div v-show="!listLen" style="margin-top:40%;text-align:center;"> 
+      <i class="fab fa-meetup fa-6x"></i>
+      <h3 class="mt-5 font-weight-bold">등록된 Meetup이 없습니다.</h3>
+    </div> -->
+
       </v-row>
+
+    
   </v-layout>
+    <div v-if="postlst.length == 0" class="text-center" style="margin-top:40%;"> 
+      <v-icon size="80" color="grey darken-2">mdi-file-image-outline</v-icon>
+      <div class="mt-5 h6 font-weight-bold">등록된 게시물이 없습니다.</div>
+    </div>
   </v-container>
-  </v-app>
 </template>
 
 

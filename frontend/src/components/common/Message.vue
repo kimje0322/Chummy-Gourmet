@@ -35,13 +35,13 @@
       </v-list>
       </v-dialog>
       </v-row>
-    <!-- 스크랩 없을 때 -->
-    <div v-if="items.length == 0" class="aligncss"> 
-      <i class="fas fa-utensils fa-6x"></i>
-      <h3 class="mt-5">스크랩한 음식점이 없습니다.</h3>
-    </div>
     
   </v-layout>
+    <!-- 스크랩 없을 때 -->
+    <div v-if="items.length == 0" class="text-center" style="margin-top:40%;"> 
+      <v-icon size="80" color="grey darken-2">mdi-food</v-icon>
+      <h3 class="mt-5 h6 font-weight-bold">스크랩한 음식점이 없습니다.</h3>
+    </div>
 </v-container>
   </v-app>
 </template>

@@ -22,7 +22,7 @@
             <!-- dm -->
             <Message v-if="item=='Message'" v-bind:userId="userId"></Message>
             <!-- history -->
-            <History :proptoTopsub="users" v-else-if="item=='History'"></History>
+            <History v-else-if="item=='History'" v-bind:userId="userId" ></History>
             <!-- profile -->
             <v-card-text v-else>
             
@@ -184,6 +184,7 @@ export default {
         return false;
     },
     created(){
+      // this.currentItem = "tab-"+this.$route.query.currentItem,
       this.meetups = [],
       this.closeMeetups = []
       this.userId = this.$cookie.get("userId");

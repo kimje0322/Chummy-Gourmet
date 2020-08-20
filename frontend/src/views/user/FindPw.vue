@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-toolbar dense>
+    <v-toolbar  class="mb-1" dense elevation="1">
       <v-icon @click="$router.go(-1)">
         mdi-arrow-left
       </v-icon>

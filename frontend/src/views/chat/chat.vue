@@ -23,24 +23,24 @@
                 <!-- {{messeages}}아니 -->
                 <div class="messages" v-chat-scroll="{always: false, smooth: true}">
                     <div v-for="(message,i) in messages" :key="i">
-                        <div v-if="message.userid == userid" style="text-align : right">
-                            <v-list-item-avatar style="cursor:pointer;" @click="gotoProfile(lst)">
+                        <div v-if="message.userid == userid" style="text-align : right" class = "myMsg">
+                            <!-- <v-list-item-avatar style="cursor:pointer;" @click="gotoProfile(lst)">
                                 <img
                                 :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+message.img"
                                 />
                             </v-list-item-avatar>
-                             <span class="text-info">[{{ message.nickname }}]: </span>
-                            <span>{{message.message}}</span>
+                             <span class="text-info">[{{ message.nickname }}]: </span> -->
+                            <span class="msg">{{message.message}}</span>
                             <span class="text-secondary time">{{message.time}}</span>
                         </div>
-                        <div v-else style = "text-align : left">
-                            <v-list-item-avatar style="cursor:pointer;" @click="gotoProfile(lst)">
+                        <div v-else style = "text-align : left" class="anotherMsg">
+                            <v-list-item-avatar size ="25" style="cursor:pointer;" @click="gotoProfile(lst)">
                                 <img
                                 :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+message.img"
                                 />
                             </v-list-item-avatar>
-                            <span class="text-info">[{{ message.nickname }}]: </span>
-                            <span>{{message.message}}</span>
+                            <span class="" style ="font-size: 1.1em; color= gray;">{{ message.nickname }}<br></span>
+                            <span class="msg">{{message.message}}</span>
                             <span class="text-secondary time">{{message.time}}</span>
                         </div>
                     </div>
@@ -212,5 +212,33 @@ export default {
 
     /* height : 400px; */
     overflow: auto;
+}
+
+.myMsg {
+    text-align: right;
+}
+
+.anotherMsg {
+    text-align: left;
+    margin-bottom: 5px;
+}
+
+.msg {
+    display: inline-block;
+    border-radius: 15px;
+    padding: 7px 15px;
+    margin-bottom: 10px;
+    margin-top: 5px;
+
+}
+
+.anotherMsg > .msg {
+    background-color: #f1f0f0;
+
+}
+
+.myMsg > .msg {
+    background-color: #0084FF;
+    color: #fff;
 }
 </style>

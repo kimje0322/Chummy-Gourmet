@@ -54,6 +54,26 @@
           </v-dialog>
 
 
+        <!-- 삭제 확인 DIALOG -->
+        <v-dialog v-model="dialogDelete" max-width="290" persistent>
+          <v-card>
+            <v-card-title class="title">정말 삭제하시겠습니까?</v-card-title>
+            <v-card-actions class="px-3">
+              <v-spacer></v-spacer>
+              <v-btn style="width:40%;" color="error" outlined @click="dialogDelete = false, dialog = false">
+                <!-- <v-icon>mdi-close</v-icon> -->
+                취소
+              </v-btn>
+              <v-btn style="width:40%;" color="primary" outlined @click="deletePost">
+                삭제
+                <!-- <v-icon>mdi-check</v-icon> -->
+              </v-btn>
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+
+
       <!-- 피드 작성/수정 DIALOG -->
       <v-dialog v-model="feedDialog" scrollable persistent max-width="640">
         <AddFeed :key="reloadKey" @init="init" @closeFeedDialog="closeFeedDialog" :data="repost"></AddFeed>
@@ -147,6 +167,8 @@ export default {
       userId: "",
       userNickname : "",
       userImg : "",
+      dialogDelete: false,
+
 
       reloadKey : 0,
       show: false,
@@ -212,8 +234,17 @@ export default {
         .catch((error) => {
           console.log(error.response);
         });
-
     },
+    // 피드 삭제
+    deletePost() {
+      axios
+          .delete(`${SERVER_URL}/post?postid=` + this.postlst.post_id)
+          .then((response) => {
+            this.dialog = false;
+            router.go(-1);
+          });
+    },
+
     // 열린 피드의 DIALOG 닫기
     closeFeedDialog(){
       this.reloadKey++;
@@ -233,14 +264,7 @@ export default {
       });
     },
     doit(item) {
-      if (item.title == "삭제") {
-        axios
-          .delete(`${SERVER_URL}/post?postid=` + this.postlst.post_id)
-          .then((response) => {
-            this.dialog = false;
-            router.go(-1);
-          });
-      } else {
+      if (item.title == "수정") {
         this.repost = {
           postid: this.postlst.post_id,
           postnickname: this.postlst.user_nickname,
@@ -250,6 +274,8 @@ export default {
         };
         this.feedDialog = true;
         // router.push({ name: "AddFeed", params: repost });
+      } else {
+        this.dialogDelete = true
       }
     },
     onComment() {

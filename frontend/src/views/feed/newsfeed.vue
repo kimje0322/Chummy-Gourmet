@@ -59,20 +59,33 @@
                 <v-btn icon small @click.stop="del(lst.postid)">
                   <v-icon>mdi-trash-can-outline</v-icon>
                 </v-btn>
-              <v-dialog dark v-model="dialog" max-width="300">
-                <v-list>
-                  게시글을 삭제하시겠습니까?
-                  <v-list-item
-                    v-for="(item, index) in items"
-                    :key="index"
-                    @click="doit(item)"
-                  >
-                    <v-list-item-title>{{ item.title }}</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-dialog>
-          </v-list-item-icon>
-        </v-list-item>
+
+                <!-- 삭제 확인 DIALOG -->
+                <v-dialog v-model="dialogDelete" max-width="290" persistent>
+                  <v-card>
+                    <v-card-title class="title">정말 삭제하시겠습니까?</v-card-title>
+                    <v-card-actions class="px-3">
+                      <v-spacer></v-spacer>
+
+                        <v-btn style="width:40%;" color="error" outlined @click="dialogDelete=false">
+                          <!-- <v-icon>mdi-close</v-icon> -->
+                          취소
+                        </v-btn>
+                        <v-btn style="width:40%;" color="primary" outlined @click="deletePost">
+                          삭제
+                          <!-- <v-icon>mdi-check</v-icon> -->
+                        </v-btn>
+
+                        <v-spacer></v-spacer>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+            
+
+             </v-list-item-icon>
+            </v-list-item>
+
+
 
         <!-- 피드 이미지 -->
         <v-img
@@ -128,7 +141,7 @@
       </v-card>
 
       <div v-if="postlst.length==0" class="nofeed" style="text-align: center;">
-        <i class="far fa-images fa-5x"></i>
+        <i color="grey" class="far fa-images fa-5x"></i>
         <p style="font-size:1.1rem; margin-top:15px">다른 사람을 팔로우하면 <br>상대방의 피드를 확인할 수 있습니다.</p>
         <router-link to="/SearchUser"><v-btn color="warning" style="width: 60%">유저 보기</v-btn></router-link>
       </div>
@@ -157,7 +170,7 @@ export default {
   },
   data() {
     return {
-      dialog: false,
+      dialogDelete:false,
       show: false,
       postlst: [],
       commentlst: [],
@@ -224,12 +237,15 @@ export default {
           this.likelist = response.data;
         });
     },
-    del(deleteid){
-      this.dialog =  true;
-      this.delid = deleteid;
-    },
-    doit(item, deleteid) {
-      if (item.title == "삭제") {
+
+      // 삭제 확인 모달 띄우기
+      del(deleteid){
+        this.dialogDelete =  true;
+        this.delid = deleteid;
+      },
+    
+      // 게시글 삭제 
+      deletePost() {
         axios
           .delete(`${SERVER_URL}/post?postid=${this.delid}`)
           .then((response) => {
@@ -237,10 +253,10 @@ export default {
             this.init();
           })
           .catch((error) => {});
-      } else {
-        this.dialog = false;
-      }
-    },
+          this.dialogDelete=false
+        },
+
+
     gotoProfile(user) {
       // 나를 누르면 마이페이지로 이동
       if(user.postuserid == this.$cookie.get("userId")){

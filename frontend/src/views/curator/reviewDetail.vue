@@ -1,6 +1,15 @@
 <template>
   <v-card elevation="24" max-width="444" class="mx-auto">
-    <v-system-bar lights-out></v-system-bar>
+    <v-toolbar-title>
+        <v-toolbar class="mb-1" dense elevation="1">
+          <v-icon @click="$router.go(-1)">
+            mdi-arrow-left
+          </v-icon>
+          <v-spacer></v-spacer>
+          <p class="my-auto">리뷰</p>
+          <v-spacer></v-spacer>
+        </v-toolbar>
+      </v-toolbar-title>
 
     <v-carousel :continuous="false" show-arrows hide-delimiter-background height="300">
       <!-- <v-carousel-item v-for="index of 5" :key="index"> -->

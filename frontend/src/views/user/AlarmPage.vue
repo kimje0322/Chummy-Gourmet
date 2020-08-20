@@ -11,9 +11,14 @@
       <v-spacer></v-spacer>
     </v-toolbar>
 
-
-
 <br>
+
+   <div v-if="chat.length+post.length+accept.length == 0" class="aligncss"> 
+            <i class="far fa-file-image fa-5x"></i>
+            <h3 class="mt-5">새로운 알림이 없습니다.</h3>
+          </div>
+
+    <div v-else>
     <v-expansion-panels >
       <v-divider>채팅</v-divider>
       <v-expansion-panel>
@@ -88,11 +93,9 @@
       </v-expansion-panel>
 
   </v-expansion-panels>
+    </div>
 
-          <div v-if="chat.length+post.length+accept.length == 0" class="aligncss"> 
-            <i class="far fa-file-image fa-5x"></i>
-            <h3 class="mt-5">새로운 알림이 없습니다.</h3>
-          </div>
+         
       
   <br><br>
   </div>
@@ -127,7 +130,7 @@ export default {
   methods:{
     //type별로 알림목록을 가져온다.
     view(type){
-      window.db.collection('alarm').doc(type).collection('messages').where('to', '==', this.$cookie.get('userId')).where('confirm','==',false).orderBy('time','desc').onSnapshot(snapshot=>{
+      window.db.collection('alarm').doc(type).collection('messages').where('to', '==', this.$cookie.get('userId')).where('confirm','==',false).orderBy('time','asc').onSnapshot(snapshot=>{
         snapshot.docChanges().forEach(change =>{
           if(change.type == 'added'){
             var doc = change.doc;
@@ -148,14 +151,27 @@ export default {
                              if(type == 'chat'){
                                this.chatCount++;
                                this.chat.push(data);
+
+                               //정렬
+                               this.chat.sort((a, b) => {
+                                    return -1 * (a.time - b.time);
+                                    });
                              }
                              else if(type == 'like' || type == 'comment'){
                                this.postCount++;
                                this.post.push(data);
+                               //정렬
+                               this.post.sort((a, b) => {
+                                    return -1 * (a.time - b.time);
+                                    });
                              }
                              else if(type == 'follow' || type == 'meetup'){
                                this.acceptCount++;
                                this.accept.push(data);
+                               //정렬
+                               this.accept.sort((a, b) => {
+                                    return -1 * (a.time - b.time);
+                                    });
                              }
                           })
                            .catch((error) => {

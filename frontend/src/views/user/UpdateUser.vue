@@ -14,7 +14,7 @@
     </v-toolbar>
     </v-toolbar-title>
     
-    <div class="entireClass">
+    <div class="entireClass mb-12">
     <v-layout row>
       <v-flex xs4 order-md2 order-xs1>
       </v-flex>

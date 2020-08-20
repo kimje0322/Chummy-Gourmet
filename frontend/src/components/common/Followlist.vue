@@ -1,15 +1,15 @@
 <template>
-  <v-app >
+  <v-app>
     <!-- 상단 -->
      <v-toolbar-title>
       <Top></Top>
     </v-toolbar-title>
     <!-- 가운데 부분 -->
     <v-sheet  id="scrolling-techniques"
-      class="overflow-y-auto"
+      class="overflow-y-auto mb-12"
       max-height="600" >
       <!-- tab view -->
-      <v-tabs v-model="currentItem" fixed-tabs slider-color="orange">
+      <v-tabs fixed-tabs v-model="currentItem" slider-color="orange">
       <v-tab class="follow-list" v-for="item in items" :key="item" :href="'#tab-' + item">
         <v-icon class="followListBtn" v-if="item=='follower'">팔로워</v-icon>
         <v-icon class="followListBtn" v-if="item=='following'">팔로잉</v-icon>
@@ -66,7 +66,7 @@
                     요청중
                 </v-btn>
 
-                <v-btn color="white" depressed @click="unFollow(user,i,'followerlist')" v-else>
+                <v-btn outlined color="grey" depressed @click="unFollow(user,i,'followerlist')" v-else>
                     팔로잉
                 </v-btn>
             </v-list-item>
@@ -81,7 +81,7 @@
         </v-list>
 
         <!-- 팔로잉 -->
-        <v-list nav dense v-else>
+        <v-list nav dense v-else min-height="600">
         <!-- 팔로잉 존재하면  -->
           <!-- 팔로잉 검색바 -->
           <v-row>
@@ -116,7 +116,7 @@
             </a>
             </v-list-item-content>
 
-            <v-btn color="white" depressed @click="unFollow(user,i,'followinglist')">
+            <v-btn outlined color="grey" depressed @click="unFollow(user,i,'followinglist')">
                 팔로잉
             </v-btn>
           </v-list-item>
@@ -454,5 +454,12 @@ export default {
     color: rgba(0,0,0,.6);
     margin: 70px 0 20px 140px;
     align-items: center;
+  }
+  
+  .v-application a{
+    color: orange ;
+  }
+  .pf-n-a{
+    color: rgb(97, 94, 94) !important;
   }
 </style>

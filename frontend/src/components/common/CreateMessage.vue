@@ -3,7 +3,7 @@
         <form @submit.prevent="createMessage">
             <div class="form-group">
                 <input style = "width : 80%; display : inline" type="text" name="message" class="form-control" placeholder="Enter message ..." v-model="newMessage">
-               <v-btn style = "width : 20%" class="btn btn-primary" type="submit" name="action">Submit</v-btn>
+               <v-btn style = "width : 20%" class="btn btn-primary" type="submit" name="action">전송</v-btn>
                <!-- <button style = "float : right" class="btn btn-primary" type="submit" name="action">Submit</button> -->
                 <p class="text-danger" v-if="errorText">{{ errorText }}</p>
             </div>
@@ -38,7 +38,8 @@ export default {
                     console.log(err);
                 });
                 window.db.collection('test').doc(this.rid).set({
-                    update: Date.now()
+                    update: Date.now(),
+                    lastMessage : this.newMessage
                 },{merge : true})
                 this.newMessage = null;
                 this.errorText = null;

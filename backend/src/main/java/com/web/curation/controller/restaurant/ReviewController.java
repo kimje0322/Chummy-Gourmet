@@ -119,16 +119,23 @@ public class ReviewController {
 	public Object searchReviewComment(@PathVariable String reviewId) {
 		final BasicResponse result = new BasicResponse();
 		Optional<List<ReviewComment>> comments = reviewCommentDao.findAllByReviewId(reviewId);
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<User> user  = new ArrayList<User>();
 		
 		if(comments.isPresent()) {
-			result.status = true;
-	        result.data = "success";
-	        result.object = comments.get();;
+			map.put("status", true);
+			map.put("data", "success");
+			map.put("object", comments.get());
+			for (ReviewComment rc : comments.get()) {
+				User u = userDao.getUserByUserId(rc.getWriter());
+				user.add(u);
+			}
+			map.put("user",user);
 		}else {
-			result.status = true;
-	        result.data = "fail";
+			map.put("status", true);
+			map.put("data", "fail");
 		}
-		return result;
+		return map;
 	}
 	
 

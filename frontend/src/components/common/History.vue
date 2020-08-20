@@ -42,15 +42,10 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 // const SERVER_URL = "https://localhost:8080";
 
   export default {
-    props:{
-      proptoTopsub: {
-        type : Object
-      },
-    },
+    props:['userId'],
     data () {
       return {
         items: [],
-        userId : "",
         postlst: [],
         commentlst :[]
       }
@@ -65,7 +60,6 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
       },
     },
     created(){
-      this.userId = this.proptoTopsub.userId
       axios
         .get(`${SERVER_URL}/userpage/getuserpost?userId=`+this.userId)
         .then((response) => {

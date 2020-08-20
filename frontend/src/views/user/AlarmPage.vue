@@ -11,25 +11,93 @@
       <v-spacer></v-spacer>
     </v-toolbar>
 
-      <div v-for="(list, i) in alarm" :key="i"> 
-        <div>
-          <v-list-item-avatar style="cursor:pointer;" @click="gotoProfile(lst)">
-            <img
-              :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+list.img"
-            />
-          </v-list-item-avatar>
-            {{list.message}}
-            <v-btn style="float : right;" class="btn btn-primary" @click="onClick(list)">확인</v-btn>
-            <br>
+<br>
+
+   <div v-if="chat.length+post.length+accept.length == 0" class="aligncss"> 
+            <i class="far fa-file-image fa-5x"></i>
+            <h3 class="mt-5">새로운 알림이 없습니다.</h3>
+          </div>
+
+    <div v-else>
+    <v-expansion-panels >
+      <v-divider>채팅</v-divider>
+      <v-expansion-panel>
+        <v-expansion-panel-header>
+                {{chatCount}} 채팅 
+          </v-expansion-panel-header>
+        <div v-for="(list,i) in chat" :key="i">
+          <div @click="onClick(list)">
+            <v-expansion-panel-content >
+                <v-list-item-avatar style="cursor:pointer;" @click="gotoProfile(lst)">
+                  <img
+                    :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+list.img"
+                  />
+                </v-list-item-avatar>
+                {{list.message}}<br>
+                  <!-- <v-btn style="float : right;" class="btn btn-primary" @click="onClick(list)">확인</v-btn> -->
+                  {{ list.time | moment("from","now")}}
+
+            </v-expansion-panel-content>
+          </div>
         </div>
-            {{ list.time | moment("from","now")}}
-      </div>
+      </v-expansion-panel>
+      </v-expansion-panels>
 
-      <div v-if="alarm.length == 0" class="aligncss"> 
-        <i class="far fa-file-image fa-5x"></i>
-        <h3 class="mt-5">새로운 알림이 없습니다.</h3>
-      </div>
+<br><br><br><br><br><br>
+      <v-expansion-panels>
+      <v-divider>게시글</v-divider>
+      <v-expansion-panel >
+        <v-expansion-panel-header>
+                {{postCount}} 게시글
+        </v-expansion-panel-header>
+        <div v-for="(list,i) in post" :key="i">
+          <div @click="onClick(list)">
+            <v-expansion-panel-content >
+                <v-list-item-avatar style="cursor:pointer;" @click="gotoProfile(lst)">
+                  <img
+                    :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+list.img"
+                  />
+                </v-list-item-avatar>
+                {{list.message}}<br>
+                  <!-- <v-btn style="float : right;" class="btn btn-primary" @click="onClick(list)">확인</v-btn> -->
+                  {{ list.time | moment("from","now")}}
 
+            </v-expansion-panel-content>
+          </div>
+        </div>
+      </v-expansion-panel>
+      </v-expansion-panels>
+
+<br><br><br><br><br><br>
+      <v-expansion-panels>
+      <v-divider>요청</v-divider>
+      <v-expansion-panel >
+        <v-expansion-panel-header>
+                {{acceptCount}} 요청
+          </v-expansion-panel-header>
+        <div v-for="(list,i) in accept" :key="i">
+          <div @click="onClick(list)">
+            <v-expansion-panel-content >
+                <v-list-item-avatar style="cursor:pointer;" @click="gotoProfile(lst)">
+                  <img
+                    :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+list.img"
+                  />
+                </v-list-item-avatar>
+                {{list.message}}<br>
+                  <!-- <v-btn style="float : right;" class="btn btn-primary" @click="onClick(list)">확인</v-btn> -->
+                  {{ list.time | moment("from","now")}}
+
+            </v-expansion-panel-content>
+          </div>
+        </div>
+      </v-expansion-panel>
+
+  </v-expansion-panels>
+    </div>
+
+         
+      
+  <br><br>
   </div>
 </template>
 
@@ -43,7 +111,12 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 export default {
   data(){
     return {
-      alarm : []
+      chat : [],
+      post : [],
+      accept : [],
+      chatCount : 0,
+      postCount : 0,
+      acceptCount : 0,
     }
   },
   created(){
@@ -57,44 +130,76 @@ export default {
   methods:{
     //type별로 알림목록을 가져온다.
     view(type){
-      window.db.collection('alarm').doc(type).collection('messages').where('to', '==', this.$cookie.get('userId')).where('confirm','==',false).orderBy('time','desc').get()
-                 .then(snapshot=>{
-                  //없을경우
-                      if(snapshot.empty){
-                        // console.log("없다");
-                        return;
-                        }
+      window.db.collection('alarm').doc(type).collection('messages').where('to', '==', this.$cookie.get('userId')).where('confirm','==',false).orderBy('time','asc').onSnapshot(snapshot=>{
+        snapshot.docChanges().forEach(change =>{
+          if(change.type == 'added'){
+            var doc = change.doc;
+                   //있을경우
+                       var data = doc.data();
+                        data.rid = doc.id;
+                        data.type = type;
+                        var img ='';
+                       //axios로 id배열 보내서 프로필이미지 배열로 바꿔온다.
+                         axios
+                           .post(
+                               `${SERVER_URL}/userpage/getuserpost`,[data.from]
+                           )
+                           .then((response) => {
+                               // console.log('응답',response);
+                             // console.log('data',data)
+                             data.img = response.data[0]
+                             if(type == 'chat'){
+                               this.chatCount++;
+                               this.chat.push(data);
 
-                    //있을경우
-                      snapshot.forEach(doc=>{
-                        var data = doc.data();
-                         data.rid = doc.id;
-                         data.type = type;
-                         var img ='';
-                        //axios로 id배열 보내서 프로필이미지 배열로 바꿔온다.
-                          axios
-                            .post(
-                                `${SERVER_URL}/userpage/getuserpost`,[data.from]
-                            )
-                            .then((response) => {
-                                // console.log('응답',response);
-                              // console.log('data',data)
-                              data.img = response.data[0]
-                              this.alarm.push(data);
-                           })
-                            .catch((error) => {
-                                console.log(error.response);
-                            });
+                               //정렬
+                               this.chat.sort((a, b) => {
+                                    return -1 * (a.time - b.time);
+                                    });
+                             }
+                             else if(type == 'like' || type == 'comment'){
+                               this.postCount++;
+                               this.post.push(data);
+                               //정렬
+                               this.post.sort((a, b) => {
+                                    return -1 * (a.time - b.time);
+                                    });
+                             }
+                             else if(type == 'follow' || type == 'meetup'){
+                               this.acceptCount++;
+                               this.accept.push(data);
+                               //정렬
+                               this.accept.sort((a, b) => {
+                                    return -1 * (a.time - b.time);
+                                    });
+                             }
+                          })
+                           .catch((error) => {
+                               console.log(error.response);
+                           });
 
-                       })
-                  })
-                  .catch(err => {
-                     console.log(err);
-                  });
+          }
+          else{
+            console.log(change.type);
+          }
+        })
+      })
+                //  .then(snapshot=>{
+                //   //없을경우
+                //       if(snapshot.empty){
+                //         // console.log("없다");
+                //         return;
+                //         }
+
+                //   })
+                //   .catch(err => {
+                //      console.log(err);
+                //   });
     },
 
     //클릭했을 때 페이지 변경해주는 함수
     onClick(list){
+      console.log('click');
       if(list.type=='chat'){
         this.$router.push({ path: '/chatroom' });
       }

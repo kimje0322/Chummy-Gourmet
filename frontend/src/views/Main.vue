@@ -22,7 +22,7 @@
             <!-- dm -->
             <Message v-if="item=='Message'" v-bind:userId="userId"></Message>
             <!-- history -->
-            <History :proptoTopsub="users" v-else-if="item=='History'"></History>
+            <History v-else-if="item=='History'" v-bind:userId="userId" ></History>
             <!-- profile -->
             <v-card-text v-else>
             
@@ -185,6 +185,7 @@ export default {
         return false;
     },
     created(){
+      // this.currentItem = "tab-"+this.$route.query.currentItem,
       this.meetups = [],
       this.closeMeetups = []
       this.userId = this.$cookie.get("userId");
@@ -194,7 +195,7 @@ export default {
         this.users = response.data;
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
     //  meetup 정보 받아오기
     axios
@@ -219,7 +220,7 @@ export default {
         }
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
         this.meetupData = false;
       });
     },
@@ -244,7 +245,7 @@ export default {
             this.created();
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
         });
       });
       }
@@ -286,7 +287,7 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
         });
       }
       // 내가 밋업 마스터일때
@@ -322,7 +323,7 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
         });
       }
     },
@@ -366,7 +367,7 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
         });
       }
     },

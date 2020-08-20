@@ -1,7 +1,7 @@
 <template>
-  <v-card elevation="24" max-width="444" class="mx-auto">
+  <v-card flat class="pb-6">
     <v-toolbar-title>
-        <v-toolbar class="mb-1" dense elevation="1">
+        <v-toolbar dense>
           <v-icon @click="$router.go(-1)">
             mdi-arrow-left
           </v-icon>

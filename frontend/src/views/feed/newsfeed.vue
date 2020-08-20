@@ -15,7 +15,7 @@
 
       <!-- 피드 작성/수정 DIALOG -->
       <v-dialog v-model="feedDialog" scrollable persistent max-width="640">
-        <AddFeed :key="index" @init="init" @closeFeedDialog="closeFeedDialog" :data="postlst[index]"></AddFeed>
+        <AddFeed :key="reloadKey" @init="init" @closeFeedDialog="closeFeedDialog" :data="postlst[index]" :isfromuserpage="false"></AddFeed>
       </v-dialog>
       
       <!-- DIALOG ACTIVATOR-->
@@ -172,6 +172,7 @@ export default {
       feedDialog : '',
       index : '',
 
+      reloadKey : 0,
       repost : {},
     };
   },
@@ -318,6 +319,7 @@ export default {
     },
     // 해당 index의 피드에 대한 DIALOG OPEN
     openFeedDialog(index){
+        this.reloadKey++;
         this.index = index;
         this.feedDialog = true;
     },

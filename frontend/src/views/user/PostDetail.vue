@@ -56,7 +56,7 @@
 
       <!-- 피드 작성/수정 DIALOG -->
       <v-dialog v-model="feedDialog" scrollable persistent max-width="640">
-        <AddFeed @init="init" @closeFeedDialog="closeFeedDialog" :data="repost"></AddFeed>
+        <AddFeed :key="reloadKey" @init="init" @closeFeedDialog="closeFeedDialog" :data="repost"></AddFeed>
       </v-dialog> 
 
 
@@ -148,7 +148,7 @@ export default {
       userNickname : "",
       userImg : "",
 
-
+      reloadKey : 0,
       show: false,
       feedDialog : false,
       repost : '',
@@ -216,6 +216,7 @@ export default {
     },
     // 열린 피드의 DIALOG 닫기
     closeFeedDialog(){
+      this.reloadKey++;
       this.dialog = false;
       this.feedDialog = false;
     },

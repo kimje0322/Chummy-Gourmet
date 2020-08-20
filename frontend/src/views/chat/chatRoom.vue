@@ -22,7 +22,7 @@
 
                         <v-list-item-content>
                             <v-list-item-title > {{item.name}} <span class="grey--text text--lighten-1">{{item.id.length}}</span> </v-list-item-title>
-                            <v-list-item-subtitle>{{item.time | moment("from","now")}}</v-list-item-subtitle>
+                            <v-list-item-subtitle>{{item.lastMessage}}&mdash; <span class='text--primary'>{{item.time | moment("from","now")}}</span></v-list-item-subtitle>
                         </v-list-item-content>
                         </v-list-item>
                         <v-divider style="margin-top: 1px; margin-bottom: 1px;"
@@ -100,6 +100,7 @@ export default {
                                 var chatData = {
                                 name : chatName,
                                 id : doc.data().id,
+                                lastMessage : doc.data().lastMessage,
                                 rid : doc.id,
                                 nickName : this.responseNickName,
                                 to : to,

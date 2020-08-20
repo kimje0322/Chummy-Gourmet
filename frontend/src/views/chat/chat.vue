@@ -118,7 +118,7 @@ export default {
                                 // console.log(response);
                                 this.myNickName = response.data[0];
                                 // console.log(this.myNickName);
-                            }).chatch((err) =>{
+                            }).catch((err) =>{
 
                             })
 

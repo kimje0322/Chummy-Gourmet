@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.StringTokenizer;
 
 import javax.validation.Valid;
@@ -135,6 +136,14 @@ public class PostController {
 		
 		
 		return data;
+	}
+	
+	@GetMapping("/post/{postId}")
+	@ApiOperation(value = "post id에 해당하는 피드 가져오기")
+	public Post getFeed(@PathVariable String postId) {
+		System.out.println(postId);
+		Optional<Post> post = postDao.selectOne(postId);
+		return post.get();
 	}
 	
 	@PostMapping("/post")

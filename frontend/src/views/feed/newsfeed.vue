@@ -15,7 +15,7 @@
 
       <!-- 피드 작성/수정 DIALOG -->
       <v-dialog v-model="feedDialog" scrollable persistent max-width="640">
-        <AddFeed :key="index" @init="init" @closeFeedDialog="closeFeedDialog" :data="postlst[index]" :isfromuserpage="false"></AddFeed>
+        <AddFeed :key="index" @init="init" @closeFeedDialog="closeFeedDialog" :data="postlst[index]"></AddFeed>
       </v-dialog>
       
       <!-- DIALOG ACTIVATOR-->
@@ -127,7 +127,7 @@
         </v-card-text>
       </v-card>
 
-      <div v-if="postlst.length==0" class="nofeed" style="text-align: center; margin-top: 120px">
+      <div v-if="postlst.length==0" class="nofeed" style="text-align: center;">
         <i class="far fa-images fa-5x"></i>
         <p style="font-size:1.1rem; margin-top:15px">다른 사람을 팔로우하면 <br>상대방의 피드를 확인할 수 있습니다.</p>
         <router-link to="/SearchUser"><v-btn color="warning" style="width: 60%">유저 보기</v-btn></router-link>

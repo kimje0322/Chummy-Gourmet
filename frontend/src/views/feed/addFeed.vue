@@ -148,6 +148,7 @@ export default {
     };
   },
   created () {
+    console.log(this.data);
     if(this.data){
       this.content = this.data.postcontent,
       this.img = this.data.postimgurl
@@ -179,23 +180,6 @@ export default {
     close() {
       this.$emit('closeFeedDialog');
       this.showImg = false;
-    },
-
-    //이미지 서버에 전송해서 저장
-    addImg() {
-      const file = new FormData();
-      file.append("file", this.file);
-      axios
-        .post(`${SERVER_URL}/post/img`, file)
-        .then((response) => {
-          // this.postimgurl = response.data;
-          console.log(response.data)
-          // this.addPost();
-        })
-        .catch((error) => {
-          console.log(error.response);
-          alert("이미지 전송 실패");
-        });
     },
 
     modifyFeed(newPost){
@@ -237,6 +221,8 @@ export default {
         postimgurl: this.imgPath + this.img,
       };
 
+      console.log(newPost)
+
       // 이미지를 안바꿨을 때
       if (!this.uploadimg) {
         if(this.data)
@@ -253,6 +239,7 @@ export default {
           .post(`${SERVER_URL}/post/img`, file)
           .then((response) => {
             newPost.postimgurl = response.data;
+            console.log(newPost.postimgurl);
             if(this.data)
               this.modifyFeed(newPost);
             else

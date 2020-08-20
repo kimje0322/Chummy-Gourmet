@@ -33,7 +33,7 @@
       <span class="text--caption">ex) 대전 맛집, 봉명동 삼겹살 ...</span>
     </v-tooltip>
       <br>
-    <div v-if="filter==true" style="text-align: center;" class="mb-3" >
+    <div v-if="filter==true && restaurants.length != 0" style="text-align: center;" class="mb-3" >
       <v-btn-toggle>
         <v-icon>mdi-filter-outline</v-icon>
         <v-btn small width="23%" outlined @click="sortByDist">거리순</v-btn>
@@ -127,6 +127,10 @@
           </v-col>
         </v-row>
     </v-card>
+
+    <div v-if="filter==true && restaurants.length == 0" style="text-align: center">
+      <p>'{{keyword}}'에 대한 검색결과가 없습니다.</p>
+    </div>
   </div>
   </div>
   </div>

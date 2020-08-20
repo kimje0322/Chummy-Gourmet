@@ -125,7 +125,7 @@
 
           <!-- 컨텐츠 -->
           <a class="black--text">
-            <span class="mr-2 font-weight-bold">{{lst.usernickname}}</span>{{ lst.postcontent }} {{lst.postid}}
+            <span class="mr-2 font-weight-bold">{{lst.usernickname}}</span>{{ lst.postcontent }}
           </a>
 
           <!-- 댓글보기 -->

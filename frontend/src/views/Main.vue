@@ -193,7 +193,7 @@ export default {
         this.users = response.data;
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
     //  meetup 정보 받아오기
     axios
@@ -210,7 +210,7 @@ export default {
           let time = new Date(response.data.object[i].date)
           if(time - now > 0){
             this.meetups.push(response.data.object[i])
-            console.log(this.meetups)
+            // console.log(this.meetups)
           }
           else{
             this.closeMeetups.push(response.data.object[i])
@@ -218,7 +218,7 @@ export default {
         }
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
         this.meetupData = false;
       });
     },
@@ -243,7 +243,7 @@ export default {
             this.created();
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
         });
       });
       }
@@ -285,7 +285,7 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
         });
       }
       // 내가 밋업 마스터일때
@@ -321,7 +321,7 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
         });
       }
     },
@@ -365,7 +365,7 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
         });
       }
     },

@@ -71,7 +71,6 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
         .then((response) => {
             this.postlst = response.data.data
             this.commentlst = response.data.comment;
-            console.log(this.postlst)
         })  
     }
 

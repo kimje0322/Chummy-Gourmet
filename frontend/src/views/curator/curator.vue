@@ -35,7 +35,7 @@
       <br>
     <div v-if="filter==true" style="text-align: center;" class="mb-3" >
       <v-btn-toggle>
-        <i class="fas fa-filter mr-3 mt-1"></i>
+        <v-icon>mdi-filter-outline</v-icon>
         <v-btn small width="23%" outlined @click="sortByDist">거리순</v-btn>
         <v-btn small width="23%" outlined @click="sortByLike">좋아요순</v-btn>
         <v-btn small width="23%" outlined @click="sortByReview">리뷰순</v-btn>

@@ -1,7 +1,6 @@
 <template>
   <v-layout>
-    <!-- color="orange" -->
-    <v-toolbar dense>
+    <v-toolbar class="mb-1" dense elevation="1">
       <v-icon @click="$router.go(-1)">
         mdi-arrow-left
       </v-icon>
@@ -157,9 +156,6 @@ export default {
 };
 </script>
 <style>
-  .my-auto {
-      font-family: 'Jua', sans-serif;
-  }
   .fa-chevron-left {
     color: white; 
     margin-left: 7px;

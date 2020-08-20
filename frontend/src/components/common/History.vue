@@ -42,34 +42,30 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 // const SERVER_URL = "https://localhost:8080";
 
   export default {
-    props:{
-      proptoTopsub: {
-        type : Object
-      },
-    },
+    props:['userId'],
     data () {
       return {
         items: [],
-        userId : "",
         postlst: [],
         commentlst :[]
       }
     },
     methods:{
       detailInfo(post,comment) {
+        // console.log(post)
         this.$router.push({name :'PostDetail', query: {post_content: post.post_content
         ,post_id : post.post_id, post_img_url : post.post_img_url,
         post_like : post.post_like, post_userid : post.post_userid, user_img:post.user_img,
-        user_nickname : post.user_nickname, comment:comment , userId : this.userId}});
+        user_nickname : post.user_nickname, comment:comment , userId : this.userId, post_date: post.post_date}});
       },
     },
     created(){
-      this.userId = this.proptoTopsub.userId
       axios
         .get(`${SERVER_URL}/userpage/getuserpost?userId=`+this.userId)
         .then((response) => {
             this.postlst = response.data.data
             this.commentlst = response.data.comment;
+            console.log(this.postlst)
         })  
     }
 

@@ -1,252 +1,269 @@
 <template>
-  <div class="user join">
-    <!-- <v-app> -->
-    <v-bottom-navigation
-      scroll-target="#scroll-area-2"
-      hide-on-scroll
-      scroll-threshold="500"
-      absolute
-      color="white"
-      horizontal
-    >
-      <v-btn-toggle tile color="deep-purple accent-3" group>
-          <v-btn @click="$router.go(-1)" value="center">취소</v-btn>
-          <v-btn value="right" @click="meetUp">생성</v-btn>
-      </v-btn-toggle>
-    </v-bottom-navigation>
-
-      <v-toolbar-title>
-        <v-toolbar dark>
-          <a @click="$router.go(-1)">
-            <i class="fas fa-chevron-left back"></i>
-          </a>
-          <v-spacer></v-spacer>
-          <v-spacer></v-spacer>
-          <p class="my-auto">Meet Up</p>
-          <v-spacer></v-spacer>
-          <v-spacer></v-spacer>
-        </v-toolbar>
-      </v-toolbar-title>
+  <div>
+    <v-toolbar dense elevation="1">
+      <v-icon @click="$router.go(-1)">
+        mdi-arrow-left
+      </v-icon>
+      <v-spacer></v-spacer>
+      <p class="my-auto text-center">MeetUp</p>
+      <v-spacer></v-spacer>
+      <a @click="meetUp">
+          <i class="fas fa-check"></i>
+      </a>
+    </v-toolbar>
       <br />
 
 
       <!-- 입력 폼 -->
-      <div class="party wrapC">
+      <div>
+        <v-form ref="form">
 
-        <!-- 파티 타이틀 -->
-        <div class="cssBox">
-          <div class="input-group mb-3">
-            <v-text-field hide-details v-model="meetup.title" solo placeholder="제목">
-            </v-text-field>
-          </div>
-          <div class="error-text" v-if="error.title">{{ error.title }} </div>
-        </div>
-        <!-- 파티 내용 -->
-        <div class="cssBox">
-        <div class="input-group mb-3">
-          <v-textarea hide-details v-model="meetup.content" solo placeholder="내용을 입력하세요."></v-textarea>
-        </div>
-        <div class="error-text" v-if="error.content">{{ error.content }} </div>
-        </div>
-        
-        <!-- 파티 장소 -->
-          <div class="cssBox">
-          <v-layout justify-center>
-            <v-dialog v-model="dialog" scrollable max-width="300px">
-              <template v-slot:activator="{on}">
-                <v-text-field
-                  hide-details
-                  slot="activator"
-                  v-on="on"
-                  v-model="meetup.location"
-                  solo
-                  readonly
-                  placeholder="장소"
-                  :append-icon="isColor ? 'mdi-map-marker orange--text text--lighten-2' : 'mdi-map-marker'"
-                  @click:append="isColor = !isColor"
-                  @click:input="isClick = !isClick"
-               ></v-text-field>
-              </template>
-              <!-- dialog -->
-              <v-card>
-        
-                <v-card-title class="headline">
-                  <input
-                    v-model="keyword"
-                    @keyup.enter="search"
-                    type="text"
-                    placeholder="원하는 지역 검색"
-                    style="width : 100%; border : 1px solid"
-                  />
-                  <v-btn width="100%" @click="search">검색</v-btn>
-                </v-card-title>
-
-                <v-card-text style="height: 300px;">
-                    <!-- 음식점 리스트 들어감 -->
-                    
-                    <v-card class="mx-auto" max-width="500">
-                        <v-row dense>
-                          <v-col v-for="restaurant in restaurants" :key="restaurant.restId" cols="12">
-                            <v-hover v-slot:default="{ hover }">
-                              <v-card  :elevation="hover ? 12 : 2"
-                              :class="{ 'on-hover': hover }"
-                              @click="select(restaurant)">
-                                <v-card-actions>
-                                  <div>
-                                    <v-card-title v-text="restaurant.name"></v-card-title>
-                                    <v-card-subtitle v-text="restaurant.location"></v-card-subtitle>
-                                  </div>
-                                  <v-spacer></v-spacer>
-                                </v-card-actions>
-                              </v-card>
-                            </v-hover>
-                          </v-col>
-                        </v-row>
-                      </v-card>
-
-
-                </v-card-text>
-                <v-divider></v-divider>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="blue darken-1" text @click="dialog = false">Close</v-btn>
-                  <!-- <v-btn color="blue darken-1" text @click="dialog = false">Save</v-btn> -->
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-layout>
-         <div class="error-text mt-2" v-if="error.location">{{ error.location }} </div>
-         </div>
-
-        <!-- 파티 날짜 -->
-        <div class="cssBox">
-        <v-menu
-          v-model = "menu"
-          :close-on-content-click="false"
-          :return-value.sync="date"
-          transition="scale-transition"
-          offset-y
-          >
-
-          <!-- 월/일 선택 -->
-          <template v-slot:activator="{ on, attrs }">
+          <!-- 밋업 타이틀 -->
+          <v-col class="pb-0">
             <v-text-field
-              hide-details
-              solo
-              v-model="meetup.date"
-              placeholder="날짜"
-              :append-icon="isColor1 ? 'mdi-calendar-check orange--text text--lighten-2' : 'mdi-calendar-check'"
+              :rules="[() => !!meetup.title]"
+              outlined hide-details="auto" 
+              v-model="meetup.title"
+              label="제목"
+              clearable
+            >          
+            </v-text-field>
+          </v-col>
+
+          <!-- 밋업 내용 -->
+          <v-col class="pb-0">
+            <v-textarea
+              :rules="[() => !!meetup.content]"
+              outlined hide-details="auto" 
+              v-model="meetup.content"
+              label="내용"
+              clearable
+            >          
+            </v-textarea>
+          </v-col>
+
+
+          <!-- 밋업 장소 -->
+          <v-col class="pb-0">
+          <v-layout justify-center>
+                <v-dialog v-model="dialog" scrollable max-width="300px">
+                  <template v-slot:activator="{on}">
+                    <v-text-field
+                      :rules="[() => !!meetup.location]"
+                      outlined hide-details="auto" 
+                      slot="activator"
+                      v-on="on"
+                      v-model="meetup.location"
+                      readonly
+                      label="장소"
+                    ></v-text-field>
+                  </template>
+                  
+                  <!-- dialog -->
+                  <v-card>
+
+
+
+                   
+
+
+
+                <v-tooltip top
+                    nudge-bottom="20"
+                    color="rgba(1, 1, 1, 0.7)"
+                    :position-y="-10">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-card-title class="pb-0">
+                      <v-text-field
+                        v-model="keyword"
+                        @keyup.enter="search"
+                        placeholder='키워드 검색'
+                        outlined clearable
+                        prepend-inner-icon="mdi-magnify"
+                        v-bind="attrs" v-on="on"
+                        
+                      />
+                    </v-card-title>
+                  </template>
+                   <span class="text--caption">ex) 대전 맛집, 봉명동 삼겹살 ...</span>
+                 </v-tooltip>
+
+                    <v-card-text style="height: 300px;">
+                        <!-- 음식점 리스트 들어감 -->
+                        
+                        <v-card class="mx-auto" max-width="500" flat>
+                            <v-row dense>
+                              <v-col v-for="restaurant in restaurants" :key="restaurant.restId" cols="12">
+                                <v-hover v-slot:default="{ hover }">
+                                  <v-card  :elevation="hover ? 12 : 2"
+                                  :class="{ 'on-hover': hover }"
+                                  @click="select(restaurant)">
+                                    <v-card-actions>
+                                      <div>
+                                        <v-card-title v-text="restaurant.name"></v-card-title>
+                                        <v-card-subtitle v-text="restaurant.location"></v-card-subtitle>
+                                      </div>
+                                      <v-spacer></v-spacer>
+                                    </v-card-actions>
+                                  </v-card>
+                                </v-hover>
+                              </v-col>
+                            </v-row>
+                          </v-card>
+
+
+                    </v-card-text>
+                    <v-divider class="mb-0"></v-divider>
+                    <v-card-actions>
+                      <v-btn color="black" text block class="mx-auto" @click="dialog = false">닫기</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </v-layout>
+              </v-col>
+
+
+          <!-- 밋업 날짜 -->
+          <v-col class="pb-0">
+            <v-dialog
+              ref="dateDialog1" v-model="dateDialog1"
               :return-value.sync="date"
-              @click:append="isColor1 = !isColor1"
-              readonly
-              v-bind="attrs"
-              v-on="on"
-            ></v-text-field>
-          </template>
-            <v-date-picker
-              v-model="date"
-              :min="new Date().toISOString().substr(0, 10)"
-              max="2050-01-01"
-              scrollable
-              full-width
+              width="290px"
             >
-              <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
-              <v-menu
-                v-model="menu2"
-                :close-on-content-click="false"
-                :return-value.sync="time"
-                transition="scale-transition"
-                offset-y
-              >
+                <!-- 월/일 선택 -->
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn text color="primary"  v-on="on" v-bind="attrs">OK</v-btn>
+                  <v-text-field
+                    :rules="[() => !!meetup.date]"
+                    outlined
+                    hide-details
+                    v-model="meetup.date"
+                    label="날짜"
+                    readonly
+                    v-bind="attrs"
+                    v-on="on"
+                  ></v-text-field>
                 </template>
-                <v-time-picker
-                  v-model="time"
-                  ampm-in-title
-                  width="260px"
+
+                <v-date-picker
+                  v-model="date"
+                  :min="new Date().toISOString().substr(0, 10)"
+                  max="2050-01-01"
+                  scrollable
+                  show-current no-title
+                  width="290px"
                 >
-                <v-spacer></v-spacer>
-                <v-btn text color="primary" @click="menu2 = false">Cancel</v-btn>
-                <v-btn text color="primary" @click="setDate">OK</v-btn>
-              </v-time-picker>
+                  <v-spacer></v-spacer>
+                  <v-btn text color="black" @click="dateDialog1 = false">취소</v-btn>
+                  <v-btn text color="black" @click="dateDialog2 = true">확인</v-btn>
 
-            </v-menu>
-          </v-date-picker>
-        </v-menu>
-        <div class="error-text mt-2" v-if="error.date">{{ error.date }} </div>
-        </div>
-      
+              </v-date-picker>
+            </v-dialog>
 
-
-        <!-- 파티 인원 -->
-        <div id="dropdown-example" class="cssBox">
-          <v-overflow-btn
-            hide-details
-            v-model="meetup.maxPersonnel"
-            solo
-            class="my-2"
-            :items="dropdown_font"
-            placeholder="인원"
-            style="margin:0px;"
-            target="#dropdown-example"
-          ></v-overflow-btn>
-        <div class="error-text" v-if="error.personnel">{{ error.personnel }} </div>
-        </div>
-
-        <!-- 성향 -->
-        <div>
-        <div class="text-center">
-          <v-dialog
-            v-model="dialog2"
-            width="500"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-combobox 
-                hide-details
-                v-model="meetup.personalities" 
-                solo multiple chips deletable-chips
-                v-on="on" v-bind="attrs"
-                label="성향"
-              >
-              </v-combobox>
-            </template>
-
-            <v-card
-              class="mx-auto"
-              max-width="400"
+            <v-dialog ref="dateDialog2" v-model="dateDialog2"
+              :return-value.sync="time"
+              width="290px"
             >
-              <v-toolbar
-                flat dark
+              <v-time-picker
+                v-model="time"
+                ampm-in-title
+                width="260px"
               >
-              <v-btn icon>
-                  <v-icon @click="dialog2 = false">mdi-close</v-icon>
-                </v-btn>
-                <v-toolbar-title>밋업 성향 선택</v-toolbar-title>
-              </v-toolbar>
+                <v-spacer></v-spacer>
+                <v-btn text color="black" @click="menu2 = false">취소</v-btn>
+                <v-btn text color="primary" @click="setDate">확인</v-btn>
+              </v-time-picker>
+            </v-dialog>
+            </v-col>
+            
 
-              <v-card-text>
-                <h2 class="subtitle mb-1">원하는 성향을 선택하세요</h2>
-                <v-chip-group
-                  v-model="meetup.personalities"
-                  active-class="deep-purple--text text--accent-4"
-                  column
-                  multiple
+          <!-- 밋업 인원 -->
+            <v-col class="pb-0">
+              <div id="dropdown-example">
+                <v-select
+                  hide-details
+                  outlined
+                  :rules="[() => !!meetup.maxPersonnel]"
+                  v-model="meetup.maxPersonnel"
+                  class="my-0 pa-0"
+                  :items="dropdown_font"
+                  label="인원"
+                  target="#dropdown-example"
+                ></v-select>
+              </div>
+            </v-col>
+            
+
+          <!-- 밋업 성향 -->
+          <v-col class="pb-0">
+            <v-dialog
+              v-model="propsDialog"
+              width="500"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-combobox
+                  ref="props"
+                  :rules="[() => !!meetup.personalities[0]]"
+                  hide-details="auto"
+                  outlined
+                  v-model="meetup.personalities" 
+                  multiple small-chips
+                  v-on="on" v-bind="attrs"
+                  label="성향"
+                  auto clearble
+                  readonly
                 >
-                  <v-chip outlined v-for="personality in personalities" :value="personality" :key="personality">
-                  {{personality}}                        
-                  </v-chip>
-                </v-chip-group>
-              </v-card-text>
-            </v-card>
-          </v-dialog>
+                  <template v-slot:selection="data">
+                    <v-chip class="mr-1 px-2"
+                      color="primary" small
+                    >
+                      <span class="mr-1">
+                        {{data.item}}
+                      </span>
+                      <v-icon small @click="data.parent.selectItem(data.item)">
+                        mdi-close
+                      </v-icon>
+                    </v-chip>
+                  </template>
+                </v-combobox>
+              </template>
+
+              <v-card>
+                  <v-card-title class="subtitle">성향
+                    <v-spacer></v-spacer>
+                    <v-btn outlined rounded small
+                      class="text-caption font-weight-bold"
+                      :class="{'primary--text': isAllPropsSelect}"
+                      @click="doAllPropsSelect"
+                    >
+                      <v-icon small>mdi-check</v-icon>                            
+                      전체
+                    </v-btn>
+                  </v-card-title>
+                  <v-divider class="mt-1 mb-6"></v-divider>
+
+                  <v-card-text>
+                    <v-btn-toggle v-model="meetup.personalities" multiple color="primary">
+                      <v-row justify="center">
+                        <v-btn tile outlined large v-for="props in personalities" :key="props" :value="props"
+                        active-class="primary--text">
+                          {{props}}
+                        </v-btn>
+                      </v-row>
+                    </v-btn-toggle>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-btn block color="primary" @click="propsDialog = false">확인</v-btn>
+                  </v-card-actions>
+              </v-card>
+             </v-dialog>
+            </v-col>
+          </v-form>
         </div>
-          <div class="error-text mt-2" v-if="error.personality">{{ error.personality }} </div>
-        </div>
-        
-      </div>
-    <!-- </v-app> -->
+<!-- 
+        <div class="mt-8 mb-5 btns">
+          <v-btn color="grey white--text" @click="$router.go(-1)" value="center">취소</v-btn>
+          <v-btn color="warning" value="right" class="ml-3" @click="meetUp">생성</v-btn>
+        </div> -->
   </div>
 </template>
 
@@ -262,13 +279,12 @@ export default {
       keyword : '',
       date: '',
       time: null,
-      menu: false,
-      menu2 : false,
-      isColor: false,
-      isColor1: false,
+      dateDialog1 : '',
+      dateDialog2 : '',
       isClick: false,
       dialog: false,
       dialog2: false,
+
 
       restaurants : [],
       selectedRest : '',
@@ -280,27 +296,20 @@ export default {
         address : '',
         date : '',
         maxPersonnel : '',
-        master : 70,
+        master : '',
         img : '',
         personalities : [],
       },
 
-      error: {
-        title: false,
-        content: false,
-        location: false,
-        date: false,
-        personnel: false,
-        master : false,
-        personality: false,
-      },
-
       dropdown_font: ["1", "2", "3", "4", "5", "6", "7", "8"],
 
+      propsDialog : false,
       personalities : [
         "낙천적", "부정적", "내향적", "외향적", "충동적", "사교적",
         "대담함", "성실함", "냉정함", "온화함", "신중함", "게으름"
       ],
+      isAllPropsSelect : false,
+
 
       targetLocation : {
         lat : '',
@@ -309,36 +318,10 @@ export default {
       geocoder : '',
     }
   },
-  watch: {
-    'meetup.title' : function() {
-      if (this.meetup.title.length < 1) this.error.title = "제목을 입력해주세요.";
-      else this.error.title = false;
-      return;
-    },
-    'meetup.content' : function() {
-      if ( this.meetup.content.length < 1 ) this.error.content = "내용을 입력해주세요.";
-      else this.error.content = false;
-      return;
-    },
-    'meetup.location' : function() {
-      if (!this.meetup.location)
-        this.error.location = "음식점을 입력해주세요.";
-      else this.error.location = false;
-      return;
-    },
-    'meetup.date' : function() {
-      if (this.meetup.date.length < 1) this.error.date = "날짜를 입력해주세요.";
-      else this.error.date = false;
-      return;
-    },
-    'meetup.personnel' : function() {
-      if (this.meetup.personnel.length < 1) this.error.personnel = "인원을 입력해주세요.";
-      else this.error.personnel = false;
-      return;
-    },
-  },
 
   mounted() {
+      this.meetup.master = this.$cookie.get('userId');
+
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(pos => {
           this.targetLocation.lat = pos.coords.latitude;
@@ -347,7 +330,7 @@ export default {
       }
 
       if (window.kakao && window.kakao.maps) {
-        console.log("이미 로딩됨");
+        // console.log("이미 로딩됨");
         this.initMap();
       } else {
         console.log("카카오맵 로딩");
@@ -361,57 +344,35 @@ export default {
   },
   methods: {
     setDate() {
-      this.menu = false;
-      this.menu2 = false;
+      this.dateDialog1 = false;
+      this.dateDialog2 = false;
       this.meetup.date = this.date + " " + this.time;
     },
     initMap() {
         // 좌표->주소
         this.geocoder = new kakao.maps.services.Geocoder();
     },
+    doAllPropsSelect(){
+      this.$nextTick( () => {
+        if(this.meetup.personalities.length===this.personalities.length){
+          this.isAllPropsSelect = false;
+          this.meetup.personalities=[];
+        }
+        else{
+          this.personalities.forEach(props => {
+            if(this.meetup.personalities.indexOf(props) == -1){
+              this.meetup.personalities.push(props)
+            }
+          });
+          this.isAllPropsSelect = true;
+        }
+      })
+    },
     meetUp() {
-      this.createMeetUpChat();
-      if (this.meetup.title.length === 0) {
-        this.error.title = "제목을 입력해주세요.";
-        return false;
-      }
-      else this.error.title = false;
-
-      if (this.meetup.content.length === 0) {
-        // alert("내용을 작성해주세요.");
-        this.error.content = "내용을 입력해주세요.";
-        return false;
-      }
-      else this.error.content = false;
-
-      if (!this.meetup.location) {
-        this.error.location = "장소를 선택해주세요.";
-        return false;
-      }
-      else this.error.location = false;
-      
-      if (!this.meetup.date) {
-        this.error.date = "날짜를 선택해주세요.";
-        return false;
-      }
-      else this.error.date = false;
-
-      if (!this.meetup.maxPersonnel) {
-        this.error.personnel = "인원을 선택해주세요.";
-        return false;
-      }
-      else this.error.personnel = false;
-
-
-      if (!this.meetup.personalities) {
-        this.error.personalities = "성향을 선택해주세요.";
-        return false;
-      }
-      else this.error.personnel = false;
-
+      // this.createMeetUpChat();
 
       // 밋업 등록 폼 유효성 검사
-      if (this.isValidForm()){
+      if (this.$refs.form.validate()){
 
         // 밋업 성향 배열을 String으로 변환
         var personalities = this.meetup.personalities.toString();
@@ -458,15 +419,15 @@ export default {
           axios
           .post(`${SERVER_URL}/rest`, newRest)
           .then((response) => {
-              this.selectedRest.id = response.data;
+            this.selectedRest.id = response.data;
               newMeetup.restId = this.selectedRest.id;
 
               // 밋업 객체 DB 등록
               axios
                 .post(`${SERVER_URL}/meetup`, newMeetup)
                 .then((response) => {
-                  this.createMeetUpChat()
                   alert("밋업 등록이 완료됐습니다.");
+                  this.createMeetUpChat()
                   this.$router.push("/map")
                 })
                 .catch((error) => {
@@ -497,7 +458,7 @@ export default {
 
       const newRoomRef = window.db.collection('test').doc();
                             console.log(newRoomRef.id);
-                            window.db.collection('test').doc(newRoomRef.id).collection('test').doc();
+                            // window.db.collection('test').doc(newRoomRef.id).collection('test').doc();
 
                              var res = window.db.collection('test').doc(newRoomRef.id).set({
                                 id :[this.meetup.master],
@@ -509,28 +470,6 @@ export default {
 
                             alert("새로운 채팅방 생성");
                             return;
-
-
-
-
-  // 유저 밋업에 추가할 때 사용할 코드 삭제하지 말 것
-    
-    //  const newRoomRef = window.db.collection('test').where('name','==','테스트').get()
-    //  .then(snapshot =>{
-    //    if(snapshot.empty){
-    //      alert("없다");
-    //    }
-    //    snapshot.forEach(doc=>{
-    //      alert(doc.data().id)
-    //      var id = doc.data().id;
-    //      id.push('56');
-    //      id.push('2');
-    //      alert(id.sort())
-    //      window.db.collection('test').doc(doc.id).set({
-    //        id : id
-    //      },{merge:true});
-    //    })
-    //  })
                           
     },
     
@@ -553,13 +492,6 @@ export default {
       if (this.meetup.personalities.length < 1) this.error.personality = "성향을 입력해주세요.";
       else {this.error.personality = false;
       return;}
-    },
-     // 입력 정보가 다 유효하면 true, 아니면 false
-    isValidForm() {
-      for (let key in this.error) {
-        if (this.error[key]) return false;
-      }
-      return true;
     },
     search(){
       axios
@@ -619,6 +551,7 @@ export default {
 </script>
 
 <style>
+* {box-sizing: border-box;}
 .back {
   color: white !important;
 }
@@ -648,11 +581,41 @@ div {
 /* .btn-person{
   margin: 0px;
 } */
-.error-text {
-  margin: 0 0 8px 8px;
+.search-bar{
+  margin-top: 8px;
 }
-.cssBox {
-  margin: 0 0 18px 0;
+.size-css {
+  overflow: hidden;
+}
+.btns {
+  text-align: center;
+}
+.input-container {
+  display: flex;
+  width: 100%;
+  height: 95%;
+  margin-bottom: 15px;
 }
 
+/* Style the form icons */
+.icon {
+  padding: 10px;
+  background: #FFA500;
+  color: white;
+  min-width: 45px;
+  text-align: center;
+}
+
+/* Style the input fields */
+.input-field {
+  width: 100%;
+  padding: 8px;
+}
+
+.input-field:focus {
+  border: 2px solid #FFA500;
+}
+.btnbtn { 
+  font-size: 2rem; 
+} 
 </style>

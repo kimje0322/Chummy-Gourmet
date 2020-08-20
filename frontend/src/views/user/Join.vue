@@ -9,7 +9,7 @@
       <v-spacer></v-spacer>
     </v-toolbar>
 
-    <div class="entire">
+    <div class="pa-sm-4 pa-md-6 pa-lg-12">
       <v-form ref="form">
         <v-col class="pb-0">
               <v-text-field
@@ -88,7 +88,7 @@
                 clearable
               ></v-text-field>
         </v-col>
-        <v-col class="pb-4">
+        <v-col class="pb-2">
             <v-checkbox
               v-model="isTerm"
               :rules="[() => !!isTerm || '약관에 동의해주세요.']"
@@ -129,7 +129,9 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-btn color="orange lighten-1" block class="ma-0 text-white" @click="checkFormAndSignUp">다음</v-btn>
+    <v-col>
+    <v-btn color="orange lighten-1" block class="text-white" @click="checkFormAndSignUp">다음</v-btn>
+    </v-col>
     </div>
   </div>
 </template>
@@ -259,6 +261,7 @@ export default {
           password: this.password,
           nickName: this.nickName,
           name: this.name,
+          phone:this.phone
         };
 
         // 현재 페이지에서 입력받은 정보를 params에 넣어서 다음 페이지로 이동

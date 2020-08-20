@@ -1,76 +1,49 @@
 <template>
-  <div id="app">
+  <div class="pa-0 ma-0 mx-auto" id="app" style="max-width:960px;">
     <v-app>
-      <v-main>
-        <v-card class="overflow-hidden mx-auto" height="667" max-width="375">
-          <!-- <v-app-bar color="deep-blue accent-4" dense dark>
-            <v-toolbar-title style="margin:auto;">돈독한 미식가</v-toolbar-title>
-          </v-app-bar>-->
+      <!-- <v-main class="ma-0 pa-0"> -->
           <v-bottom-navigation
-            class="navbar-fixed-bottom"
             v-if="!$route.meta.navbar"
-            scroll-target="#scroll-area-2"
             hide-on-scroll
-            scroll-threshold="500"
-            absolute
+            fixed
+            min-width="360"
+            max-width="960"
             color="white"
-            horizontal
+            class="pa-0"
+            style="left: 50%;transform: translateX(-50%);"
+            grow
           >
-            <v-btn class="nav-btn" @click="gotomap" text color="orange accent-4">
-              <!-- <router-link to="/map"> -->
-                <!-- <v-icon>fas fa-search</v-icon> -->
-                <v-icon class="icon-css">mdi-map-marker-radius</v-icon>
-              <!-- </router-link> -->
+            <v-btn class="pl-7" @click="gotomap" text color="orange accent-4">
+                <v-icon>mdi-map-marker-radius</v-icon>
             </v-btn>
 
             <v-btn @click="gotonewsfeed" text color="orange accent-4">
-              <!-- <router-link to=/newsfeed> -->
-                <v-icon class="icon-css">mdi-history</v-icon>
-              <!-- </router-link> -->
+                <v-icon>mdi-history</v-icon>
             </v-btn>
 
-            <v-btn @click="gotofeedadd" text color="orange accent-4">
-              <!-- <router-link to="/feed/add"> -->
-              <!-- <input ref="imageInput" type="file" hidden @change="onChangeImages"> -->
-              <!-- <v-btn type="button" @click="onClickImageUpload"> -->
-              <!-- </v-btn> -->  
-                <v-icon class="icon-css">fas fa-plus</v-icon>
-              <!-- </router-link> -->
-            </v-btn>
+
+            <Alram></Alram>
 
             <v-btn @click="gotocurator" text color="orange accent-4">
-              <!-- <router-link to="/curator"> -->
-                <!-- <v-icon>fas fa-list</v-icon> -->
-                <v-icon class="icon-css">mdi-magnify</v-icon>
-              <!-- </router-link> -->
+                <v-icon>mdi-magnify</v-icon>
             </v-btn>
 
+<<<<<<< HEAD
             <v-btn @click="gotouserinfo" text color="orange">
               <!-- <router-link to="/user/info"> -->
                 <v-icon class="icon-css">fas fa-user</v-icon>
               <!-- </router-link> -->
+=======
+            <v-btn class="pr-10" @click="gotouserinfo" text color="orange accent-4">
+                <v-icon>fas fa-user</v-icon>
+>>>>>>> 7135b2215c7c6468ec3f64627f05471c5cb0afd4
             </v-btn>
           </v-bottom-navigation>
 
-          <!-- home -->
-          <v-sheet
-            v-if="$route.name === 'Home'"
-            id="scroll-area-1"
-            class="overflow-y-auto"
-            max-height="667"
-          >
-            <v-container class="home-padding" style="height: 100%;">
-              <router-view></router-view>
-            </v-container>
-          </v-sheet>
 
-          <!-- Login -->
-          <v-sheet
-            v-if="$route.name === 'Login'"
-            id="scroll-area-1"
-            class="overflow-y-auto"
-            max-height="667"
+          <v-container class="pa-0 mx-auto overflow-y-auto" style="width:100%;max-width:960px;height:667px;min-width:360px;"
           >
+<<<<<<< HEAD
             <v-container class="home-padding" style="height: 100%;">
               <router-view></router-view>
             </v-container>
@@ -85,6 +58,12 @@
           
         </v-card>
       </v-main>
+=======
+            <router-view></router-view>
+          </v-container>
+
+      <!-- </v-main> -->
+>>>>>>> 7135b2215c7c6468ec3f64627f05471c5cb0afd4
     </v-app>
   </div>
 </template>
@@ -94,9 +73,13 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 import "./components/css/style.scss";
 import axios from "axios";
 import router from "@/routes";
+import Alram from "./components/common/Alarm";
 
 export default {
   name: "app",
+  components :{
+    Alram
+  },
   methods: {
     gotomap() {
       router.push({ path: '/map' }).catch(()=>{});
@@ -166,6 +149,7 @@ export default {
 </script>
 
 <style>
+<<<<<<< HEAD
 .home-padding {
   padding: 0px !important;
 }
@@ -180,5 +164,7 @@ export default {
 .v-item-group.v-bottom-navigation--horizontal .v-btn>.v-btn__content>.v-icon {
   margin-right: 0px !important;
 }
+=======
+>>>>>>> 7135b2215c7c6468ec3f64627f05471c5cb0afd4
 
 </style>

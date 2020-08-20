@@ -1,7 +1,15 @@
 <template>
   <v-card elevation="24" max-width="444" class="mx-auto">
-    <v-system-bar lights-out></v-system-bar>
-
+    <v-toolbar-title>
+        <v-toolbar class="mb-1" dense elevation="1">
+          <v-icon @click="$router.go(-1)">
+            mdi-arrow-left
+          </v-icon>
+          <v-spacer></v-spacer>
+          <p class="my-auto">음식점 상세보기</p>
+          <v-spacer></v-spacer>
+        </v-toolbar>
+      </v-toolbar-title>
     <v-carousel
       :continuous="false"
       show-arrows
@@ -76,7 +84,7 @@
           <v-list-item v-else :key="review.title" @click="moveReviewDetail(review)">
 
             <v-list-item-avatar>
-              <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg"></v-img>
+              <v-img :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+reviewWriterImg[index]"></v-img>
             </v-list-item-avatar>
 
             <v-list-item-content>
@@ -97,6 +105,7 @@
         </template>
       </v-list>
     </v-list>
+  <br><br>
   </v-card>
 </template>
 
@@ -113,9 +122,11 @@ export default {
     return {
       cycle: false,
       show: false,
-      restaurant: this.$route.params,
+      restaurant: this.$route.query,
       reviews: [],
       members : [],
+      reviewWriterId : [],
+      reviewWriterImg :[]
     };
   },
   created() {
@@ -125,11 +136,29 @@ export default {
           this.reviews = response.data.object;
           // this.reviews = response.data.review;
           // this.members = response.data.member;
+
+          //이미지 가져오기
+          for(var i = 0 ; i<this.reviews.length;i++){
+            this.reviewWriterId.push(this.reviews[i].writer);
+          }
+    
+           axios.post(
+                    `${SERVER_URL}/userpage/getuserpost`,this.reviewWriterId
+                )
+                .then((response) => {
+                    // console.log('응답',response);
+                   this.reviewWriterImg = response.data;
+              })
+                .catch((error) => {
+                    console.log(error.response);
+                });
           
         })
         .catch((error) => {
           console.log(error.response);
         });
+      
+
   },
   methods : {
     moveReviewDetail(review) {

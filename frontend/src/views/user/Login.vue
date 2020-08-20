@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-toolbar dense elevation="1">
+    <v-toolbar class="" dense elevation="1">
       <v-icon @click="$router.go(-1)">
         mdi-arrow-left
       </v-icon>
@@ -9,8 +9,7 @@
       <v-spacer></v-spacer>
     </v-toolbar>
 
-    <v-container style="background-color:">
-      <div class="user">
+      <div class="pa-sm-4 pa-md-6 pa-lg-12">
         <v-col class="text-center">
           <img class="my-8" src="../../assets/images/logo.png" alt style="width:30%;" />
         </v-col>
@@ -20,7 +19,7 @@
               v-model="email"
               :rules="[() => !!email || '이메일을 입력해주세요', rules.email]"
               outlined hide-details="auto"
-              @keyup.enter="Login"
+              @keyup.enter="onLogin"
               placeholder="이메일을 입력하세요."
               type="text"
               clearable
@@ -56,6 +55,7 @@
                   </router-link>
               </v-col>
             </v-row>
+        </v-form>
         <v-col class="py-0">
           <div class="text-body-2 grey--text text-weight-medium">SNS 간편 로그인</div>
           <v-divider class="mt-3 mb-5"></v-divider>
@@ -64,14 +64,12 @@
             <GoogleLogin class="mr-4" :component="component" />
           </v-row>
         </v-col>
-        </v-form>
       </div>
-    </v-container>
   </div>
 </template>
 
 <script>
-import "../../components/css/user.scss";
+// import "../../components/css/user.scss";
 import PV from "password-validator";
 import * as EmailValidator from "email-validator";
 import KakaoLogin from "../../components/user/snsLogin/Kakao.vue";
@@ -108,7 +106,7 @@ export default {
       },
       isSubmit: false,
       component: this,
-      checked:false
+      checked:true
     };
   },
   created() {
@@ -118,6 +116,7 @@ export default {
     // 쿠키를 사용한 로그인 부분
     // 로그인이 성공했을 때 쿠키에 토큰와 userId를 저장한다.
     onLogin() {
+      console.log('로그인의온로그인');
       if(!this.$refs.form.validate()){
         return;
       }

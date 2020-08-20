@@ -10,21 +10,26 @@
         mdi-arrow-left
       </v-icon>
     <v-spacer></v-spacer>
-    <v-text-field 
-      @keyup="onSearchUser"
-      v-model="searchUser"
-      label="검색"
-      hide-details
-      solo
-      autofocus
-    ></v-text-field> 
+    <p class="my-auto text-center">유저 검색</p>
     <v-spacer></v-spacer>
     </v-app-bar>
+ 
     <v-sheet
       id="scrolling-techniques-7"
-      class="overflow-y-auto"
+      class="overflow-y-auto mt-15 mb-15"
       max-height="600"
     >
+
+      <v-text-field
+        class="m-3"
+        @keyup="onSearchUser"
+        v-model="searchUser"
+        label="검색"
+        :append-icon="'mdi-account-search-outline'"
+        hide-details
+        solo
+      ></v-text-field>         
+
         <v-list nav dense >
             <v-skeleton-loader
                 ref="skeleton"
@@ -60,7 +65,7 @@
                     요청중
                 </v-btn>
 
-                <v-btn depressed color="white" @click="unFollow(user,i,'followerlist')" v-else>
+                <v-btn outlined color="grey" @click="unFollow(user,i,'followerlist')" v-else>
                     팔로잉
                 </v-btn>
 
@@ -86,6 +91,7 @@ export default {
       userImg:"",
       searchUser:"",
       show:true,
+      mynickname :''
     };
   },
   methods :{
@@ -143,6 +149,17 @@ export default {
         `${SERVER_URL}/userpage/insertfollowingRequest?followerId=`+user.UserId+`&userId=`+this.userId
       )
       .then((response) => {
+        //팔로우 요청이 성공했을때
+            //팔로우 알림 보냄
+              console.log(this.mynickname);
+               window.db.collection('alarm').doc('follow').collection('messages').add({
+                        to : user.UserId,
+                        from : this.$cookie.get('userId'),
+                        message: this.mynickname+"님이 회원님에게 팔로우 요청을 하였습니다.",
+                        time: Date.now(),
+                        confirm : false
+                    }).catch(err => {
+                    });
       })
       .catch((error) => {
           console.log(error.response);
@@ -162,6 +179,17 @@ export default {
         });
     },
     created(){
+
+     //유저의 닉네임 가져오기
+     axios
+      .post(`${SERVER_URL}/chat/nickname`,[this.$cookie.get('userId')])
+      .then((response) => {
+       this.mynickname = response.data[0];
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+
       this.userId = this.$cookie.get("userId");
       this.items =[]
     axios
@@ -180,7 +208,6 @@ export default {
               followerFollowing : response.data[i].followerFollowing
             })
           }
-          
         }
         this.show = false;
       })
@@ -198,5 +225,8 @@ export default {
 <style scoped>
   .follow-lsit {
     width: 100px
+  }
+  .pf-n-a{
+    color: rgb(97, 94, 94) !important;
   }
 </style>

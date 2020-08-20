@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-toolbar-title >
-      <v-toolbar dense>
+      <v-toolbar class="mb-1" dense elevation="1">
       <v-icon @click="$router.go(-1)">
         mdi-arrow-left
       </v-icon>
@@ -14,7 +14,7 @@
     </v-toolbar>
     </v-toolbar-title>
     
-    <div class="entireClass">
+    <div class="entireClass mb-12">
     <v-layout row>
       <v-flex xs4 order-md2 order-xs1>
       </v-flex>
@@ -30,9 +30,8 @@
       </v-flex>
     </v-layout>
     
-
     <v-layout row>
-      <v-flex xs3 order-md2 order-xs1>
+      <!-- <v-flex xs3 order-md2 order-xs1>
       </v-flex>
       <v-flex xs6 order-md3 order-xs2 class="update-buttons">
         <v-btn small type="button" class="mr-2" @click="onClickImageChange" >수정</v-btn>
@@ -40,12 +39,8 @@
         <v-btn small @click="onClickSubmit">확인</v-btn>
       </v-flex>
       <v-flex xs3 order-md1 order-xs3>
-      </v-flex>
-    </v-layout>
-
-    <v-layout>
+      </v-flex> -->
    <v-main>
-
     <v-col class="pb-0">
           <v-text-field
             outlined hide-details="auto" 
@@ -73,6 +68,7 @@
           :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" 
           v-model="userPwd"
           label="비밀번호"
+          :disabled="show"
           ref="userPwd"
         ></v-text-field>
       </v-col>
@@ -105,7 +101,6 @@
                 clearable
               ></v-text-field>
         </v-col>
-
     </v-main>
     </v-layout>
     </div>
@@ -127,6 +122,7 @@ export default {
       error: {
         nickName: true,
       },
+      show : false,
       show1: false,
       user : {},
       userNickname : "",
@@ -241,6 +237,9 @@ export default {
         this.user = response.data;
         this.userNickname = this.user.userNickname;
         this.userPwd = this.user.userPWd;
+        if(this.userPwd == "google" || this.userPwd == "kakao"){
+          this.show = true;
+        }
         this.userComment = this.user.userComment;
         this.userImg = this.user.userImg;
         this.userId = this.$cookie.get("userId");
@@ -254,9 +253,6 @@ export default {
 </script>
 
 <style scoped>
-  .my-auto {
-      font-family: 'Jua', sans-serif;
-  }
   .fa-chevron-left {
     color: white; 
     margin-left: 7px;

@@ -37,8 +37,22 @@ public class Post {
 	private String usernickname;
 	@Column(name = "user_img")
 	private String user_img;
-	
 
+	public Post() {
+		super();
+	}
+
+	public Post(String postid, String postuserid, String postdate, String postcontent, String postimgurl,
+			String postlike, String usernickname) {
+		super();
+		this.postid = postid;
+		this.postuserid = postuserid;
+		this.postdate = postdate;
+		this.postcontent = postcontent;
+		this.postimgurl = postimgurl;
+		this.postlike = postlike;
+		this.usernickname = usernickname;
+	}
 
 	public String getUsernickname() {
 		return usernickname;

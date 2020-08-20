@@ -1,11 +1,11 @@
 <template>
-  <v-app>
-    <v-toolbar dense>
+  <div>
+    <v-toolbar class="mb-1" dense elevation="1">
       <v-icon @click="$router.go(-1)">
         mdi-arrow-left
       </v-icon>
       <v-spacer></v-spacer>
-      <p class="my-auto text-center">Profile 수정</p>
+      <p class="my-auto text-center">프로필 수정</p>
       <v-spacer></v-spacer>
       <a @click="update">
           <i class="fas fa-check"></i>
@@ -271,7 +271,7 @@
       </ul>
     </div>
   </div>
-  </v-app>
+  </div>
 </template>
 
 <script>

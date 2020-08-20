@@ -1,7 +1,7 @@
 <template>
   <v-app>
      <v-toolbar-title >
-      <v-toolbar dense>
+      <v-toolbar class="mb-1" dense elevation="1">
       <v-icon @click="$router.go(-1)">
         mdi-arrow-left
       </v-icon>
@@ -116,12 +116,33 @@ export default {
   },
   methods :{
     acceptRequest(){
+      var userid = this.guestList[this.index].userId;
       axios
       .get(
-        `${SERVER_URL}/meetup/acceptMeetupRequest?meetupId=${this.meetupInfo.id}&guestId=${this.guestList[this.index].userId}`
+        `${SERVER_URL}/meetup/acceptMeetupRequest?meetupId=${this.meetupInfo.id}&guestId=${this.guestList[this.index].userId}&requestId=${this.requestList[this.index].id}`
       )
       .then((response) => {
         if(response.data.data == "success"){
+
+            // 유저 밋업에 추가할 때 사용할 코드 삭제하지 말 것
+    
+          const newRoomRef = window.db.collection('test').where('name','==', this.meetupInfo.title).get()
+          .then(snapshot =>{
+            if(snapshot.empty){
+              // alert("없다");
+            }
+            snapshot.forEach(doc=>{
+              var id = doc.data().id;
+              if(!id.includes(userid)){
+                id.push(userid);
+                id.sort()
+              }
+              window.db.collection('test').doc(doc.id).set({
+                id : id
+              },{merge:true});
+            })
+          })
+
           alert("수락완료");
           this.dialog = false
           this.created();
@@ -136,7 +157,7 @@ export default {
     deleteRequest(){
       axios
       .delete(
-        `${SERVER_URL}/meetup/request/${this.meetupInfo.id}`
+        `${SERVER_URL}/meetup/request/${this.requestList[this.index].id}`
       )
       .then((response) => {
         if(response.data.data == "success"){
@@ -158,7 +179,7 @@ export default {
       this.userNickname = this.guestList[idx].userNickname
       this.requestMessage = this.requestList[idx].requestMessage
       axios
-      .get(`${SERVER_URL}/meetup/searchByMeetupID/${this.requestList[idx].meetupId}`)
+      .get(`${SERVER_URL}/meetup/search/${this.requestList[idx].meetupId}`)
       .then((response) => {
         this.meetupInfo = response.data;
         this.meetupDate = this.meetupInfo.date.slice(0, 16)

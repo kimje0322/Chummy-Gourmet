@@ -1,15 +1,14 @@
 
 <template>
   <div class="map_wrap_1">
-
         <!-- SPEED DIAL -->
         <v-speed-dial
-          style="top:470px; height:10px;"
           v-model="fab"
-          absolute bottom right
+          absolute
           direction="top"
           transition="slide-y-reverse-transition"
           retain-focus-on-click="true"
+          style="bottom:200px; right:20px;"
         >
           <!-- BUTTON ACTIVATOR -->
           <template v-slot:activator>
@@ -29,8 +28,8 @@
           </v-btn>
 
           <!-- 밋업 생성 페이지 이동 버튼 -->
-          <v-btn fab dark small color="green">
-              <v-icon color="white" @click="$router.push('/map/createMeetup')">mdi-pencil</v-icon>
+          <v-btn fab dark small color="green" @click="$router.push('/map/createMeetup')">
+              <v-icon color="white" >mdi-pencil-plus</v-icon>
           </v-btn>
 
           <!-- 밋업 필터링 버튼 -->
@@ -53,6 +52,15 @@
             >
             <!-- POP OVER -->
               <v-card class="mx-auto">
+                <v-list color="">
+                  <v-list-item>
+                    <v-list-content>
+                      <v-list-item-title class="text-h6">밋업 필터</v-list-item-title>
+                      <v-list-item-subtitle>취향에 맞게 밋업을 검색해보세요 :)</v-list-item-subtitle>
+                    </v-list-content>
+                  </v-list-item>
+                </v-list>
+                <v-divider class="my-0"></v-divider>
                 <v-list>
                   <!-- 선호 음식 -->
                   <v-list-item>
@@ -238,23 +246,45 @@
 
 
 
-    <div id="map1" style="position:unset;">map</div>
+    <div id="map1" style="position:absolute">map</div>
     <!-- <div id="menu_wrap" class="bg_white"> -->
         <!-- <div class="option"> -->
             <div>
-              <!-- <input @keyup.enter="search"  v-model="keyword" type="text" placeholder="입력창"> 
-              <v-btn @click="search" icon><v-icon size="20">mdi-magnify</v-icon></v-btn>  -->
-<form action="">
-  <input type="search">
-  <i class="fa fa-search"></i>
-</form>
+              <v-text-field @keyup.enter="search" v-model="keyword"
+              placeholder="지역을 입력하세요.."
+              append-icon="mdi-magnify"
+              background-color="white"
+              solo rounded clearable
+              style="position:absolute; left:10px; top:10px; z-index:20; opacity:.8;"
+              > 
+              </v-text-field>
 
-        <v-text-field style="z-index:30; top:10px; left:30px;"
-        append-icon="mdi-heart" absolute>
-          
-          
-        </v-text-field>
+              <!-- <div class="search-box">
+                <input type="text" />
+                <span></span>
+              </div> -->
             </div>
+
+
+            <!-- snackbar -->
+             <v-snackbar
+              v-model="snackbar"
+              :color="snackbarColor"
+              timeout="3000"
+            >
+              {{snackbarText}}
+
+              <template v-slot:action="{ attrs }">
+                <v-btn
+                  dark
+                  text
+                  v-bind="attrs"
+                  @click="snackbar = false"
+                >
+                  닫기
+                </v-btn>
+              </template>
+            </v-snackbar>
         <!-- </div> -->
     <!-- </div> -->
     <div class="custom_zoomcontrol radius_border">
@@ -311,6 +341,10 @@ export default {
 
       menu: false,
       fab : false,
+
+      snackbar : false,
+      snackbarText : '',
+      snackbarColor : '',
     };
   },
   computed: {
@@ -473,7 +507,7 @@ export default {
 
               var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
               this.meetups.forEach(meetup => {
-                console.log(meetup)
+                // console.log(meetup)
                 geocoder.addressSearch(meetup.address, (result, status) => {
                     if (status === kakao.maps.services.Status.OK) {
                         var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
@@ -560,10 +594,17 @@ export default {
             // 정상적으로 검색이 완료됐으면 
             if (status === kakao.maps.services.Status.OK) {
                 var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
+                this.snackbarText = "[ " + this.keyword + " ] 으로 이동합니다 :)";
+                this.snackbarColor = "info";
+                this.snackbar = true;
                 // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
                 this.map.setCenter(coords);
-            } 
+            } else{
+              this.snackbarText = "없는 지역이예요.. 다시 확인해주세요 :(";
+              this.snackbarColor = 'error';
+              this.snackbar = true;
+              
+            }
         });    
     }
   }
@@ -576,15 +617,14 @@ export default {
 <style>
 #map1 {
   width: 100%;
-  height: 610px;
-  position: unset;
+  height: 969px;
 }
 
-.map_wrap1 {
+.map_wrap_1 {
   overflow: hidden;
   width: 100%;
-  height: 667px;
-  padding-top: 0px;
+  height: 969px;
+
 }
 .radius_border {
   border: 1px solid #919191;
@@ -597,8 +637,8 @@ export default {
   border: none;
   margin-right: 7px;
   position: absolute;
-  top: 520px;
-  right: 10px;
+  bottom: 100px;
+  right : 20px;
   width: 36px;
   height: 80px;
   overflow: hidden;
@@ -613,7 +653,6 @@ export default {
   cursor: pointer;
 }
 .custom_zoomcontrol span img {
-  width: 10px;
   height: 35px;
   padding: 12px 0;
   border: none;
@@ -622,11 +661,9 @@ export default {
   border-bottom: 1px solid #bfbfbf;
 }
 
-#menu_wrap {position:absolute;top:0;left:0;bottom:0;width:250px;margin:10px 0 30px 10px;padding:5px;overflow-y:hidden;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:14px;border-radius: 10px;height:55px;}
 .bg_white {background:#fff;}
 #menu_wrap hr { display: block; height: 1px;border: 0; border-top: 2px solid #5F5F5F;margin:3px 0;}
 #menu_wrap .option{text-align: center;}
-#menu_wrap .option p {margin:10px 0;}  
 #menu_wrap .option button {margin-left:5px;}
 
 
@@ -636,8 +673,6 @@ export default {
 ._wrap * {padding: 0;margin: 0;}
 ._wrap ._info {width: 286px;height: 120px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
 ._wrap ._info:nth-child(1) {border: 0;box-shadow: 0px 1px 2px #888;}
-._info ._title {padding: 5px 0 0 10px;height: 30px;background: #eee;border-bottom: 1px solid #ddd;font-size: 18px;font-weight: bold;}
-._info .close {position: absolute;top: 10px;right: 10px;color: #888;width: 17px;height: 17px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');}
 ._info .close:hover {cursor: pointer;}
 ._info ._body {position: relative;overflow: hidden; background: white;}
 ._info ._desc {position: relative;margin: 13px 0 0 90px;height: 75px;}
@@ -648,69 +683,6 @@ export default {
 ._info .link {color: #5085BB;}
 
 
-
-
-/* form{
-    position: absolute;
-    top: 0;
-    left: 0;
-    margin : 30px 10px;
-    transform: translate(0,-50%);
-    transition: all .4s;
-    width: 50px;
-    height: 50px;
-    background: white;
-    box-sizing: border-box;
-    border-radius: 50px;
-    border: 4px solid white;
-    padding: 5px;
-    opacity: .8;
-    z-index: 10;
-}
-
-input{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;;
-    height: 42.5px;
-    line-height: 30px;
-    outline: 0;
-    border: 0;
-    display: none;
-    font-size: 1em;
-    border-radius: 20px;
-    padding: 0 20px;
-}
-
-.fa{
-    box-sizing: border-box;
-    padding: 10px;
-    width: 42.5px;
-    height: 42.5px;
-    position: absolute;
-    top: 0;
-    right: 0;
-    border-radius: 50%;
-    color: #07051a;
-    text-align: center;
-    font-size: 1.2em;
-    transition: all 1s;
-}
-
-form:hover{
-    width: 250px;
-    cursor: pointer;
-}
-
-form:hover input{
-    display: block;
-}
-
-form:hover .fa{
-    background: #07051a;
-    color: white;
-} */
 
 
 

@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <!-- Profile -->
-    <v-toolbar dense>
+    <v-toolbar class="mb-1" dense elevation="1">
       <v-icon @click="$router.go(-1)">
         mdi-arrow-left
       </v-icon>
@@ -9,8 +9,10 @@
       <p class="my-auto text-center">프로필</p>
       <v-spacer></v-spacer>
     </v-toolbar>
+
     <!-- 매너온도/팔로워/팔로잉 -->
-    <v-toolbar > 
+    <v-layout>
+    <v-toolbar flat> 
       <v-list-item-avatar>
         <v-img :src="this.userImg"></v-img>
       </v-list-item-avatar>
@@ -56,6 +58,7 @@
       <v-spacer></v-spacer>
       <CreateChat :postuserid="this.anotherId" />
     </v-toolbar>
+    </v-layout>
     <v-container>
   <v-layout class="entireClass">
       <v-row>
@@ -116,6 +119,7 @@ export default {
       realInterests: [],
       checkedInterests: [],
       dialog: false,
+      mynickname:''
       
     }
   },
@@ -150,6 +154,19 @@ export default {
         `${SERVER_URL}/userpage/insertfollowingRequest?followerId=`+this.anotherId+`&userId=`+this.userId
       )
       .then((response) => {
+
+        //팔로우 요청이 성공했을때
+            //팔로우 알림 보냄
+              console.log(this.mynickname);
+               window.db.collection('alarm').doc('follow').collection('messages').add({
+                        to : this.anotherId,
+                        from : this.$cookie.get('userId'),
+                        message: this.mynickname+"님이 회원님에게 팔로우 요청을 하였습니다.",
+                        time: Date.now(),
+                        confirm : false
+                    }).catch(err => {
+                    });
+
       })
       .catch((error) => {
           console.log(error.response);
@@ -172,6 +189,17 @@ export default {
   name: "Profile",
   
   created() {
+
+    //유저의 닉네임 가져오기
+     axios
+      .post(`${SERVER_URL}/chat/nickname`,[this.$cookie.get('userId')])
+      .then((response) => {
+       this.mynickname = response.data[0];
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+
 
     this.userId = this.$cookie.get("userId");
     this.anotherId = this.$route.query.userId

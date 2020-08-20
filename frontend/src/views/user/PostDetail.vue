@@ -61,7 +61,7 @@
           min-height="300" max-height="450" 
         ></v-img>
 
-        <!-- 좋아요/댓글/DM 버튼 -->
+        <!-- 좋아요/댓글 버튼 -->
         <v-card-text class="pt-2 pb-0">
           
           <!-- 좋아요 -->
@@ -81,8 +81,6 @@
             <v-icon>mdi-chat-processing-outline</v-icon>
           </v-btn>
 
-          <!-- DM -->
-          <CreateChat :postuserid="postlst.post_id"/>
         </v-card-text>
 
          <!-- 좋아요 갯수/컨텐츠/댓글보기/시간 -->
@@ -96,17 +94,15 @@
             </a>
 
             <!-- 댓글보기 -->
-            <!-- <div v-if="commentlst[i][0] > 0">
+            <div v-if="commentlst > 0">
               <span class="grey--text font-weight-medium" @click="onComment">  
-                댓글 {{this.commentlst}}개 모두 보기
+                댓글 {{commentlst}}개 모두 보기
               </span>
-            </div> -->
+            </div>
           
             <!-- 시간 -->
-            <!-- <div class="grey--text text-caption">{{ lst.postdate | moment("from", "now") }}</div> -->
-
+            <div class="grey--text text-caption">{{ postlst.post_date | moment("from", "now") }}</div>
           </v-card-text>
-
       </v-card>
       </div>
       
@@ -115,21 +111,17 @@
 </template>
 
 <script>
+
 import axios from "axios";
 import router from "@/routes";
 import Vue from "vue";
 import vueMoment from "vue-moment";
-import CreateChat from "../../components/common/CreateChat";
-
 Vue.use(vueMoment);
 
 const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 // const SERVER_URL = "https://localhost:8080";
 
 export default {
-  components: {
-    CreateChat,
-  },
   data() {
     return {
       like: false,
@@ -148,6 +140,7 @@ export default {
   created() {
     // 선택한 피드 객체 생성
     this.postlst = {
+      post_date : this.$route.query.post_date,
       post_content: this.$route.query.post_content,
       post_id: this.$route.query.post_id,
       post_img_url: this.$route.query.post_img_url,
@@ -156,7 +149,9 @@ export default {
       user_img: this.$route.query.user_img,
       user_nickname: this.$route.query.user_nickname,
     };
-    console.log(this.postlst);
+
+      this.timestamp = new Date();
+      // console.log(this.postlst.post_date)
 
     // 유저가 좋아요한 피드 리스트 가져오기
     axios
@@ -164,12 +159,6 @@ export default {
       .then((response) => {
         console.log(response);
         this.likelist = response.data;
-        if (this.likelist.includes(111)) {
-          console.log("있음");
-        }
-        else
-          console.log("없음");
-        
     });
 
     this.userId = this.$route.query.userId;
@@ -179,6 +168,10 @@ export default {
     }
   },
   methods: {
+    del(deleteid){
+      this.dialog =  true;
+      this.delid = deleteid;
+    },
     updateLikes(){
       axios
         .get(`${SERVER_URL}/post/like/${this.$cookie.get("userId")}`)

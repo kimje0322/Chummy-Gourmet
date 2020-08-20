@@ -193,7 +193,7 @@ export default {
         this.$refs.userNickname.focus()
         this.$alert("닉네임을 입력해주세요.");
       }
-      else if (this.userPwd.length > 0 && !this.passwordSchema.validate(this.userPwd)){
+      else if (this.userPwd.length > 0 && !this.passwordSchema.validate(this.userPwd) && !this.show){
         this.$refs.userPwd.focus()
         this.$alert("영문,숫자 포함 8 자리이상이어야 합니다.");
       }

@@ -4,12 +4,12 @@
      <v-toolbar dark>
       <!-- 중앙정렬 하기 위해 2개씀 -->
       <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
-      <p class="my-auto">채팅</p>
+      <p class="my-auto">{{this.room.name}}</p>
       <v-spacer></v-spacer>
     </v-toolbar>
 
    <div class="container chat">
-        <h4 class="text-primary text-center">{{ this.room.name }}</h4>
+        <!-- <h4 class="text-primary text-center">{{ this.room.name }}</h4> -->
         <div class="card">
             <div class="card-body">
                 <p class="text-secondary nomessages" v-if="messages.length == 0">

@@ -13,10 +13,10 @@
 
 <br>
 
-   <div v-if="chat.length+post.length+accept.length == 0" class="aligncss"> 
-            <i class="far fa-file-image fa-5x"></i>
-            <h3 class="mt-5">새로운 알림이 없습니다.</h3>
-          </div>
+    <div v-if="chat.length+post.length+accept.length == 0" class="text-center" style="margin-top:50%;"> 
+      <v-icon size="100" color="grey darken-2">mdi-file-image-outline</v-icon>
+      <h3 class="mt-5 font-weight-bold">새로운 알림이 없습니다.</h3>
+    </div>
 
     <div v-else>
     <v-expansion-panels >
@@ -28,14 +28,26 @@
         <div v-for="(list,i) in chat" :key="i">
           <div @click="onClick(list)">
             <v-expansion-panel-content >
-                <v-list-item-avatar style="cursor:pointer;" @click="gotoProfile(lst)">
-                  <img
-                    :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+list.img"
-                  />
-                </v-list-item-avatar>
-                {{list.message}}<br>
+              <v-list>
+                <v-list-item>
+                  <v-list-item-avatar style="cursor:pointer;" @click="gotoProfile(lst)">
+                    <img
+                      :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+list.img"
+                    />
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      {{list.message}}
+                    </v-list-item-title>
+                      <v-list-item-subtitle>
+                        {{ list.time | moment("from","now")}}
+                      </v-list-item-subtitle>
+                  </v-list-item-content>
+                      
+
+                </v-list-item>
+              </v-list>
                   <!-- <v-btn style="float : right;" class="btn btn-primary" @click="onClick(list)">확인</v-btn> -->
-                  {{ list.time | moment("from","now")}}
 
             </v-expansion-panel-content>
           </div>

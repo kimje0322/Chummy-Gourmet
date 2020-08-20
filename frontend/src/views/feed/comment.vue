@@ -1,16 +1,6 @@
 <template>
   <section class="user join">
-    <!-- <v-bottom-navigation
-      v-if="$route.name === 'NewsFeed'"
-      scroll-target="#scroll-area-2"
-      hide-on-scroll
-      scroll-threshold="500"
-      absolute
-      color="white"
-      horizontal
-    >
-    </v-bottom-navigation>-->
-    <v-app>
+      <!-- 상단 툴바 -->
       <v-toolbar-title>
         <v-toolbar class="mb-1" dense elevation="1">
           <v-icon @click="$router.go(-1)">
@@ -21,15 +11,23 @@
           <v-spacer></v-spacer>
         </v-toolbar>
       </v-toolbar-title>
+
+      <!-- -->
       <div style="position: relative;">
+
+        <!-- 댓글 작성 창 -->
         <section class="comment">
           <div class="top">
+
+            <!-- 프사 -->
             <span class="prf">
               <img
                 style="height: 100%; width: 100%; -webkit-user-drag: none;"
                 :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+this.myimg"
               />
             </span>
+
+            <!-- 댓글 작성창 -->
             <form style="height: 42px;" class="text-box">
               <textarea
                 aria-label="here"
@@ -40,10 +38,16 @@
                 class="text"
                 placeholder="write here!"
                 v-model="commentText"
+                @keyup.enter="onCreate"
+                rows="1"
+                clearable
               ></textarea>
               <button @click="onCreate()" class="upload">게시</button>
             </form>
+
           </div>
+
+
           <div v-if="recomment" class="top">
             <span class="prf">
               <img
@@ -52,127 +56,74 @@
               />
             </span>
             <form style="height: 42px; " class="text-box">
-              <!-- v-model="recommentText" -->
-              <textarea style="height: 18px;" class="text" v-model="commentcontent"></textarea>
+              <textarea @keyup.enter="onRewrite" style="height: 18px;" class="text" v-model="commentcontent"></textarea>
               <button @click="onRewrite()" class="upload">수정</button>
             </form>
           </div>
         </section>
-        <div class="lst">
-          <ul style="height: 494px;">
-            <div class="lst-div" tabindex="0">
-              <li
-                style="width: 335px; margin-left: 0px; padding-left: 16px; border-bottom: 1px solid rgba(var(--ce3, 239, 239, 239), 1);"
-              >
-                <div class="lst-box">
-                  <div class="lst-cover">
-                    <div
-                      class="lst-prf"
-                      style="float: left; height: 32px; width: 32px; margin-right: 18px;"
-                    >
-                      <span class="prf" style="margin-left: 0px;">
-                        <img
-                          @click="gotoProfile({userid:postuserid, userimg: postuserimg})"
-                          style="height: 100%; width: 100%; -webkit-user-drag: none;"
-                          :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+postuserimg"
-                        />
-                      </span>
-                    </div>
-                    <div
-                      style="float: left; flex-direction: column; position: relative;"
-                    >
-                      <!-- <div style="display: inline-flex;"> -->
-                      <h2
-                        style="font-size: 14px; font-weight: 600; align-items: center; display: inline-flex; margin-right: 4px;"
-                      >
-                        <div style="display: flex; flex-direction: column;">
-                          <a class="prf-link" @click="gotoProfile({userid:postuserid, userimg : postuserimg})">{{postname}}</a>
-                        </div>
-                      </h2>
-                      <!-- </div> -->
-                      <span>
-                        {{ postcontent }}
-                        <br />
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            </div>
-            <ul style="margin-bottom: 16px; padding-top: 0 !important;">
-              <div>
-                <li
-                  style="display: list-item; width: 335px; padding-bottom: 0;"
-                  v-for="(lst, i) in commentlst"
-                  :key="i"
-                >
-                  <div style="position: relative;">
-                    <div style="width: 307px;">
-                      <div
-                        class="lst-prf"
-                        style="float: left; height: 32px; width: 32px; margin-right: 18px;"
-                      >
-                        <span class="prf" style="margin-left: 0px;">
-                          <img
-                            @click="gotoProfileByComment(lst)"
-                            style="height: 100%; width: 100%; -webkit-user-drag: none;"
-                            :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+lst.userimg"
-                          />
-                        </span>
-                      </div>
-                      <div style="float: left; width: 250px;">
-                        <!-- <h3 style="display: inline-flex;"></h3> -->
-                        <h2
-                          style="font-size: 14px; font-weight: 600; align-items: center; display: inline-flex; margin-right: 4px;"
-                        >
-                          <div style="display: flex; flex-direction: column;">
-                            <a class="prf-link" @click="gotoProfileByComment(lst)">{{ lst.usernickname }}</a>
-                          </div>
-                        </h2>
-                        <!-- <h3
-                          style="font-size: 14px; font-weight: 600; align-items: center; display: inline-flex; margin: 0; display: flex;"
-                        >
-                          <div style="display: flex; flex-direction: column;">
-                            <a class="prf-link" href="#">dlwlrma</a>
-                          </div>
-                        </h3>-->
-                        <span style="width: 270px;">
-                          <!-- {{lst}} -->
-                          {{lst.postcomment}}
-                          <!-- {{ }} -->
-                        </span>
-                        <div style="color: #8e8e8e; margin-top: 12px; margin-bottom: 4px;">
-                          <a style="margin-right: 12px; color: #8e8e8e;">
-                            {{ lst.commentdate | moment("from", "now") }}
-                          </a>
-                          <!-- v-if="lst.commentid === userId" -->
-                          <button v-if="lst.commentuserid  == userid" @click="rewrite(lst)">수정하기</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- v-if="commentid === user" -->
-                  <span  v-if="lst.commentuserid  == userid" style="margin-top: 9px;">
-                    <div style="float: right;">
-                      <button @click="onDelete(lst)">
-                        <div>
-                          <span>
-                            <i
-                              style="display: block; position: relative; height: 14px; width: 14px;"
-                              class="far fa-trash-alt"
-                            ></i>
-                          </span>
-                        </div>
-                      </button>
-                    </div>
-                  </span>
-                </li>
-              </div>
-            </ul>
-          </ul>
+
+
+
+
+        <!-- 댓글 리스트 -->
+        <div class="">
+          <!-- <ul style="height: 494px;"> -->
+
+            <!-- 작성자가 피드 컨텐츠 -->
+            <v-list>
+              <v-list-item>
+                <v-list-item-avatar>
+                  <img
+                    @click="gotoProfile({userid:postuserid, userimg: postuserimg})"
+                    style="height: 100%; width: 100%; -webkit-user-drag: none;"
+                    :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+postuserimg"
+                  />
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title>
+                      <a class="black--text font-weight-bold mr-2" @click="gotoProfile({userid:postuserid, userimg : postuserimg})">{{postname}}</a>
+                      {{ postcontent }}
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+            <v-divider class="my-0"></v-divider>
+
+
+            <!-- 댓글 리스트 -->
+            <v-list v-for="(lst, i) in commentlst" :key="i">
+              <v-list-item>
+                <v-list-item-avatar>
+                  <img
+                    @click="gotoProfileByComment(lst)"
+                    style="height: 100%; width: 100%; -webkit-user-drag: none;"
+                    :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+lst.userimg"
+                  />
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title>
+                      <a class="black--text font-weight-bold mr-2" @click="gotoProfileByComment(lst)">{{ lst.usernickname }}</a>
+                      {{lst.postcomment}}
+                  </v-list-item-title>
+                  <v-list-item-subtitle>
+                      <a style="margin-right: 12px; color: #8e8e8e;">
+                        {{ lst.commentdate | moment("from", "now") }}
+                      </a>
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+                <v-list-item-icon>
+                  <v-btn icon v-if="lst.commentuserid  == userid" @click="rewrite(lst)">
+                    <v-icon small>mdi-pencil</v-icon>
+                  </v-btn>
+                  <v-btn icon v-if="lst.commentuserid  == userid" @click="onDelete(lst)">
+                    <v-icon small>mdi-trash-can-outline</v-icon>
+                  </v-btn>
+                </v-list-item-icon>
+              </v-list-item>
+            </v-list>
+
         </div>
       </div>
-    </v-app>
   </section>
 </template>
 
@@ -451,18 +402,6 @@ li {
   position: relative;
   margin: 0;
   padding: 0;
-}
-ul {
-  box-sizing: content-box;
-  height: cal(100% - 32px);
-  overflow-y: scroll;
-  /* padding: 16px 12px; */
-  padding: 12px 28px 16px 0 !important;
-  position: absolute;
-  /* width: calc(100% - 8px); */
-  list-style: none;
-  margin: 0;
-  display: block;
 }
 .lst {
   flex: 1 1 auto;

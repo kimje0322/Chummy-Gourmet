@@ -34,7 +34,7 @@
           </v-bottom-navigation>
 
 
-          <v-container class="pa-0 mx-auto overflow-y-auto" style="width:100%;max-width:960px;height:667px;min-width:360px;"
+          <v-container class="pa-0 mx-auto overflow-y-auto" style="width:100%;max-width:960px;;min-width:360px;"
           >
             <router-view></router-view>
           </v-container>
@@ -82,43 +82,45 @@ export default {
   },
   created() {
     //로그인 유지가 아닐경우
-  
-    if (
-      this.$cookie.get("loginSave") == "false" ||
-      this.$cookie.get("loginSave") == null
-    ) {
-      //저장되어있는 쿠키를 제거한다.
-      this.$cookie.delete("accesstoken");
-      this.$cookie.delete("userId");
-      alert("로그인을 해주세요");
-      this.$router.push("/");
-    }
-    //로그인 유지일 경우
-    else {
-      //새 토큰을 받아온다.
-      axios
-        .get(
-          `${SERVER_URL}/account/loginSave?email=${this.$cookie.get(
-            "useremail"
-          )}`
-        )
 
-        .then((response) => {
-          console.log("로그인페이지");
-          console.log(response.data);
+    if(this.$route.name != 'Home'){
+      if (
+        this.$cookie.get("loginSave") == "false" ||
+        this.$cookie.get("loginSave") == null
+      ) {
+        //저장되어있는 쿠키를 제거한다.
+        this.$cookie.delete("accesstoken");
+        this.$cookie.delete("userId");
+        alert("로그인을 해주세요");
+        this.$router.push("/").catch(()=>{});
+      }
+      //로그인 유지일 경우
+      else {
+        //새 토큰을 받아온다.
+        axios
+          .get(
+            `${SERVER_URL}/account/loginSave?email=${this.$cookie.get(
+              "useremail"
+            )}`
+          )
 
-          this.$cookie.set("accesstoken", response.data, 1);
-          this.$cookie.set("userId", response.data.object.userId, 1);
+          .then((response) => {
+            console.log("로그인페이지");
+            console.log(response.data);
 
-          this.$router.push("/map");
-        })
+            this.$cookie.set("accesstoken", response.data, 1);
+            this.$cookie.set("userId", response.data.object.userId, 1);
 
-        .catch((error) => {
-          console.log(error.response);
-          alert("다시 로그인 해주세요");
-          this.$router.push("/");
-        });
-    }
+            this.$router.push("/map");
+          })
+
+          .catch((error) => {
+            console.log(error.response);
+            alert("다시 로그인 해주세요");
+            this.$router.push("/").catch(()=>{});
+          });
+        }
+     }
   }
 
 };

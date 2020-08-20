@@ -29,7 +29,7 @@
               </v-dialog>
 
               <!-- 사용자 정보 -->
-              <v-card-title>
+              <v-card-title class="pa-1">
               <v-list>
                 <v-list-item>
                   <v-list-item-avatar>
@@ -43,7 +43,7 @@
               </v-card-title>
 
               <!-- 피드 작성부분 -->
-              <v-card-text style="height:450;">
+              <v-card-text style="height:450;" class="pa-1">
                 <v-list>
                   <input ref="imageInput" type="file" hidden @change="onChangeImages" />
                   

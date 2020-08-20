@@ -54,10 +54,10 @@
               <v-card class="mx-auto">
                 <v-list color="">
                   <v-list-item>
-                    <v-list-content>
+                    <v-list-item-content>
                       <v-list-item-title class="text-h6">밋업 필터</v-list-item-title>
                       <v-list-item-subtitle>취향에 맞게 밋업을 검색해보세요 :)</v-list-item-subtitle>
-                    </v-list-content>
+                    </v-list-item-content>
                   </v-list-item>
                 </v-list>
                 <v-divider class="my-0"></v-divider>

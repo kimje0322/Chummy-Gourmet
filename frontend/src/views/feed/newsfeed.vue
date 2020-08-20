@@ -140,9 +140,14 @@
         </v-card-text>
       </v-card>
 
-      <div v-if="postlst.length==0" class="nofeed" style="text-align: center;">
-        <i color="grey" class="far fa-images fa-5x"></i>
-        <p style="font-size:1.1rem; margin-top:15px">다른 사람을 팔로우하면 <br>상대방의 피드를 확인할 수 있습니다.</p>
+          <!-- <div v-if="chat.length+post.length+accept.length == 0" class="text-center" style="margin-top:50%;"> 
+      <v-icon size="100" color="grey darken-2">mdi-file-image-outline</v-icon>
+      <h3 class="mt-5 font-weight-bold">새로운 알림이 없습니다.</h3>
+    </div> -->
+
+      <div v-if="postlst.length==0" class="text-center" style="margin-top:50%;">
+        <v-icon size="100" color="grey darken-2">mdi-file-image-outline</v-icon>
+        <div class="my-5 h6 font-weight-bold">다른 사람을 팔로우하면 <br>상대방의 피드를 확인할 수 있습니다.</div>
         <router-link to="/SearchUser"><v-btn color="warning" style="width: 60%">유저 보기</v-btn></router-link>
       </div>
     </div>

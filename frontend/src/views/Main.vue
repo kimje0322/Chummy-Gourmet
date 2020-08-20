@@ -84,10 +84,11 @@
               </v-row>
             </v-container>
              <!-- 밋업 없을 때 --> 
-            <v-container v-show="!listLen" style="margin-top:100px;text-align: center;"> 
+            <div v-show="!listLen" style="margin-top:44%;text-align:center;"> 
               <i class="fab fa-meetup fa-6x"></i>
-              <h3 class="mt-5">등록된 Meetup이 없습니다.</h3>
-            </v-container>
+              <div class="black--text mt-5 h6 font-weight-bold">등록된 Meetup이 없습니다.</div>
+            </div>
+
             </v-card-text>
           </v-card>
         </v-tab-item>

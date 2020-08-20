@@ -54,6 +54,12 @@
           </v-dialog>
 
 
+      <!-- 피드 작성/수정 DIALOG -->
+      <v-dialog v-model="feedDialog" scrollable persistent max-width="640">
+        <AddFeed @init="init" @closeFeedDialog="closeFeedDialog" :data="repost"></AddFeed>
+      </v-dialog> 
+
+
 
         <!-- 피드 이미지 -->
         <v-img
@@ -116,12 +122,17 @@ import axios from "axios";
 import router from "@/routes";
 import Vue from "vue";
 import vueMoment from "vue-moment";
+import AddFeed from "../feed/addFeed";
+
 Vue.use(vueMoment);
 
 const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 // const SERVER_URL = "https://localhost:8080";
 
 export default {
+  components: {
+    AddFeed
+  },
   data() {
     return {
       like: false,
@@ -129,27 +140,35 @@ export default {
       likelist: [],
       likeornot: "",
       likestate: true,
-      postlst: [],
+      postlst: "",
       commentlst: [],
       items: [{ title: "수정" }, { title: "삭제" }],
       dialog: false,
       userId: "",
+      userNickname : "",
+      userImg : "",
+
+
       show: false,
+      feedDialog : false,
+      repost : '',
     };
   },
   created() {
+        this.userNickname = this.$route.query.user_nickname;
+        this.userImg = this.$route.query.user_img;
     // 선택한 피드 객체 생성
-    this.postlst = {
-      post_date : this.$route.query.post_date,
-      post_content: this.$route.query.post_content,
-      post_id: this.$route.query.post_id,
-      post_img_url: this.$route.query.post_img_url,
-      post_like: this.$route.query.post_like,
-      post_userid: this.$route.query.post_userid,
-      user_img: this.$route.query.user_img,
-      user_nickname: this.$route.query.user_nickname,
-    };
-
+      this.postlst = {
+        post_date : this.$route.query.post_date,
+        post_content: this.$route.query.post_content,
+        post_id: this.$route.query.post_id,
+        post_img_url: this.$route.query.post_img_url,
+        post_like: this.$route.query.post_like,
+        post_userid: this.$route.query.post_userid,
+        user_img: this.$route.query.user_img,
+        user_nickname: this.$route.query.user_nickname,
+      };
+      // this.init();
       this.timestamp = new Date();
       // console.log(this.postlst.post_date)
 
@@ -157,7 +176,7 @@ export default {
     axios
       .get(`${SERVER_URL}/post/like/${this.$cookie.get("userId")}`)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         this.likelist = response.data;
     });
 
@@ -168,6 +187,38 @@ export default {
     }
   },
   methods: {
+    init(){
+      console.log("init")
+      // 현재 로그인한 유저정보 가져오기
+      axios
+        .get(
+          `${SERVER_URL}/post/${this.postlst.post_id}`
+        )
+        .then((response) => {
+          console.log(response.data);
+            let updatePost = response.data;
+            this.postlst = {
+              // post_date : updatePost.postdate,
+              post_content: updatePost.postcontent,
+              post_id: updatePost.postid,
+              post_img_url: updatePost.postimgurl,
+              post_like: updatePost.postlike,
+              post_userid: updatePost.postuserid,
+              user_img: this.userImg,
+              user_nickname: this.userNickname,
+            };
+            console.log(this.postlst);
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
+
+    },
+    // 열린 피드의 DIALOG 닫기
+    closeFeedDialog(){
+      this.dialog = false;
+      this.feedDialog = false;
+    },
     del(deleteid){
       this.dialog =  true;
       this.delid = deleteid;
@@ -189,16 +240,15 @@ export default {
             router.go(-1);
           });
       } else {
-        // this.dialog = false
-        // router.push({ name: "PostUpdate", query: {postlst: this.postlst}});
-        let repost = {
+        this.repost = {
           postid: this.postlst.post_id,
           postnickname: this.postlst.user_nickname,
           postcontent: this.postlst.post_content,
-          postimage: this.postlst.post_img_url,
+          postimgurl: this.postlst.post_img_url,
           userpage: true,
         };
-        router.push({ name: "AddFeed", params: repost });
+        this.feedDialog = true;
+        // router.push({ name: "AddFeed", params: repost });
       }
     },
     onComment() {

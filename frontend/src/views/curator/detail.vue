@@ -84,7 +84,7 @@
           <v-list-item v-else :key="review.title" @click="moveReviewDetail(review)">
 
             <v-list-item-avatar>
-              <v-img src="https://cdn.vuetifyjs.com/images/lists/1.jpg"></v-img>
+              <v-img :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+reviewWriterImg[index]"></v-img>
             </v-list-item-avatar>
 
             <v-list-item-content>
@@ -122,9 +122,11 @@ export default {
     return {
       cycle: false,
       show: false,
-      restaurant: this.$route.params,
+      restaurant: this.$route.query,
       reviews: [],
       members : [],
+      reviewWriterId : [],
+      reviewWriterImg :[]
     };
   },
   created() {
@@ -134,11 +136,29 @@ export default {
           this.reviews = response.data.object;
           // this.reviews = response.data.review;
           // this.members = response.data.member;
+
+          //이미지 가져오기
+          for(var i = 0 ; i<this.reviews.length;i++){
+            this.reviewWriterId.push(this.reviews[i].writer);
+          }
+    
+           axios.post(
+                    `${SERVER_URL}/userpage/getuserpost`,this.reviewWriterId
+                )
+                .then((response) => {
+                    // console.log('응답',response);
+                   this.reviewWriterImg = response.data;
+              })
+                .catch((error) => {
+                    console.log(error.response);
+                });
           
         })
         .catch((error) => {
           console.log(error.response);
         });
+      
+
   },
   methods : {
     moveReviewDetail(review) {

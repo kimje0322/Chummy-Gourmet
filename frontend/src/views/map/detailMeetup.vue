@@ -9,6 +9,7 @@
           <v-spacer></v-spacer>
           <p class="my-auto">Meet Up</p>
           <v-spacer></v-spacer>
+          <GoChatForMeetUp :meetup ="meetup" />
           <div>
           <button @click="dialog = true">
             <div style="padding: 2px; width: 24px; height: 24px;">
@@ -18,24 +19,16 @@
           <v-dialog v-model="dialog" max-width="190">
             <v-list>
               <v-list-item>
-                <v-btn block text>
-                <GoChatForMeetUp :meetup ="meetup" />
-                </v-btn>
-              </v-list-item>
-              <v-list-item>
                 <v-btn block text color="orange" v-if="isGuest" @click="cancleMeetup">{{text}}</v-btn>
                 <v-btn block text color="orange" v-else-if="meetup.curPersonnel==meetup.maxPersonnel" disabled>{{text}}</v-btn>
                 <v-btn block text color="orange" v-else-if="isRequest" @click="cancleRequestMeetup">{{text}}</v-btn>
                 <v-btn block text color="orange" v-else @click="requestDialog = true">{{text}}</v-btn>
               </v-list-item>
             </v-list>
-              
           </v-dialog>
           </div>
-          
         </v-toolbar>
       </v-toolbar-title>
-
     
       <!-- 입력 폼 -->
       <div class="party wrapC">

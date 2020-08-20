@@ -1,6 +1,6 @@
 <template>
-    <div id="kakao-login">
-        <button @click="onClick">
+    <div id="kakao-login" class="kakao-login" @click="onClick">
+        <button >
             <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" viewBox="0 0 55 55">
                 <g id="그룹_247" data-name="그룹 247" transform="translate(-237 -406)">
                     <g id="구성_요소_2" data-name="구성 요소 2" transform="translate(237 406)">
@@ -43,6 +43,7 @@ export default {
     },
     methods: {
         onClick(){
+            console.log('카카오의로그인이 왜 실행돼 씹ㄴ')
          // console.log(window.Kakao);
                 window.Kakao.Auth.login({
                     scope : 'account_email, profile',
@@ -50,6 +51,7 @@ export default {
                 });
         },
         join(){
+            
             // console.log(authObj);
                 window.Kakao.API.request({
                     url:'/v2/user/me',

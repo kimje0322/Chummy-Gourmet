@@ -1,12 +1,17 @@
 <template>
 <div style = "padding :0 ">
 
-     <v-toolbar dark>
-      <!-- 중앙정렬 하기 위해 2개씀 -->
-      <a @click="$router.go(-1)"><i class="fas fa-chevron-left"></i></a><v-spacer></v-spacer>
+
+      <!-- 상단 툴바 -->
+    <v-toolbar class="mb-1" dense elevation="1">
+      <v-icon @click="$router.go(-1)">
+        mdi-arrow-left
+      </v-icon>
+      <v-spacer></v-spacer>
       <p class="my-auto">{{this.room.name}}</p>
       <v-spacer></v-spacer>
     </v-toolbar>
+
 
    <div class="container chat">
         <!-- <h4 class="text-primary text-center">{{ this.room.name }}</h4> -->
@@ -45,6 +50,7 @@
                 <CreateMessage :id="userid" :rid="this.room.rid" :to="this.room.to" :myNickName="this.myNickName" :roomName="this.room.name" />
             </div>
         </div>
+    <br><br>
     </div>
 </div>
 </template>
@@ -89,14 +95,14 @@ export default {
                       window.db.collection('alarm').doc('chat').collection('messages').where('roomid','==',this.room.rid).where('to','==',this.userid).get()
                       .then(snapshot =>{
                           if(snapshot.empty) {
-                              console.log('채팅이 없다')
+                            //   console.log('채팅이 없다')
                           }
 
                           snapshot.forEach(doc =>{
                              window.db.collection('alarm').doc('chat').collection('messages').doc(doc.id).set({
                                     confirm : true
                                 },{merge:true}).catch(err => {
-                                    console.log(err);
+                                    // console.log(err);
                                 });
                           })
                       })
@@ -125,15 +131,15 @@ export default {
                                 `${SERVER_URL}/userpage/getuserpost`,this.room.id
                             )
                             .then((response) => {
-                                console.log('응답',response);
+                                // console.log('응답',response);
                                 this.userImg = response.data;
                            })
                             .catch((error) => {
-                                console.log(error.response);
+                                // console.log(error.response);
                             });
         },
         view(room){
-            console.log('이미지',this.userImg);
+            // console.log('이미지',this.userImg);
              window.db.collection('test').doc(this.room.rid).collection('messages').orderBy('time').onSnapshot(snapshot=>{
                     
                   snapshot.docChanges().forEach(change =>{
@@ -182,7 +188,8 @@ export default {
 
 <style>
 .card-body{
-    height : 440px;
+    max-height : 667px;
+    min-height: 447px;
 }
 
 .chat h2{
@@ -201,7 +208,7 @@ export default {
     font-size: 0.7em;
 }
 .messages{
-    max-height: 400px;
+    max-height: 647px;
 
     /* height : 400px; */
     overflow: auto;

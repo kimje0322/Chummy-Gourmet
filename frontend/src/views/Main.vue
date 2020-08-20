@@ -8,7 +8,7 @@
     <!-- 가운데 부분 -->
     <div>
       <!-- tab view -->
-      <v-tabs v-model="currentItem" fixed-tabs slider-color="orange">
+      <v-tabs color="orange" v-model="currentItem" fixed-tabs slider-color="orange">
         <v-tab @click="setItem(item)" v-for="item in items" :key="item" :href="'#tab-' + item">
           <v-icon v-if="item=='Profile'" >mdi-account-box</v-icon>
           <v-icon v-if="item=='History'">fas fa-list</v-icon>
@@ -142,6 +142,7 @@ export default {
   
   data: () => {
     return {
+      tabColor: "",
       meetup: "",
       dialog:false,
       // 밋업 전체 데이터
@@ -390,7 +391,7 @@ export default {
 .text-meetup {
   text-align: center;
 }
-.mt-5 {
-  font-family: 'Jua', sans-serif;
-}
+
+
+
 </style>

@@ -119,12 +119,23 @@
 
                 <v-list-item-content>
                   <v-list-item-title>
-                    {{reviewCommentmember[i].userNickname}}
+                      <a class="black--text font-weight-bold mr-2">{{reviewCommentmember[i].userNickname}}</a>
+                      
+                      {{comment.content}}
                   </v-list-item-title>
- 
-                  <v-list-item-subtitle  class='text--primary'>
-                    {{comment.content}} &mdash; <span  class="grey--text text--lighten-1">{{comment.date}}</span>
+                  <v-list-item-subtitle>
+                      <a style="margin-right: 12px; color: #8e8e8e;">
+                        {{comment.date}}
+                      </a>
                   </v-list-item-subtitle>
+
+                  <!-- <v-list-item-title>
+                    {{reviewCommentmember[i].userNickname}}
+                  </v-list-item-title> -->
+ 
+                  <!-- <v-list-item-subtitle  class='text--primary'>
+                    {{comment.content}} &mdash; <span  class="grey--text text--lighten-1">{{comment.date}}</span>
+                  </v-list-item-subtitle> -->
                 </v-list-item-content>
                 
               </v-list-item>

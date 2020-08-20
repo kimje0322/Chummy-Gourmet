@@ -24,14 +24,12 @@
             v-if="viewImg" :src="viewImg">
           </v-img>
         </v-avatar>
-        
       </v-flex>
       <v-flex xs4 order-md1 order-xs3>
       </v-flex>
     </v-layout>
-    
-    <v-layout row>
-      <!-- <v-flex xs3 order-md2 order-xs1>
+    <v-layout>
+       <v-flex xs3 order-md2 order-xs1>
       </v-flex>
       <v-flex xs6 order-md3 order-xs2 class="update-buttons">
         <v-btn small type="button" class="mr-2" @click="onClickImageChange" >수정</v-btn>
@@ -39,7 +37,9 @@
         <v-btn small @click="onClickSubmit">확인</v-btn>
       </v-flex>
       <v-flex xs3 order-md1 order-xs3>
-      </v-flex> -->
+      </v-flex>
+    </v-layout>
+    <v-layout row>
    <v-main>
     <v-col class="pb-0">
           <v-text-field

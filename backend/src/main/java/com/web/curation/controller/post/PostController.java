@@ -140,6 +140,7 @@ public class PostController {
 	@PostMapping("/post")
 	@ApiOperation(value = "게시글 등록")
 	public void insert(@Valid @RequestBody Post post) {
+		System.out.println("test" + post);
 		postDao.insert(post);
 	}
 	

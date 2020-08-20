@@ -378,6 +378,11 @@ export default {
     // }
   },
   methods: {
+    showSnackBar(content, color){
+      this.snackbarText = content;
+      this.snackbarColor = color;
+      this.snackbar = true;
+    },
     setDate(){
       if(this.dates.length == 1){
         this.dates.push(this.dates[0]);
@@ -418,48 +423,44 @@ export default {
     },
     doFilter(){
       this.meetups.forEach((meetup, index) => {
-        var isPersonalites = true;
-        var isDate = true;
-        var isPersonnel = true;
-        var isCategory = true;
-
+        var isPersonalites = false;
+        var isDate = false;
+        var isPersonnel = false;
+        var isCategory = false;
         // 카테고리 필터링
         for(let i = 0; i< this.selectedFoods.length; i++){
-          // 밋업이 필터성향을 하나라도 포함하고 있으면
-          if(meetup.category == this.selectedFoods[i])
+          // 밋업이 필터 카테고리를 하나라도 포함하고 있으면
+          if(meetup.category == this.selectedFoods[i]){
+            isCategory = true;
             break;
-          
-          // 밋업이 필터성향을 하나도 포함하고 있지 않으면
-          else{
-            if(i == this.selectedFoods.length - 1)
-              isCategory = false;
           }
         }
         // 성향 필터링
         for(let i = 0; i<this.selectedProps.length; i++){
           // 밋업이 필터성향을 하나라도 포함하고 있으면
-          if(meetup.personalities.indexOf(this.selectedProps[i]) > -1)
+          if(meetup.personalities.indexOf(this.selectedProps[i]) > -1){
+            isPersonalites = true;
             break;
-          
-          // 밋업이 필터성향을 하나도 포함하고 있지 않으면
-          else{
-            if(i == this.selectedProps.length - 1)
-              isPersonalites = false;
           }
         }
 
         // 인원 필터링
-        if(meetup.curPersonnel < this.personnel[0] || meetup.curPersonnel > this.personnel[1])
-          isPersonnel = false;
+        if(meetup.curPersonnel >= this.personnel[0] && meetup.curPersonnel <= this.personnel[1]){
+          isPersonnel = true;
+        }
         
         // 날짜 필터링
-        if(new Date(meetup.date) < new Date(this.dates[0]) || new Date(meetup.date) > new Date(this.dates[1]))
-          isDate = false;
+        if(new Date(meetup.date.slice(0, 16)) >= new Date(this.dates[0]) && new Date(meetup.date.slice(0, 16)) <= new Date(this.dates[1])){
+          isDate = true;
+        }
         
-        if(isPersonalites && isDate && isPersonnel && isCategory)
+        if(isPersonalites && isDate && isPersonnel && isCategory){
           this.markers[index].setMap(this.map)
-        else
+        }
+        else{
           this.markers[index].setMap(null)
+        }
+        this.showSnackBar("필터가 설정되었습니다. :)", "info");
 
       });
 
@@ -504,6 +505,7 @@ export default {
             .then((response) => {
               // 밋업 리스트
               this.meetups = response.data.object;
+              console.log(this.meetups)
 
               var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
               this.meetups.forEach(meetup => {
@@ -535,7 +537,7 @@ export default {
                                               <img src="${meetup.img}" width="73" height="70"/>
                                           </div>
                                           <div class="_desc">
-                                              <div class="ellipsis"><label>일시 : </label> ${meetup.date}</div>
+                                              <div class="ellipsis"><label>일시 : </label> ${meetup.date.slice(0, 16)}</div>
                                               <div class="ellipsis"><label>위치 : </label> ${meetup.location}</div>
                                               <div><label>인원 : </label> ${meetup.curPersonnel} / ${meetup.maxPersonnel}</div>
                                           </div>

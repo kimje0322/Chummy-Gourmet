@@ -1,6 +1,15 @@
 <template>
   <v-card elevation="24" max-width="444" class="mx-auto">
-    <v-system-bar lights-out></v-system-bar>
+    <v-toolbar-title>
+        <v-toolbar class="mb-1" dense elevation="1">
+          <v-icon @click="$router.go(-1)">
+            mdi-arrow-left
+          </v-icon>
+          <v-spacer></v-spacer>
+          <p class="my-auto">리뷰</p>
+          <v-spacer></v-spacer>
+        </v-toolbar>
+      </v-toolbar-title>
 
     <v-carousel :continuous="false" show-arrows hide-delimiter-background height="300">
       <!-- <v-carousel-item v-for="index of 5" :key="index"> -->
@@ -105,7 +114,7 @@
               <v-divider></v-divider>
               <v-list-item>
                 <v-list-item-avatar>
-                  <v-img :src="comment.userImg" />
+                  <v-img :src="'https://i3b302.p.ssafy.io:8080/img/user?imgname='+reviewCommentmember[i].userImg"/>
                 </v-list-item-avatar>
 
                 <v-list-item-content>
@@ -149,6 +158,7 @@ export default {
       review: "",
       meetup: "",
       members: [],
+      reviewCommentmember:[],
       master : [],
       comments: [],
       comment : '',
@@ -209,20 +219,10 @@ export default {
     axios
       .get(`${SERVER_URL}/review/comment/${this.review.id}`)
       .then((response) => {
+        console.log("hi")
+        console.log(response)
         this.comments = response.data.object;
-        // 댓글 데이터의 각 사용자의 이미지 데이터 없어서 백에 한번더 갔다옴
-        for (let i = 0; i < this.comments.length; i++) {
-          axios
-          .get(
-            `${SERVER_URL}/userpage/getuser?userId=${this.comments[i].writer}`
-          )
-          .then((response) => {
-            this.comments[i].userImg = "https://i3b302.p.ssafy.io:8080/img/user?imgname="+ response.data.userImg
-          })
-          .catch((error) => {
-            console.log(error.response);
-          });
-        }
+        this.reviewCommentmember = response.data.user;
       })
       .catch((error) => {
         console.log(error.response);

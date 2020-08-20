@@ -13,12 +13,11 @@
       </v-toolbar-title>
 
       <!-- -->
-      <div style="position: relative;">
+      <div class="pb-10" style="position: relative;">
 
         <!-- 댓글 작성 창 -->
         <section class="comment">
           <div class="top">
-
             <!-- 프사 -->
             <span class="prf">
               <img
@@ -44,31 +43,12 @@
               ></textarea>
               <button @click="onCreate()" class="upload">게시</button>
             </form>
-
-          </div>
-
-
-          <div v-if="recomment" class="top">
-            <span class="prf">
-              <img
-                style="height: 100%; width: 100%; -webkit-user-drag: none;"
-                :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+this.myimg"
-              />
-            </span>
-            <form style="height: 42px; " class="text-box">
-              <textarea @keyup.enter="onRewrite" style="height: 18px;" class="text" v-model="commentcontent"></textarea>
-              <button @click="onRewrite()" class="upload">수정</button>
-            </form>
           </div>
         </section>
-
-
-
 
         <!-- 댓글 리스트 -->
         <div class="">
           <!-- <ul style="height: 494px;"> -->
-
             <!-- 작성자가 피드 컨텐츠 -->
             <v-list>
               <v-list-item>
@@ -92,7 +72,7 @@
 
             <!-- 댓글 리스트 -->
             <v-list v-for="(lst, i) in commentlst" :key="i">
-              <v-list-item>
+              <v-list-item v-if="!recomment || i != index">
                 <v-list-item-avatar>
                   <img
                     @click="gotoProfileByComment(lst)"
@@ -112,7 +92,7 @@
                   </v-list-item-subtitle>
                 </v-list-item-content>
                 <v-list-item-icon>
-                  <v-btn icon v-if="lst.commentuserid  == userid" @click="rewrite(lst)">
+                  <v-btn icon v-if="lst.commentuserid  == userid" @click="rewrite(lst,i)">
                     <v-icon small>mdi-pencil</v-icon>
                   </v-btn>
                   <v-btn icon v-if="lst.commentuserid  == userid" @click="onDelete(lst)">
@@ -120,6 +100,34 @@
                   </v-btn>
                 </v-list-item-icon>
               </v-list-item>
+
+              <v-list-item v-if="recomment && i == index">
+                <v-list-item-avatar>
+                  <img
+                    @click="gotoProfileByComment(lst)"
+                    style="height: 100%; width: 100%; -webkit-user-drag: none;"
+                    :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+lst.userimg"
+                  />
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title>
+                      <v-text-field 
+                      @keyup.enter="onRewrite" 
+                      v-model="commentcontent"
+                      autofocus 
+                      :value="lst.postcomment"
+                      >
+                      {{lst.postcomment}}
+                      </v-text-field>
+                  </v-list-item-title>
+                </v-list-item-content>
+                <v-list-item-icon>
+                  <v-btn icon v-if="lst.commentuserid  == userid" @click="onRewrite()">
+                    <v-icon small>mdi-pencil</v-icon>
+                  </v-btn>
+                </v-list-item-icon>
+              </v-list-item>
+            
             </v-list>
 
         </div>
@@ -149,7 +157,8 @@ export default {
       cid : "",
       postuserid:"",
       userid : "",
-      mynickname : ''
+      mynickname : '',
+      index : "",
     };
   },
   watch: {
@@ -309,11 +318,11 @@ export default {
         .catch((error) => {});
       }
     },
-    rewrite(comment) {
+    rewrite(comment, i) {
       this.recomment = true
       this.cid = comment.commentid
-      
       this.commentcontent = comment.postcomment;
+      this.index = i;
     },
     onRewrite() {
       var commentxt = {

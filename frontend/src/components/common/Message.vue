@@ -120,7 +120,7 @@ export default {
               this.whenCreated();
           })
         } else {
-          router.push({name: "Detail", params: this.list});
+          router.push({name: "Detail", query: this.list});
         }
       }
     }

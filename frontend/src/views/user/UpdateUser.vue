@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-toolbar-title >
-      <v-toolbar dense>
+      <v-toolbar class="mb-1" dense elevation="1">
       <v-icon @click="$router.go(-1)">
         mdi-arrow-left
       </v-icon>
@@ -14,7 +14,7 @@
     </v-toolbar>
     </v-toolbar-title>
     
-    <div class="entireClass">
+    <div class="entireClass mb-12">
     <v-layout row>
       <v-flex xs4 order-md2 order-xs1>
       </v-flex>
@@ -30,9 +30,8 @@
       </v-flex>
     </v-layout>
     
-
     <v-layout row>
-      <v-flex xs3 order-md2 order-xs1>
+      <!-- <v-flex xs3 order-md2 order-xs1>
       </v-flex>
       <v-flex xs6 order-md3 order-xs2 class="update-buttons">
         <v-btn small type="button" class="mr-2" @click="onClickImageChange" >수정</v-btn>
@@ -40,12 +39,8 @@
         <v-btn small @click="onClickSubmit">확인</v-btn>
       </v-flex>
       <v-flex xs3 order-md1 order-xs3>
-      </v-flex>
-    </v-layout>
-
-    <v-layout>
+      </v-flex> -->
    <v-main>
-
     <v-col class="pb-0">
           <v-text-field
             outlined hide-details="auto" 
@@ -106,7 +101,6 @@
                 clearable
               ></v-text-field>
         </v-col>
-
     </v-main>
     </v-layout>
     </div>

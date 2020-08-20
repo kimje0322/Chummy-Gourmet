@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-toolbar-title >
-      <v-toolbar dense>
+      <v-toolbar class="mb-1" dense elevation="1">
       <v-icon @click="$router.go(-1)">
         mdi-arrow-left
       </v-icon>
@@ -156,7 +156,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
   .follow-lsit {
     width: 100px
   }
@@ -170,6 +170,9 @@ export default {
     color: rgba(0,0,0,.6);
     width: 100%;
     text-align: center;
+  }
+   .pf-n-a{
+    color: rgb(97, 94, 94) !important;
   }
 
 

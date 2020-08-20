@@ -60,5 +60,9 @@ public interface MeetUpDao extends JpaRepository<Meetup, String> {
 	// MEETUP 현재원 감소
 	@Query(value = "UPDATE meetup SET meetup_cur_personnel = meetup_cur_personnel-1 WHERE meetup_id = :meetupId", nativeQuery = true)
 	void personnelDown(int meetupId);
+	
+	// 밋업 제목으로 밋업 정보 전부 반환(밋업 아이디 필요해서) 밋업생성하자마자 방장을 밋업 멤버로 넣으려고
+	@Query(value = "select * from meetup where meetup_title = :title", nativeQuery = true)
+	Meetup findByTitle(String title);
 
 }

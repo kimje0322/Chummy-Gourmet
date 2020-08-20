@@ -21,7 +21,6 @@
       
       <!-- dialog -->
       <v-dialog
-        dark
         v-model="dialog"
         max-width="190"
         >
@@ -140,6 +139,5 @@ export default {
     text-align: center;
     min-height: 300px
   }
-
 
 </style>

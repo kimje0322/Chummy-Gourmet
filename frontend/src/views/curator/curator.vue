@@ -8,31 +8,58 @@
       <v-spacer></v-spacer>
       <p class="my-auto">음식점 검색</p>
       <v-spacer></v-spacer>
-    </v-toolbar>
+    </v-toolbar> 
   
   <div class="entire">
   <div style="padding : 0">
-    <input
-      v-model="keyword"
-      @keyup.enter="doSearch"
-      type="text"
-      placeholder="원하는 지역 검색"
-      style="width : 80%; border : 1px solid"
-    />
 
-    <v-btn height="48px" width="8%" style="float: right;" @click="doSearch">검색</v-btn>
-    <p>{{keyword}}에 대한 결과</p>
+    <v-tooltip top
+      nudge-bottom="20"
+      color="rgba(1, 1, 1, 0.7)"
+      :position-y="-10">
+    <template v-slot:activator="{ on, attrs }">
+      <v-card-title class="pb-0 pt-0">
+        <v-text-field
+          hide-details=""
+          v-model="keyword"
+          @keyup.enter="doSearch"
+          placeholder='키워드 검색'
+          outlined clearable
+          prepend-inner-icon="mdi-magnify"
+          v-bind="attrs" v-on="on"
+        />
+      </v-card-title>
+    </template>
+      <span class="text--caption">ex) 대전 맛집, 봉명동 삼겹살 ...</span>
+    </v-tooltip>
+      <br>
+    <div v-if="filter==true" style="text-align: center;" class="mb-3" >
+      <v-btn-toggle>
+        <i class="fas fa-filter mr-3 mt-1"></i>
+        <v-btn small width="23%" outlined @click="sortByDist">거리순</v-btn>
+        <v-btn small width="23%" outlined @click="sortByLike">좋아요순</v-btn>
+        <v-btn small width="23%" outlined @click="sortByReview">리뷰순</v-btn>
+        <v-btn small width="23%" outlined @click="sortByProperties">선호음식</v-btn>
+      </v-btn-toggle>
+    </div>
+
+
+    <!-- <p>{{keyword}}에 대한 결과</p> -->
 
 <!--  pop over  -->
-      <div>
+      <!-- <div>
           <v-menu
+            max-width="100%"
             v-model="menu"
             :close-on-content-click="false"
             transition="slide-y-transition"
             offset-y
           >
           <template v-slot:activator="{on}">
+            
             <v-btn
+
+              width="92%"
               slot="activator"
               v-on="on"
             >
@@ -48,13 +75,10 @@
                   <v-btn outlined @click="sortByReview">리뷰순</v-btn>
                   <v-btn outlined @click="sortByProperties">선호음식</v-btn>
                 </v-btn-toggle>
-                <!-- <v-spacer></v-spacer>
-                <v-btn @click="menu = false">Cancel</v-btn>
-                <v-btn color="primary" @click="menu = false">Save</v-btn> -->
               </v-card-actions>
             </v-card>
           </v-menu>
-        </div>
+        </div> -->
 
 
     <v-card>
@@ -126,7 +150,7 @@ export default {
       menu: false,
       message: false,
       hints: true,
-      
+      filter: false,
       targetLocation :{
         lat : '',
         lng : '',
@@ -275,6 +299,7 @@ export default {
             });
           })
           this.restaurants = restaurants;
+          this.filter = true;
         })
         .catch((error) => {
           console.log(error.response);

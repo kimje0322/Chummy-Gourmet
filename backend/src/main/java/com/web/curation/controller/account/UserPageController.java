@@ -508,6 +508,24 @@ public class UserPageController {
 		return data;
 	}
 
+	@PostMapping("/userpage/getuserpost")
+	@ApiOperation(value = "[유저]유저id 배열로 유저 img 배열 리턴")
+	public List<Object> getuserimg(@RequestBody(required = true) List<Object> data) {
+		System.out.println(data);
+		System.out.println(data.size());
+		
+		List<Object> img= new ArrayList<Object>();
+		
+		for(int i = 0 ; i<data.size();i++) {
+			img.add(userdao.selectUserImgByUserId(data.get(i)));
+		}
+		
+		System.out.println(img);
+		
+		return img;
+	}
+
+	
 	@GetMapping("/userpage/getpost")
 	@ApiOperation(value = "[게시글] 게시글번호로 게시글 정보 가져오기")
 	public Map<String, Object> getpost(@RequestParam(required = true) final String postId) {

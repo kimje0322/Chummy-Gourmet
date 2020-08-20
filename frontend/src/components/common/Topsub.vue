@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <v-toolbar>
+    <v-toolbar dense flat>
       <v-list-item-avatar>
         <v-img :src="'https://i3b302.p.ssafy.io:8080/img/user?imgname='+proptoTopsub.userImg"></v-img>
       </v-list-item-avatar>

@@ -12,14 +12,12 @@
     </v-bottom-navigation>-->
     <v-app>
       <v-toolbar-title>
-        <v-toolbar dark>
-          <a @click="$router.go(-1)">
-            <i class="fas fa-chevron-left back"></i>
-          </a>
+        <v-toolbar class="mb-1" dense elevation="1">
+          <v-icon @click="$router.go(-1)">
+            mdi-arrow-left
+          </v-icon>
           <v-spacer></v-spacer>
-          <v-spacer></v-spacer>
-          <p class="my-auto">Comment</p>
-          <v-spacer></v-spacer>
+          <p class="my-auto">댓글</p>
           <v-spacer></v-spacer>
         </v-toolbar>
       </v-toolbar-title>
@@ -210,7 +208,6 @@ export default {
   },
   mounted() {},
   created() {
-
     //유저의 닉네임 가져오기
      axios
       .post(`${SERVER_URL}/chat/nickname`,[this.$cookie.get('userId')])

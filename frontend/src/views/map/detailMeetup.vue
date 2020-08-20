@@ -1,82 +1,124 @@
 <template>
 
   <div class="user join">
-    <v-bottom-navigation
-      scroll-target="#scroll-area-2"
-      hide-on-scroll
-      scroll-threshold="500"
-      absolute
-      color="white"
-      horizontal
-    >
-      <v-btn-toggle tile color="deep-purple accent-3" >
-          <v-btn  @click="$router.go(-1)">취소</v-btn>
-          <v-btn  v-if="isGuest" @click="cancleMeetup">{{text}}</v-btn>
-          <v-btn  v-else-if="meetup.curPersonnel==meetup.maxPersonnel" disabled>{{text}}</v-btn>
-          <v-btn  v-else-if="isRequest" @click="cancleRequestMeetup">{{text}}</v-btn>
-          <v-btn  v-else @click="requestDialog = true">{{text}}</v-btn>
-      </v-btn-toggle>
-    </v-bottom-navigation>
-
       <v-toolbar-title>
-        <v-toolbar dark>
-          <a @click="$router.go(-1)">
-            <i class="fas fa-chevron-left back"></i>
-          </a>
-          <v-spacer></v-spacer>
+        <v-toolbar class="mb-1" dense elevation="1">
+          <v-icon @click="$router.go(-1)">
+            mdi-arrow-left
+          </v-icon>
           <v-spacer></v-spacer>
           <p class="my-auto">Meet Up</p>
           <v-spacer></v-spacer>
-          <v-spacer></v-spacer>
+          <div>
+          <button @click="dialog = true">
+            <div style="padding: 2px; width: 24px; height: 24px;">
+              <i class="fas fa-ellipsis-v"></i>
+            </div>  
+          </button>
+          <v-dialog v-model="dialog" max-width="190">
+            <v-list>
+              <v-list-item>
+                <v-btn block text>
+                <GoChatForMeetUp :meetup ="meetup" />
+                </v-btn>
+              </v-list-item>
+              <v-list-item>
+                <v-btn block text color="orange" v-if="isGuest" @click="cancleMeetup">{{text}}</v-btn>
+                <v-btn block text color="orange" v-else-if="meetup.curPersonnel==meetup.maxPersonnel" disabled>{{text}}</v-btn>
+                <v-btn block text color="orange" v-else-if="isRequest" @click="cancleRequestMeetup">{{text}}</v-btn>
+                <v-btn block text color="orange" v-else @click="requestDialog = true">{{text}}</v-btn>
+              </v-list-item>
+            </v-list>
+              
+          </v-dialog>
+          </div>
+          
         </v-toolbar>
       </v-toolbar-title>
-      <br />
 
-    <GoChatForMeetUp :meetup ="meetup" />
+    
       <!-- 입력 폼 -->
       <div class="party wrapC">
 
-        <!-- 파티 타이틀 -->
-        <div class="input-group mb-3">
-          <v-text-field v-model="meetup.title" solo readonly></v-text-field>
-        </div>
-        
-        <!-- 파티 내용 -->
-        <div class="input-group mb-3">
-          <v-textarea v-model="meetup.content" solo readonly></v-textarea>
-        </div>
-
-        <!-- 파티 장소 -->
-          <v-layout justify-center>
+        <!-- 밋업 타이틀 -->
+          <v-col class="pb-0">
             <v-text-field
-                v-model="meetup.location"
-                solo
-                readonly
-                :append-icon="'mdi-map-marker orange--text text--lighten-2'"
-            ></v-text-field>
-          </v-layout>
+              outlined hide-details="auto" 
+              v-model="meetup.title"
+              label="제목"
+              readonly
+            >          
+            </v-text-field>
+          </v-col>
 
-        <!-- 파티 날짜 -->
-        <v-text-field
-            solo
-            v-model="meetup.date"
-            :append-icon="'mdi-calendar-check orange--text text--lighten-2'"
+          <!-- 밋업 내용 -->
+          <v-col class="pb-0">
+            <v-textarea
+              outlined hide-details="auto" 
+              v-model="meetup.content"
+              label="내용"
+              readonly
+            >          
+            </v-textarea>
+          </v-col>
+        <!-- 밋업 장소 -->
+        <v-col class="pb-0">
+          <v-text-field
+            outlined hide-details="auto" 
+            slot="activator"
+            v-model="meetup.location"
             readonly
+            label="장소"
+          ></v-text-field>
+        </v-col>
+
+        <!-- 밋업 날짜 -->
+        <v-col class="pb-0">
+        <v-text-field
+          outlined
+          hide-details
+          v-model="meetup.date"
+          label="날짜"
+          readonly
         ></v-text-field>
+        </v-col>
 
-        <!-- 파티 인원 -->
-        <v-text-field solo readonly :value="meetup.curPersonnel + ' / ' + meetup.maxPersonnel ">
-        </v-text-field>
-
-        <!-- 파티 성향 -->
-        <v-combobox 
-          v-model="meetup.personalities" 
-          solo multiple chips readonly
+        <!-- 밋업 인원 -->
+        <v-col class="pb-0">
+        <v-text-field 
+        readonly
+        class="my-0 pa-0"
+        label="인원"
+        hide-details
+        outlined
+        :value="meetup.curPersonnel + ' / ' + meetup.maxPersonnel "
         >
-        </v-combobox>
+        </v-text-field>
+        </v-col>
+
+        <!-- 밋업 성향 -->
+          <v-col class="pb-0">
+            <v-combobox
+              outlined
+              hide-details="auto"
+              v-model="meetup.personalities" 
+              multiple small-chips
+              label="성향"
+              auto 
+              readonly
+            >
+            <template v-slot:selection="data">
+            <v-chip class="mr-1 px-2"
+              color="primary" small
+            >
+            <span class="mr-1">
+                        {{data.item}}
+                      </span>
+            </v-chip>
+            </template>
+          </v-combobox>
+          </v-col>
       </div>
-
-
       <!-- 밋업 참석 신청 DIALOG -->
       <v-dialog v-model="requestDialog" max-width="290">
           <v-card>
@@ -133,10 +175,11 @@ export default {
       meetup : '',
       requestDialog : false,
       requestMessage : '',
-      text : '참석 신청',
+      text : '참석신청',
       isGuest : false,
       isRequest : false,
-      mynickname : ''
+      mynickname : '',
+      dialog: false,
     }
   },
   created() {
@@ -165,7 +208,7 @@ export default {
           // if(request.guestId == "70"){
           if(request.guestId == this.$cookie.get("userId")){
             this.isRequest = request.id;
-            this.text = "신청 취소";
+            this.text = "신청취소";
           }
         });
       }
@@ -180,7 +223,7 @@ export default {
         // if(guest.userId == "70"){
         if(guest.userId == this.$cookie.get("userId")){
           this.isGuest = true;
-          this.text = "참석 취소";
+          this.text = "참석취소";
         }
       });
     })  
@@ -199,16 +242,22 @@ export default {
       })
     },
     cancleMeetup(){
-      var meetupId = this.$route.query.meetupId;
-      axios
-      .delete(`${SERVER_URL}/meetup?meetupId=${meetupId}&userId=${this.$cookie.get("userId")}`)
-      .then((response) => {
-        this.isGuest = false;
-        this.isRequest = false;
-        this.text = "참석 신청";
-        this.init();
-        alert("밋업 참석이 취소되었습니다.");
-      })  
+      console.log(this.meetup)
+      if(this.meetup.master == this.$cookie.get("userId")){
+        this.$alert("밋업주최자는 참여취소가 불가합니다.")
+      }
+      else{
+        var meetupId = this.$route.query.meetupId;
+        axios
+        .delete(`${SERVER_URL}/meetup?meetupId=${meetupId}&userId=${this.$cookie.get("userId")}`)
+        .then((response) => {
+          this.isGuest = false;
+          this.isRequest = false;
+          this.text = "참석신청";
+          this.init();
+          alert("밋업 참석이 취소되었습니다.");
+        })  
+      }
     },
     cancleRequestMeetup(){
       console.log(this.isRequest)
@@ -216,7 +265,7 @@ export default {
       .delete(`${SERVER_URL}/meetup/request/${this.isRequest}`)
       .then((response) => {
         this.isRequest = false;
-        this.text = "참석 신청";
+        this.text = "참석신청";
         alert("밋업 참석 신청이 취소되었습니다.");
       })  
     },

@@ -1,11 +1,20 @@
 <template>
   <v-card elevation="24" max-width="444" class="mx-auto">
-    <v-system-bar lights-out></v-system-bar>
+    <v-toolbar-title>
+        <v-toolbar class="mb-1" dense elevation="1">
+          <v-icon @click="$router.go(-1)">
+            mdi-arrow-left
+          </v-icon>
+          <v-spacer></v-spacer>
+          <p class="my-auto">리뷰</p>
+          <v-spacer></v-spacer>
+        </v-toolbar>
+      </v-toolbar-title>
 
     <v-carousel :continuous="false" show-arrows hide-delimiter-background height="300">
       <!-- <v-carousel-item v-for="index of 5" :key="index"> -->
         <v-img
-          src="https://img.siksinhot.com/place/1485274468095571.jpg?w=307&h=300&c=Y"
+          :src="meetup.img"
           class="white--text align-end"
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
           height="100%"
@@ -25,9 +34,7 @@
                 <v-icon color="indigo">mdi-map-marker-outline</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title v-text="meetup.location"></v-list-item-title>
-                <!-- <v-list-item-title v-if="restaurant.location" v-text="restaurant.location"></v-list-item-title> -->
-                <!-- <v-list-item-subtitle v-if="restaurant.location" v-text="restaurant.location"></v-list-item-subtitle> -->
+                <v-list-item-title>{{meetup.location}}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
 
@@ -36,7 +43,7 @@
                 <v-icon color="indigo">mdi-calendar-month-outline</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title v-text="meetup.date"></v-list-item-title>
+                <v-list-item-title>{{meetup.date}}</v-list-item-title>
                 <!-- <v-list-item-subtitle>Mobile</v-list-item-subtitle> -->
               </v-list-item-content>
             </v-list-item>
@@ -46,9 +53,7 @@
                 <v-icon color="indigo">mdi-crown-outline</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title v-text="meetup.master"></v-list-item-title>
-                <!-- <v-list-item-title v-if="restaurant.telphone" v-text="restaurant.telphone"></v-list-item-title> -->
-                <!-- <v-list-item-subtitle>Mobile</v-list-item-subtitle> -->
+                <v-list-item-title>{{master.userNickname}}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
 
@@ -57,9 +62,9 @@
                 <v-icon color="indigo">mdi-account-group-outline</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title v-for="(member) in members" :key="member">@{{member}}</v-list-item-title>
-                <!-- <v-list-item-title v-if="restaurant.telphone" v-text="restaurant.telphone"></v-list-item-title> -->
-                <!-- <v-list-item-subtitle>Mobile</v-list-item-subtitle> -->
+                <v-list-item-title v-for="(member,i) in members" :key="i">
+                  @{{member.userNickname}}
+                  </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
 
@@ -69,8 +74,6 @@
               </v-list-item-icon>
               <v-list-item-content>
                 {{meetup.content}}
-                <!-- <v-list-item-title v-text="meetup.content"></v-list-item-title> -->
-                <!-- <v-list-item-subtitle>Mobile</v-list-item-subtitle> -->
               </v-list-item-content>
             </v-list-item>
           </v-list>
@@ -87,31 +90,31 @@
               <span class="title font-weight-bold">{{review.title}}</span>
             </v-card-title>
 
-            <v-card-text class="headline font-weight-bold" v-text="review.content"></v-card-text>
+            <v-card-text class="headline font-weight-bold">{{review.content}}</v-card-text>
 
             <v-card-actions>
               <v-list-item class="grow">
                 <v-list-item-avatar color="grey darken-3">
                   <v-img
                     class="elevation-6"
-                    src="https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
+                    :src="master.userImg"
                   ></v-img>
                 </v-list-item-avatar>
 
                 <v-list-item-content>
-                  <v-list-item-title v-text="meetup.master"></v-list-item-title>
+                  <v-list-item-title>{{master.userNickname}}</v-list-item-title>
                   <v-list-item-subtitle>master</v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
             </v-card-actions>
           </v-card>
 
-          <v-list>
-            <template v-for="(comment, i) of comments">
-              <v-divider :key="comment.id"></v-divider>
-              <v-list-item :key="comment.writer">
+          <v-list v-for="(comment,i) in comments" :key="i">
+            <template >
+              <v-divider></v-divider>
+              <v-list-item>
                 <v-list-item-avatar>
-                  <v-img :src="imgs[i]" />
+                  <v-img :src="'https://i3b302.p.ssafy.io:8080/img/user?imgname='+reviewCommentmember[i].userImg"/>
                 </v-list-item-avatar>
 
                 <v-list-item-content>
@@ -130,7 +133,7 @@
           <v-divider></v-divider>
           <v-text-field
             v-model="comment"
-            placeholder="댓글을 입력하세요.." solo
+            placeholder="댓글을 입력하세요." solo
             rounded dense clearable append-outer-icon="mdi-arrow-up-thick"
             @keyup.enter="writeComment"
             @click:append-outer="writeComment"
@@ -138,6 +141,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
+    <br><br>
   </v-card>
 </template>
 
@@ -155,8 +159,11 @@ export default {
       review: "",
       meetup: "",
       members: [],
+      reviewCommentmember:[],
+      master : [],
       comments: [],
       comment : '',
+      user:[],
       imgs: [
         "https://cdn.vuetifyjs.com/images/lists/1.jpg",
         "https://cdn.vuetifyjs.com/images/lists/2.jpg",
@@ -167,38 +174,89 @@ export default {
     };
   },
   created() {
+    axios
+    .get(
+      `${SERVER_URL}/userpage/getuser?userId=${this.$cookie.get("userId")}`
+    )
+    .then((response) => {
+      this.user = response.data;
+      this.user.userImg = "https://i3b302.p.ssafy.io:8080/img/user?imgname="+ this.user.userImg
+    })
+    .catch((error) => {
+      console.log(error.response);
+    });
     this.review = this.$route.params.review;
+    this.getMeetup();
     this.getComments();
   },
   methods : {
+    getMeetup(){
+      axios
+      .get(`${SERVER_URL}/meetup/search/${this.review.meetupId}`)
+      .then((response) => {
+        this.meetup = response.data;
+        //밋업 멤버 가져오기
+        axios
+        .get(`${SERVER_URL}/meetup/members/${this.review.meetupId}`)
+        .then((response) => {
+          this.members = response.data.object;
+          for (let i = 0; i < this.members.length; i++) {
+            if(this.members[i].userId == this.meetup.master){
+              this.master = this.members[i];
+              this.master.userImg = "https://i3b302.p.ssafy.io:8080/img/user?imgname="+ this.master.userImg
+              break;
+            }
+          }
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+    },
     getComments(){
     axios
       .get(`${SERVER_URL}/review/comment/${this.review.id}`)
       .then((response) => {
-        console.log(response.data);
+        console.log("hi")
+        console.log(response)
         this.comments = response.data.object;
+        this.reviewCommentmember = response.data.user;
       })
       .catch((error) => {
         console.log(error.response);
       });
     },
     writeComment() {
-      var newComment = {
-        writer : 70,
-        content : this.comment,
-        reviewId : this.review.id,
-      };
-      axios
-        .put(`${SERVER_URL}/review/comment`, newComment)
-        .then((response) => {
-          console.log(response.data);
-          this.getComments();
-          this.comment = "";
-        })
-        .catch((error) => {
-          console.log(error.response);
-        });
-
+      let flag = false;
+      for (let i = 0; i < this.members.length; i++) {
+        // 밋업 멤버로 사용자가 있는 경우에만 댓글 작성 가능
+        if(this.members[i].userId == `${this.user.userId}`){
+          flag = true;
+          break;
+        }
+      }
+      if(flag){
+        var newComment = {
+            writer : `${this.user.userId}`,
+            content : this.comment,
+            reviewId : this.review.id,
+          };
+          axios
+            .put(`${SERVER_URL}/review/comment`, newComment)
+            .then((response) => {
+              this.getComments();
+              this.comment = "";
+            })
+            .catch((error) => {
+              console.log(error.response);
+            });  
+      }
+      else{
+        this.$alert("해당 밋업의 멤버만 댓글을 작성 가능합니다.")
+      }
     },
 
   },

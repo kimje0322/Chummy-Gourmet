@@ -10,22 +10,26 @@
         mdi-arrow-left
       </v-icon>
     <v-spacer></v-spacer>
-    <v-text-field 
-      @keyup="onSearchUser"
-      v-model="searchUser"
-      label="검색"
-      hide-details
-      solo
-      autofocus
-    ></v-text-field> 
+    <p class="my-auto text-center">유저 검색</p>
     <v-spacer></v-spacer>
     </v-app-bar>
-    <br><br>
+ 
     <v-sheet
       id="scrolling-techniques-7"
-      class="overflow-y-auto"
+      class="overflow-y-auto mt-15 mb-15"
       max-height="600"
     >
+
+      <v-text-field
+        class="m-3"
+        @keyup="onSearchUser"
+        v-model="searchUser"
+        label="검색"
+        :append-icon="'mdi-account-search-outline'"
+        hide-details
+        solo
+      ></v-text-field>         
+
         <v-list nav dense >
             <v-skeleton-loader
                 ref="skeleton"
@@ -61,7 +65,7 @@
                     요청중
                 </v-btn>
 
-                <v-btn depressed color="white" @click="unFollow(user,i,'followerlist')" v-else>
+                <v-btn outlined color="grey" @click="unFollow(user,i,'followerlist')" v-else>
                     팔로잉
                 </v-btn>
 
@@ -221,5 +225,8 @@ export default {
 <style scoped>
   .follow-lsit {
     width: 100px
+  }
+  .pf-n-a{
+    color: rgb(97, 94, 94) !important;
   }
 </style>

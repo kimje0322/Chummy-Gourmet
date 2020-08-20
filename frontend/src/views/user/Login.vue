@@ -19,7 +19,7 @@
               v-model="email"
               :rules="[() => !!email || '이메일을 입력해주세요', rules.email]"
               outlined hide-details="auto"
-              @keyup.enter="Login"
+              @keyup.enter="onLogin"
               placeholder="이메일을 입력하세요."
               type="text"
               clearable
@@ -55,6 +55,7 @@
                   </router-link>
               </v-col>
             </v-row>
+        </v-form>
         <v-col class="py-0">
           <div class="text-body-2 grey--text text-weight-medium">SNS 간편 로그인</div>
           <v-divider class="mt-3 mb-5"></v-divider>
@@ -63,7 +64,6 @@
             <GoogleLogin class="mr-4" :component="component" />
           </v-row>
         </v-col>
-        </v-form>
       </div>
   </div>
 </template>
@@ -116,6 +116,7 @@ export default {
     // 쿠키를 사용한 로그인 부분
     // 로그인이 성공했을 때 쿠키에 토큰와 userId를 저장한다.
     onLogin() {
+      console.log('로그인의온로그인');
       if(!this.$refs.form.validate()){
         return;
       }

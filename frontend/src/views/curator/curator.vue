@@ -306,7 +306,7 @@ export default {
         });
     },
     moveDetail(restaurant) {
-      router.push({name : "Detail", params : restaurant});
+      router.push({name : "Detail", query : restaurant});
     },
     doLike(restaurant){
       if(this.$cookie.get('userId') == null){

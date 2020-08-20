@@ -119,10 +119,11 @@
 
                 <v-list-item-content>
                   <v-list-item-title>
-                    {{comment.content}}
+                    {{reviewCommentmember[i].userNickname}}
                   </v-list-item-title>
-                  <v-list-item-subtitle>
-                    {{comment.date}}
+ 
+                  <v-list-item-subtitle  class='text--primary'>
+                    {{comment.content}} &mdash; <span  class="grey--text text--lighten-1">{{comment.date}}</span>
                   </v-list-item-subtitle>
                 </v-list-item-content>
                 
@@ -141,6 +142,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
+    <br><br>
   </v-card>
 </template>
 

@@ -38,7 +38,8 @@ export default {
                     console.log(err);
                 });
                 window.db.collection('test').doc(this.rid).set({
-                    update: Date.now()
+                    update: Date.now(),
+                    lastMessage : this.newMessage
                 },{merge : true})
                 this.newMessage = null;
                 this.errorText = null;

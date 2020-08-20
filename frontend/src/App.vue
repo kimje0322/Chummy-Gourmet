@@ -34,8 +34,8 @@
             </v-btn>
           </v-bottom-navigation>
 
-          <v-container class="pa-0 mx-auto overflow-y-auto" style="width:100%;max-width:960px;height:667px;min-width:360px;min-height:667px;"
-            id="scroll-area-1"
+
+          <v-container class="pa-0 mx-auto overflow-y-auto" style="width:100%;max-width:960px;height:667px;min-width:360px;"
           >
             <router-view></router-view>
           </v-container>

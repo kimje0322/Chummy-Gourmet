@@ -71,4 +71,9 @@ public interface PostDao extends JpaRepository<Post, String> {
 	@Query(value = "SELECT post_like FROM post WHERE post_id = :postid", nativeQuery = true)
 	int selectByPostId(String postid);
 
+	// 게시글 ID를 통해 해당 게시글 정보 가져오기
+	@Query(value = "SELECT post_id, post_userid, post_date, post_content, post_img_url, post_like, post_update_date, post_img_url as user_img, post_img_url as user_nickname FROM post WHERE post_id = :postId", nativeQuery = true)
+	Optional<Post> selectOne(String postId);
+
+
 }

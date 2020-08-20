@@ -29,7 +29,7 @@
 
           <!-- 밋업 생성 페이지 이동 버튼 -->
           <v-btn fab dark small color="green" @click="$router.push('/map/createMeetup')">
-              <v-icon color="white" >mdi-pencil</v-icon>
+              <v-icon color="white" >mdi-pencil-plus</v-icon>
           </v-btn>
 
           <!-- 밋업 필터링 버튼 -->

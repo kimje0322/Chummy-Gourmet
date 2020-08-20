@@ -141,6 +141,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
+    <br><br>
   </v-card>
 </template>
 

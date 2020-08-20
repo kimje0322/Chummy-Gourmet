@@ -167,13 +167,10 @@ export default {
       userId: "",
       userNickname : "",
       userImg : "",
-<<<<<<< HEAD
       dialogDelete: false,
 
-=======
 
       reloadKey : 0,
->>>>>>> 7135b2215c7c6468ec3f64627f05471c5cb0afd4
       show: false,
       feedDialog : false,
       repost : '',
@@ -275,11 +272,11 @@ export default {
           postimgurl: this.postlst.post_img_url,
           userpage: true,
         };
+        this.feedDialog = true;
+        // router.push({ name: "AddFeed", params: repost });
       } else {
         this.dialogDelete = true
       }
-        this.feedDialog = true;
-        // router.push({ name: "AddFeed", params: repost });
     },
     onComment() {
       let postinfo = {

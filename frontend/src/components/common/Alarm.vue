@@ -1,6 +1,6 @@
 <template>
      <v-btn @click="goAlarmPage" text color="orange accent-4">
-       <v-badge v-model="show" color="indigo">
+       <v-badge color="indigo">
                 <span slot="badge">{{count}}</span>
                 <v-icon>mdi-bell</v-icon>
         </v-badge>

@@ -345,6 +345,9 @@ export default {
       snackbar : false,
       snackbarText : '',
       snackbarColor : '',
+
+      geocoder : '',
+      curRegion : '',
     };
   },
   computed: {
@@ -354,6 +357,8 @@ export default {
       }
       return this.dates.join(' ~ ')
     }
+  },
+  watch : {
   },
   mounted() {
     // 현재 위치 확인
@@ -378,6 +383,35 @@ export default {
     // }
   },
   methods: {
+    clearMarkersAndOverays(){
+      for(let i=0; i<this.markers.length;i++){
+        this.markers[i].setMap(null);
+      }
+      this.markers = [];
+      this.overlays = [];
+    },
+
+    // 지역(구)의 변경감지하는 메소드
+    checkChangeRegion(result, status){
+      if(status == kakao.maps.services.Status.OK){
+        let newRegion = result[0].region_2depth_name;
+        if(this.curRegion != newRegion){
+          this.curRegion = newRegion;
+          this.clearMarkersAndOverays();
+          this.getNearMeetups(result[0]);
+          this.showSnackBar("[ " + result[0].region_1depth_name + " " + newRegion + " ] 를 조회합니다 :)", "success");
+        }
+      }
+    },
+    // 좌표로 행정동 주소 정보를 요청합니다
+    searchAddrFromCoords(coords, callback) {
+      this.geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), callback);         
+    },
+
+    // 좌표로 법정동 상세 주소 정보를 요청합니다
+    searchDetailAddrFromCoords(coords, callback) {
+      this.geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
+    },
     showSnackBar(content, color){
       this.snackbarText = content;
       this.snackbarColor = color;
@@ -472,6 +506,7 @@ export default {
           var coords = new kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
           this.map.panTo(coords);
         });
+        this.showSnackBar("현재 위치로 이동합니다.", "info");
      }
     },
     swap(dates) {
@@ -487,10 +522,23 @@ export default {
         level: 3
       };
       this.map = new kakao.maps.Map(container, options);
+      this.geocoder = new kakao.maps.services.Geocoder();
+
+      // 페이지 시작 시, 현재 지역(구) 정보를 저장
+      this.geocoder.coord2RegionCode(this.map.getCenter().getLng(), this.map.getCenter().getLat(), (result, status)=>{
+        this.curRegion = result[0].region_2depth_name;
+      });         
+      
+      // Map Zoom In/Out 또는 중심 좌표 변경 시
+      // 바뀐 지역(구) 정보 조회해서
+      // 현재 지역과 바뀐 지도의 지역이 다르면
+      // 해당 지역의 밋업 리스트 불러오기
+      kakao.maps.event.addListener(this.map, 'idle', () => {
+        this.searchAddrFromCoords(this.map.getCenter(), this.checkChangeRegion);
+      })
 
       // 좌표->주소
-      var geocoder = new kakao.maps.services.Geocoder();
-      geocoder.coord2Address(CURLNG, CURLAT, (result, status) => {
+      this.geocoder.coord2Address(CURLNG, CURLAT, (result, status) => {
         if(status === kakao.maps.services.Status.OK){
 
           // 현재 주소
@@ -500,62 +548,7 @@ export default {
           }
 
           // 해당 위치 주변의 밋업 리스트          
-          axios
-            .get(`${SERVER_URL}/meetup/search/location/${address.region_1depth_name} ${address.region_2depth_name}`)
-            .then((response) => {
-              // 밋업 리스트
-              this.meetups = response.data.object;
-              console.log(this.meetups)
-
-              var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
-              this.meetups.forEach(meetup => {
-                // console.log(meetup)
-                geocoder.addressSearch(meetup.address, (result, status) => {
-                    if (status === kakao.maps.services.Status.OK) {
-                        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-                        // marker 생성
-                        var markerImage = new kakao.maps.MarkerImage(imageSrc, new kakao.maps.Size(24, 35));
-                        var marker = new kakao.maps.Marker({
-                          title: meetup.title,
-                          position: coords,
-                          image : markerImage,
-                          clickable: true,
-                        });
-
-                        // custom overlay infowindow 생성
-                        var overlay = new kakao.maps.CustomOverlay({     
-                          position: marker.getPosition(),
-                          content: 
-                            `
-                              <div class="_wrap">
-                                  <div class="_info">
-                                      <div class="_title">
-                                          <a href="#/map/detailMeetup?meetupId=${meetup.id}" class="">${meetup.title}</a>
-                                      </div>
-                                      <div class="_body">
-                                          <div class="img">
-                                              <img src="${meetup.img}" width="73" height="70"/>
-                                          </div>
-                                          <div class="_desc">
-                                              <div class="ellipsis"><label>일시 : </label> ${meetup.date.slice(0, 16)}</div>
-                                              <div class="ellipsis"><label>위치 : </label> ${meetup.location}</div>
-                                              <div><label>인원 : </label> ${meetup.curPersonnel} / ${meetup.maxPersonnel}</div>
-                                          </div>
-                                      </div>
-                                  </div> 
-                              </div>
-                            `
-                        });
-                        this.overlays.push(overlay);
-                        this.markers.push(marker);
-                        kakao.maps.event.addListener(marker, "click", this.toggleInfoWindow(this.map, marker, overlay, this.overlays));
-                        marker.setMap(this.map);
-                    } 
-                });    
-                  
-              });
-
-            })
+          this.getNearMeetups(address);
         }
       });
     },
@@ -588,26 +581,85 @@ export default {
           return false;
         }
         // 장소 검색 객체를 생성합니다
-        var geocoder = new kakao.maps.services.Geocoder();
+        // var geocoder = new kakao.maps.services.Geocoder();
         
         // 주소로 좌표를 검색합니다
-        geocoder.addressSearch(this.keyword, (result, status) => {
+        this.geocoder.addressSearch(this.keyword, (result, status) => {
 
             // 정상적으로 검색이 완료됐으면 
             if (status === kakao.maps.services.Status.OK) {
                 var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-                this.snackbarText = "[ " + this.keyword + " ] 으로 이동합니다 :)";
-                this.snackbarColor = "info";
-                this.snackbar = true;
+                this.showSnackBar("[ " + this.keyword + " ] 으로 이동합니다 :)", "info");
                 // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
                 this.map.setCenter(coords);
             } else{
-              this.snackbarText = "없는 지역이예요.. 다시 확인해주세요 :(";
-              this.snackbarColor = 'error';
-              this.snackbar = true;
-              
+              this.showSnackBar("없는 지역이예요.. 다시 확인해주세요 :(", "error");
             }
         });    
+    },
+    getNearMeetups(address){
+      console.log(address);
+      axios
+            .get(`${SERVER_URL}/meetup/search/location/${address.region_1depth_name.slice(0, 2)} ${address.region_2depth_name}`)
+            .then((response) => {
+              // 밋업 리스트
+              console.log(response)
+              if(response.data.data == "success"){
+                this.meetups = response.data.object;
+                    console.log(this.meetups)
+                    var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
+                    this.meetups.forEach(meetup => {
+                      // console.log(meetup)
+                      this.geocoder.addressSearch(meetup.address, (result, status) => {
+                          if (status === kakao.maps.services.Status.OK) {
+                              var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                              // marker 생성
+                              var markerImage = new kakao.maps.MarkerImage(imageSrc, new kakao.maps.Size(24, 35));
+                              var marker = new kakao.maps.Marker({
+                                title: meetup.title,
+                                position: coords,
+                                image : markerImage,
+                                clickable: true,
+                              });
+
+                              // custom overlay infowindow 생성
+                              var overlay = new kakao.maps.CustomOverlay({     
+                                position: marker.getPosition(),
+                                content: 
+                                  `
+                                    <div class="_wrap">
+                                        <div class="_info">
+                                            <div class="_title">
+                                                <a href="#/map/detailMeetup?meetupId=${meetup.id}" class="">${meetup.title}</a>
+                                            </div>
+                                            <div class="_body">
+                                                <div class="img">
+                                                    <img src="${meetup.img}" width="73" height="70"/>
+                                                </div>
+                                                <div class="_desc">
+                                                    <div class="ellipsis"><label>일시 : </label> ${meetup.date.slice(0, 16)}</div>
+                                                    <div class="ellipsis"><label>위치 : </label> ${meetup.location}</div>
+                                                    <div><label>인원 : </label> ${meetup.curPersonnel} / ${meetup.maxPersonnel}</div>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                  `
+                              });
+                              this.overlays.push(overlay);
+                              this.markers.push(marker);
+                              kakao.maps.event.addListener(marker, "click", this.toggleInfoWindow(this.map, marker, overlay, this.overlays));
+                              marker.setMap(this.map);
+                          } 
+                      });    
+                        
+                    });
+
+              }
+          
+   
+
+            })
     }
   }
 }

@@ -34,7 +34,7 @@
           </v-bottom-navigation>
 
 
-          <v-container class="pa-0 mx-auto overflow-y-auto" style="width:100%;max-width:960px;;min-width:360px;"
+          <v-container class="pa-0 mx-auto overflow-y-auto" style="width:100%;max-width:960px;height:667px;min-width:360px;"
           >
             <router-view></router-view>
           </v-container>

@@ -626,25 +626,38 @@ export default {
                               var overlay = new kakao.maps.CustomOverlay({     
                                 position: marker.getPosition(),
                                 content: 
+                                  // `
+                                  //   <div class="_wrap">
+                                  //       <div class="_info">
+                                  //           <div class="_title">
+                                  //               <a href="#/map/detailMeetup?meetupId=${meetup.id}" class="">${meetup.title}</a>
+                                  //           </div>
+                                  //           <div class="_body">
+                                  //               <div class="img">
+                                  //                   <img src="${meetup.img}" width="73" height="70"/>
+                                  //               </div>
+                                  //               <div class="_desc">
+                                  //                   <div class="ellipsis"><label>일시 : </label> ${meetup.date.slice(0, 16)}</div>
+                                  //                   <div class="ellipsis"><label>위치 : </label> ${meetup.location}</div>
+                                  //                   <div><label>인원 : </label> ${meetup.curPersonnel} / ${meetup.maxPersonnel}</div>
+                                  //               </div>
+                                  //           </div>
+                                  //       </div> 
+                                  //   </div>
+                                  // `
                                   `
-                                    <div class="_wrap">
-                                        <div class="_info">
-                                            <div class="_title">
-                                                <a href="#/map/detailMeetup?meetupId=${meetup.id}" class="">${meetup.title}</a>
-                                            </div>
-                                            <div class="_body">
-                                                <div class="img">
-                                                    <img src="${meetup.img}" width="73" height="70"/>
-                                                </div>
-                                                <div class="_desc">
-                                                    <div class="ellipsis"><label>일시 : </label> ${meetup.date.slice(0, 16)}</div>
-                                                    <div class="ellipsis"><label>위치 : </label> ${meetup.location}</div>
-                                                    <div><label>인원 : </label> ${meetup.curPersonnel} / ${meetup.maxPersonnel}</div>
-                                                </div>
-                                            </div>
-                                        </div> 
+                                  <div class="overlay_wrap">
+                                    <div class="overlay_info">
+                                        <a href="#/map/detailMeetup?meetupId=${meetup.id}"><strong>${meetup.title}</strong></a>
+                                        <div class="desc">
+                                            <img src="${meetup.img}" width="56" height="56" alt="">
+                                            <div class="date"><label>일시 : </label> ${meetup.date.slice(0, 16)}</div>
+                                            <div class="address"><label>위치 : </label> ${meetup.location}</div>
+                                            <div class="personnel"><label>인원 : </label> ${meetup.curPersonnel} / ${meetup.maxPersonnel}</div>
+                                        </div>
                                     </div>
-                                  `
+                                  </div>
+                                   `
                               });
                               this.overlays.push(overlay);
                               this.markers.push(marker);
@@ -718,7 +731,7 @@ export default {
 
 
 
-._wrap {position: absolute;left: 0;bottom: 40px;width: 288px;height: 132px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
+/* ._wrap {position: absolute;left: 0;bottom: 40px;width: 288px;height: 132px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
 ._wrap * {padding: 0;margin: 0;}
 ._wrap ._info {width: 286px;height: 120px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
 ._wrap ._info:nth-child(1) {border: 0;box-shadow: 0px 1px 2px #888;}
@@ -729,7 +742,19 @@ export default {
 ._desc .jibun {font-size: 11px;color: #888;margin-top: -2px;}
 ._info .img {position: absolute;top: 6px;left: 5px;width: 73px;height: 71px;border: 1px solid #ddd;color: #888;overflow: hidden;}
 ._info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
-._info .link {color: #5085BB;}
+._info .link {color: #5085BB;} */
+
+.overlay_wrap {position: absolute;top:-177px;left:-143px;}
+.overlay_info {width:288px;height:133px;border-radius: 6px; margin-bottom: 12px; float:left;position: relative; border: 1px solid #ccc; border-bottom: 2px solid #ddd;background-color:#fff;}
+.overlay_info:nth-of-type(n) {border:0; box-shadow: 0px 1px 2px #888;}
+.overlay_info a {display: block; background: #FFA726 url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center; text-decoration: none; color: #fff; padding:12px 36px 12px 14px; font-size: 14px; border-radius: 6px 6px 0 0}
+.overlay_info a strong {background:url(https://image.flaticon.com/icons/svg/581/581725.svg) no-repeat; background-size:16px 16px;color:white; padding: 0 0 0 20px;}
+.overlay_info .desc {padding:14px;position: relative; min-width: 190px; height: 56px}
+.overlay_info img {vertical-align: top;}
+.overlay_info .date {font-size: 12px; color: #333; position: absolute; left: 80px; right: 14px; top: 16px; white-space: normal}
+.overlay_info .address {font-size: 12px; color: #333; position: absolute; left: 80px; right: 14px; top: 32px; white-space: normal}
+.overlay_info .personnel {font-size: 12px; color: #333; position: absolute; left: 80px; right: 14px; top: 48px; white-space: normal}
+.overlay_info:after {content:'';position: absolute; margin-left: -11px; left: 50%; bottom: -12px; width: 22px; height: 12px; background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png) no-repeat 0 bottom;}
 
 
 

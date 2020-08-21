@@ -166,7 +166,7 @@ export default {
        this.mynickname = response.data[0];
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
 
 
@@ -180,7 +180,7 @@ export default {
         this.myimg = response.data.userImg;
       })
       .catch((error) => {
-        // console.log(error.response);
+        // // console.log(error.response);
       });
 
     axios
@@ -194,7 +194,7 @@ export default {
         // alert(this.postuserid)
       })
       .catch((error) => {
-        // console.log(error.response);
+        // // console.log(error.response);
       });
   },
   methods: {
@@ -234,7 +234,7 @@ export default {
           }
         })
         .catch((error) => {
-          // console.log(error.response);
+          // // console.log(error.response);
         });
         let userImg = `https://i3b302.p.ssafy.io:8080/img/user?imgname=`+user.userimg;
          this.$router.push('/user/profile?userId='+user.commentuserid
@@ -257,7 +257,7 @@ export default {
               this.postuserimg = this.$route.query.postuserimg;
             })
             .catch((error) => {
-              // console.log(error.response);
+              // // console.log(error.response);
             });
         })
         .catch((error) => {});
@@ -289,7 +289,7 @@ export default {
               //게시한 유저가 자신이 아닐때만
             //좋아요 알림 보냄
             if(this.postuserid != this.$cookie.get('userId')){
-              console.log(this.mynickname);
+              // console.log(this.mynickname);
                window.db.collection('alarm').doc('comment').collection('messages').add({
                         to : this.postuserid,
                         from : this.$cookie.get('userId'),
@@ -298,12 +298,12 @@ export default {
                         postid : this.$route.query.postid,
                         confirm : false
                     }).catch(err => {
-                        console.log(err);
+                        // console.log(err);
                     });
             }
             })
             .catch((error) => {
-              // console.log(error.response);
+              // // console.log(error.response);
             });
         })
         .catch((error) => {});
@@ -338,7 +338,7 @@ export default {
               this.postuserimg = this.$route.query.postuserimg;
             })
             .catch((error) => {
-              // console.log(error.response);
+              // // console.log(error.response);
             });
         })
         .catch((error) => {});

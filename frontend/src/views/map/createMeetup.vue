@@ -330,10 +330,10 @@ export default {
       }
 
       if (window.kakao && window.kakao.maps) {
-        // console.log("이미 로딩됨");
+        // // console.log("이미 로딩됨");
         this.initMap();
       } else {
-        console.log("카카오맵 로딩");
+        // console.log("카카오맵 로딩");
         const script = document.createElement("script");
         /* global kakao */
         script.onload = () => kakao.maps.load(this.initMap);
@@ -431,7 +431,7 @@ export default {
                   this.$router.push("/map")
                 })
                 .catch((error) => {
-                  console.log('error보기')
+                  // console.log('error보기')
                 })
           });
         }
@@ -447,7 +447,7 @@ export default {
               this.$router.push("/map")
             })
             .catch((error) => {
-              console.log('error보기')
+              // console.log('error보기')
             })
         }
       }
@@ -457,7 +457,7 @@ export default {
     createMeetUpChat(){
 
       const newRoomRef = window.db.collection('test').doc();
-                            console.log(newRoomRef.id);
+                            // console.log(newRoomRef.id);
                             // window.db.collection('test').doc(newRoomRef.id).collection('test').doc();
 
                              var res = window.db.collection('test').doc(newRoomRef.id).set({
@@ -465,7 +465,7 @@ export default {
                                 time : Date.now(),
                                 name : this.meetup.title
                             }).catch(err =>{
-                                console.log(err);
+                                // console.log(err);
                             })
 
                             alert("새로운 채팅방 생성");
@@ -534,7 +534,7 @@ export default {
           this.restaurants = restaurants;
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
         })
     },
     select(restaurant){

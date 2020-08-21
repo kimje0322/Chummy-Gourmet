@@ -35,7 +35,7 @@ export default {
                     message: this.newMessage,
                     time: Date.now()
                 }).catch(err => {
-                    console.log(err);
+                    // console.log(err);
                 });
                 window.db.collection('test').doc(this.rid).set({
                     update: Date.now(),
@@ -47,7 +47,7 @@ export default {
                 var a;
                     var message = '';
                 //this.to가 배열일경우
-                // console.log(Array.isArray(this.to));
+                // // console.log(Array.isArray(this.to));
                 if(Array.isArray(this.to)){
                     a = this.to;
                 }
@@ -64,7 +64,7 @@ export default {
                 }
 
                 for(var i = 0;i<a.length;i++){
-                    // console.log(this.myNickName);
+                    // // console.log(this.myNickName);
                     //새로운 알람을 보낸다.
                     window.db.collection('alarm').doc('chat').collection('messages').add({
                         to : a[i],
@@ -74,7 +74,7 @@ export default {
                         roomid : this.rid,
                         confirm : false
                     }).catch(err => {
-                        console.log(err);
+                        // console.log(err);
                     });
                 }
             } else {

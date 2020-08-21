@@ -148,7 +148,7 @@ export default {
     };
   },
   created () {
-    console.log(this.data);
+    // console.log(this.data);
     if(this.data){
       this.content = this.data.postcontent,
       this.img = this.data.postimgurl
@@ -164,7 +164,7 @@ export default {
         this.userimg = response.data.userImg;
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
 
   },
@@ -183,32 +183,32 @@ export default {
     },
 
     modifyFeed(newPost){
-      console.log("수정")
-      console.log(newPost);
+      // console.log("수정")
+      // console.log(newPost);
       axios
         .put(`${SERVER_URL}/post`, newPost)
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           this.close();
           this.$emit('init');
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
           alert("이미지 전송 실패");
         });
     },
     insertFeed(newPost){
-      console.log("등록")
-      console.log(newPost);
+      // console.log("등록")
+      // console.log(newPost);
       axios
         .post(`${SERVER_URL}/post`, newPost)
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           this.close();
           this.$emit('init');
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
           alert("이미지 전송 실패");
         });
     },
@@ -221,7 +221,7 @@ export default {
         postimgurl: this.imgPath + this.img,
       };
 
-      console.log(newPost)
+      // console.log(newPost)
 
       // 이미지를 안바꿨을 때
       if (!this.uploadimg) {
@@ -239,14 +239,14 @@ export default {
           .post(`${SERVER_URL}/post/img`, file)
           .then((response) => {
             newPost.postimgurl = response.data;
-            console.log(newPost.postimgurl);
+            // console.log(newPost.postimgurl);
             if(this.data)
               this.modifyFeed(newPost);
             else
               this.insertFeed(newPost);
           })
           .catch((error) => {
-            console.log(error.response);
+            // console.log(error.response);
             alert("이미지 전송 실패");
           });
       }

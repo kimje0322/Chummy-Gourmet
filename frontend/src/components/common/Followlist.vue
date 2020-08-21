@@ -182,7 +182,7 @@ export default {
        this.mynickname = response.data[0];
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
 
     this.whenCreated(); 
@@ -213,7 +213,7 @@ export default {
         }
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
       axios
       .get(
@@ -232,7 +232,7 @@ export default {
         }
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });    
     },
     gotoProfile(user) {
@@ -275,7 +275,7 @@ export default {
         }
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
     },
 
@@ -298,7 +298,7 @@ export default {
           }
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
     },
 
@@ -317,7 +317,7 @@ export default {
           .then((response) => {
           })
           .catch((error) => {
-            console.log(error.response);
+            // console.log(error.response);
           });
     },
     onFollow(user,idx) {
@@ -329,7 +329,7 @@ export default {
       .then((response) => {
            //팔로우 요청이 성공했을때
             //팔로우 알림 보냄
-              console.log(this.mynickname);
+              // console.log(this.mynickname);
                window.db.collection('alarm').doc('follow').collection('messages').add({
                         to : user.followerId,
                         from : this.$cookie.get('userId'),
@@ -340,7 +340,7 @@ export default {
                     });
       })
       .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
       });
     },
     unFollow(user,idx,str) {
@@ -380,7 +380,7 @@ export default {
                 }
               })
               .catch((error) => {
-                console.log(error.response);
+                // console.log(error.response);
               });
           }
           else{
@@ -402,12 +402,12 @@ export default {
               }
             })
             .catch((error) => {
-              console.log(error.response);
+              // console.log(error.response);
             });  
         }
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
         });
     }
     

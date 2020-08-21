@@ -204,7 +204,7 @@ export default {
        this.mynickname = response.data[0];
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
 
     this.init();
@@ -229,10 +229,10 @@ export default {
         });
         this.postlst = posts;
         this.commentlst = response.data.comment;
-        // console.log("mentlst : " + response.data.comment);
+        // // console.log("mentlst : " + response.data.comment);
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
       
       // 로그인한 유저가 좋아요한 피드들 불러오기
@@ -297,7 +297,7 @@ export default {
     onLike(postlike, idx) {
       this.likestate = !this.likestate;
       if (this.postlst[idx].postid in this.likelist) {
-        // console.log("이거나오면안됨");
+        // // console.log("이거나오면안됨");
       } else {
         axios
           .put(`${SERVER_URL}/post/like?postid=${this.postlst[idx].postid}&userid=${this.$cookie.get("userId")}`)
@@ -305,7 +305,7 @@ export default {
             //게시한 유저가 자신이 아닐때만
             //좋아요 알림 보냄
             if(this.postlst[idx].postuserid != this.$cookie.get('userId')){
-              console.log(this.mynickname);
+              // console.log(this.mynickname);
                window.db.collection('alarm').doc('like').collection('messages').add({
                         to : this.postlst[idx].postuserid,
                         from : this.$cookie.get('userId'),
@@ -314,7 +314,7 @@ export default {
                         postid : this.postlst[idx].postid,
                         confirm : false
                     }).catch(err => {
-                        console.log(err);
+                        // console.log(err);
                     });
             }
             this.like = !this.like;
@@ -322,7 +322,7 @@ export default {
             this.init();
           })
           .catch((error) => {
-            console.log(error);
+            // console.log(error);
           });
       }
     },
@@ -335,7 +335,7 @@ export default {
           this.init();
         })
         .catch((error) => {
-          console.log(error);
+          // console.log(error);
         });
     },
     // 해당 index의 피드에 대한 DIALOG OPEN

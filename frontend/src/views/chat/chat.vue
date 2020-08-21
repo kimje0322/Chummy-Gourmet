@@ -95,14 +95,14 @@ export default {
                       window.db.collection('alarm').doc('chat').collection('messages').where('roomid','==',this.room.rid).where('to','==',this.userid).get()
                       .then(snapshot =>{
                           if(snapshot.empty) {
-                            //   console.log('채팅이 없다')
+                            //   // console.log('채팅이 없다')
                           }
 
                           snapshot.forEach(doc =>{
                              window.db.collection('alarm').doc('chat').collection('messages').doc(doc.id).set({
                                     confirm : true
                                 },{merge:true}).catch(err => {
-                                    // console.log(err);
+                                    // // console.log(err);
                                 });
                           })
                       })
@@ -114,10 +114,10 @@ export default {
                             .post(
                                 `${SERVER_URL}/chat/nickname`,[this.userid]
                             ).then((response) =>{
-                                // console.log('내 닉네임');
-                                // console.log(response);
+                                // // console.log('내 닉네임');
+                                // // console.log(response);
                                 this.myNickName = response.data[0];
-                                // console.log(this.myNickName);
+                                // // console.log(this.myNickName);
                             }).catch((err) =>{
 
                             })
@@ -131,20 +131,20 @@ export default {
                                 `${SERVER_URL}/userpage/getuserpost`,this.room.id
                             )
                             .then((response) => {
-                                // console.log('응답',response);
+                                // // console.log('응답',response);
                                 this.userImg = response.data;
                            })
                             .catch((error) => {
-                                // console.log(error.response);
+                                // // console.log(error.response);
                             });
         },
         view(room){
-            // console.log('이미지',this.userImg);
+            // // console.log('이미지',this.userImg);
              window.db.collection('test').doc(this.room.rid).collection('messages').orderBy('time').onSnapshot(snapshot=>{
                     
                   snapshot.docChanges().forEach(change =>{
                     if (change.type == 'added'){
-                    //   console.log(change.doc.data());
+                    //   // console.log(change.doc.data());
                       var doc = change.doc;
 
                       //닉네임 구하기
@@ -154,13 +154,13 @@ export default {
                           num = this.room.id.indexOf(id);
                       }    
              
-                    //   console.log("--------------------")
-                    //   console.log(id)
-                    //   console.log(typeof(id));
-                    //   console.log(num)              
-                    //   console.log(this.room.id)
-                    //   console.log(this.room.nickName[num])
-                    //   console.log(this.room.nickName)
+                    //   // console.log("--------------------")
+                    //   // console.log(id)
+                    //   // console.log(typeof(id));
+                    //   // console.log(num)              
+                    //   // console.log(this.room.id)
+                    //   // console.log(this.room.nickName[num])
+                    //   // console.log(this.room.nickName)
 
                     
 
@@ -172,8 +172,8 @@ export default {
                         img : this.room.img[num]
                         // to : to
                       }
-                    //   console.log('ms');
-                    //   console.log(ms);
+                    //   // console.log('ms');
+                    //   // console.log(ms);
 
                       this.messages.push(ms);
 

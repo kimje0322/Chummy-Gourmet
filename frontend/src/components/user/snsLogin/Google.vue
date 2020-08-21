@@ -67,7 +67,7 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
                         });
                         
                         gauth.then(function(response){
-                            console.log('init success');
+                            // console.log('init success');
                             var gauth = window.gapi.auth2.getAuthInstance();
                             gauth.signIn().then(function(){
 
@@ -93,16 +93,16 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
                                 axios.get(`${SERVER_URL}/account/signup/valid?nickname=${userInfo.userNickname}&email=${userInfo.userEmail}`)
                                 .then((response)=>{
                                     //이메일 닉네임 유효성 검사 성공
-                                    console.log(response);
+                                    // console.log(response);
                                     if(response.data.status){
                                         //구글 계정으로 등록
                                         axios.post(`${SERVER_URL}/account/apisignup`,userInfo)
                                         .then(res => {
-                                        console.log("성공");
+                                        // console.log("성공");
                                         alert("가입되었습니다. 다시로그인해주세요");
                                         })
                                         .catch(err => {
-                                            console.log("실패");
+                                            // console.log("실패");
                                         })
                                     }
                                     else{
@@ -112,7 +112,7 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
                                         )
 
                                         .then((response) => {
-                                        console.log(response.data);
+                                        // console.log(response.data);
 
                                         cookie.set("accesstoken", response.data, 1);
                                         cookie.set("userId", response.data.object.userId, 1);
@@ -121,7 +121,7 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
                                         })
 
                                         .catch((error) => {
-                                        console.log(error.response);
+                                        // console.log(error.response);
                                         alert("로그인 실패");
                                         });
                                     }
@@ -129,7 +129,7 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
                                 }).catch((e)=>{
                                     //이메일 닉네임이 이미 있을경우
                                     //로그인 작업을 처리한 후 쿠키에 넣어준다
-                                    console.log(e);
+                                    // console.log(e);
                                 });
                         
                             });
@@ -140,7 +140,7 @@ const SERVER_URL = "https://i3b302.p.ssafy.io:8080";
 
             },
             login(){
-                console.log("되라좀");
+                // console.log("되라좀");
             }
 
            

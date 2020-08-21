@@ -13,12 +13,11 @@
       </v-toolbar-title>
 
       <!-- -->
-      <div style="position: relative;">
+      <div class="pb-10" style="position: relative;">
 
         <!-- 댓글 작성 창 -->
         <section class="comment">
           <div class="top">
-
             <!-- 프사 -->
             <span class="prf">
               <img
@@ -44,31 +43,12 @@
               ></textarea>
               <button @click="onCreate()" class="upload">게시</button>
             </form>
-
-          </div>
-
-
-          <div v-if="recomment" class="top">
-            <span class="prf">
-              <img
-                style="height: 100%; width: 100%; -webkit-user-drag: none;"
-                :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+this.myimg"
-              />
-            </span>
-            <form style="height: 42px; " class="text-box">
-              <textarea @keyup.enter="onRewrite" style="height: 18px;" class="text" v-model="commentcontent"></textarea>
-              <button @click="onRewrite()" class="upload">수정</button>
-            </form>
           </div>
         </section>
-
-
-
 
         <!-- 댓글 리스트 -->
         <div class="">
           <!-- <ul style="height: 494px;"> -->
-
             <!-- 작성자가 피드 컨텐츠 -->
             <v-list>
               <v-list-item>
@@ -92,7 +72,7 @@
 
             <!-- 댓글 리스트 -->
             <v-list v-for="(lst, i) in commentlst" :key="i">
-              <v-list-item>
+              <v-list-item v-if="!recomment || i != index">
                 <v-list-item-avatar>
                   <img
                     @click="gotoProfileByComment(lst)"
@@ -112,7 +92,7 @@
                   </v-list-item-subtitle>
                 </v-list-item-content>
                 <v-list-item-icon>
-                  <v-btn icon v-if="lst.commentuserid  == userid" @click="rewrite(lst)">
+                  <v-btn icon v-if="lst.commentuserid  == userid" @click="rewrite(lst,i)">
                     <v-icon small>mdi-pencil</v-icon>
                   </v-btn>
                   <v-btn icon v-if="lst.commentuserid  == userid" @click="onDelete(lst)">
@@ -120,6 +100,34 @@
                   </v-btn>
                 </v-list-item-icon>
               </v-list-item>
+
+              <v-list-item v-if="recomment && i == index">
+                <v-list-item-avatar>
+                  <img
+                    @click="gotoProfileByComment(lst)"
+                    style="height: 100%; width: 100%; -webkit-user-drag: none;"
+                    :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+lst.userimg"
+                  />
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title>
+                      <v-text-field 
+                      @keyup.enter="onRewrite" 
+                      v-model="commentcontent"
+                      autofocus 
+                      :value="lst.postcomment"
+                      >
+                      {{lst.postcomment}}
+                      </v-text-field>
+                  </v-list-item-title>
+                </v-list-item-content>
+                <v-list-item-icon>
+                  <v-btn icon v-if="lst.commentuserid  == userid" @click="onRewrite()">
+                    <v-icon small>mdi-pencil</v-icon>
+                  </v-btn>
+                </v-list-item-icon>
+              </v-list-item>
+            
             </v-list>
 
         </div>
@@ -149,7 +157,8 @@ export default {
       cid : "",
       postuserid:"",
       userid : "",
-      mynickname : ''
+      mynickname : '',
+      index : "",
     };
   },
   watch: {
@@ -166,7 +175,7 @@ export default {
        this.mynickname = response.data[0];
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
 
 
@@ -180,7 +189,7 @@ export default {
         this.myimg = response.data.userImg;
       })
       .catch((error) => {
-        // console.log(error.response);
+        // // console.log(error.response);
       });
 
     axios
@@ -194,7 +203,7 @@ export default {
         // alert(this.postuserid)
       })
       .catch((error) => {
-        // console.log(error.response);
+        // // console.log(error.response);
       });
   },
   methods: {
@@ -234,7 +243,7 @@ export default {
           }
         })
         .catch((error) => {
-          // console.log(error.response);
+          // // console.log(error.response);
         });
         let userImg = `https://i3b302.p.ssafy.io:8080/img/user?imgname=`+user.userimg;
          this.$router.push('/user/profile?userId='+user.commentuserid
@@ -257,7 +266,7 @@ export default {
               this.postuserimg = this.$route.query.postuserimg;
             })
             .catch((error) => {
-              // console.log(error.response);
+              // // console.log(error.response);
             });
         })
         .catch((error) => {});
@@ -289,7 +298,7 @@ export default {
               //게시한 유저가 자신이 아닐때만
             //좋아요 알림 보냄
             if(this.postuserid != this.$cookie.get('userId')){
-              console.log(this.mynickname);
+              // console.log(this.mynickname);
                window.db.collection('alarm').doc('comment').collection('messages').add({
                         to : this.postuserid,
                         from : this.$cookie.get('userId'),
@@ -298,22 +307,22 @@ export default {
                         postid : this.$route.query.postid,
                         confirm : false
                     }).catch(err => {
-                        console.log(err);
+                        // console.log(err);
                     });
             }
             })
             .catch((error) => {
-              // console.log(error.response);
+              // // console.log(error.response);
             });
         })
         .catch((error) => {});
       }
     },
-    rewrite(comment) {
+    rewrite(comment, i) {
       this.recomment = true
       this.cid = comment.commentid
-      
       this.commentcontent = comment.postcomment;
+      this.index = i;
     },
     onRewrite() {
       var commentxt = {
@@ -338,7 +347,7 @@ export default {
               this.postuserimg = this.$route.query.postuserimg;
             })
             .catch((error) => {
-              // console.log(error.response);
+              // // console.log(error.response);
             });
         })
         .catch((error) => {});

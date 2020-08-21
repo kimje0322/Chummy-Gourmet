@@ -146,16 +146,16 @@ export default {
                     `${SERVER_URL}/userpage/getuserpost`,this.reviewWriterId
                 )
                 .then((response) => {
-                    // console.log('응답',response);
+                    // // console.log('응답',response);
                    this.reviewWriterImg = response.data;
               })
                 .catch((error) => {
-                    console.log(error.response);
+                    // console.log(error.response);
                 });
           
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
         });
       
 

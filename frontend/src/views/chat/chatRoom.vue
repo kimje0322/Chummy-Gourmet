@@ -58,7 +58,7 @@ export default {
                  .then(snapshot=>{
                   //없을경우
                       if(snapshot.empty){
-                        console.log("없다");
+                        // console.log("없다");
                         return;
                         }
 
@@ -72,23 +72,23 @@ export default {
                             )
                             .then((response) => {
                                 this.responseNickName = response.data;
-                                // console.log(this.responseNickName);
+                                // // console.log(this.responseNickName);
                                 var chatName;
                                     //수신하는 사람
                                     var to = doc.data().id;
                                     var idx = to.indexOf(this.$cookie.get('userId')) 
                                     if (idx > -1) to.splice(idx, 1)
-                                    // console.log('수신인');
-                                    // console.log(to)
+                                    // // console.log('수신인');
+                                    // // console.log(to)
                                 //채팅방이름이 Room일경우 (1대1 대화일 경우)
-                                // console.log(doc.data().name);
+                                // // console.log(doc.data().name);
                                     var arrayforname = doc.data().id;
                                     var toforname = arrayforname.indexOf(to[0]);
                                 if(doc.data().name == 'Room')
                                 {
-                                    // console.log(doc.data().id.indexOf('2'));
+                                    // // console.log(doc.data().id.indexOf('2'));
                                     chatName = this.responseNickName[toforname];
-                                    // console.log(arrayforname,toforname,chatName,to)
+                                    // // console.log(arrayforname,toforname,chatName,to)
                                 }
                                 //아닐경우 -> firestore에 저장된 이름
                                 else{
@@ -107,12 +107,12 @@ export default {
                                 time : doc.data().update,
                                 // time : moment(doc.data().update).format('LLL'),
                                 }
-                            // console.log(chatData);
+                            // // console.log(chatData);
                              axios.post(
                                 `${SERVER_URL}/userpage/getuserpost`,chatData.id
                             )
                             .then((response) => {
-                                // console.log('응답',response);
+                                // // console.log('응답',response);
                                 chatData.img = response.data;
                                 this.chatroom.push(chatData);
                                 //채팅방 출력이미지
@@ -131,27 +131,27 @@ export default {
                                     });
                            })
                             .catch((error) => {
-                                console.log(error.response);
+                                // console.log(error.response);
                             });
 
-                        //  console.log(doc.id, '=>',doc.data());
+                        //  // console.log(doc.id, '=>',doc.data());
                            })
                             .catch((error) => {
-                                console.log(error.response);
+                                // console.log(error.response);
                             });
                           
-                                // console.log(this.responseNickName);
+                                // // console.log(this.responseNickName);
 
                          
                        })
                   })
                   .catch(err => {
-                     console.log(err);
+                     // console.log(err);
                   });
     },
     methods:{
         chatGo(room){
-            // console.log(room);
+            // // console.log(room);
            
                             
          this.$router.push({name: 'Chat', params: {room: room}});
@@ -162,17 +162,17 @@ export default {
                 .then(snapshot=>{
                     //없을경우
                     if(snapshot.empty){
-                        console.log("없다");
+                        // console.log("없다");
                         return;
                     }
 
                     //있을경우
                     snapshot.forEach(doc=>{
-                        // console.log(doc.id, '=>',doc.data());
+                        // // console.log(doc.id, '=>',doc.data());
                     })
                 })
                 .catch(err => {
-                    console.log(err);
+                    // console.log(err);
                 });
                 this.newMessage = null;
                 this.errorText = null;

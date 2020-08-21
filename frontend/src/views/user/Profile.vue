@@ -144,7 +144,7 @@ export default {
           .then((response) => {
           })
           .catch((error) => {
-            console.log(error.response);
+            // console.log(error.response);
           });
     },
     onFollow() {
@@ -157,7 +157,7 @@ export default {
 
         //팔로우 요청이 성공했을때
             //팔로우 알림 보냄
-              console.log(this.mynickname);
+              // console.log(this.mynickname);
                window.db.collection('alarm').doc('follow').collection('messages').add({
                         to : this.anotherId,
                         from : this.$cookie.get('userId'),
@@ -169,7 +169,7 @@ export default {
 
       })
       .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
       });
     },
     unFollow() {
@@ -181,7 +181,7 @@ export default {
         .then((response) => {
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
         });
     }
   },
@@ -197,7 +197,7 @@ export default {
        this.mynickname = response.data[0];
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
 
 
@@ -223,7 +223,7 @@ export default {
         this.userNickname = response.data.userNickname
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
 
       axios
@@ -231,7 +231,7 @@ export default {
         .then((response) => {
             this.postlst = response.data.data
             this.commentlst = response.data.comment;
-            // console.log(this.postlst)
+            // // console.log(this.postlst)
         })
 
       // 유저 추가 정보  

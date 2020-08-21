@@ -345,6 +345,9 @@ export default {
       snackbar : false,
       snackbarText : '',
       snackbarColor : '',
+
+      geocoder : '',
+      curRegion : '',
     };
   },
   computed: {
@@ -354,6 +357,8 @@ export default {
       }
       return this.dates.join(' ~ ')
     }
+  },
+  watch : {
   },
   mounted() {
     // 현재 위치 확인
@@ -366,7 +371,7 @@ export default {
 
     // 카카오 맵 로딩
     // if (window.kakao && window.kakao.maps) {
-    //   console.log("이미 로딩됨");
+    //   // console.log("이미 로딩됨");
     //   this.initMap();
     // } else {
       const script = document.createElement("script");
@@ -378,6 +383,40 @@ export default {
     // }
   },
   methods: {
+    clearMarkersAndOverays(){
+      for(let i=0; i<this.markers.length;i++){
+        this.markers[i].setMap(null);
+      }
+      this.markers = [];
+      this.overlays = [];
+    },
+
+    // 지역(구)의 변경감지하는 메소드
+    checkChangeRegion(result, status){
+      if(status == kakao.maps.services.Status.OK){
+        let newRegion = result[0].region_2depth_name;
+        if(this.curRegion != newRegion){
+          this.curRegion = newRegion;
+          this.clearMarkersAndOverays();
+          this.getNearMeetups(result[0]);
+          this.showSnackBar("[ " + result[0].region_1depth_name + " " + newRegion + " ] 를 조회합니다 :)", "success");
+        }
+      }
+    },
+    // 좌표로 행정동 주소 정보를 요청합니다
+    searchAddrFromCoords(coords, callback) {
+      this.geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), callback);         
+    },
+
+    // 좌표로 법정동 상세 주소 정보를 요청합니다
+    searchDetailAddrFromCoords(coords, callback) {
+      this.geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
+    },
+    showSnackBar(content, color){
+      this.snackbarText = content;
+      this.snackbarColor = color;
+      this.snackbar = true;
+    },
     setDate(){
       if(this.dates.length == 1){
         this.dates.push(this.dates[0]);
@@ -418,48 +457,44 @@ export default {
     },
     doFilter(){
       this.meetups.forEach((meetup, index) => {
-        var isPersonalites = true;
-        var isDate = true;
-        var isPersonnel = true;
-        var isCategory = true;
-
+        var isPersonalites = false;
+        var isDate = false;
+        var isPersonnel = false;
+        var isCategory = false;
         // 카테고리 필터링
         for(let i = 0; i< this.selectedFoods.length; i++){
-          // 밋업이 필터성향을 하나라도 포함하고 있으면
-          if(meetup.category == this.selectedFoods[i])
+          // 밋업이 필터 카테고리를 하나라도 포함하고 있으면
+          if(meetup.category == this.selectedFoods[i]){
+            isCategory = true;
             break;
-          
-          // 밋업이 필터성향을 하나도 포함하고 있지 않으면
-          else{
-            if(i == this.selectedFoods.length - 1)
-              isCategory = false;
           }
         }
         // 성향 필터링
         for(let i = 0; i<this.selectedProps.length; i++){
           // 밋업이 필터성향을 하나라도 포함하고 있으면
-          if(meetup.personalities.indexOf(this.selectedProps[i]) > -1)
+          if(meetup.personalities.indexOf(this.selectedProps[i]) > -1){
+            isPersonalites = true;
             break;
-          
-          // 밋업이 필터성향을 하나도 포함하고 있지 않으면
-          else{
-            if(i == this.selectedProps.length - 1)
-              isPersonalites = false;
           }
         }
 
         // 인원 필터링
-        if(meetup.curPersonnel < this.personnel[0] || meetup.curPersonnel > this.personnel[1])
-          isPersonnel = false;
+        if(meetup.curPersonnel >= this.personnel[0] && meetup.curPersonnel <= this.personnel[1]){
+          isPersonnel = true;
+        }
         
         // 날짜 필터링
-        if(new Date(meetup.date) < new Date(this.dates[0]) || new Date(meetup.date) > new Date(this.dates[1]))
-          isDate = false;
+        if(new Date(meetup.date.slice(0, 16)) >= new Date(this.dates[0]) && new Date(meetup.date.slice(0, 16)) <= new Date(this.dates[1])){
+          isDate = true;
+        }
         
-        if(isPersonalites && isDate && isPersonnel && isCategory)
+        if(isPersonalites && isDate && isPersonnel && isCategory){
           this.markers[index].setMap(this.map)
-        else
+        }
+        else{
           this.markers[index].setMap(null)
+        }
+        this.showSnackBar("필터가 설정되었습니다. :)", "info");
 
       });
 
@@ -471,6 +506,7 @@ export default {
           var coords = new kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
           this.map.panTo(coords);
         });
+        this.showSnackBar("현재 위치로 이동합니다.", "info");
      }
     },
     swap(dates) {
@@ -486,10 +522,23 @@ export default {
         level: 3
       };
       this.map = new kakao.maps.Map(container, options);
+      this.geocoder = new kakao.maps.services.Geocoder();
+
+      // 페이지 시작 시, 현재 지역(구) 정보를 저장
+      this.geocoder.coord2RegionCode(this.map.getCenter().getLng(), this.map.getCenter().getLat(), (result, status)=>{
+        this.curRegion = result[0].region_2depth_name;
+      });         
+      
+      // Map Zoom In/Out 또는 중심 좌표 변경 시
+      // 바뀐 지역(구) 정보 조회해서
+      // 현재 지역과 바뀐 지도의 지역이 다르면
+      // 해당 지역의 밋업 리스트 불러오기
+      kakao.maps.event.addListener(this.map, 'idle', () => {
+        this.searchAddrFromCoords(this.map.getCenter(), this.checkChangeRegion);
+      })
 
       // 좌표->주소
-      var geocoder = new kakao.maps.services.Geocoder();
-      geocoder.coord2Address(CURLNG, CURLAT, (result, status) => {
+      this.geocoder.coord2Address(CURLNG, CURLAT, (result, status) => {
         if(status === kakao.maps.services.Status.OK){
 
           // 현재 주소
@@ -499,61 +548,7 @@ export default {
           }
 
           // 해당 위치 주변의 밋업 리스트          
-          axios
-            .get(`${SERVER_URL}/meetup/search/location/${address.region_1depth_name} ${address.region_2depth_name}`)
-            .then((response) => {
-              // 밋업 리스트
-              this.meetups = response.data.object;
-
-              var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
-              this.meetups.forEach(meetup => {
-                // console.log(meetup)
-                geocoder.addressSearch(meetup.address, (result, status) => {
-                    if (status === kakao.maps.services.Status.OK) {
-                        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-                        // marker 생성
-                        var markerImage = new kakao.maps.MarkerImage(imageSrc, new kakao.maps.Size(24, 35));
-                        var marker = new kakao.maps.Marker({
-                          title: meetup.title,
-                          position: coords,
-                          image : markerImage,
-                          clickable: true,
-                        });
-
-                        // custom overlay infowindow 생성
-                        var overlay = new kakao.maps.CustomOverlay({     
-                          position: marker.getPosition(),
-                          content: 
-                            `
-                              <div class="_wrap">
-                                  <div class="_info">
-                                      <div class="_title">
-                                          <a href="#/map/detailMeetup?meetupId=${meetup.id}" class="">${meetup.title}</a>
-                                      </div>
-                                      <div class="_body">
-                                          <div class="img">
-                                              <img src="${meetup.img}" width="73" height="70"/>
-                                          </div>
-                                          <div class="_desc">
-                                              <div class="ellipsis"><label>일시 : </label> ${meetup.date}</div>
-                                              <div class="ellipsis"><label>위치 : </label> ${meetup.location}</div>
-                                              <div><label>인원 : </label> ${meetup.curPersonnel} / ${meetup.maxPersonnel}</div>
-                                          </div>
-                                      </div>
-                                  </div> 
-                              </div>
-                            `
-                        });
-                        this.overlays.push(overlay);
-                        this.markers.push(marker);
-                        kakao.maps.event.addListener(marker, "click", this.toggleInfoWindow(this.map, marker, overlay, this.overlays));
-                        marker.setMap(this.map);
-                    } 
-                });    
-                  
-              });
-
-            })
+          this.getNearMeetups(address);
         }
       });
     },
@@ -586,26 +581,98 @@ export default {
           return false;
         }
         // 장소 검색 객체를 생성합니다
-        var geocoder = new kakao.maps.services.Geocoder();
+        // var geocoder = new kakao.maps.services.Geocoder();
         
         // 주소로 좌표를 검색합니다
-        geocoder.addressSearch(this.keyword, (result, status) => {
+        this.geocoder.addressSearch(this.keyword, (result, status) => {
 
             // 정상적으로 검색이 완료됐으면 
             if (status === kakao.maps.services.Status.OK) {
                 var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-                this.snackbarText = "[ " + this.keyword + " ] 으로 이동합니다 :)";
-                this.snackbarColor = "info";
-                this.snackbar = true;
+                this.showSnackBar("[ " + this.keyword + " ] 으로 이동합니다 :)", "info");
                 // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
                 this.map.setCenter(coords);
             } else{
-              this.snackbarText = "없는 지역이예요.. 다시 확인해주세요 :(";
-              this.snackbarColor = 'error';
-              this.snackbar = true;
-              
+              this.showSnackBar("없는 지역이예요.. 다시 확인해주세요 :(", "error");
             }
         });    
+    },
+    getNearMeetups(address){
+      // console.log(address);
+      axios
+            .get(`${SERVER_URL}/meetup/search/location/${address.region_1depth_name.slice(0, 2)} ${address.region_2depth_name}`)
+            .then((response) => {
+              // 밋업 리스트
+              // console.log(response)
+              if(response.data.data == "success"){
+                this.meetups = response.data.object;
+                    // console.log(this.meetups)
+                    var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
+                    this.meetups.forEach(meetup => {
+                      // // console.log(meetup)
+                      this.geocoder.addressSearch(meetup.address, (result, status) => {
+                          if (status === kakao.maps.services.Status.OK) {
+                              var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                              // marker 생성
+                              var markerImage = new kakao.maps.MarkerImage(imageSrc, new kakao.maps.Size(24, 35));
+                              var marker = new kakao.maps.Marker({
+                                title: meetup.title,
+                                position: coords,
+                                image : markerImage,
+                                clickable: true,
+                              });
+
+                              // custom overlay infowindow 생성
+                              var overlay = new kakao.maps.CustomOverlay({     
+                                position: marker.getPosition(),
+                                content: 
+                                  // `
+                                  //   <div class="_wrap">
+                                  //       <div class="_info">
+                                  //           <div class="_title">
+                                  //               <a href="#/map/detailMeetup?meetupId=${meetup.id}" class="">${meetup.title}</a>
+                                  //           </div>
+                                  //           <div class="_body">
+                                  //               <div class="img">
+                                  //                   <img src="${meetup.img}" width="73" height="70"/>
+                                  //               </div>
+                                  //               <div class="_desc">
+                                  //                   <div class="ellipsis"><label>일시 : </label> ${meetup.date.slice(0, 16)}</div>
+                                  //                   <div class="ellipsis"><label>위치 : </label> ${meetup.location}</div>
+                                  //                   <div><label>인원 : </label> ${meetup.curPersonnel} / ${meetup.maxPersonnel}</div>
+                                  //               </div>
+                                  //           </div>
+                                  //       </div> 
+                                  //   </div>
+                                  // `
+                                  `
+                                  <div class="overlay_wrap">
+                                    <div class="overlay_info">
+                                        <a href="#/map/detailMeetup?meetupId=${meetup.id}"><strong>${meetup.title}</strong></a>
+                                        <div class="desc">
+                                            <img src="${meetup.img}" width="56" height="56" alt="">
+                                            <div class="date"><label>일시 : </label> ${meetup.date.slice(0, 16)}</div>
+                                            <div class="address"><label>위치 : </label> ${meetup.location}</div>
+                                            <div class="personnel"><label>인원 : </label> ${meetup.curPersonnel} / ${meetup.maxPersonnel}</div>
+                                        </div>
+                                    </div>
+                                  </div>
+                                   `
+                              });
+                              this.overlays.push(overlay);
+                              this.markers.push(marker);
+                              kakao.maps.event.addListener(marker, "click", this.toggleInfoWindow(this.map, marker, overlay, this.overlays));
+                              marker.setMap(this.map);
+                          } 
+                      });    
+                        
+                    });
+
+              }
+          
+   
+
+            })
     }
   }
 }
@@ -664,7 +731,7 @@ export default {
 
 
 
-._wrap {position: absolute;left: 0;bottom: 40px;width: 288px;height: 132px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
+/* ._wrap {position: absolute;left: 0;bottom: 40px;width: 288px;height: 132px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
 ._wrap * {padding: 0;margin: 0;}
 ._wrap ._info {width: 286px;height: 120px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
 ._wrap ._info:nth-child(1) {border: 0;box-shadow: 0px 1px 2px #888;}
@@ -675,7 +742,19 @@ export default {
 ._desc .jibun {font-size: 11px;color: #888;margin-top: -2px;}
 ._info .img {position: absolute;top: 6px;left: 5px;width: 73px;height: 71px;border: 1px solid #ddd;color: #888;overflow: hidden;}
 ._info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
-._info .link {color: #5085BB;}
+._info .link {color: #5085BB;} */
+
+.overlay_wrap {position: absolute;top:-177px;left:-143px;}
+.overlay_info {width:288px;height:133px;border-radius: 6px; margin-bottom: 12px; float:left;position: relative; border: 1px solid #ccc; border-bottom: 2px solid #ddd;background-color:#fff;}
+.overlay_info:nth-of-type(n) {border:0; box-shadow: 0px 1px 2px #888;}
+.overlay_info a {display: block; background: #FFA726 url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center; text-decoration: none; color: #fff; padding:12px 36px 12px 14px; font-size: 14px; border-radius: 6px 6px 0 0}
+.overlay_info a strong {background:url(https://image.flaticon.com/icons/svg/581/581725.svg) no-repeat; background-size:16px 16px;color:white; padding: 0 0 0 20px;}
+.overlay_info .desc {padding:14px;position: relative; min-width: 190px; height: 56px}
+.overlay_info img {vertical-align: top;}
+.overlay_info .date {font-size: 12px; color: #333; position: absolute; left: 80px; right: 14px; top: 16px; white-space: normal}
+.overlay_info .address {font-size: 12px; color: #333; position: absolute; left: 80px; right: 14px; top: 32px; white-space: normal}
+.overlay_info .personnel {font-size: 12px; color: #333; position: absolute; left: 80px; right: 14px; top: 48px; white-space: normal}
+.overlay_info:after {content:'';position: absolute; margin-left: -11px; left: 50%; bottom: -12px; width: 22px; height: 12px; background:url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png) no-repeat 0 bottom;}
 
 
 

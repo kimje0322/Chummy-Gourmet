@@ -160,7 +160,7 @@ export default {
       })
 
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
         alert("이미지 전송 실패");
       });
     },
@@ -176,7 +176,7 @@ export default {
       })
 
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
         alert("데이터 전송 실패");
       });
     },
@@ -214,7 +214,7 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
         });  
       }
     }
@@ -246,7 +246,7 @@ export default {
         this.viewImg = SERVER_URL+"/img/user?imgname="+this.userImg;
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
     },
   };

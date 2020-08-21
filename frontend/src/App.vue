@@ -34,7 +34,7 @@
           </v-bottom-navigation>
 
 
-          <v-container class="pa-0 mx-auto overflow-y-auto" style="width:100%;max-width:960px;;min-width:360px;"
+          <v-container class="pa-0 mx-auto overflow-y-auto" style="width:100%;max-width:960px;height:667px;min-width:360px;"
           >
             <router-view></router-view>
           </v-container>
@@ -105,8 +105,8 @@ export default {
           )
 
           .then((response) => {
-            console.log("로그인페이지");
-            console.log(response.data);
+            // console.log("로그인페이지");
+            // console.log(response.data);
 
             this.$cookie.set("accesstoken", response.data, 1);
             this.$cookie.set("userId", response.data.object.userId, 1);
@@ -115,7 +115,7 @@ export default {
           })
 
           .catch((error) => {
-            console.log(error.response);
+            // console.log(error.response);
             alert("다시 로그인 해주세요");
             this.$router.push("/").catch(()=>{});
           });

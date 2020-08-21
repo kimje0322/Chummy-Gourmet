@@ -438,7 +438,7 @@ export default {
         })
         .catch((error) => {
           alert("엑시오스못가고실패");
-          console.log(error.response);
+          // console.log(error.response);
         });
       }
     },

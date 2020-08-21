@@ -55,7 +55,7 @@
       </v-expansion-panel>
       </v-expansion-panels>
 
-<br><br><br><br><br><br>
+<br><br><br><br>
       <v-expansion-panels>
       <v-divider>게시글</v-divider>
       <v-expansion-panel >
@@ -65,22 +65,32 @@
         <div v-for="(list,i) in post" :key="i">
           <div @click="onClick(list)">
             <v-expansion-panel-content >
-                <v-list-item-avatar style="cursor:pointer;" @click="gotoProfile(lst)">
-                  <img
-                    :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+list.img"
-                  />
-                </v-list-item-avatar>
-                {{list.message}}<br>
-                  <!-- <v-btn style="float : right;" class="btn btn-primary" @click="onClick(list)">확인</v-btn> -->
-                  {{ list.time | moment("from","now")}}
+                 <v-list>
+                <v-list-item>
+                  <v-list-item-avatar style="cursor:pointer;" @click="gotoProfile(lst)">
+                    <img
+                      :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+list.img"
+                    />
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      {{list.message}}
+                    </v-list-item-title>
+                      <v-list-item-subtitle>
+                        {{ list.time | moment("from","now")}}
+                      </v-list-item-subtitle>
+                  </v-list-item-content>
+                      
 
+                </v-list-item>
+              </v-list>
             </v-expansion-panel-content>
           </div>
         </div>
       </v-expansion-panel>
       </v-expansion-panels>
 
-<br><br><br><br><br><br>
+<br><br><br><br>
       <v-expansion-panels>
       <v-divider>요청</v-divider>
       <v-expansion-panel >
@@ -90,15 +100,25 @@
         <div v-for="(list,i) in accept" :key="i">
           <div @click="onClick(list)">
             <v-expansion-panel-content >
-                <v-list-item-avatar style="cursor:pointer;" @click="gotoProfile(lst)">
-                  <img
-                    :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+list.img"
-                  />
-                </v-list-item-avatar>
-                {{list.message}}<br>
-                  <!-- <v-btn style="float : right;" class="btn btn-primary" @click="onClick(list)">확인</v-btn> -->
-                  {{ list.time | moment("from","now")}}
+                <v-list>
+                <v-list-item>
+                  <v-list-item-avatar style="cursor:pointer;" @click="gotoProfile(lst)">
+                    <img
+                      :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+list.img"
+                    />
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      {{list.message}}
+                    </v-list-item-title>
+                      <v-list-item-subtitle>
+                        {{ list.time | moment("from","now")}}
+                      </v-list-item-subtitle>
+                  </v-list-item-content>
+                      
 
+                </v-list-item>
+              </v-list>
             </v-expansion-panel-content>
           </div>
         </div>
@@ -157,8 +177,8 @@ export default {
                                `${SERVER_URL}/userpage/getuserpost`,[data.from]
                            )
                            .then((response) => {
-                               // console.log('응답',response);
-                             // console.log('data',data)
+                               // // console.log('응답',response);
+                             // // console.log('data',data)
                              data.img = response.data[0]
                              if(type == 'chat'){
                                this.chatCount++;
@@ -187,31 +207,31 @@ export default {
                              }
                           })
                            .catch((error) => {
-                               console.log(error.response);
+                               // console.log(error.response);
                            });
 
           }
           else{
-            console.log(change.type);
+            // console.log(change.type);
           }
         })
       })
                 //  .then(snapshot=>{
                 //   //없을경우
                 //       if(snapshot.empty){
-                //         // console.log("없다");
+                //         // // console.log("없다");
                 //         return;
                 //         }
 
                 //   })
                 //   .catch(err => {
-                //      console.log(err);
+                //      // console.log(err);
                 //   });
     },
 
     //클릭했을 때 페이지 변경해주는 함수
     onClick(list){
-      console.log('click');
+      // console.log('click');
       if(list.type=='chat'){
         this.$router.push({ path: '/chatroom' });
       }
@@ -232,8 +252,8 @@ export default {
             .then((response) => {
                 var post = response.data.data
                 var comment = response.data.comment;
-                // console.log(post.post_content);
-                // console.log(comment);
+                // // console.log(post.post_content);
+                // // console.log(comment);
                this.$router.push({name :'PostDetail', query: {post_content: post.post_content
                 ,post_id : post.post_id, post_img_url : post.post_img_url,
                 post_like : post.post_like, post_userid : post.post_userid, user_img:post.user_img,
@@ -246,14 +266,14 @@ export default {
                       window.db.collection('alarm').doc('follow').collection('messages').where('to','==',this.$cookie.get('userId')).get()
                       .then(snapshot =>{
                           if(snapshot.empty) {
-                              // console.log('팔로우 요청이 없다.')
+                              // // console.log('팔로우 요청이 없다.')
                           }
 
                           snapshot.forEach(doc =>{
                              window.db.collection('alarm').doc('follow').collection('messages').doc(doc.id).set({
                                     confirm : true
                                 },{merge:true}).catch(err => {
-                                    // console.log(err);
+                                    // // console.log(err);
                                 });
                           })
                       })
@@ -265,13 +285,13 @@ export default {
                       window.db.collection('alarm').doc('meetup').collection('messages').where('to','==',this.$cookie.get('userId')).get()
                       .then(snapshot =>{
                           if(snapshot.empty) {
-                              // console.log('팔로우 요청이 없다.')
+                              // // console.log('팔로우 요청이 없다.')
                           }
                           snapshot.forEach(doc =>{
                              window.db.collection('alarm').doc('meetup').collection('messages').doc(doc.id).set({
                                     confirm : true
                                 },{merge:true}).catch(err => {
-                                    // console.log(err);
+                                    // // console.log(err);
                                 });
                           })
                       })

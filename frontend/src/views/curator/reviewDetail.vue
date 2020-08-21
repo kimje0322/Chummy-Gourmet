@@ -119,12 +119,23 @@
 
                 <v-list-item-content>
                   <v-list-item-title>
-                    {{reviewCommentmember[i].userNickname}}
+                      <a class="black--text font-weight-bold mr-2">{{reviewCommentmember[i].userNickname}}</a>
+                      
+                      {{comment.content}}
                   </v-list-item-title>
- 
-                  <v-list-item-subtitle  class='text--primary'>
-                    {{comment.content}} &mdash; <span  class="grey--text text--lighten-1">{{comment.date}}</span>
+                  <v-list-item-subtitle>
+                      <a style="margin-right: 12px; color: #8e8e8e;">
+                        {{comment.date}}
+                      </a>
                   </v-list-item-subtitle>
+
+                  <!-- <v-list-item-title>
+                    {{reviewCommentmember[i].userNickname}}
+                  </v-list-item-title> -->
+ 
+                  <!-- <v-list-item-subtitle  class='text--primary'>
+                    {{comment.content}} &mdash; <span  class="grey--text text--lighten-1">{{comment.date}}</span>
+                  </v-list-item-subtitle> -->
                 </v-list-item-content>
                 
               </v-list-item>
@@ -184,7 +195,7 @@ export default {
       this.user.userImg = "https://i3b302.p.ssafy.io:8080/img/user?imgname="+ this.user.userImg
     })
     .catch((error) => {
-      console.log(error.response);
+      // console.log(error.response);
     });
     this.review = this.$route.params.review;
     this.getMeetup();
@@ -210,24 +221,24 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
         });
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
     },
     getComments(){
     axios
       .get(`${SERVER_URL}/review/comment/${this.review.id}`)
       .then((response) => {
-        console.log("hi")
-        console.log(response)
+        // console.log("hi")
+        // console.log(response)
         this.comments = response.data.object;
         this.reviewCommentmember = response.data.user;
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
     },
     writeComment() {
@@ -252,7 +263,7 @@ export default {
               this.comment = "";
             })
             .catch((error) => {
-              console.log(error.response);
+              // console.log(error.response);
             });  
       }
       else{

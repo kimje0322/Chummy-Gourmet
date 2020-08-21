@@ -30,7 +30,7 @@
         />
       </v-card-title>
     </template>
-      <span class="text--caption">ex) 대전 맛집, 봉명동 삼겹살 ...</span>
+      <span class="text--caption">ex) 대전 맛집, 삼겹살 ...</span>
     </v-tooltip>
       <br>
     <div v-if="filter==true && restaurants.length != 0" style="text-align: center;" class="mb-3" >
@@ -42,44 +42,6 @@
         <v-btn small width="23%" outlined @click="sortByProperties">선호음식</v-btn>
       </v-btn-toggle>
     </div>
-
-
-    <!-- <p>{{keyword}}에 대한 결과</p> -->
-
-<!--  pop over  -->
-      <!-- <div>
-          <v-menu
-            max-width="100%"
-            v-model="menu"
-            :close-on-content-click="false"
-            transition="slide-y-transition"
-            offset-y
-          >
-          <template v-slot:activator="{on}">
-            
-            <v-btn
-
-              width="92%"
-              slot="activator"
-              v-on="on"
-            >
-              필터
-            </v-btn>
-          </template>
-
-            <v-card>
-              <v-card-actions>
-                <v-btn-toggle>
-                  <v-btn outlined @click="sortByDist">거리순</v-btn>
-                  <v-btn outlined @click="sortByLike">좋아요순</v-btn>
-                  <v-btn outlined @click="sortByReview">리뷰순</v-btn>
-                  <v-btn outlined @click="sortByProperties">선호음식</v-btn>
-                </v-btn-toggle>
-              </v-card-actions>
-            </v-card>
-          </v-menu>
-        </div> -->
-
 
     <v-card>
         <v-row dense>
@@ -201,25 +163,25 @@ export default {
   },
   methods: {
     sortByDist(){
-      console.log("거리순");
+      // console.log("거리순");
       this.restaurants.sort((a, b) => {
         return a.dist - b.dist;
       })
     },
     sortByLike(){
-      console.log("좋아요순");
+      // console.log("좋아요순");
       this.restaurants.sort((a, b) => {
         return -1 * (a.like - b.like);
       })
     },
     sortByReview(){
-      console.log("리뷰순");
+      // console.log("리뷰순");
       this.restaurants.sort((a, b) => {
         return -1 * (a.review - b.review);
       })
     },
     sortByProperties(){
-      console.log("선호음식");
+      // console.log("선호음식");
       axios
         .get(`${SERVER_URL}/userpage/getuserInfo?userId=${this.$cookie.get('userId')}`)
         .then((response) => {
@@ -306,7 +268,7 @@ export default {
           this.filter = true;
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
         });
     },
     moveDetail(restaurant) {
@@ -345,7 +307,7 @@ export default {
         .then((response) => {
             var newRestId = response.data;
             restaurant.id = newRestId;
-            console.log(restaurant.id);
+            // console.log(restaurant.id);
             this.toggleLike(restaurant);
         });
       }
@@ -410,7 +372,7 @@ export default {
         .then((response) => {
             var newRestId = response.data;
             restaurant.id = newRestId;
-            console.log(restaurant.id);
+            // console.log(restaurant.id);
             this.toggleScrap(restaurant);
         });
       }

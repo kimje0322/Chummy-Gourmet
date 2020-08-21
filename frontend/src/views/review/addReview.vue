@@ -1,106 +1,49 @@
 <template>
-  <section class="user join">
-    <v-app>
-      <v-toolbar-title>
-        <v-toolbar dark>
-          <a @click="$router.go(-1)">
-            <i class="fas fa-chevron-left back"></i>
-          </a>
-          <v-spacer></v-spacer>
-          <v-spacer></v-spacer>
-          <p class="my-auto">Review</p>
-          <v-spacer></v-spacer>
-          <v-spacer></v-spacer>
-          <!-- <div v-if="revise" @click="reviseImg">
+    <div>
+      <v-toolbar dense elevation="1">
+        <v-icon @click="$router.go(-1)">
+          mdi-arrow-left
+        </v-icon>
+        <v-spacer></v-spacer>
+        <p class="my-auto text-center">리뷰작성</p>
+        <v-spacer></v-spacer>
+        <a @click="addReview">
             <i class="fas fa-check"></i>
-          </div> -->
-          <!-- <div v-else @click="addImg">
-            <i class="fas fa-check"></i>
-          </div> -->
-          <!-- <a @click="addImg"></a> -->
-        </v-toolbar>
-      </v-toolbar-title>
-
+        </a>
+      </v-toolbar>
       <div>
-        <!-- <p>{{this.postuserid}}</p> -->
-        
-        <!-- <div style="padding: 18px 25px;">
-          <div>
-            <div style="padding: 12px 0;">
-              <div style="margin-right: 8px;">
-                <span class="prf" style="margin-left: 0px; ">
-                  <img
-                    style="height: 32px; width: 32px; border-radius: 50%;"
-                    :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+ userimg"
-                  />
-                </span>
-                <span>{{username}}</span>
-                <div style="float: right;">
-                  <div @click="onClickImageUpload">
-                    <input ref="imageInput" type="file" hidden @change="onChangeImages" />
-                    <i class="fa fa-images" style="margin-top: 6px; width: 20px; height: 20px;"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <img
-            id="imageview"
-            style="width: 100%"
-            v-if="revise && revise3"
-            :src="`https://i3b302.p.ssafy.io:8080/img/post?imgname=`+postimg"
-          />
-          <img id="imageview" style="width: 100%" v-if="revise1" :src="postimg" />
-          <input ref="imageInput" type="file" hidden @change="onChangeImages" />
-          <v-img v-if="postimgurl" :src="postimgurl"></v-img>
-          <v-img v-else :src="postimgurl"></v-img>
-          <v-textarea v-if="revise" style="margin-top: 0;" v-model="content"></v-textarea>
-        </div> -->
         <v-form
-          ref="form" v-model="form"
+          ref="form" 
+          v-model="form"
           class="pa-8 pt-8"
         >
-          <v-text-field
-            v-model="review.title"
-            filled clearable
-            color="deep-purple"
-            label="Title"
-          ></v-text-field>
-          <v-textarea
-            v-model="review.content"
-            filled clearable
-            color="deep-purple"
-            label="Contents"
-            rows="7"
-          ></v-textarea>
-        </v-form>
-        <v-divider></v-divider>
-        <v-card-actions class="pa-8 pt-8">
-          <v-btn @click="$refs.form.reset()" text>
-            Clear
-          </v-btn>
-          <v-spacer></v-spacer>
-          <v-btn
-            :disabled="!form"
-            :loading="isLoading"
-            class="white--text"
-            color="deep-purple accent-4"
-            depressed
-            @click="addReview"
-          >Submit</v-btn>
-        </v-card-actions>
+         <!-- 밋업 타이틀 -->
+          <v-col class="pb-0">
+            <v-text-field
+              outlined hide-details="auto" 
+              v-model="review.title"
+              label="제목"
+              clearable
+            >          
+            </v-text-field>
+          </v-col>
 
-        <!-- <div style="padding: 12px; 0;">
-          <div style="margin: 0 12px; border: solid 1px var(--divider); border-radius: 8px;">
-            <div style="6px;" aria-label="게시물에 이미지 추가">adfadfffgdsgsdㅗㅓㅗㅓㅛㅛㅅ</div>
-          </div>
-        </div>-->
-        <!-- <input ref="imageInput" type="file" hidden @change="onChangeImages" /> -->
-        <!-- <v-btn type="button" @click="onClickImageUpload">이미지 업로드</v-btn> -->
-        <!-- <v-btn @click="addImg">입력</v-btn> -->
+           <!-- 밋업 내용 -->
+          <v-col class="pb-0">
+            <v-textarea
+              outlined hide-details="auto"
+              v-model="review.content"
+              label="Contents"
+              rows="10"
+              clearable
+            >          
+            </v-textarea>
+          </v-col>
+        </v-form>
+        
+
       </div>
-    </v-app>
-  </section>
+    </div>
 </template>
 
 <script>

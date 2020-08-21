@@ -163,25 +163,25 @@ export default {
   },
   methods: {
     sortByDist(){
-      console.log("거리순");
+      // console.log("거리순");
       this.restaurants.sort((a, b) => {
         return a.dist - b.dist;
       })
     },
     sortByLike(){
-      console.log("좋아요순");
+      // console.log("좋아요순");
       this.restaurants.sort((a, b) => {
         return -1 * (a.like - b.like);
       })
     },
     sortByReview(){
-      console.log("리뷰순");
+      // console.log("리뷰순");
       this.restaurants.sort((a, b) => {
         return -1 * (a.review - b.review);
       })
     },
     sortByProperties(){
-      console.log("선호음식");
+      // console.log("선호음식");
       axios
         .get(`${SERVER_URL}/userpage/getuserInfo?userId=${this.$cookie.get('userId')}`)
         .then((response) => {
@@ -268,7 +268,7 @@ export default {
           this.filter = true;
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
         });
     },
     moveDetail(restaurant) {
@@ -307,7 +307,7 @@ export default {
         .then((response) => {
             var newRestId = response.data;
             restaurant.id = newRestId;
-            console.log(restaurant.id);
+            // console.log(restaurant.id);
             this.toggleLike(restaurant);
         });
       }
@@ -372,7 +372,7 @@ export default {
         .then((response) => {
             var newRestId = response.data;
             restaurant.id = newRestId;
-            console.log(restaurant.id);
+            // console.log(restaurant.id);
             this.toggleScrap(restaurant);
         });
       }

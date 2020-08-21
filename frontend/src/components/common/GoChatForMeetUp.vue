@@ -59,8 +59,8 @@ export default {
 
                   })
                   .catch(err => {
-                     console.log(err);
-                     console.log("에러");
+                     // console.log(err);
+                     // console.log("에러");
                   });
         },
         goChat(room){
@@ -70,12 +70,12 @@ export default {
                                 `${SERVER_URL}/userpage/getuserpost`,room.id
                             )
                             .then((response) => {
-                                // console.log('응답',response);
+                                // // console.log('응답',response);
                                 room.img = response.data;
                                 this.$router.push({name: 'Chat', params: {room: room}});
                            })
                             .catch((error) => {
-                                console.log(error.response);
+                                // console.log(error.response);
                             });
             this.$router.push({name: 'Chat', params: {room: room}});
         },
@@ -89,7 +89,7 @@ export default {
                       this.insertNickname(this.room)                                       
                   })
                .catch(error=>{
-                console.log("못받아왔어용");
+                // console.log("못받아왔어용");
               })
         },
 
@@ -103,7 +103,7 @@ export default {
                      this.goChat(this.room)
                      })
                 .catch((error) => {
-                     console.log(error.response);
+                     // console.log(error.response);
              });
         }
     }

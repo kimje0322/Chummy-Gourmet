@@ -98,12 +98,12 @@ export default {
                 this.items.push(restaurant); 
               })
               .catch((error) => {
-              console.log(error.response);
+              // console.log(error.response);
               });
             }
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
         });
       },
       show(item){
@@ -112,7 +112,7 @@ export default {
       },
       doit(iitem){
         if(iitem.title == '삭제') {
-          console.log(this.list);
+          // console.log(this.list);
           axios.delete(`${SERVER_URL}/rest/scrap?restid=${this.list.id}&userid=${this.userId}`)
           .then((response) => {
               this.dialog = false

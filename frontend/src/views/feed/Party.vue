@@ -159,14 +159,14 @@ export default {
         alert("인원을 선택해주세요.");
         return;
       }
-      console.log(this.title);
-      console.log(this.title.length);
-      console.log(this.content);
-      console.log(this.content.length);
-      console.log(this.date);
-      console.log(this.date.length);
-      console.log(this.count);
-      console.log(this.count.length);
+      // console.log(this.title);
+      // console.log(this.title.length);
+      // console.log(this.content);
+      // console.log(this.content.length);
+      // console.log(this.date);
+      // console.log(this.date.length);
+      // console.log(this.count);
+      // console.log(this.count.length);
 
       // axios
       //   .get(

@@ -43,8 +43,8 @@ export default {
     },
     methods: {
         onClick(){
-            console.log('카카오의로그인이 왜 실행돼 씹ㄴ')
-         // console.log(window.Kakao);
+            // console.log('카카오의로그인이 왜 실행돼 씹ㄴ')
+         // // console.log(window.Kakao);
                 window.Kakao.Auth.login({
                     scope : 'account_email, profile',
                     success: this.join,
@@ -52,7 +52,7 @@ export default {
         },
         join(){
             
-            // console.log(authObj);
+            // // console.log(authObj);
                 window.Kakao.API.request({
                     url:'/v2/user/me',
                     success : res => {
@@ -73,34 +73,34 @@ export default {
                                 //카카오 계정으로 등록
                                 axios.post(`${SERVER_URL}/account/apisignup`,userInfo)
                                 .then(res => {
-                                //   console.log("성공");
+                                //   // console.log("성공");
                                   alert("가입되었습니다. 다시로그인해주세요");
                                 })
                                 .catch(err => {
-                                    // console.log("실패");
+                                    // // console.log("실패");
                                 })
                             }
                             else{
                                 //로그인 오류메세지 넘겨주기,여기부터다시시작
                                 //이메일 닉네임이 이미 있을경우
                                 //로그인 작업을 처리한 후 쿠키에 넣어준다
-                                // console.log("로그인하기");
+                                // // console.log("로그인하기");
                                 this.login(userInfo);
                             }
 
                         }).catch((e)=>{
                             //에러메시지 출력
-                            console.log(e);
-                            // console.log("이미 가입되어있는 이메일입니다.");
+                            // console.log(e);
+                            // // console.log("이미 가입되어있는 이메일입니다.");
                         });
 
-                        // console.log(userInfo);
+                        // // console.log(userInfo);
                         // alert("로그인 성공!");
                         // this.$bvModal.hide("bv-modal-example");
                     },
                     fail : error => {
                         this.$router.push("/errorPage");
-                        console.log(error);
+                        // console.log(error);
                     }
                 })
         },
@@ -119,7 +119,7 @@ export default {
         })
 
         .catch((error) => {
-        //   console.log(error.response);
+        //   // console.log(error.response);
           alert("소셜회원은 회원가입한 소셜 로그인으로, 홈페이지 회원은 홈페이지 로그인으로 로그인 해 주세요");
         });
         }

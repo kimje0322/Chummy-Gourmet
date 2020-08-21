@@ -101,7 +101,7 @@ export default {
           alert("수락실패");
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
     },
     deleteFollowing(followingRequestId){
@@ -118,7 +118,7 @@ export default {
           alert("삭제실패");
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
     },
     created(){
@@ -146,7 +146,7 @@ export default {
         }
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
   },
 },

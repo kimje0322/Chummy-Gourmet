@@ -210,7 +210,7 @@ export default {
         .then(response => {
           // data : success / isExistNickname
           var data = response.data.data;
-          console.log(data);
+          // console.log(data);
           if (data == "isExistNickname") {
             this.error.nickName =
               "사용중인 닉네임입니다. 다른 닉네임을 입력해주세요.";
@@ -221,7 +221,7 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error.response);
+          // console.log(error.response);
         });
     },
     checkEmail(){
@@ -230,7 +230,7 @@ export default {
         .then(response => {
           // data : success / isExistEmail
           var data = response.data.data;
-          console.log(data);
+          // console.log(data);
 
           if (data == "isExistEmail") {
             this.error.email =
@@ -242,7 +242,7 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error.response);
+          // console.log(error.response);
         });
     },
     checkFormAndSignUp() {

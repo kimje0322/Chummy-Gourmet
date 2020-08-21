@@ -371,7 +371,7 @@ export default {
 
     // 카카오 맵 로딩
     // if (window.kakao && window.kakao.maps) {
-    //   console.log("이미 로딩됨");
+    //   // console.log("이미 로딩됨");
     //   this.initMap();
     // } else {
       const script = document.createElement("script");
@@ -598,18 +598,18 @@ export default {
         });    
     },
     getNearMeetups(address){
-      console.log(address);
+      // console.log(address);
       axios
             .get(`${SERVER_URL}/meetup/search/location/${address.region_1depth_name.slice(0, 2)} ${address.region_2depth_name}`)
             .then((response) => {
               // 밋업 리스트
-              console.log(response)
+              // console.log(response)
               if(response.data.data == "success"){
                 this.meetups = response.data.object;
-                    console.log(this.meetups)
+                    // console.log(this.meetups)
                     var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
                     this.meetups.forEach(meetup => {
-                      // console.log(meetup)
+                      // // console.log(meetup)
                       this.geocoder.addressSearch(meetup.address, (result, status) => {
                           if (status === kakao.maps.services.Status.OK) {
                               var coords = new kakao.maps.LatLng(result[0].y, result[0].x);

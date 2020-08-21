@@ -195,7 +195,7 @@ export default {
       this.user.userImg = "https://i3b302.p.ssafy.io:8080/img/user?imgname="+ this.user.userImg
     })
     .catch((error) => {
-      console.log(error.response);
+      // console.log(error.response);
     });
     this.review = this.$route.params.review;
     this.getMeetup();
@@ -221,24 +221,24 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
         });
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
     },
     getComments(){
     axios
       .get(`${SERVER_URL}/review/comment/${this.review.id}`)
       .then((response) => {
-        console.log("hi")
-        console.log(response)
+        // console.log("hi")
+        // console.log(response)
         this.comments = response.data.object;
         this.reviewCommentmember = response.data.user;
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
     },
     writeComment() {
@@ -263,7 +263,7 @@ export default {
               this.comment = "";
             })
             .catch((error) => {
-              console.log(error.response);
+              // console.log(error.response);
             });  
       }
       else{

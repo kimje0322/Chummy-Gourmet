@@ -183,7 +183,7 @@ export default {
        this.mynickname = response.data[0];
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
 
     var meetupId = this.$route.query.meetupId;
@@ -235,7 +235,7 @@ export default {
       })
     },
     cancleMeetup(){
-      console.log(this.meetup)
+      // console.log(this.meetup)
       if(this.meetup.master == this.$cookie.get("userId")){
         this.$alert("밋업주최자는 참여취소가 불가합니다.")
       }
@@ -253,7 +253,7 @@ export default {
       }
     },
     cancleRequestMeetup(){
-      console.log(this.isRequest)
+      // console.log(this.isRequest)
       axios
       .delete(`${SERVER_URL}/meetup/request/${this.isRequest}`)
       .then((response) => {
@@ -279,10 +279,10 @@ export default {
                         meetupid : request.meetupId,
                         confirm : false
                     }).catch(err => {
-                        console.log(err);
+                        // console.log(err);
                     });
 
-      // console.log(request);
+      // // console.log(request);
       axios
       .post(`${SERVER_URL}/meetup/request`, request)
       .then((response) => {

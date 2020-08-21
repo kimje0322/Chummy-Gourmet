@@ -343,7 +343,7 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
         });
     }
   },
@@ -403,7 +403,7 @@ export default {
         this.checkedInterests.push(s);
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
     },
     isVaildJoinInfo() {

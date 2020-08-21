@@ -116,7 +116,7 @@ export default {
     // 쿠키를 사용한 로그인 부분
     // 로그인이 성공했을 때 쿠키에 토큰와 userId를 저장한다.
     onLogin() {
-      console.log('로그인의온로그인');
+      // console.log('로그인의온로그인');
       if(!this.$refs.form.validate()){
         return;
       }
@@ -134,7 +134,7 @@ export default {
           this.$router.push("/map");
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
           alert("이메일과 비밀번호를 확인해주세요.");
         });
     },

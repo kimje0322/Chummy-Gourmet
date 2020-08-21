@@ -151,7 +151,7 @@ export default {
           alert("수락실패");
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
     },
     deleteRequest(){
@@ -169,7 +169,7 @@ export default {
           alert("거절실패");
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
     },
     showRequest(idx){
@@ -201,7 +201,7 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
         });
         let userImg = `https://i3b302.p.ssafy.io:8080/img/user?imgname=`+user.userImg;
          this.$router.push('/user/profile?userId='+user.userId
@@ -227,13 +227,13 @@ export default {
               this.guestList.push(response.data)
             })
             .catch((error) => {
-              console.log(error.response);
+              // console.log(error.response);
             });
           }
         }
       })
       .catch((error) => {
-        console.log(error.response);
+        // console.log(error.response);
       });
   },
 },

@@ -189,13 +189,13 @@ export default {
       };
       // this.init();
       this.timestamp = new Date();
-      // console.log(this.postlst.post_date)
+      // // console.log(this.postlst.post_date)
 
     // 유저가 좋아요한 피드 리스트 가져오기
     axios
       .get(`${SERVER_URL}/post/like/${this.$cookie.get("userId")}`)
       .then((response) => {
-        // console.log(response);
+        // // console.log(response);
         this.likelist = response.data;
     });
 
@@ -207,14 +207,14 @@ export default {
   },
   methods: {
     init(){
-      console.log("init")
+      // console.log("init")
       // 현재 로그인한 유저정보 가져오기
       axios
         .get(
           `${SERVER_URL}/post/${this.postlst.post_id}`
         )
         .then((response) => {
-          console.log(response.data);
+          // console.log(response.data);
             let updatePost = response.data;
             this.postlst = {
               // post_date : updatePost.postdate,
@@ -226,10 +226,10 @@ export default {
               user_img: this.userImg,
               user_nickname: this.userNickname,
             };
-            console.log(this.postlst);
+            // console.log(this.postlst);
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
         });
     },
     // 피드 삭제
@@ -256,7 +256,7 @@ export default {
       axios
         .get(`${SERVER_URL}/post/like/${this.$cookie.get("userId")}`)
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           this.likelist = response.data;
       });
     },
@@ -287,9 +287,9 @@ export default {
     },
     onLike() {
       this.likestate = !this.likestate;
-      console.log('onlike제발')
+      // console.log('onlike제발')
       if (this.likelist.includes(this.postlst.post_id)) {
-        console.log("이거나오면안됨");
+        // console.log("이거나오면안됨");
       } else {
         axios
           .put(
@@ -305,12 +305,12 @@ export default {
             // this.init();
           })
           .catch((error) => {
-            console.log(error);
+            // console.log(error);
           });
       }
     },
     unLike() {
-      console.log('unlike제발')
+      // console.log('unlike제발')
       this.likestate = !this.likestate;
       axios
         .delete(
@@ -325,7 +325,7 @@ export default {
 
         })
         .catch((error) => {
-          console.log(error);
+          // console.log(error);
         });
     }
 

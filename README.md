@@ -53,7 +53,7 @@
 
 ## 💻 개발 개요
 
-![](img/wireframe.png)
+![](img/wireframe_final.PNG)
 
 
 
@@ -64,39 +64,39 @@
 > 회원가입 후 서비스 이용 가능하며, 로그인 후 사용자 위치 기반 지도를 보여줍니다. 지도내에 생성된 __meetup__ 내용을 확인할 수 있습니다. __meetup__ 생성을 원할시 `+` 버튼을 눌러 내용 입력하여 생성가능합니다. 또한, 맛집 리스트와 상세 리뷰 및 마이페이지 기능까지 확인할 수 있습니다.
 
 1. 회원가입
-   
-![](img/join.png)
-   
+   ![](img/join_final.PNG)
 
-   
+
+
 2. 로그인
-
-   ![](img/login.png)
-
-   
-
-3. 주변 맛집 및 meetup 검색
-
-   ![](img/search.png)
-
-   
-
-4. meetup 추가
-
-   ![](img/meetup.png)
-
-   
-
-5. 상세 리뷰
-
-   ![](img/review.png)
-   
-6. 마이페이지
-
-   ![](img/mypage.png)
+![](img/login_final.PNG)
    
 
    
+3. MeetUp
+   ![](img/meetup_final.PNG)
+
+   ![](img/meetup_filter.PNG)
+
+   
+
+4. 뉴스피드
+   ![](img/newsfeed_final.PNG)
+
+   
+
+5. 마이페이지
+   ![](img/mypage_final.PNG)
+
+   ![](img/mypage_plus.PNG)
+
+   
+
+6. 부가기능(알림, 검색 등)
+   ![](img/info_final.PNG)
+
+   
+
 
 ## 📡 배포 및 개발 환경
 
@@ -105,16 +105,21 @@
 > 개발환경
 >
 > - Server
->
->   ![](img/server.png)
+> ![](img/server.png)
 >   
->- Frontend
->   ![](img/frontend.png)
-> 
->- Backend
->   ![](img/backend.png)
-> 
->- DB
-> 
->  ![](img/DB.png)
+>   
+>   
+> - Frontend
+>   
+> ![](img/frontend.png)
+>   
+>   
+> - Backend
+>   
+> ![](img/backend.png)
+>   
+>   
+> - DB
+>   ![](img/DB.png)
+>
 

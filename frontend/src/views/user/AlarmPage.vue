@@ -55,7 +55,7 @@
       </v-expansion-panel>
       </v-expansion-panels>
 
-<br><br><br><br><br><br>
+<br><br><br><br>
       <v-expansion-panels>
       <v-divider>게시글</v-divider>
       <v-expansion-panel >
@@ -65,22 +65,32 @@
         <div v-for="(list,i) in post" :key="i">
           <div @click="onClick(list)">
             <v-expansion-panel-content >
-                <v-list-item-avatar style="cursor:pointer;" @click="gotoProfile(lst)">
-                  <img
-                    :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+list.img"
-                  />
-                </v-list-item-avatar>
-                {{list.message}}<br>
-                  <!-- <v-btn style="float : right;" class="btn btn-primary" @click="onClick(list)">확인</v-btn> -->
-                  {{ list.time | moment("from","now")}}
+                 <v-list>
+                <v-list-item>
+                  <v-list-item-avatar style="cursor:pointer;" @click="gotoProfile(lst)">
+                    <img
+                      :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+list.img"
+                    />
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      {{list.message}}
+                    </v-list-item-title>
+                      <v-list-item-subtitle>
+                        {{ list.time | moment("from","now")}}
+                      </v-list-item-subtitle>
+                  </v-list-item-content>
+                      
 
+                </v-list-item>
+              </v-list>
             </v-expansion-panel-content>
           </div>
         </div>
       </v-expansion-panel>
       </v-expansion-panels>
 
-<br><br><br><br><br><br>
+<br><br><br><br>
       <v-expansion-panels>
       <v-divider>요청</v-divider>
       <v-expansion-panel >
@@ -90,15 +100,25 @@
         <div v-for="(list,i) in accept" :key="i">
           <div @click="onClick(list)">
             <v-expansion-panel-content >
-                <v-list-item-avatar style="cursor:pointer;" @click="gotoProfile(lst)">
-                  <img
-                    :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+list.img"
-                  />
-                </v-list-item-avatar>
-                {{list.message}}<br>
-                  <!-- <v-btn style="float : right;" class="btn btn-primary" @click="onClick(list)">확인</v-btn> -->
-                  {{ list.time | moment("from","now")}}
+                <v-list>
+                <v-list-item>
+                  <v-list-item-avatar style="cursor:pointer;" @click="gotoProfile(lst)">
+                    <img
+                      :src="`https://i3b302.p.ssafy.io:8080/img/user?imgname=`+list.img"
+                    />
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      {{list.message}}
+                    </v-list-item-title>
+                      <v-list-item-subtitle>
+                        {{ list.time | moment("from","now")}}
+                      </v-list-item-subtitle>
+                  </v-list-item-content>
+                      
 
+                </v-list-item>
+              </v-list>
             </v-expansion-panel-content>
           </div>
         </div>

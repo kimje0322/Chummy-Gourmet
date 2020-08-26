@@ -1,4 +1,6 @@
 <template>
+  <v-app>
+
     <v-container>
   <v-layout class="entireClass">
     <v-row>
@@ -39,6 +41,7 @@
       <div class="mt-5 h6 font-weight-bold">등록된 게시물이 없습니다.</div>
     </div>
   </v-container>
+  </v-app>
 </template>
 
 

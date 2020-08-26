@@ -14,30 +14,22 @@
     </v-toolbar>
     </v-toolbar-title>
     
-    <div class="entireClass mb-12">
+    <div class="entireClass">
     <v-layout row>
-      <v-flex xs4 order-md2 order-xs1>
-      </v-flex>
-      <v-flex xs4 order-md3 order-xs2>
+        <v-spacer></v-spacer>
         <v-avatar class="p-img" size="100" >
           <v-img 
             v-if="viewImg" :src="viewImg">
           </v-img>
         </v-avatar>
-      </v-flex>
-      <v-flex xs4 order-md1 order-xs3>
-      </v-flex>
+        <v-spacer></v-spacer>
     </v-layout>
     <v-layout>
-       <v-flex xs3 order-md2 order-xs1>
-      </v-flex>
-      <v-flex xs6 order-md3 order-xs2 class="update-buttons">
+        <v-spacer></v-spacer>
         <v-btn small type="button" class="mr-2" @click="onClickImageChange" >수정</v-btn>
         <input ref="imageInput" type="file" hidden @change="onChangeImage">
         <v-btn small @click="onClickSubmit">확인</v-btn>
-      </v-flex>
-      <v-flex xs3 order-md1 order-xs3>
-      </v-flex>
+        <v-spacer></v-spacer>
     </v-layout>
     <v-layout row>
    <v-main>

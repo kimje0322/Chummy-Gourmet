@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-toolbar dense elevation="1">
-      <v-icon @click="$router.go(-1)">
+      <v-icon @click="$router.push({name: 'Map', params : $route.params})">
         mdi-arrow-left
       </v-icon>
       <v-spacer></v-spacer>
@@ -85,7 +85,7 @@
                       />
                     </v-card-title>
                   </template>
-                   <span class="text--caption">ex) 대전 맛집, 봉명동 삼겹살 ...</span>
+                   <span class="text--caption">ex) 대전 맛집, 부산 맛찬들 ...</span>
                  </v-tooltip>
 
                     <v-card-text style="height: 300px;">

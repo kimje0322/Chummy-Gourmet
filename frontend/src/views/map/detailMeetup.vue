@@ -3,7 +3,7 @@
   <div class="user join">
       <v-toolbar-title>
         <v-toolbar class="mb-1" dense elevation="1">
-          <v-icon @click="$router.go(-1)">
+          <v-icon @click="$router.push({name : 'Map', params : {lat : $route.query.lat, lng : $route.query.lng}})">
             mdi-arrow-left
           </v-icon>
           <v-spacer></v-spacer>
@@ -176,6 +176,8 @@ export default {
     }
   },
   created() {
+
+
      //유저의 닉네임 가져오기
      axios
       .post(`${SERVER_URL}/chat/nickname`,[this.$cookie.get('userId')])
@@ -287,7 +289,7 @@ export default {
       .post(`${SERVER_URL}/meetup/request`, request)
       .then((response) => {
         alert("신청이 완료되었습니다.")
-        this.$router.push("/map");
+        this.$router.push({name:'Map', params: ''});
       })  
     },
     stringToArray(strings){

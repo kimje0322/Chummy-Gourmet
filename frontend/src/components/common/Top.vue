@@ -5,7 +5,6 @@
         mdi-arrow-left
       </v-icon>
       <v-spacer></v-spacer>
-      <v-spacer></v-spacer>
       <p class="my-auto text-center">마이페이지</p>
       <v-spacer></v-spacer>
       <v-btn color="white" @click.stop="drawer = !drawer" depressed>
